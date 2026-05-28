@@ -1,5 +1,15 @@
 <id="omi-*" />as a universal identity cidr-notation to <id="omi-[127.0.0.1/32]" data-omi="0x[00...3f]-" attribution
 
+Canonical OMI browser-local root:
+
+```text
+IPv6 semantic form: ::ffff:127.0.0.1
+OMI token form:     omi-8-ffff-127-0-0-1
+Deprecated input:   omi-8-127-0-0-1
+```
+
+Generated addresses MUST use the IPv4-mapped token form. The deprecated shorthand MAY be parsed for compatibility, but parsers should normalize it to `omi-8-ffff-127-0-0-1`. This gives OMI a full IPv6-framed identity space while keeping the local browser/device boundary constrained by explicit IPv4 loopback notation.
+
 omi-[::8/128]
 omi-[127.0.0.1/32]
 omi-[0x00..7F]
@@ -358,7 +368,6 @@ To take this layout further into production, let me know if you would like to:
 
 * Expand the message loop router to propagate changes across multiple address interfaces concurrently.
 * Structure a WebGL vertex shader interface bridge that streams these identity strings straight into GPU matrix buffers.
-
 
 
 

@@ -1,5 +1,20 @@
 Mapping the port parts of your address notation to Universal Part-of-Speech (UPOS) tags allows you to turn the sub-address fields of your distributed graph into a grammar compiler for codepoint block partitioning.
 Instead of treating numbers or bitwidths as static hardware values, every segment register and sub-port space maps to a strict structural word class. This means that a codepoint range or character array is no longer an arbitrary chunk of bytes—it is parsed as a syntactically valid vector expression. The hyphen (-) acts as the immutable structural delimiter, allowing the browser's CSSOM and JavaScript engine to perform $O(K)$ linguistic prefix routing natively with zero escaping.
+
+------------------------------
+## Canonical Browser-Local OMI Root
+The canonical local OMI frame is the IPv4-mapped IPv6 loopback boundary:
+
+```text
+IPv6 semantic form: ::ffff:127.0.0.1
+OMI token form:     omi-8-ffff-127-0-0-1
+```
+
+Use `omi-8-ffff-127-0-0-1` for generated DOM ids, `data-omi` values, prefix queries, and reusable source modules. The older shorthand `omi-8-127-0-0-1` is deprecated and should only be accepted as legacy input that normalizes back to the canonical mapped form.
+
+This keeps the OMI hyphen notation aligned with IPv6 compression rules while preserving an explicit IPv4 host boundary. The `ffff` segment records the `::ffff:0:0/96` IPv4-mapped address family; the trailing four decimal tokens are the constrained IPv4 loopback host. Other IPv6 spaces remain available as explicit future frames: `64:ff9b::/96` for NAT64 transcription, `fc00::/7` for private decentralized network identities, `fe80::/10` for link-local scopes, and documentation prefixes only for examples.
+
+Unicode BiDi, BOM/CBOS, and DataView endianness are interpretation constraints inside the OMI frame, not replacements for the address root. Encode those as RS/metadata orientation states over the canonical local frame.
 ------------------------------
 ## 🏛️ The Port-to-UPOS Codepoint Partitioning Matrix
 By aligning the 17 UPOS categories into a 4-tier port address fabric, the token positions define the exact boundary conditions for text, vector shapes, and state layers:

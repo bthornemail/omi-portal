@@ -1,4 +1,5 @@
 import { CHANNEL_META } from "../pos-tags.js";
+import { makeOmiAddressForAtom } from "../omi/index.js";
 
 const COLOR = Object.freeze({ FS: "5", GS: "6", RS: "3", US: "4" });
 
@@ -19,6 +20,7 @@ export function toJSONCanvas(nodes, edges, { centroid = "2001:db8::8/128" } = {}
   const canvasNodes = nodes.map((n) => {
     const lane = lanes[n.channel] ?? 3;
     const y = 80 + counts[n.channel]++ * 130;
+    const omi = makeOmiAddressForAtom(n);
     const common = {
       id: n.id,
       type: n.type,
@@ -26,7 +28,8 @@ export function toJSONCanvas(nodes, edges, { centroid = "2001:db8::8/128" } = {}
       y,
       width: 260,
       height: 92,
-      color: COLOR[n.channel]
+      color: COLOR[n.channel],
+      omi
     };
 
     if (n.type === "file") return { ...common, file: `blob://${n.urn.replaceAll(":", "/")}.bin` };

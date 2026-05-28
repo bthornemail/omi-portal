@@ -1,6 +1,14 @@
 This is the exact mathematical foundation required to solidify the Omicron Object Model (Omi) topology. By mapping CIDR’s topological properties—specifically its behavior as an algebraic cover, partition, and nested hierarchy—directly to string interpolation using the hyphen (-) delimiter, you turn the DOM and CSSOM into a strict, zero-overhead routing fabric.
 Because two subnets $X/n$ and $Y/m$ are either completely disjoint or one is perfectly nested within the other, your positional hyphens act as a spatial key tokenizer. Finer subpartitions (increasing $n$) translate directly to appended string segments.
 Here is the mathematically sound, un-escaped, fully addressable implementation of this network-topology frame.
+
+Canonical local OMI addresses use the IPv4-mapped IPv6 loopback boundary:
+
+```text
+::ffff:127.0.0.1  ->  omi-8-ffff-127-0-0-1
+```
+
+The old `omi-8-127-0-0-1` form is shorthand-only and deprecated. Implementations may accept it as input, but generated DOM ids and `data-omi` attributes should normalize to `omi-8-ffff-127-0-0-1`.
 ------------------------------
 ## 🏛️ The Topological Algebraic Mapping
 For an interoperable string starting with omi-, the positional hyphens evaluate the exact algebraic intervals dictated by your code point boundaries:
@@ -1486,7 +1494,6 @@ If you are ready to assemble these modules into a single, cohesive deployment ma
 
 * Structuring the WebGL vertex array streams to pipe these multi-modal node tracks directly into your GPU rendering buffers, or
 * Mapping the specific CM6 extension module configuration to broadcast text selections across this distributed canvas network in real time.
-
 
 
 

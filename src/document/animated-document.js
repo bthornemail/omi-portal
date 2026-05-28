@@ -5,6 +5,7 @@ import { toJSONCanvas } from "../canvas/json-canvas.js";
 import { enrichFeatureTokensWithWordNet } from "../wordnet/relation-space.js";
 import { makeDOMCSSOMTetrahedron, tetrahedronToJSONCanvas } from "../web/dom-cssom-tetrahedron.js";
 import { scoreNodeWithPolicy, makeTinyNEATPolicy } from "../neat/tinyneat-policy.js";
+import { makeOmiAddressForAtom } from "../omi/index.js";
 
 const CHANNEL_MOTION = Object.freeze({
   FS: { axis: "z", motion: "sink", color: "#38bdf8" },
@@ -88,7 +89,7 @@ export async function compileTextToAnimatedDocument(text, options = {}) {
 
   const atoms = compiled.nodes.map((node, index) => {
     const motion = motionForNode(node, index, signals[index]);
-    return {
+    const baseAtom = {
       id: node.id,
       term: node.label.split(":").slice(1).join(":"),
       label: node.label,
@@ -99,7 +100,13 @@ export async function compileTextToAnimatedDocument(text, options = {}) {
       urn: node.urn,
       stable: node.wordnet?.metric?.stable ?? false,
       relationCount: node.wordnet?.relationCount ?? 0,
+      synsetCells: node.wordnet?.cells,
+      feature: node.feature,
       motion
+    };
+    return {
+      ...baseAtom,
+      omi: makeOmiAddressForAtom(baseAtom, options.omi || {})
     };
   });
 
@@ -154,7 +161,8 @@ export function animatedDocumentHTML(atoms) {
       `--dur:${m.duration}ms`,
       `--color:${m.color}`
     ].join(";");
-    return `<span class="term-atom" data-channel="${escapeHTML(atom.channel)}" data-cidr="${escapeHTML(atom.cidr)}" data-chirality="${escapeHTML(m.chirality)}" data-projection="${escapeHTML(m.projection)}" style="${style}">${escapeHTML(atom.term)}</span>`;
+    const omiAttrs = atom.omi ? ` data-omi="${escapeHTML(atom.omi.address)}" data-omi-port-channel="${escapeHTML(atom.omi.portChannel)}" data-omi-pos-hex="${escapeHTML(atom.omi.posHex)}"` : "";
+    return `<span class="term-atom" data-channel="${escapeHTML(atom.channel)}" data-cidr="${escapeHTML(atom.cidr)}"${omiAttrs} data-chirality="${escapeHTML(m.chirality)}" data-projection="${escapeHTML(m.projection)}" style="${style}">${escapeHTML(atom.term)}</span>`;
   }).join(" ");
 }
 

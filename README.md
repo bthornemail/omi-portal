@@ -2,6 +2,8 @@
 
 This package turns Universal POS tags into canonical transformation-feature tokens for a default OMI graph node policy.
 
+See [docs/](./docs/) for the canonical OMI framework notes on IPv4-mapped IPv6 addressing, `0x00..0x3f` control descriptors, and SharedArrayBuffer memory layout.
+
 Pipeline:
 
 ```text
