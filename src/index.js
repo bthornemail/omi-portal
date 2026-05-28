@@ -60,6 +60,8 @@ export * from "./wordnet/relation-space.js";
 export * from "./web/dom-cssom-reference.js";
 export * from "./web/dom-cssom-registry.js";
 export * from "./web/dom-cssom-tetrahedron.js";
+export * from "./web/triplicate-projection.js";
+export * from "./web/hardware-bus.js";
 export * from "./document/animated-document.js";
 export * from "./neat/tinyneat-policy.js";
 export * from "./distributed/index.js";

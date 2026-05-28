@@ -11,7 +11,10 @@ export const OMI_SEMANTIC_SERVICE_BUSES = Object.freeze({
   "::5": "hnsw-memory-indexer",
   "::6": "cm6-transaction-bridge",
   "::7": "fano-clock-guard",
-  "::8": "master-canvas-surface"
+  "::8": "master-canvas-surface",
+  "::10": "webserial-port-bus",
+  "::11": "webusb-interface-bus",
+  "::12": "webhid-device-bus"
 });
 
 export const OMI_ROUTING_ROOTS = Object.freeze({
@@ -94,13 +97,14 @@ export function makeOmiSynsetRoutingFrame(tokenOrParts, { upos = "X", universalF
   const token = typeof tokenOrParts === "string" ? tokenOrParts : formatOmiFanoPrologToken(tokenOrParts);
   const parsed = parseOmiFanoPrologToken(token);
   const featureList = universalFeatures.length ? universalFeatures : parsed.featureTokens;
+  const transportBus = TRANSPORT_TO_BUS[parsed.transport] || "::1";
   return {
     v: "omi.synset.routing-frame.v0",
     token: parsed.token,
     serviceBus: "::3",
     serviceName: OMI_SEMANTIC_SERVICE_BUSES["::3"],
-    transportBus: parsed.transport === "turn" ? "::4" : "::1",
-    transportName: parsed.transport === "turn" ? OMI_SEMANTIC_SERVICE_BUSES["::4"] : OMI_SEMANTIC_SERVICE_BUSES["::1"],
+    transportBus,
+    transportName: OMI_SEMANTIC_SERVICE_BUSES[transportBus] || transportBus,
     roots: OMI_ROUTING_ROOTS,
     upos,
     universalFeatures: featureList,
@@ -111,7 +115,7 @@ export function makeOmiSynsetRoutingFrame(tokenOrParts, { upos = "X", universalF
       "data-omi": parsed.token,
       "data-omi-service-bus": "3",
       "data-omi-service": "prolog-wndb",
-      "data-omi-transport-bus": parsed.transport === "turn" ? "4" : "1",
+      "data-omi-transport-bus": transportBus.replace("::", ""),
       "data-omi-transport": parsed.transport,
       "data-omi-context-root": OMI_ROUTING_ROOTS.context,
       "data-omi-remote-root": OMI_ROUTING_ROOTS.remoteCodepoint,
@@ -139,7 +143,7 @@ function parseFanoPoint(value) {
 
 function parseTransport(value) {
   const transport = String(value || "").toLowerCase();
-  if (!["local", "turn"].includes(transport)) throw new TypeError(`Invalid OMI Fano transport: ${value}`);
+  if (!["local", "turn", "serial", "usb", "hid"].includes(transport)) throw new TypeError(`Invalid OMI Fano transport: ${value}`);
   return transport;
 }
 
@@ -169,9 +173,18 @@ function decodeBase64Binary(value) {
   throw new TypeError("No Base64 decoder is available in this runtime");
 }
 
+export const TRANSPORT_TO_BUS = Object.freeze({
+  local: "::1",
+  turn: "::4",
+  serial: "::10",
+  usb: "::11",
+  hid: "::12"
+});
+
 export function routeToDistributedBus(parsedToken) {
   const transport = parsedToken.transport || "local";
-  if (transport === "turn") return "::4";
+  const bus = TRANSPORT_TO_BUS[transport];
+  if (bus) return bus;
   if (parsedToken.sourceCategory === 5) return "::5";
   return "::1";
 }

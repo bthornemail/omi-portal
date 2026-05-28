@@ -311,11 +311,12 @@
   </style>
 </head>
 <body>
-  <div class="hud">
-    <h1>ChiralCanvas Tetrahedron</h1>
-    <p>FS, GS, RS, and US are rendered as addressable A-Frame entities. The rear panel is a live canvas texture of the 5040 Smith matrix.</p>
-    <div class="meta" id="hud-meta"></div>
-  </div>
+    <div class="hud">
+      <h1>ChiralCanvas Tetrahedron</h1>
+      <p>FS, GS, RS, and US are rendered as addressable A-Frame entities. The rear panel is a live canvas texture of the 5040 Smith matrix.</p>
+      <div class="meta" id="hud-meta"></div>
+      <div class="cell" id="polytope-hud" style="margin-top:8px; font-size:11px">tick=0<br>720p=0 120b=0<br>24c=0 6f=0 2e=0</div>
+    </div>
   <nav class="nav" aria-label="Demo navigation">
     <a href="/">Smith</a>
     <a href="/document.html">Document</a>
@@ -399,17 +400,29 @@
       ChiralSmithCanvas,
       createPrologWordNetBroker,
       createSmithMatrix,
+      createPolytopeBuffer,
       formatOmiFanoPrologToken,
       makeOmiSynsetRoutingFrame,
       makeWordNetCentroid,
       makeDOMCSSOMTetrahedron,
       serializePrologWordNetPacket,
       storeSmithTick,
-      writeCanvasGraphToSmithMatrix
+      writeCanvasGraphToSmithMatrix,
+      registerTick,
+      OmiPolytopeFactorialBuffer
     } from "/src/index.js";
+    import {
+      createPolytopeGeometry,
+      updatePolytopeGeometry,
+      createPolytopeHUD,
+      applyProjectionToPage,
+      PAGE_NAMES
+    } from "/src/web/polytope-webgl.js";
 
     const tetrahedron = makeDOMCSSOMTetrahedron([], { minRelations: 6 });
     const matrix = createSmithMatrix({ shared: false });
+    const polytopeClock = createPolytopeBuffer({ shared: false });
+    const polytopeFactorial = new OmiPolytopeFactorialBuffer(polytopeClock.buffer);
     const smithCanvas = new ChiralSmithCanvas(document.getElementById("smithTexture"), matrix, {
       background: "#081016",
       grid: "rgba(203, 213, 225, 0.24)",
@@ -581,11 +594,52 @@
 
     AFRAME.registerComponent("smith-texture-loop", {
       tick: function (time) {
-        storeSmithTick(matrix, Math.floor(time / 36));
+        const tick = Math.floor(time / 36);
+        storeSmithTick(matrix, tick);
+        registerTick(polytopeClock, tick);
         smithCanvas.render();
         const mesh = this.el.getObject3D("mesh");
         const map = mesh?.material?.map;
         if (map) map.needsUpdate = true;
+
+        const hud = document.getElementById("polytope-hud");
+        if (hud) {
+          const p = createPolytopeHUD(tick);
+          hud.innerHTML = p.html;
+        }
+        const pages = document.querySelectorAll("[polytope-page]");
+        for (const el of pages) {
+          const pi = Number(el.getAttribute("polytope-page"));
+          const geo = el.getObject3D("mesh")?.geometry;
+          if (geo) updatePolytopeGeometry(THREE, geo, polytopeClock, 720, pi);
+        }
+      }
+    });
+
+    AFRAME.registerComponent("polytope-point-cloud", {
+      schema: { page: { default: 0 } },
+      init: function () {
+        const pi = this.data.page;
+        this._page = pi;
+        const geo = createPolytopeGeometry(THREE, polytopeClock, 720, pi);
+        const mat = new THREE.PointsMaterial({
+          color: new THREE.Color().setHSL(pi / 7, 0.85, 0.55),
+          size: 0.08,
+          sizeAttenuation: true,
+          transparent: true,
+          opacity: 0.7
+        });
+        const mesh = new THREE.Points(geo, mat);
+        this._mesh = mesh;
+        mesh.position.set(pi * 1.1 - 3.3, 0, -4.5);
+        this.el.setObject3D("mesh", mesh);
+      },
+      tick: function (time) {
+        const tick = Math.floor(time / 36);
+        const proj = applyProjectionToPage(this._page, tick, 0.5);
+        if (this._mesh) {
+          this._mesh.position.z = -4.5 + proj.dz;
+        }
       }
     });
 
@@ -950,6 +1004,13 @@
     <a-entity environment="preset: starry; groundColor: #0f172a; grid: 1x1; dressingAmount: 18; lighting: none"></a-entity>
     <a-entity tetrahedron-frame></a-entity>
     <a-entity id="prolog-wordnet-entities"></a-entity>
+    <a-entity polytope-point-cloud="page: 0"></a-entity>
+    <a-entity polytope-point-cloud="page: 1"></a-entity>
+    <a-entity polytope-point-cloud="page: 2"></a-entity>
+    <a-entity polytope-point-cloud="page: 3"></a-entity>
+    <a-entity polytope-point-cloud="page: 4"></a-entity>
+    <a-entity polytope-point-cloud="page: 5"></a-entity>
+    <a-entity polytope-point-cloud="page: 6"></a-entity>
 
     <a-plane
       position="0 2.15 -9.2"

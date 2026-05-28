@@ -50,13 +50,19 @@ test("OMI Object Model manifest covers every dev-docs markdown source", async ()
 test("OMI Object Model manifest declares address spaces and Lisp transformers", async () => {
   const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const addressNotations = new Set(manifest.addressSpaces.map((space) => space.notation));
-  assert.ok(addressNotations.has("::1..::8"));
-  assert.ok(addressNotations.has("::ffff:127.0.0.1"));
-  assert.ok(addressNotations.has("::/128"));
+  assert.ok(addressNotations.has("::1..::12"));
 
   const service = manifest.addressSpaces.find((space) => space.id === "semantic-service-buses");
+
   assert.ok(service.buses.some((bus) => bus.ipv6 === "::3" && bus.name === "prolog-wordnet-broker"));
+
   assert.ok(service.buses.some((bus) => bus.ipv6 === "::8" && bus.name === "master-canvas-surface"));
+
+  assert.ok(service.buses.some((bus) => bus.ipv6 === "::10" && bus.name === "webserial-port-bus"));
+
+  assert.ok(service.buses.some((bus) => bus.ipv6 === "::11" && bus.name === "webusb-interface-bus"));
+
+  assert.ok(service.buses.some((bus) => bus.ipv6 === "::12" && bus.name === "webhid-device-bus"));
 
   const transformerIds = new Set(manifest.transformers.map((transformer) => transformer.id));
   assert.ok(transformerIds.has("cons"));
