@@ -13,7 +13,7 @@ export const OMI_BIDI_PROFILE = Object.freeze({
 
 const DEFAULT_HISTORY_BYTES = 5040 * 8;
 
-import { createPolytopeBuffer, registerTick, tickFactorials, OmiPolytopeFactorialBuffer } from "../runtime/polytope-sab.js";
+import { createPolytopeBuffer, registerTick, tickFactorials, OmiPolytopeFactorialBuffer, storeTickValue } from "../runtime/polytope-sab.js";
 import { OmiBareMetalBootCompiler } from "../runtime/boot-compiler.js";
 
 const BOOT_ADDR_RE = /^omi-ffff-127-0-0-1-0x7[cC]00-0x7[fF]00|^omi-ffff-127-0-0-1-0x7[fF]01-0x[aA][aA]55/;
@@ -73,6 +73,8 @@ export class OmiBiDiCM6CoreEngine {
     const scalar = evaluatePolynomial(coefficients, 2.5);
     const signedScalar = controls.chirality === OMI_BIDI_CODES.RLE ? scalar * -1.5 : scalar;
 
+    const strippedToken = cleanToken.replace(/[\u202a-\u202e]/g, "").replace(/--+/g, "-");
+
     return this.cons(
       {
         textToken: cleanToken,
@@ -85,7 +87,8 @@ export class OmiBiDiCM6CoreEngine {
         extrusionDepth: signedScalar * mixedRadixWeight,
         cursorOffset,
         polytope: tickFactorials(currentTick > 0n ? Number(currentTick) : 0),
-        boot: BOOT_ADDR_RE.test(cleanToken) ? this.bootCompiler.parseBootAddress(cleanToken) : null
+        boot: BOOT_ADDR_RE.test(strippedToken) ? this.bootCompiler.parseBootAddress(strippedToken) : null,
+        temporalSlot: storeTickValue(this.polytopeClock, moduloTickSlot, signedScalar * mixedRadixWeight)
       }
     );
   }

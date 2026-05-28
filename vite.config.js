@@ -43,7 +43,7 @@ export default defineConfig({
           if (id.includes("aframe") || id.includes("three")) {
             return "graphics-3d-pipeline";
           }
-          if (id.includes("prolog") || id.includes("wordnet") || id.includes("hnsw")) {
+          if (id.includes("prolog") || id.includes("wordnet") || id.includes("hnsw") || id.includes("semantic-memory-broker")) {
             return "semantic-memory-broker";
           }
           if (id.includes("@codemirror") || id.includes("lezer")) {

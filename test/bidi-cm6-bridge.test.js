@@ -4,7 +4,8 @@ import assert from "node:assert/strict";
 import {
   OMI_BIDI_PROFILE,
   OmiBiDiCM6CoreEngine,
-  compileOmiBiDiExtension
+  compileOmiBiDiExtension,
+  OmiBareMetalBootCompiler
 } from "../src/index.js";
 
 function encodeFloats(values) {
@@ -84,4 +85,60 @@ test("BiDi constructor accepts custom polytope buffer", () => {
 
 test("CM6 bridge requires an injected ViewPlugin dependency", () => {
   assert.throws(() => compileOmiBiDiExtension(new SharedArrayBuffer(5040 * 8)), /ViewPlugin/);
+});
+
+test("processBiDiTransaction includes boot analysis for boot sector address", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const view = new DataView(sab);
+  view.setBigUint64(8, 0b1111n, true);
+  const engine = new OmiBiDiCM6CoreEngine(sab);
+  const payload = encodeFloats([1.5, 2, -0.5, 10]);
+  const cell = engine.processBiDiTransaction(
+    `omi-ffff-127-0-0-1-\u202a\u202d-0x7c00-0x7f00-NOUN-VERB-SYM-${payload}`, 0
+  );
+  assert.ok(cell);
+  const boot = engine.cdr(cell).boot;
+  assert.ok(boot);
+  assert.equal(boot.valid, true);
+  assert.equal(boot.tier, "BOOT_SECTOR_LOOKUP_TABLE");
+  assert.equal(boot.bounds.startAddress, 0x7c00);
+  assert.equal(boot.bounds.endAddress, 0x7f00);
+});
+
+test("processBiDiTransaction includes boot analysis for extended execution surface", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const view = new DataView(sab);
+  view.setBigUint64(8, 0b1111n, true);
+  const engine = new OmiBiDiCM6CoreEngine(sab);
+  const payload = encodeFloats([1, 0, 0, 0]);
+  const cell = engine.processBiDiTransaction(
+    `omi-ffff-127-0-0-1-\u202a\u202d-0x7f01-0xaa55-VERB-SYM-slot720-${payload}`, 4
+  );
+  assert.ok(cell);
+  const boot = engine.cdr(cell).boot;
+  assert.ok(boot);
+  assert.equal(boot.tier, "EXTENDED_EXECUTION_SURFACE");
+  assert.equal(boot.bounds.startAddress, 0x7f01);
+  assert.equal(boot.bounds.endAddress, 0xaa55);
+  assert.ok(boot.coefficients);
+});
+
+test("processBiDiTransaction boot is null for non-boot addresses", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const view = new DataView(sab);
+  view.setBigUint64(8, 0b1111n, true);
+  const engine = new OmiBiDiCM6CoreEngine(sab);
+  const payload = encodeFloats([1.5, 2, -0.5, 10]);
+  const cell = engine.processBiDiTransaction(
+    `omi-8-\u202a\u202d-ffff-127-0-0-1-0x1a-0x41-${payload}`, 12
+  );
+  assert.ok(cell);
+  assert.equal(engine.cdr(cell).boot, null);
+});
+
+test("engine constructor accepts custom bootCompiler", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const bootCompiler = new OmiBareMetalBootCompiler(sab);
+  const engine = new OmiBiDiCM6CoreEngine(sab, { bootCompiler });
+  assert.equal(engine.bootCompiler, bootCompiler);
 });
