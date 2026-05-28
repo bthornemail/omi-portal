@@ -5,10 +5,18 @@ import {
   SMITH_MATRIX_SLOTS,
   activeSmithState,
   createSmithMatrix,
+  createSmithMatrixFloat,
   smithPointForSlot,
   storeSmithTick,
+  storePolytopeTick,
   writeCanvasGraphToSmithMatrix
 } from "../src/runtime/chiral-smith.js";
+
+import {
+  POLYTOPE_SLOTS,
+  polytopeWindow,
+  tickFactorials
+} from "../src/runtime/polytope-sab.js";
 
 test("smith matrix creates 5040 addressable slots", () => {
   const matrix = createSmithMatrix({ shared: false });
@@ -38,4 +46,25 @@ test("active state tracks tick modulo 5040", () => {
 
   const state = activeSmithState(matrix);
   assert.equal(state.slot, 7);
+});
+
+test("active state exposes polytope factorial decomposition", () => {
+  const matrix = createSmithMatrix({ shared: false });
+  storeSmithTick(matrix, 1000);
+  const state = activeSmithState(matrix);
+  assert.ok(state.polytope);
+  assert.equal(state.polytope.tick, 1000);
+  assert.equal(state.polytope.page6, 1);
+});
+
+test("createSmithMatrixFloat allocates Float64 polytope buffer", () => {
+  const clock = createSmithMatrixFloat({ shared: false });
+  assert.equal(clock.BYTES_PER_ELEMENT, 8);
+  assert.equal(clock.length, POLYTOPE_SLOTS);
+});
+
+test("storePolytopeTick stores tick at slot 0", () => {
+  const clock = createSmithMatrixFloat({ shared: false });
+  storePolytopeTick(clock, 5120);
+  assert.equal(clock[0], 80);
 });

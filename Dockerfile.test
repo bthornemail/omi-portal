@@ -1,0 +1,14 @@
+FROM node:24-alpine
+
+WORKDIR /test
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts --omit=dev
+COPY src ./src
+COPY test/load ./test/load
+
+ENV OMI_SOLID=tetrahedron
+ENV OMI_ROUNDS=200
+ENV OMI_INTERVAL_MS=5
+ENV OMI_FANOUT=4
+
+ENTRYPOINT ["node", "--experimental-vm-modules", "test/load/run.mjs"]

@@ -168,3 +168,10 @@ function decodeBase64Binary(value) {
   if (typeof Buffer !== "undefined") return Buffer.from(value, "base64").toString("binary");
   throw new TypeError("No Base64 decoder is available in this runtime");
 }
+
+export function routeToDistributedBus(parsedToken) {
+  const transport = parsedToken.transport || "local";
+  if (transport === "turn") return "::4";
+  if (parsedToken.sourceCategory === 5) return "::5";
+  return "::1";
+}

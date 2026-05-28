@@ -94,6 +94,66 @@ The payload is URL-safe Base64 for a four-term Float32 polynomial vector. The 16
 | `10..13` | polynomial term 1, Float32 little endian |
 | `14..15` | lifecycle slot, little endian |
 
+## Distributed Storage Semantics
+
+The OMI distributed protocol extends the remote transport path (`turn` tier, `::4`) with Reed-Solomon erasure-coded fragment propagation. The semantics defined here draw from the Monotone Causal Reed-Solomon Gossip Storage Protocol (MCRSGSP) prospectus and are documented as future surfaces.
+
+### RS(k,n) Erasure Coding
+
+Data payloads are Reed-Solomon encoded before fragmentation:
+
+| Parameter | Meaning |
+|---|---|
+| k | minimum fragments required for reconstruction |
+| n | total fragments generated |
+
+Constraint: 1 <= k <= n <= 255. Encoding uses GF(2^8). Any k fragments from any peer suffice for reconstruction.
+
+### Fragment Identity
+
+Each fragment is uniquely identified by:
+
+```text
+(codeword_id, version_vector, fragment_index)
+```
+
+Fragments are immutable after generation. Mutation requires creation of a new causal version.
+
+### Gossip Exchange
+
+Nodes periodically exchange fragment inventories through a push/pull protocol:
+
+1. Node A advertises its version vector frontier.
+2. Node B computes missing fragments from the frontier.
+3. Node B requests missing fragments by codeword and index.
+4. Node A transmits the requested fragments.
+
+Recommended fanout: sqrt(network_size). Random peer sampling with configurable fanout.
+
+### Anti-Entropy Repair
+
+Repair triggers on:
+- fragment loss detection
+- peer frontier divergence
+- node rejoin
+- periodic maintenance cycle
+
+Repair MUST preserve monotonicity. Repair MUST NOT delete causally valid fragments.
+
+### Causal Closure
+
+A fragment set S is causally closed iff every observed ancestor of every fragment in S is also in S. Closure is evaluated only over locally observed state. Nodes MUST NOT assume global visibility.
+
+Reconstruction is valid iff:
+1. all fragments share identical codeword_id
+2. fragment subset is causally closed
+3. |S| >= k
+4. RS_decode(S) succeeds
+
+### Candidate Reconstruction Lattice
+
+System state is the set of all valid RS reconstructions derivable from observed fragments. This forms a monotone join-semilattice with no destructive operations. Application layers MAY define preferred candidate selection, ranking, and materialized views above protocol semantics.
+
 ## Hardware Engines
 
 The protocol prospectus defines these runtime engines:

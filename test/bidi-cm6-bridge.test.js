@@ -48,6 +48,40 @@ test("BiDi clock advances and resets at the 5040 boundary", () => {
   assert.equal(view.getBigUint64(0, true), 0n);
 });
 
+test("BiDi advanceClockTimeline registers tick on polytope clock", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const engine = new OmiBiDiCM6CoreEngine(sab);
+  const view = new DataView(sab);
+  view.setBigUint64(0, 5039n, true);
+
+  engine.advanceClockTimeline();
+  assert.equal(engine.polytopeClock[0], 0);
+});
+
+test("BiDi processBiDiTransaction includes polytope decomposition", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const view = new DataView(sab);
+  view.setBigUint64(8, 0b1111n, true);
+  const engine = new OmiBiDiCM6CoreEngine(sab);
+  const payload = encodeFloats([1.5, 2, -0.5, 10]);
+  const cell = engine.processBiDiTransaction(`omi-8-\u202a\u202d-ffff-127-0-0-1-0x1a-0x41-${payload}`, 12);
+
+  const polytope = engine.cdr(cell).polytope;
+  assert.ok(polytope);
+  assert.ok(typeof polytope.page6 === "number");
+  assert.ok(typeof polytope.block5 === "number");
+  assert.ok(typeof polytope.cell4 === "number");
+  assert.ok(typeof polytope.frame3 === "number");
+  assert.ok(typeof polytope.edge2 === "number");
+});
+
+test("BiDi constructor accepts custom polytope buffer", () => {
+  const sab = new SharedArrayBuffer(5040 * 8);
+  const poly = new Float64Array(new ArrayBuffer(5040 * 8));
+  const engine = new OmiBiDiCM6CoreEngine(sab, { polytopeBuffer: poly });
+  assert.equal(engine.polytopeClock, poly);
+});
+
 test("CM6 bridge requires an injected ViewPlugin dependency", () => {
   assert.throws(() => compileOmiBiDiExtension(new SharedArrayBuffer(5040 * 8)), /ViewPlugin/);
 });

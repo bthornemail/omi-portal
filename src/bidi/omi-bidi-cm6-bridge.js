@@ -13,13 +13,17 @@ export const OMI_BIDI_PROFILE = Object.freeze({
 
 const DEFAULT_HISTORY_BYTES = 5040 * 8;
 
+import { createPolytopeBuffer, registerTick, tickFactorials, OmiPolytopeFactorialBuffer } from "../runtime/polytope-sab.js";
+
 export class OmiBiDiCM6CoreEngine {
-  constructor(sharedBuffer) {
+  constructor(sharedBuffer, { polytopeBuffer } = {}) {
     this.sab = sharedBuffer || new SharedArrayBuffer(DEFAULT_HISTORY_BYTES);
     this.view = new DataView(this.sab);
     this.f32View = new Float32Array(this.sab);
     this.BUFFER_LENGTH_BYTES = this.sab.byteLength;
     this.MASTER_TICK_REG_OFFSET = 0;
+    this.polytopeClock = polytopeBuffer || createPolytopeBuffer({ shared: true });
+    this.polytopeFactorial = new OmiPolytopeFactorialBuffer(this.polytopeClock.buffer);
   }
 
   cons(carHeader, cdrPayload) {
@@ -75,7 +79,8 @@ export class OmiBiDiCM6CoreEngine {
       },
       {
         extrusionDepth: signedScalar * mixedRadixWeight,
-        cursorOffset
+        cursorOffset,
+        polytope: tickFactorials(currentTick > 0n ? Number(currentTick) : 0)
       }
     );
   }
@@ -102,6 +107,9 @@ export class OmiBiDiCM6CoreEngine {
       this.view.setBigUint64(this.MASTER_TICK_REG_OFFSET, 0n, true);
       for (let i = 8; i < this.BUFFER_LENGTH_BYTES; i++) this.view.setUint8(i, 0);
     }
+
+    registerTick(this.polytopeClock, moduloTickInt);
+    this.polytopeFactorial.evaluateGCLifecycle(moduloTickInt);
 
     return moduloTickInt;
   }

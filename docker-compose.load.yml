@@ -1,0 +1,60 @@
+services:
+  tetrahedron:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      OMI_SOLID: tetrahedron
+      OMI_ROUNDS: "200"
+      OMI_INTERVAL_MS: "5"
+    deploy:
+      resources:
+        limits: { memory: 256M }
+
+  octahedron:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      OMI_SOLID: octahedron
+      OMI_ROUNDS: "200"
+      OMI_INTERVAL_MS: "5"
+    deploy:
+      resources:
+        limits: { memory: 512M }
+
+  cube:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      OMI_SOLID: cube
+      OMI_ROUNDS: "200"
+      OMI_INTERVAL_MS: "5"
+    deploy:
+      resources:
+        limits: { memory: 512M }
+
+  icosahedron:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      OMI_SOLID: icosahedron
+      OMI_ROUNDS: "200"
+      OMI_INTERVAL_MS: "5"
+    deploy:
+      resources:
+        limits: { memory: 1g }
+
+  dodecahedron:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      OMI_SOLID: dodecahedron
+      OMI_ROUNDS: "100"
+      OMI_INTERVAL_MS: "10"
+    deploy:
+      resources:
+        limits: { memory: 1g }

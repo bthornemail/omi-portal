@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "browserify": "^17.0.1",
-    "playwright": "^1.60.0"
+    "playwright": "^1.60.0",
+    "terser": "^5.48.0"
   },
   "keywords": [
     "omi",

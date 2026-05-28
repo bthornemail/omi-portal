@@ -1,3 +1,5 @@
+import { createPolytopeBuffer, registerTick, polytopeWindow, tickFactorials } from "./polytope-sab.js";
+
 export const SMITH_MATRIX_SLOTS = 5040;
 
 const TWO_PI = Math.PI * 2;
@@ -110,9 +112,28 @@ export function smithPointForSlot(matrix, slot, tick = loadSmithTick(matrix)) {
 export function activeSmithState(matrix) {
   const tick = loadSmithTick(matrix);
   const slot = tick % SMITH_MATRIX_SLOTS;
+  const pt = smithPointForSlot(matrix, slot, tick);
   return {
     tick,
     slot,
-    point: smithPointForSlot(matrix, slot, tick)
+    point: pt,
+    polytope: tickFactorials(tick)
+  };
+}
+
+export function createSmithMatrixFloat({ shared = true } = {}) {
+  return createPolytopeBuffer({ shared });
+}
+
+export function storePolytopeTick(matrix, tick) {
+  return registerTick(matrix, tick);
+}
+
+export function polytopeWindows() {
+  return {
+    edges: polytopeWindow(new Float64Array(5040), 720),
+    vertices: polytopeWindow(new Float64Array(5040), 120),
+    cells: polytopeWindow(new Float64Array(5040), 24),
+    frames: polytopeWindow(new Float64Array(5040), 6)
   };
 }

@@ -56,6 +56,13 @@
       "canonicalStatus": "indexed-source",
       "keyConcepts": ["BiDi controls", "CBOS", "lambda/F-expression ranges", "manifest glossary", "CodeMirror bridge", "WebGL future surface"],
       "sourceNotes": "Indexed for concepts and provenance. It is not copied wholesale into canonical docs."
+    },
+    {
+      "path": "dev-docs/Monotone Causal Reed–Solomon Gossip Storage Protocol (MCRSGSP).md",
+      "role": "distributed storage protocol prospectus",
+      "canonicalStatus": "reference-only",
+      "keyConcepts": ["Reed-Solomon erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "monotone set semantics", "coordination-free reconstruction"],
+      "sourceNotes": "RFC-style specification for fragment-based storage over unreliable transport. Relevant to OMI Phase 3 CoTURN/WebRTC unreliable UDP transport and the webrtc-udp-transceiver documented-future engine. The causal ordering and anti-entropy repair models complement the 5040-tick deterministic timeline for distributed scenarios."
     }
   ],
   "addressSpaces": [
@@ -69,8 +76,8 @@
         { "ipv6": "::1", "name": "loopback-ipc", "status": "documented" },
         { "ipv6": "::2", "name": "lisp-signaler", "status": "documented" },
         { "ipv6": "::3", "name": "prolog-wordnet-broker", "status": "implemented" },
-        { "ipv6": "::4", "name": "coturn-turn-synset-proxy", "status": "documented-future" },
-        { "ipv6": "::5", "name": "hnsw-memory-indexer", "status": "documented-future" },
+        { "ipv6": "::4", "name": "coturn-turn-synset-proxy", "status": "implemented" },
+        { "ipv6": "::5", "name": "hnsw-memory-indexer", "status": "implemented" },
         { "ipv6": "::6", "name": "cm6-transaction-bridge", "status": "implemented" },
         { "ipv6": "::7", "name": "fano-clock-guard", "status": "implemented-partial" },
         { "ipv6": "::8", "name": "master-canvas-surface", "status": "implemented" }
@@ -181,8 +188,12 @@
     { "id": "bitwise-clock-orchestrator", "status": "implemented-partial", "role": "5040-cycle timeline and Smith matrix support" },
     { "id": "carry-lookahead-adder", "status": "implemented", "role": "4-bit CLA carry utilities" },
     { "id": "fano-collision-validator", "status": "documented-future", "role": "multi-user timing collision detection over Fano lines" },
-    { "id": "webrtc-udp-transceiver", "status": "documented-future", "role": "unreliable unordered TURN/WebRTC transport through ::4" },
-    { "id": "hnsw-proximity-graph", "status": "documented-future", "role": "approximate nearest-neighbor lookup over text and geometry" },
+    { "id": "webrtc-udp-transceiver", "status": "implemented", "role": "unreliable unordered TURN/WebRTC transport through ::4" },
+    { "id": "hnsw-proximity-graph", "status": "implemented", "role": "approximate nearest-neighbor lookup over text and geometry" },
+    { "id": "rs-erasure-coding", "status": "implemented", "role": "Reed-Solomon GF(2^8) encode/decode for fragment storage" },
+    { "id": "causal-version-vectors", "status": "implemented", "role": "version vector causal ordering and merge for distributed state" },
+    { "id": "gossip-protocol", "status": "implemented", "role": "push-pull gossip exchange with frontier-based delta computation" },
+    { "id": "anti-entropy-repair", "status": "implemented", "role": "periodic divergence detection and fragment repair scheduler" },
     { "id": "webgl2-shader-stream", "status": "documented-future", "role": "GPU Horner evaluation for polyform extrusion" },
     { "id": "codemirror-transaction-bridge", "status": "implemented", "role": "text-to-DataView BiDi projection" },
     { "id": "jsdom-validation-environment", "status": "documented", "role": "headless DOM/CSSOM mirror without runtime dependency" }
@@ -306,8 +317,8 @@
     }
   ],
   "implementationStatus": {
-    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix"],
-    "documentedFuture": ["live CoTURN/WebRTC bridge", "HNSW runtime index", "full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
+    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix", "RS erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "fragment store", "CoTURN TURN proxy", "WebRTC transport", "HNSW vector index"],
+    "documentedFuture": ["full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
     "deprecated": ["omi-8-127-0-0-1 generated shorthand"],
     "referenceOnly": ["large exploratory manifest snippets in dev-docs/Omi Declarative.md", "full transcript content in dev-docs/chat.md"]
   },
@@ -338,7 +349,7 @@
     },
     {
       "id": "service-bus-labeling",
-      "requirement": "Semantic content routes identify ::1..::8; WordNet uses ::3; TURN proxy metadata uses ::4."
+      "requirement": "Semantic content routes identify ::1..::8; WordNet uses ::3; TURN proxy uses ::4; HNSW indexer uses ::5."
     }
   ],
   "terms": [
