@@ -14,9 +14,12 @@ export const OMI_BIDI_PROFILE = Object.freeze({
 const DEFAULT_HISTORY_BYTES = 5040 * 8;
 
 import { createPolytopeBuffer, registerTick, tickFactorials, OmiPolytopeFactorialBuffer } from "../runtime/polytope-sab.js";
+import { OmiBareMetalBootCompiler } from "../runtime/boot-compiler.js";
+
+const BOOT_ADDR_RE = /^omi-ffff-127-0-0-1-0x7[cC]00-0x7[fF]00|^omi-ffff-127-0-0-1-0x7[fF]01-0x[aA][aA]55/;
 
 export class OmiBiDiCM6CoreEngine {
-  constructor(sharedBuffer, { polytopeBuffer } = {}) {
+  constructor(sharedBuffer, { polytopeBuffer, bootCompiler } = {}) {
     this.sab = sharedBuffer || new SharedArrayBuffer(DEFAULT_HISTORY_BYTES);
     this.view = new DataView(this.sab);
     this.f32View = new Float32Array(this.sab);
@@ -24,6 +27,7 @@ export class OmiBiDiCM6CoreEngine {
     this.MASTER_TICK_REG_OFFSET = 0;
     this.polytopeClock = polytopeBuffer || createPolytopeBuffer({ shared: true });
     this.polytopeFactorial = new OmiPolytopeFactorialBuffer(this.polytopeClock.buffer);
+    this.bootCompiler = bootCompiler || new OmiBareMetalBootCompiler(this.sab);
   }
 
   cons(carHeader, cdrPayload) {
@@ -80,7 +84,8 @@ export class OmiBiDiCM6CoreEngine {
       {
         extrusionDepth: signedScalar * mixedRadixWeight,
         cursorOffset,
-        polytope: tickFactorials(currentTick > 0n ? Number(currentTick) : 0)
+        polytope: tickFactorials(currentTick > 0n ? Number(currentTick) : 0),
+        boot: BOOT_ADDR_RE.test(cleanToken) ? this.bootCompiler.parseBootAddress(cleanToken) : null
       }
     );
   }

@@ -50,6 +50,7 @@ export * from "./runtime/cla4.js";
 export * from "./runtime/chiral-urn.js";
 export * from "./runtime/chiral-smith.js";
 export * from "./runtime/polytope-sab.js";
+export * from "./runtime/boot-compiler.js";
 export * from "./addressing/cidr.js";
 export * from "./addressing/synset-cells.js";
 export * from "./omi/index.js";
