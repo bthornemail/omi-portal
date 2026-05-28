@@ -45,6 +45,7 @@ export * from "./nlp/features.js";
 export * from "./scgnn/default-node.js";
 export * from "./canvas/json-canvas.js";
 export * from "./canvas/smith-canvas.js";
+export * from "./bidi/omi-bidi-cm6-bridge.js";
 export * from "./runtime/cla4.js";
 export * from "./runtime/chiral-urn.js";
 export * from "./runtime/chiral-smith.js";

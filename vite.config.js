@@ -7,7 +7,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         aframe: resolve(__dirname, "aframe.html"),
-        document: resolve(__dirname, "document.html")
+        document: resolve(__dirname, "document.html"),
+        bidi: resolve(__dirname, "bidi.html")
       }
     }
   },

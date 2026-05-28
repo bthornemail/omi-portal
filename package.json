@@ -13,9 +13,18 @@
     "demo:wordnet": "node examples/wordnet-demo.js"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.20.2",
+    "@codemirror/commands": "^6.10.3",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/language": "^6.12.3",
+    "@codemirror/lint": "^6.9.6",
+    "@codemirror/search": "^6.7.0",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.43.0",
     "@vitejs/plugin-react": "^5.0.0",
     "aframe": "^1.7.1",
     "aframe-environment-component": "^1.5.0",
+    "codemirror": "^6.0.2",
     "tinyneat": "^1.1.0",
     "vite": "^6.0.0",
     "wink-eng-lite-web-model": "^1.8.1",
