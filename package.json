@@ -10,7 +10,8 @@
     "test": "node --test test/*.test.js",
     "demo": "node examples/node-demo.js",
     "bundle:wink-browserify": "browserify examples/browserify-entry.cjs -o public/wink-bundle.js",
-    "demo:wordnet": "node examples/wordnet-demo.js"
+    "demo:wordnet": "node examples/wordnet-demo.js",
+    "start": "node src/server.js"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.2",

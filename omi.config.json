@@ -1,0 +1,35 @@
+{
+  "canonicalRoot": "omi-ffff-127-0-0-1",
+  "subnet": "::/48",
+  "memory": {
+    "type": "SharedArrayBuffer",
+    "size": 40320,
+    "slots": 5040,
+    "stride": 8
+  },
+  "clock": {
+    "frequency": 60,
+    "promoteInterval": 720,
+    "resetInterval": 5040
+  },
+  "partitions": {
+    "FS": { "port": 0x10, "label": "NOUN, PROPN, VERB, ADJ" },
+    "GS": { "port": 0x11, "label": "ADP, AUX, CCONJ, NUM, DET, PART" },
+    "RS": { "port": 0x12, "label": "ADV, INTJ, PRON, SCONJ" },
+    "US": { "port": 0x13, "label": "PUNCT, SYM, X" }
+  },
+  "trigraph": {
+    "enabled": true,
+    "sequences": {
+      "??-": "~",
+      "??/": "\\line-splicing",
+      "??=": "#"
+    }
+  },
+  "deploy": {
+    "proxyUrl": "http://74.208.190.29:8080",
+    "sseStream": "/omi-stream",
+    "sabRead": "/omi-sab-read",
+    "sabWrite": "/omi-sab-write"
+  }
+}
