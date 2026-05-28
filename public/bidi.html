@@ -1,347 +1,242 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>OMI CodeMirror BiDi Bridge</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #081016;
-      --panel: #0f172a;
-      --panel-2: #0b1220;
-      --border: #263244;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --cyan: #00ffcc;
-      --pink: #ff0055;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    main {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(360px, .9fr) minmax(460px, 1.1fr);
-      gap: 16px;
-      padding: 18px;
-    }
-    section {
-      min-width: 0;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: rgba(15, 23, 42, .88);
-    }
-    .controls, .stage {
-      padding: 16px;
-      display: grid;
-      gap: 12px;
-      align-content: start;
-    }
-    h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
-    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
-    .row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    button, a {
-      min-height: 36px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #111827;
-      color: var(--text);
-      padding: 8px 10px;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    button:hover, a:hover { border-color: #475569; background: #182235; }
-    #omi-cm6-editor-surface {
-      min-height: 300px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--panel-2);
-    }
-    .cm-editor {
-      min-height: 300px;
-      background: var(--panel-2);
-      color: var(--text);
-      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    .cm-gutters { background: #09111d; color: var(--muted); border-right: 1px solid var(--border); }
-    .cm-activeLine, .cm-activeLineGutter { background: rgba(148, 163, 184, .08); }
-    pre, .metric {
-      margin: 0;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--panel-2);
-      padding: 10px;
-      color: #cbd5e1;
-      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .metric span {
-      display: block;
-      color: var(--muted);
-      font: 10px Inter, ui-sans-serif, system-ui, sans-serif;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    .metric strong {
-      display: block;
-      margin-top: 5px;
-      overflow-wrap: anywhere;
-    }
-    svg {
-      width: 100%;
-      min-height: 360px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: radial-gradient(circle at 50% 50%, rgba(148, 163, 184, .16), transparent 32%), #050a12;
-    }
-    [data-omi-type="bidi-canvas-tile"] {
-      transform-box: fill-box;
-      transform-style: preserve-3d;
-      transform-origin: center;
-      transition: transform 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), fill 0.15s ease, stroke .15s ease;
-    }
-    [data-bidi-flow="LRE-LRO"] {
-      unicode-bidi: bidi-override;
-      direction: ltr;
-      fill: rgba(0, 255, 204, 0.2);
-      stroke: var(--cyan);
-    }
-    [data-bidi-flow="RLE-RLO"] {
-      unicode-bidi: bidi-override;
-      direction: rtl;
-      fill: rgba(255, 0, 85, 0.2);
-      stroke: var(--pink);
-      stroke-dasharray: 4 2;
-    }
-    @media (max-width: 920px) {
-      main { grid-template-columns: 1fr; }
-      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 560px) {
-      main { padding: 10px; }
-      .metric-grid { grid-template-columns: 1fr; }
-    }
-    #stream-log {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px;
-      font: 11px/1.4 ui-monospace, monospace;
-      max-height: 180px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      color: var(--cyan);
-    }
-    #stream-log .warn { color: #fbbf24; }
-    #stream-log .reset { color: var(--pink); }
-    #stream-log .vector { color: #60a5fa; }
-    .stream-bar {
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-    }
-    .stream-bar .dot {
-      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
-    }
-    .dot.connected { background: #22c55e; }
-    .dot.disconnected { background: #ef4444; }
-    .dot.pending { background: #fbbf24; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omi Protocol: Symmetrical Chiral Translation Surface</title>
+    <style>
+        :root {
+            --neon-cyan: #00ffcc;
+            --neon-magenta: #ff0055;
+            --neon-amber: #ffff00;
+            --bg-dark: #07080b;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--neon-cyan);
+            font-family: 'Courier New', monospace;
+            padding: 30px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        [data-omi-type="chiral-vertex"] {
+            fill: rgba(0, 255, 204, 0.05);
+            stroke: var(--neon-cyan);
+            stroke-width: 1.2px;
+            transform-box: fill-box;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transition: transform 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), fill 0.1s linear;
+        }
+
+        [id*="-0x02-left-"] {
+            stroke: var(--neon-amber);
+            fill: rgba(255, 255, 0, 0.03);
+        }
+
+        [id*="-0x04-right-"] {
+            stroke: var(--neon-magenta);
+            filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.5));
+        }
+
+        .chiral-inverted {
+            stroke-dasharray: 4;
+            animation: pulseInversion 0.2s infinite linear;
+        }
+
+        [id*="-??-"]:not([id*="-??-??-"]) {
+            stroke-width: 2px;
+            stroke: var(--neon-amber);
+        }
+
+        [id*="-??-??-"]:not([id*="-??-??-??-"]) {
+            stroke-width: 2.5px;
+            fill: rgba(0, 255, 204, 0.15);
+        }
+
+        [id*="-??-??-??-"] {
+            stroke-width: 3px;
+            stroke: var(--neon-magenta);
+            filter: drop-shadow(0 20px 10px rgba(255, 0, 85, 0.4));
+        }
+
+        @keyframes pulseInversion {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 8; }
+        }
+
+        #omi-telemetry-panel {
+            margin-top: 20px;
+            background: rgba(0, 255, 204, 0.02);
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            padding: 15px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .metric-highlight { color: #fff; font-weight: bold; }
+
+        #stream-log {
+            margin-top: 16px;
+            background: rgba(0, 255, 204, 0.02);
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            border-radius: 6px;
+            padding: 10px;
+            font: 11px/1.4 'Courier New', monospace;
+            max-height: 180px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: var(--neon-cyan);
+        }
+        #stream-log .reset { color: var(--neon-magenta); }
+        #stream-log .vector { color: #60a5fa; }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+        }
+        .dot.connected { background: #22c55e; }
+        .dot.disconnected { background: #ef4444; }
+    </style>
 </head>
 <body>
-  <main>
-    <section class="controls">
-      <h1>CodeMirror BiDi Bridge</h1>
-      <p>CM6 transactions carrying Unicode BiDi controls drive DataView polarity, 5040-cycle memory, and CSSOM projection state.</p>
-      <div id="omi-cm6-editor-surface"></div>
-      <div class="row">
-        <button id="insert-positive" type="button">Insert LRE/LRO</button>
-        <button id="insert-negative" type="button">Insert RLE/RLO</button>
-        <button id="step" type="button">Step Clock</button>
-        <a href="/document.html">Document</a>
-      </div>
-      <pre id="token-readout"></pre>
-    </section>
 
-    <section class="stage">
-      <div>
-        <h1>BiDi 2.5D Surface</h1>
-        <p>The active SVG tile receives `data-bidi-flow` and transform updates from the CM6 bridge.</p>
-      </div>
-      <svg id="omi-webgl-canvas-surface" viewBox="0 0 800 400" data-service-bus="8" role="img" aria-label="OMI BiDi extrusion surface">
-        <g id="omi-bidi-tiling-grid" transform="translate(360 170)">
-          <path id="omi-node-active-bidi-mesh" data-omi-type="bidi-canvas-tile" data-bidi-flow="LRE-LRO" d="M 0 0 H 80 V 80 H 0 Z" fill="rgba(0,255,204,.2)" stroke="#00ffcc" stroke-width="4"></path>
+    <h1>OMI NOTATION STREAM PROJECTION SURFACE</h1>
+
+    <svg id="omi-ffff-127-0-0-1" width="100%" height="320" style="border: 1px solid rgba(0,255,204,0.05);">
+        <g id="omi-hardware-io-matrix">
+            <circle id="omi-ffff-127-0-0-1-0x02-left-NOUN-VERB-slot720-YmFzZTY0-imo"
+                    data-omi-type="chiral-vertex" cx="150" cy="160" r="25" />
+
+            <rect id="omi-ffff-127-0-0-1-0x04-right-PROPN-AUX-slot1440-??--MzkAQA-imo"
+                  data-omi-type="chiral-vertex" x="450" y="110" width="100" height="100" />
+
+            <polygon id="omi-ffff-127-0-0-1-0x02-left-ADJ-NUM-slot2160-??-??-??--ZzkAQA-imo"
+                     data-omi-type="chiral-vertex" points="800,110 850,210 750,210" />
         </g>
-      </svg>
-      <div class="metric-grid">
-        <div class="metric"><span>Profile</span><strong id="metric-profile">LRE-LRO</strong></div>
-        <div class="metric"><span>Endian</span><strong id="metric-endian">little</strong></div>
-        <div class="metric"><span>Tick</span><strong id="metric-tick">0</strong></div>
-        <div class="metric"><span>Depth</span><strong id="metric-depth">0</strong></div>
-        <div class="metric"><span>Buffer</span><strong>5040 * 8</strong></div>
-        <div class="metric"><span>Root</span><strong>omi-ffff-127-0-0-1</strong></div>
-      </div>
-      <pre id="cell-readout"></pre>
-      <div class="stream-bar">
-        <span class="dot disconnected" id="stream-dot"></span>
-        <span id="stream-label" style="font:11px monospace;color:var(--muted)">disconnected</span>
-      </div>
-      <pre id="stream-log"></pre>
-    </section>
-  </main>
+    </svg>
 
-  <script type="module">
-    import { EditorView, basicSetup } from "codemirror";
-    import { javascript } from "@codemirror/lang-javascript";
-    import { ViewPlugin } from "@codemirror/view";
-    import { compileOmiBiDiExtension, OmiBiDiCM6CoreEngine } from "/src/index.js";
+    <div id="omi-telemetry-panel">
+        <div>[Bus Connection]: <span id="telemetry-connection" class="metric-highlight">Initializing Stream...</span></div>
+        <div>[Active Context]: <span id="telemetry-context" class="metric-highlight">omi-ffff-127-0-0-1</span></div>
+        <div>[Last Ingested Token]: <span id="telemetry-token" class="metric-highlight">None</span></div>
+        <div>[Calculated Polynomial Order]: <span id="telemetry-degree" class="metric-highlight">Degree 0 (Constant)</span></div>
+        <div style="margin-top:8px">
+            <span class="dot disconnected" id="stream-dot"></span>
+            <span id="stream-label" style="color:var(--neon-cyan)">disconnected</span>
+        </div>
+    </div>
 
-    const coefficients = new Float32Array([1.5, 2, -0.5, 10]);
-    const payload = btoa(String.fromCharCode(...new Uint8Array(coefficients.buffer))).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/g, "");
-    const positiveToken = `omi-8-\u202a\u202d-ffff-127-0-0-1-0x1a-0x41-${payload}`;
-    const negativeToken = `omi-8-\u202b\u202e-ffff-127-0-0-1-0x1a-0x41-${payload}`;
-    const sharedBuffer = typeof SharedArrayBuffer === "function"
-      ? new SharedArrayBuffer(5040 * 8)
-      : new ArrayBuffer(5040 * 8);
-    const engineProbe = new OmiBiDiCM6CoreEngine(sharedBuffer);
-    const metric = {
-      profile: document.getElementById("metric-profile"),
-      endian: document.getElementById("metric-endian"),
-      tick: document.getElementById("metric-tick"),
-      depth: document.getElementById("metric-depth")
-    };
-    const cellReadout = document.getElementById("cell-readout");
-    const tokenReadout = document.getElementById("token-readout");
+    <pre id="stream-log"></pre>
 
-    function renderEvaluation({ header, payload: result, tick }) {
-      metric.profile.textContent = header.profile;
-      metric.endian.textContent = header.isLittleEndian ? "little" : "big";
-      metric.depth.textContent = result.extrusionDepth.toFixed(2);
-      metric.tick.textContent = String(tick ?? engineProbe.view.getBigUint64(0, true));
-      cellReadout.textContent = JSON.stringify({
-        car: {
-          profile: header.profile,
-          isLittleEndian: header.isLittleEndian,
-          chiralityCode: `0x${header.chiralityCode.toString(16)}`,
-          polarityCode: `0x${header.polarityCode.toString(16)}`
-        },
-        cdr: result
-      }, null, 2);
-    }
+    <script type="module">
+        import { OmiSymmetricalChiralLexer } from "../src/omi/chiral-lexer.js";
+        import { OmiTrigraphPreprocessor } from "../src/omi/trigraph-preprocessor.js";
+        import { OmiPlaceValueInterpreter } from "../src/omi/place-value-interpreter.js";
 
-    const extensions = compileOmiBiDiExtension(sharedBuffer, {
-      ViewPlugin,
-      onEvaluation: renderEvaluation
-    });
+        const connectionIndicator = document.getElementById('telemetry-connection');
+        const tokenDisplay = document.getElementById('telemetry-token');
+        const degreeDisplay = document.getElementById('telemetry-degree');
+        const streamDot = document.getElementById('stream-dot');
+        const streamLabel = document.getElementById('stream-label');
+        const streamLog = document.getElementById('stream-log');
 
-    const view = new EditorView({
-      doc: `${positiveToken}\n`,
-      extensions: [
-        basicSetup,
-        javascript(),
-        extensions
-      ],
-      parent: document.getElementById("omi-cm6-editor-surface")
-    });
-
-    function insertToken(token) {
-      view.dispatch({
-        changes: { from: view.state.doc.length, insert: `${token}\n` },
-        selection: { anchor: view.state.doc.length + token.length + 1 }
-      });
-      tokenReadout.textContent = token
-        .replaceAll("\u202a", "\\u202A")
-        .replaceAll("\u202b", "\\u202B")
-        .replaceAll("\u202d", "\\u202D")
-        .replaceAll("\u202e", "\\u202E")
-        .replaceAll("\u202c", "\\u202C");
-    }
-
-    document.getElementById("insert-positive").addEventListener("click", () => insertToken(positiveToken));
-    document.getElementById("insert-negative").addEventListener("click", () => insertToken(negativeToken));
-    document.getElementById("step").addEventListener("click", () => {
-      metric.tick.textContent = String(engineProbe.advanceClockTimeline());
-    });
-    tokenReadout.textContent = positiveToken.replaceAll("\u202a", "\\u202A").replaceAll("\u202d", "\\u202D");
-
-    // === SSE STREAM CLIENT ===
-    const STREAM_URLS = [
-      "http://69.48.202.32:8080/omi-stream",
-      "http://74.208.190.29:8080/omi-stream"
-    ];
-    const streamDot = document.getElementById("stream-dot");
-    const streamLabel = document.getElementById("stream-label");
-    const streamLog = document.getElementById("stream-log");
-
-    function logStream(origin, event, data) {
-      const cls = event === "hard-reset" ? "reset" : event === "vector-update" ? "vector" : "warn";
-      const time = new Date().toLocaleTimeString();
-      streamLog.innerHTML += `<span class="${cls}">[${time}] <strong>${origin}</strong> <em>${event}</em> ${JSON.stringify(data)}</span>\n`;
-      streamLog.scrollTop = streamLog.scrollHeight;
-    }
-
-    function connectSSE(url) {
-      const source = new EventSource(url);
-      const origin = new URL(url).hostname;
-
-      source.onopen = () => {
-        streamDot.className = "dot connected";
-        streamLabel.textContent = `connected to ${origin}`;
-        logStream(origin, "open", {});
-      };
-
-      source.addEventListener("handshake", (e) => {
-        const data = JSON.parse(e.data);
-        logStream(origin, "handshake", data);
-      });
-
-      source.addEventListener("promote-gc", (e) => {
-        const data = JSON.parse(e.data);
-        logStream(origin, "promote-gc", data);
-        if (data.slot) document.getElementById("metric-tick").textContent = String(data.slot);
-      });
-
-      source.addEventListener("hard-reset", (e) => {
-        const data = JSON.parse(e.data);
-        logStream(origin, "hard-reset", data);
-        document.getElementById("metric-tick").textContent = "0";
-      });
-
-      source.addEventListener("vector-update", (e) => {
-        const data = JSON.parse(e.data);
-        logStream(origin, "vector-update", data);
-        if (typeof data.value === "number") {
-          document.getElementById("metric-depth").textContent = data.value.toFixed(2);
+        function logStream(origin, event, data) {
+            const cls = event === "hard-reset" ? "reset" : "vector";
+            const time = new Date().toLocaleTimeString();
+            streamLog.innerHTML += `<span class="${cls}">[${time}] <strong>${origin}</strong> <em>${event}</em> ${JSON.stringify(data)}</span>\n`;
+            streamLog.scrollTop = streamLog.scrollHeight;
         }
-      });
 
-      source.onerror = () => {
-        streamDot.className = "dot disconnected";
-        streamLabel.textContent = `disconnected from ${origin}`;
-        logStream(origin, "error", {});
-      };
-    }
+        const virtualSab = new SharedArrayBuffer(5040 * 8);
+        const lexer = new OmiSymmetricalChiralLexer();
+        const preprocessor = new OmiTrigraphPreprocessor(virtualSab);
+        const interpreter = new OmiPlaceValueInterpreter(virtualSab);
 
-    for (const url of STREAM_URLS) connectSSE(url);
-  </script>
+        const STREAM_URLS = [
+            "http://69.48.202.32:8080/omi-stream",
+            "http://74.208.190.29:8080/omi-stream"
+        ];
+
+        function connectSSE(url) {
+            const source = new EventSource(url);
+            const origin = new URL(url).hostname;
+
+            source.onopen = () => {
+                connectionIndicator.textContent = `ONLINE (Bound to ${origin}:8080/omi-stream)`;
+                connectionIndicator.style.color = "var(--neon-cyan)";
+                streamDot.className = "dot connected";
+                streamLabel.textContent = `connected to ${origin}`;
+                logStream(origin, "open", {});
+            };
+
+            source.onerror = () => {
+                connectionIndicator.textContent = `OFFLINE (Re-route loop active)`;
+                connectionIndicator.style.color = "var(--neon-magenta)";
+                streamDot.className = "dot disconnected";
+                streamLabel.textContent = `disconnected from ${origin}`;
+                logStream(origin, "error", {});
+            };
+
+            source.addEventListener('vector-update', (event) => {
+                try {
+                    const packetData = JSON.parse(event.data);
+                    if (!packetData || !packetData.token) return;
+
+                    const targetTokenStr = packetData.token;
+                    tokenDisplay.textContent = targetTokenStr;
+
+                    const preprocessorCell = preprocessor.preprocessAndEvaluateStream(targetTokenStr);
+                    const headerMetadata = preprocessor.car(preprocessorCell);
+
+                    const maskCell = interpreter.evaluateMaskDegree(targetTokenStr);
+                    const degreeSpecs = interpreter.car(maskCell);
+
+                    degreeDisplay.textContent = `Degree ${degreeSpecs.algebraicMetric.polynomialOrderDegree} (${degreeSpecs.algebraicMetric.activeMaskTerm})`;
+
+                    logStream(origin, "vector-update", {
+                        token: targetTokenStr.substring(0, 48) + "...",
+                        degree: degreeSpecs.algebraicMetric.polynomialOrderDegree,
+                        inverted: headerMetadata.hasTrigraphOperator
+                    });
+
+                    const targetNode = document.getElementById(targetTokenStr);
+                    if (targetNode) {
+                        if (headerMetadata.hasTrigraphOperator) {
+                            targetNode.classList.add('chiral-inverted');
+                        } else {
+                            targetNode.classList.remove('chiral-inverted');
+                        }
+
+                        const zTranslationDepth = degreeSpecs.algebraicMetric.polynomialOrderDegree * 25;
+                        targetNode.style.transform = `translate3d(0, 0, ${zTranslationDepth}px) rotateX(15deg)`;
+                    }
+                } catch (err) {
+                    // transient frame parsing anomalies
+                }
+            });
+
+            source.addEventListener('hard-reset', () => {
+                console.log("[Omi UI View] Global 5040 clock ring loop reset detected. Resetting canvas layers.");
+                logStream(origin, "hard-reset", {});
+                const nodes = document.querySelectorAll('[data-omi-type="chiral-vertex"]');
+                nodes.forEach(node => {
+                    node.classList.remove('chiral-inverted');
+                    node.style.transform = "translate3d(0px, 0px, 0px)";
+                });
+                degreeDisplay.textContent = "Degree 0 (Constant) - System Reset Completed";
+            });
+        }
+
+        for (const url of STREAM_URLS) connectSSE(url);
+    </script>
 </body>
 </html>
