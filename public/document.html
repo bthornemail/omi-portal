@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OMI DOM/CSSOM Inspector</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081016;
+      --panel: #0f172a;
+      --panel-2: #0b1220;
+      --border: #263244;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --fs: #38bdf8;
+      --gs: #a78bfa;
+      --rs: #facc15;
+      --us: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(340px, .8fr) minmax(460px, 1.2fr);
+      gap: 16px;
+      min-height: 100vh;
+      padding: 18px;
+    }
+    section {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(15, 23, 42, .88);
+    }
+    h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
+    h2 { margin: 0; font-size: 14px; letter-spacing: 0; }
+    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .controls {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 132px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 12px;
+      font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.45;
+    }
+    .row, .filter-grid, .metric-grid {
+      display: grid;
+      gap: 8px;
+    }
+    .row {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: end;
+    }
+    .filter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .metric-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    button, select, input {
+      min-height: 36px;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #111827;
+      color: var(--text);
+      padding: 0 10px;
+      font-weight: 700;
+    }
+    button { cursor: pointer; }
+    button:hover { border-color: #475569; background: #182235; }
+    label {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .metric, .details, pre {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel-2);
+    }
+    .metric {
+      min-width: 0;
+      padding: 9px;
+    }
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 5px;
+      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+    .details {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+    .detail-row {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .detail-row span {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font: 10px Inter, ui-sans-serif, system-ui, sans-serif;
+      font-weight: 800;
+    }
+    .detail-row code {
+      color: #dbeafe;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    pre {
+      margin: 0;
+      max-height: 180px;
+      overflow: auto;
+      padding: 12px;
+      color: #cbd5e1;
+      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .document-stage {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .stage-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .stage-head a {
+      flex: 0 0 auto;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #111827;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .paper {
+      min-height: 520px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(8,16,22,.96), rgba(15,23,42,.82));
+      overflow: auto;
+    }
+    .animated-document {
+      font-size: clamp(18px, 2.1vw, 30px);
+      line-height: 1.7;
+    }
+    [data-omi^="omi-8"] {
+      outline-offset: 2px;
+    }
+    [data-omi-port-channel="FS"] { --color: var(--fs); }
+    [data-omi-port-channel="GS"] { --color: var(--gs); }
+    [data-omi-port-channel="RS"] { --color: var(--rs); }
+    [data-omi-port-channel="US"] { --color: var(--us); }
+    .term-atom {
+      cursor: pointer;
+      transition: opacity .16s ease, filter .16s ease, border-color .16s ease;
+    }
+    .term-atom.is-hidden {
+      opacity: .16;
+      filter: grayscale(.8);
+    }
+    .term-atom.is-selected {
+      outline: 2px solid #e5e7eb;
+      outline-offset: 3px;
+      border-color: #e5e7eb;
+    }
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      .paper { min-height: 420px; }
+      .row, .filter-grid, .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      main { padding: 10px; }
+      .row, .filter-grid, .metric-grid { grid-template-columns: 1fr; }
+      .stage-head { align-items: flex-start; }
+      .detail-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="controls">
+      <h1>DOM/CSSOM Atom Inspector</h1>
+      <p>winkNLP supplies POS transforms, WordNet synsets supply CIDR centroids, CSSOM/DOM define the tetrahedron, and OMI attributes expose native prefix routing.</p>
+      <textarea id="source">Documented synsets animate DOM terms through CSSOM rules and semantic CIDR atoms.</textarea>
+      <div class="row">
+        <button id="compile" type="button">Compile</button>
+        <label>Projection
+          <select id="projection">
+            <option value="mixed">Mixed</option>
+            <option value="2d">2D</option>
+            <option value="3d">3D</option>
+          </select>
+        </label>
+        <label>Chirality
+          <select id="chirality">
+            <option value="native">Native</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </label>
+        <label>TinyNEAT
+          <select id="tinyneat">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+          </select>
+        </label>
+      </div>
+
+      <h2>CSSOM Filters</h2>
+      <div class="filter-grid">
+        <label>OMI Prefix
+          <input id="filter-prefix" value="omi-8-ffff-127-0-0-1" spellcheck="false">
+        </label>
+        <label>Graph Channel
+          <select id="filter-graph">
+            <option value="">Any</option>
+            <option>FS</option><option>GS</option><option>RS</option><option>US</option>
+          </select>
+        </label>
+        <label>OMI Port
+          <select id="filter-port">
+            <option value="">Any</option>
+            <option>FS</option><option>GS</option><option>RS</option><option>US</option>
+          </select>
+        </label>
+        <label>POS Hex
+          <input id="filter-pos" placeholder="0x07" spellcheck="false">
+        </label>
+        <label>Synset Cell
+          <input id="filter-cell" placeholder="S0 or C04" spellcheck="false">
+        </label>
+        <label>CIDR
+          <input id="filter-cidr" placeholder="127.x.x.x/32" spellcheck="false">
+        </label>
+        <label>Centroid
+          <input id="filter-centroid" placeholder="2001:db8:.../128" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric"><span>Total</span><strong id="metric-total">0</strong></div>
+        <div class="metric"><span>Visible</span><strong id="metric-visible">0</strong></div>
+        <div class="metric"><span>Stable</span><strong id="metric-stable">0</strong></div>
+        <div class="metric"><span>Prefix</span><strong id="metric-prefix">0</strong></div>
+        <div class="metric"><span>Tetra</span><strong id="metric-tetra">0</strong></div>
+        <div class="metric"><span>Centroid</span><strong id="metric-centroid">-</strong></div>
+      </div>
+
+      <h2>Selected Atom</h2>
+      <div id="details" class="details"></div>
+      <pre id="summary"></pre>
+    </section>
+
+    <section class="document-stage">
+      <div class="stage-head">
+        <div>
+          <h1>Animated Semantic Document</h1>
+          <p>Each term is a writable DOM atom with `data-omi` attributes and CSSOM-routable OMI port metadata.</p>
+        </div>
+        <div class="row">
+          <a href="/bidi.html">BiDi CM6</a>
+          <a href="/aframe.html">A-Frame</a>
+        </div>
+      </div>
+      <div class="paper">
+        <div id="document" class="animated-document"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import {
+      applyDOMCSSOMAttributes,
+      buildDOMCSSOMRegistry,
+      compileTextToAnimatedDocument,
+      filterDOMCSSOMAtoms
+    } from "/src/index.js";
+
+    const wordpos = {
+      async lookup(lemma) {
+        return [{
+          lemma,
+          synonyms: [lemma, `${lemma}_sense`],
+          hypernyms: ["document"],
+          hyponyms: [`${lemma}_term`],
+          meronyms: ["style"],
+          holonyms: ["canvas"],
+          antonyms: ["void"]
+        }];
+      }
+    };
+
+    const source = document.getElementById("source");
+    const docEl = document.getElementById("document");
+    const summary = document.getElementById("summary");
+    const detailsEl = document.getElementById("details");
+    const projection = document.getElementById("projection");
+    const chirality = document.getElementById("chirality");
+    const tinyneat = document.getElementById("tinyneat");
+    const filters = {
+      prefix: document.getElementById("filter-prefix"),
+      graph: document.getElementById("filter-graph"),
+      port: document.getElementById("filter-port"),
+      pos: document.getElementById("filter-pos"),
+      cell: document.getElementById("filter-cell"),
+      cidr: document.getElementById("filter-cidr"),
+      centroid: document.getElementById("filter-centroid")
+    };
+    const metric = {
+      total: document.getElementById("metric-total"),
+      visible: document.getElementById("metric-visible"),
+      stable: document.getElementById("metric-stable"),
+      prefix: document.getElementById("metric-prefix"),
+      tetra: document.getElementById("metric-tetra"),
+      centroid: document.getElementById("metric-centroid")
+    };
+    let compiled;
+    let registry;
+    let selectedId;
+
+    function currentFilters() {
+      return {
+        omiPrefix: filters.prefix.value,
+        graphChannel: filters.graph.value,
+        omiPortChannel: filters.port.value,
+        posHex: filters.pos.value,
+        synsetCell: filters.cell.value,
+        cidr: filters.cidr.value,
+        centroid: filters.centroid.value
+      };
+    }
+
+    function applyOverrides() {
+      if (!compiled) return;
+      for (const atom of docEl.querySelectorAll(".term-atom")) {
+        if (projection.value !== "mixed") atom.dataset.projection = projection.value;
+        if (chirality.value !== "native") atom.dataset.chirality = chirality.value;
+      }
+    }
+
+    function wireAtomElements() {
+      const elements = [...docEl.querySelectorAll(".term-atom")];
+      elements.forEach((element, index) => {
+        const atom = registry.atoms[index];
+        applyDOMCSSOMAttributes(element, atom);
+        element.tabIndex = 0;
+        element.setAttribute("role", "button");
+        element.addEventListener("click", () => selectAtom(atom.id));
+        element.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectAtom(atom.id);
+          }
+        });
+      });
+    }
+
+    function selectAtom(id) {
+      selectedId = id;
+      for (const element of docEl.querySelectorAll(".term-atom")) {
+        element.classList.toggle("is-selected", element.dataset.omiAtomId === id);
+      }
+      renderDetails(registry.toDetails(id));
+    }
+
+    function renderDetails(details) {
+      if (!details) {
+        detailsEl.innerHTML = `<div class="detail-row"><span>Status</span><code>No atom selected</code></div>`;
+        return;
+      }
+      const rows = [
+        ["Term", details.term],
+        ["OMI", details.omiAddress],
+        ["Selector", details.selector],
+        ["POS", `${details.pos} ${details.posHex}`],
+        ["Port", details.portChannel],
+        ["Graph", details.graphChannel],
+        ["CIDR", details.cidr],
+        ["Centroid", details.centroid],
+        ["Relations", `${details.relationCount} ${details.stable ? "stable" : "unstable"}`],
+        ["Cells", details.activeSynsetCells.join(" ") || "-"]
+      ];
+      detailsEl.innerHTML = rows.map(([label, value]) => (
+        `<div class="detail-row"><span>${escapeHTML(label)}</span><code>${escapeHTML(value)}</code></div>`
+      )).join("");
+    }
+
+    function applyFilters() {
+      if (!registry) return;
+      const filterValues = currentFilters();
+      const visible = new Set(filterDOMCSSOMAtoms(registry, filterValues).map((atom) => atom.id));
+      const prefixMatches = registry.queryPrefix(filterValues.omiPrefix || "").length;
+      for (const element of docEl.querySelectorAll(".term-atom")) {
+        element.classList.toggle("is-hidden", !visible.has(element.dataset.omiAtomId));
+      }
+      metric.total.textContent = registry.metrics.totalAtoms;
+      metric.visible.textContent = visible.size;
+      metric.stable.textContent = registry.metrics.stableAtoms;
+      metric.prefix.textContent = prefixMatches;
+      metric.tetra.textContent = registry.metrics.tetrahedronVertices;
+      metric.centroid.textContent = registry.metrics.tetrahedronCentroid || "-";
+      summary.textContent = JSON.stringify({
+        filters: filterValues,
+        visible: visible.size,
+        channels: compiled.features.channelCounts,
+        omiPorts: Object.fromEntries(["FS", "GS", "RS", "US"].map((channel) => [
+          channel,
+          registry.index.byOmiPortChannel.get(channel)?.length || 0
+        ]))
+      }, null, 2);
+    }
+
+    async function run() {
+      compiled = await compileTextToAnimatedDocument(source.value, {
+        wordpos,
+        useTinyNEAT: tinyneat.value === "on",
+        populationSize: 8,
+        generations: 1
+      });
+      registry = buildDOMCSSOMRegistry(compiled);
+      if (!document.getElementById("animated-document-style")) {
+        const style = document.createElement("style");
+        style.id = "animated-document-style";
+        style.textContent = compiled.css;
+        document.head.appendChild(style);
+      }
+      docEl.innerHTML = compiled.html;
+      wireAtomElements();
+      applyOverrides();
+      applyFilters();
+      selectAtom(registry.atoms[0]?.id);
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    document.getElementById("compile").addEventListener("click", run);
+    projection.addEventListener("change", applyOverrides);
+    chirality.addEventListener("change", applyOverrides);
+    tinyneat.addEventListener("change", run);
+    Object.values(filters).forEach((control) => control.addEventListener("input", applyFilters));
+    Object.values(filters).forEach((control) => control.addEventListener("change", applyFilters));
+    run();
+  </script>
+</body>
+</html>

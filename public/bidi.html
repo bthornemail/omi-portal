@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OMI CodeMirror BiDi Bridge</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081016;
+      --panel: #0f172a;
+      --panel-2: #0b1220;
+      --border: #263244;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --cyan: #00ffcc;
+      --pink: #ff0055;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(360px, .9fr) minmax(460px, 1.1fr);
+      gap: 16px;
+      padding: 18px;
+    }
+    section {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(15, 23, 42, .88);
+    }
+    .controls, .stage {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
+    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button, a {
+      min-height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #111827;
+      color: var(--text);
+      padding: 8px 10px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:hover, a:hover { border-color: #475569; background: #182235; }
+    #omi-cm6-editor-surface {
+      min-height: 300px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel-2);
+    }
+    .cm-editor {
+      min-height: 300px;
+      background: var(--panel-2);
+      color: var(--text);
+      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .cm-gutters { background: #09111d; color: var(--muted); border-right: 1px solid var(--border); }
+    .cm-activeLine, .cm-activeLineGutter { background: rgba(148, 163, 184, .08); }
+    pre, .metric {
+      margin: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel-2);
+      padding: 10px;
+      color: #cbd5e1;
+      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font: 10px Inter, ui-sans-serif, system-ui, sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 5px;
+      overflow-wrap: anywhere;
+    }
+    svg {
+      width: 100%;
+      min-height: 360px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: radial-gradient(circle at 50% 50%, rgba(148, 163, 184, .16), transparent 32%), #050a12;
+    }
+    [data-omi-type="bidi-canvas-tile"] {
+      transform-box: fill-box;
+      transform-style: preserve-3d;
+      transform-origin: center;
+      transition: transform 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), fill 0.15s ease, stroke .15s ease;
+    }
+    [data-bidi-flow="LRE-LRO"] {
+      unicode-bidi: bidi-override;
+      direction: ltr;
+      fill: rgba(0, 255, 204, 0.2);
+      stroke: var(--cyan);
+    }
+    [data-bidi-flow="RLE-RLO"] {
+      unicode-bidi: bidi-override;
+      direction: rtl;
+      fill: rgba(255, 0, 85, 0.2);
+      stroke: var(--pink);
+      stroke-dasharray: 4 2;
+    }
+    @media (max-width: 920px) {
+      main { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      main { padding: 10px; }
+      .metric-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="controls">
+      <h1>CodeMirror BiDi Bridge</h1>
+      <p>CM6 transactions carrying Unicode BiDi controls drive DataView polarity, 5040-cycle memory, and CSSOM projection state.</p>
+      <div id="omi-cm6-editor-surface"></div>
+      <div class="row">
+        <button id="insert-positive" type="button">Insert LRE/LRO</button>
+        <button id="insert-negative" type="button">Insert RLE/RLO</button>
+        <button id="step" type="button">Step Clock</button>
+        <a href="/document.html">Document</a>
+      </div>
+      <pre id="token-readout"></pre>
+    </section>
+
+    <section class="stage">
+      <div>
+        <h1>BiDi 2.5D Surface</h1>
+        <p>The active SVG tile receives `data-bidi-flow` and transform updates from the CM6 bridge.</p>
+      </div>
+      <svg id="omi-webgl-canvas-surface" viewBox="0 0 800 400" data-service-bus="8" role="img" aria-label="OMI BiDi extrusion surface">
+        <g id="omi-bidi-tiling-grid" transform="translate(360 170)">
+          <path id="omi-node-active-bidi-mesh" data-omi-type="bidi-canvas-tile" data-bidi-flow="LRE-LRO" d="M 0 0 H 80 V 80 H 0 Z" fill="rgba(0,255,204,.2)" stroke="#00ffcc" stroke-width="4"></path>
+        </g>
+      </svg>
+      <div class="metric-grid">
+        <div class="metric"><span>Profile</span><strong id="metric-profile">LRE-LRO</strong></div>
+        <div class="metric"><span>Endian</span><strong id="metric-endian">little</strong></div>
+        <div class="metric"><span>Tick</span><strong id="metric-tick">0</strong></div>
+        <div class="metric"><span>Depth</span><strong id="metric-depth">0</strong></div>
+        <div class="metric"><span>Buffer</span><strong>5040 * 8</strong></div>
+        <div class="metric"><span>Root</span><strong>omi-8-ffff-127-0-0-1</strong></div>
+      </div>
+      <pre id="cell-readout"></pre>
+    </section>
+  </main>
+
+  <script type="module">
+    import { EditorView, basicSetup } from "codemirror";
+    import { javascript } from "@codemirror/lang-javascript";
+    import { ViewPlugin } from "@codemirror/view";
+    import { compileOmiBiDiExtension, OmiBiDiCM6CoreEngine } from "/src/index.js";
+
+    const coefficients = new Float32Array([1.5, 2, -0.5, 10]);
+    const payload = btoa(String.fromCharCode(...new Uint8Array(coefficients.buffer))).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/g, "");
+    const positiveToken = `omi-8-\u202a\u202d-ffff-127-0-0-1-0x1a-0x41-${payload}`;
+    const negativeToken = `omi-8-\u202b\u202e-ffff-127-0-0-1-0x1a-0x41-${payload}`;
+    const sharedBuffer = typeof SharedArrayBuffer === "function"
+      ? new SharedArrayBuffer(5040 * 8)
+      : new ArrayBuffer(5040 * 8);
+    const engineProbe = new OmiBiDiCM6CoreEngine(sharedBuffer);
+    const metric = {
+      profile: document.getElementById("metric-profile"),
+      endian: document.getElementById("metric-endian"),
+      tick: document.getElementById("metric-tick"),
+      depth: document.getElementById("metric-depth")
+    };
+    const cellReadout = document.getElementById("cell-readout");
+    const tokenReadout = document.getElementById("token-readout");
+
+    function renderEvaluation({ header, payload: result, tick }) {
+      metric.profile.textContent = header.profile;
+      metric.endian.textContent = header.isLittleEndian ? "little" : "big";
+      metric.depth.textContent = result.extrusionDepth.toFixed(2);
+      metric.tick.textContent = String(tick ?? engineProbe.view.getBigUint64(0, true));
+      cellReadout.textContent = JSON.stringify({
+        car: {
+          profile: header.profile,
+          isLittleEndian: header.isLittleEndian,
+          chiralityCode: `0x${header.chiralityCode.toString(16)}`,
+          polarityCode: `0x${header.polarityCode.toString(16)}`
+        },
+        cdr: result
+      }, null, 2);
+    }
+
+    const extensions = compileOmiBiDiExtension(sharedBuffer, {
+      ViewPlugin,
+      onEvaluation: renderEvaluation
+    });
+
+    const view = new EditorView({
+      doc: `${positiveToken}\n`,
+      extensions: [
+        basicSetup,
+        javascript(),
+        extensions
+      ],
+      parent: document.getElementById("omi-cm6-editor-surface")
+    });
+
+    function insertToken(token) {
+      view.dispatch({
+        changes: { from: view.state.doc.length, insert: `${token}\n` },
+        selection: { anchor: view.state.doc.length + token.length + 1 }
+      });
+      tokenReadout.textContent = token
+        .replaceAll("\u202a", "\\u202A")
+        .replaceAll("\u202b", "\\u202B")
+        .replaceAll("\u202d", "\\u202D")
+        .replaceAll("\u202e", "\\u202E")
+        .replaceAll("\u202c", "\\u202C");
+    }
+
+    document.getElementById("insert-positive").addEventListener("click", () => insertToken(positiveToken));
+    document.getElementById("insert-negative").addEventListener("click", () => insertToken(negativeToken));
+    document.getElementById("step").addEventListener("click", () => {
+      metric.tick.textContent = String(engineProbe.advanceClockTimeline());
+    });
+    tokenReadout.textContent = positiveToken.replaceAll("\u202a", "\\u202A").replaceAll("\u202d", "\\u202D");
+  </script>
+</body>
+</html>

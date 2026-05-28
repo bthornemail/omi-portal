@@ -1,0 +1,358 @@
+{
+  "version": "1.0.0",
+  "canonicalRoot": {
+    "omi": "omi-8-ffff-127-0-0-1",
+    "ipv6": "::ffff:127.0.0.1",
+    "deprecatedShorthand": "omi-8-127-0-0-1",
+    "remoteCodepointRoot": "::/128",
+    "source": "docs/canonical-addressing.md"
+  },
+  "protocol": {
+    "name": "Omicron Object Model Distributed Protocol",
+    "version": "Omi-v1.2.0",
+    "safetyClassification": "zero-escape-token-structure",
+    "prospectus": "docs/omi-distributed-protocol.md",
+    "summary": "Decentralized multi-modal browser protocol joining DOM, CSSOM, JSDOM, graphics memory, WordNet routing, and OMI token prefixes into one addressable route fabric."
+  },
+  "sources": [
+    {
+      "path": "dev-docs/OMI( omi- ) Object Model.md",
+      "role": "topological object-model exploration",
+      "canonicalStatus": "canonicalized",
+      "keyConcepts": ["CIDR containment", "DOM hierarchy", "CSSOM prefix matching", "cons/car/cdr IPC", "720/5040 lifecycle", "A-Frame"],
+      "sourceNotes": "Contains the broadest OMI topology narrative. Deprecated localhost shorthand examples normalize to omi-8-ffff-127-0-0-1."
+    },
+    {
+      "path": "dev-docs/Omi Declarative.md",
+      "role": "deployment manifest exploration",
+      "canonicalStatus": "reference-only",
+      "keyConcepts": ["CodeMirror 6", "Fano clock", "Universal POS ports", "CoTURN", "Prolog WordNet", "WebGL 2"],
+      "sourceNotes": "Used as source language for framework concepts. Runtime networking and shader surfaces remain future unless locally implemented."
+    },
+    {
+      "path": "dev-docs/Omi Object Model.md",
+      "role": "control descriptor and object-model seed",
+      "canonicalStatus": "canonicalized",
+      "keyConcepts": ["0x00..0x3f", "dataset attributes", "DOM registration", "CSSOM routing", "polynomial payloads"],
+      "sourceNotes": "Supplies the printable descriptor rule for DOM-safe control semantics."
+    },
+    {
+      "path": "dev-docs/Omi Port Rendering.md",
+      "role": "service-bus and rendering exploration",
+      "canonicalStatus": "canonicalized",
+      "keyConcepts": ["::1..::8 service buses", "RPC routing", "WordNet broker", "WebRTC transport", "2.5D extrusion"],
+      "sourceNotes": "Defines semantic service-bus vocabulary and CSSOM signal interception model."
+    },
+    {
+      "path": "dev-docs/Omi Porting.md",
+      "role": "port projection and network routing exploration",
+      "canonicalStatus": "canonicalized",
+      "keyConcepts": ["UPOS ports", "Universal Features", "WordNet operators", "Fano routes", "CoTURN/TURN proxy"],
+      "sourceNotes": "Source for UPOS-to-port projection, Fano WordNet token shape, and synset packet routing."
+    },
+    {
+      "path": "dev-docs/chat.md",
+      "role": "indexed transcript source",
+      "canonicalStatus": "indexed-source",
+      "keyConcepts": ["BiDi controls", "CBOS", "lambda/F-expression ranges", "manifest glossary", "CodeMirror bridge", "WebGL future surface"],
+      "sourceNotes": "Indexed for concepts and provenance. It is not copied wholesale into canonical docs."
+    }
+  ],
+  "addressSpaces": [
+    {
+      "id": "semantic-service-buses",
+      "notation": "::1..::8",
+      "omiPrefix": "omi-1..omi-8",
+      "status": "implemented-partial",
+      "meaning": "Content/process delivery range for OMI semantic subsystems.",
+      "buses": [
+        { "ipv6": "::1", "name": "loopback-ipc", "status": "documented" },
+        { "ipv6": "::2", "name": "lisp-signaler", "status": "documented" },
+        { "ipv6": "::3", "name": "prolog-wordnet-broker", "status": "implemented" },
+        { "ipv6": "::4", "name": "coturn-turn-synset-proxy", "status": "documented-future" },
+        { "ipv6": "::5", "name": "hnsw-memory-indexer", "status": "documented-future" },
+        { "ipv6": "::6", "name": "cm6-transaction-bridge", "status": "implemented" },
+        { "ipv6": "::7", "name": "fano-clock-guard", "status": "implemented-partial" },
+        { "ipv6": "::8", "name": "master-canvas-surface", "status": "implemented" }
+      ]
+    },
+    {
+      "id": "local-context-root",
+      "notation": "::ffff:127.0.0.1",
+      "omiPrefix": "omi-8-ffff-127-0-0-1",
+      "status": "implemented",
+      "meaning": "Browser-local context boundary for DOM, CSSOM, JSDOM, SVG, A-Frame, and JSON Canvas projections."
+    },
+    {
+      "id": "remote-codepoint-root",
+      "notation": "::/128",
+      "omiPrefix": "omi-0",
+      "status": "documented",
+      "meaning": "Remote or deferred codepoint hierarchy marker."
+    },
+    {
+      "id": "documentation-prefix",
+      "notation": "2001:db8::/32",
+      "omiPrefix": "synset documentation centroid",
+      "status": "implemented",
+      "meaning": "Documentation-safe IPv6 centroid projection for WordNet and DOM/CSSOM reference terms."
+    }
+  ],
+  "tokenLayouts": [
+    {
+      "id": "canonical-fs-gs-rs-us",
+      "shape": "omi-8-ffff-127-0-0-1-0xRS-0xUS-payload",
+      "status": "implemented",
+      "meaning": "Canonical browser-local OMI address with bounded RS control and US unit/codepoint fields."
+    },
+    {
+      "id": "fano-wordnet-operator",
+      "shape": "omi-fano-pN-local|turn-OP-SOURCE-TARGET-FEATURES-slot720-PAYLOAD",
+      "status": "implemented",
+      "meaning": "Fano WordNet synset route with operator-first relation routing and 16-byte packet serialization."
+    },
+    {
+      "id": "fano-upos-two-cube",
+      "shape": "omi-fano-pN-local|turn-SRC_UPOS-DST_UPOS-SOURCE-TARGET-FEATURES-slot720-PAYLOAD",
+      "status": "documented-future",
+      "meaning": "Prospectus grammar extension for a two-cube Universal POS and Universal Features routing table."
+    },
+    {
+      "id": "omi-file-dot-cdr",
+      "shape": "CAR4:CDR(content.context.payload)",
+      "status": "implemented",
+      "meaning": "*.omi binary-to-text file frame with 4-byte pre-header and dot-delimited lambda-cube body."
+    }
+  ],
+  "fileFormats": [
+    {
+      "id": "omi-file-v0",
+      "extension": ".omi",
+      "status": "implemented",
+      "spec": "docs/omi-file-format.md",
+      "car": {
+        "bytes": 4,
+        "fields": [
+          { "byte": 0, "name": "chirality-endian-bom", "values": ["0x01", "0x02"] },
+          { "byte": 1, "name": "polarity-bidi-flow", "values": ["0x0a", "0x0b"] },
+          { "byte": 2, "name": "alignment", "values": ["0x20", "0x3f"] },
+          { "byte": 3, "name": "delimiter-bridge", "values": ["0x2d"] }
+        ]
+      },
+      "cdr": {
+        "encoding": "utf-8 printable text",
+        "delimiter": ".",
+        "shape": "content.context.payload",
+        "content": "omi-* route",
+        "context": "hyphen-delimited UPOS ports",
+        "payload": "URL-safe Base64 typed vector or UTF-8 clamped fallback",
+        "lambdaCube": [
+          "content CIDR block space hierarchy",
+          "context UPOS port socket pair",
+          "Base64 Float32 vector payload"
+        ]
+      }
+    }
+  ],
+  "objectSurfaces": [
+    { "id": "dom", "name": "DOM", "role": "runtime object tree, ids, events, and data attributes", "status": "implemented" },
+    { "id": "cssom", "name": "CSSOM", "role": "selector/rule surface for prefix routing and visual state", "status": "implemented" },
+    { "id": "jsdom", "name": "JSDOM", "role": "server/test mirror for DOM/CSSOM semantics; no runtime dependency", "status": "documented" },
+    { "id": "svg", "name": "SVG", "role": "2D addressable graph and tile surface", "status": "implemented" },
+    { "id": "aframe", "name": "A-Frame", "role": "3D WebGL-backed entity surface", "status": "implemented" },
+    { "id": "json-canvas", "name": "JSON Canvas", "role": "portable graph export surface", "status": "implemented" },
+    { "id": "codemirror", "name": "CodeMirror 6", "role": "transactional text token and BiDi bridge surface", "status": "implemented" },
+    { "id": "wordnet-prolog", "name": "WordNet/Prolog", "role": "synset relation and semantic centroid surface", "status": "implemented" }
+  ],
+  "projectiveTiming": {
+    "geometry": "Fano Plane PG(2,2)",
+    "points": 7,
+    "lines": 7,
+    "pointsPerLine": 3,
+    "linesPerPoint": 3,
+    "tokenField": "p1..p7",
+    "lifecycle": [
+      { "slot": 720, "name": "promote-gc-sweep", "meaning": "6! boundary for pruning volatile leaf state" },
+      { "slot": 5040, "name": "hard-reset", "meaning": "7! boundary for clearing active memory registers" }
+    ],
+    "status": "implemented-partial"
+  },
+  "hardwareEngines": [
+    { "id": "bitwise-clock-orchestrator", "status": "implemented-partial", "role": "5040-cycle timeline and Smith matrix support" },
+    { "id": "carry-lookahead-adder", "status": "implemented", "role": "4-bit CLA carry utilities" },
+    { "id": "fano-collision-validator", "status": "documented-future", "role": "multi-user timing collision detection over Fano lines" },
+    { "id": "webrtc-udp-transceiver", "status": "documented-future", "role": "unreliable unordered TURN/WebRTC transport through ::4" },
+    { "id": "hnsw-proximity-graph", "status": "documented-future", "role": "approximate nearest-neighbor lookup over text and geometry" },
+    { "id": "webgl2-shader-stream", "status": "documented-future", "role": "GPU Horner evaluation for polyform extrusion" },
+    { "id": "codemirror-transaction-bridge", "status": "implemented", "role": "text-to-DataView BiDi projection" },
+    { "id": "jsdom-validation-environment", "status": "documented", "role": "headless DOM/CSSOM mirror without runtime dependency" }
+  ],
+  "sequencing": {
+    "id": "canonical-omi-protocol-sequencing",
+    "status": "documented",
+    "spec": "docs/omi-protocol-sequencing.md",
+    "surfaces": ["CodeMirror 6", "OMI Kernel Core", "Shared Worker", "DataView SAB", "WebRTC Data Channel", "WebGL 2 Canvas"],
+    "phases": [
+      {
+        "index": 1,
+        "id": "ingestion-compilation",
+        "name": "Ingestion and lexical compilation",
+        "steps": ["CodeMirror transaction capture", "hyphen/dot lexical token split", "identity ingest through car/cdr"]
+      },
+      {
+        "index": 2,
+        "id": "memory-time-metrics",
+        "name": "Memory mapping and time metrics",
+        "steps": ["atomic stride verification", "7-tick cascade profiles", "CLA vector resolution"]
+      },
+      {
+        "index": 3,
+        "id": "routing-transports",
+        "name": "Routing and distributed transports",
+        "steps": ["local vs remote filter", "16-byte binary packet pack", "CoTURN/WebRTC UDP-style broadcast metadata"]
+      },
+      {
+        "index": 4,
+        "id": "spatial-eviction",
+        "name": "Spatial acceleration and eviction",
+        "steps": ["GPU buffer target", "Horner shader draw", "720/5040 lifecycle sweep"]
+      }
+    ],
+    "rotators": ["rot7", "rot15", "rot60", "rot120", "rot240", "rot360", "rot720"],
+    "assertions": [
+      "non-blocking-ingestion",
+      "zero-copy-serialization-boundary",
+      "factorial-time-alignment",
+      "context-normalization",
+      "surface-separation"
+    ]
+  },
+  "controlDescriptors": [
+    { "range": "0x00..0x1f", "role": "32-slot pre-header descriptors", "memory": "SharedArrayBuffer(128) as Float32Array(32)", "status": "documented" },
+    { "range": "0x00..0x3f", "role": "RS control predicates and F-expression declarations", "memory": "SharedArrayBuffer(256) as Float32Array(64)", "status": "implemented-partial" },
+    { "range": "0x00..0x7f", "role": "US unit/codepoint definitions and S-expression leaves", "memory": "ASCII/codepoint unit frame", "status": "implemented" }
+  ],
+  "transformers": [
+    { "id": "cons", "signature": "cons(carHeader, cdrPayload)", "role": "construct route/payload transit cell", "status": "implemented" },
+    { "id": "car", "signature": "car(cell)", "role": "extract route, header, service bus, or context", "status": "implemented" },
+    { "id": "cdr", "signature": "cdr(cell)", "role": "extract payload, tail tokens, binary vector, or deferred body", "status": "implemented" },
+    { "id": "omi-parse", "signature": "parseOmiAddress(input)", "role": "parse and normalize canonical FS/GS/RS/US address", "status": "implemented" },
+    { "id": "cssom-prefix", "signature": "[data-omi^=\"...\"]", "role": "native subtree and route-prefix selection", "status": "implemented" },
+    { "id": "cidr-projection", "signature": "toIPv6Centroid(seed), toIPv4HostRoute(seed)", "role": "semantic centroid and local route projection", "status": "implemented" },
+    { "id": "dataview-projection", "signature": "DataView(buffer)", "role": "byte-level endian, packet, and timeline interpretation", "status": "implemented" }
+  ],
+  "routingTables": [
+    {
+      "id": "fs-gs-rs-us",
+      "role": "canonical OMI address frame",
+      "entries": [
+        { "key": "FS", "meaning": "IPv6/document frame and service surface" },
+        { "key": "GS", "meaning": "localhost/context bridge" },
+        { "key": "RS", "meaning": "control predicate, bounded to 0x00..0x3f" },
+        { "key": "US", "meaning": "unit/codepoint leaf, bounded to 0x00..0x7f" }
+      ]
+    },
+    {
+      "id": "upos-port-projection",
+      "role": "Universal POS to OMI port channel projection",
+      "entries": [
+        { "key": "FS", "class": "open-content", "tags": ["NOUN", "PROPN", "VERB", "ADJ"], "role": "base entities, actions, global script blocks, and process boundaries" },
+        { "key": "GS", "class": "closed-operator", "tags": ["ADP", "AUX", "CCONJ", "NUM", "DET", "PART"], "role": "loop counts, bitwidth shifts, carry signals, and coordinate scalars" },
+        { "key": "RS", "class": "linguistic-predicate", "tags": ["ADV", "INTJ", "PRON", "SCONJ"], "role": "0x00..0x3f controls and lazy Prolog F-expression declarations" },
+        { "key": "US", "class": "volatile-unit", "tags": ["PUNCT", "SYM", "X"], "role": "0x00..0x7f codepoints, eager S-expression leaves, and terminal polynomial payloads" }
+      ]
+    },
+    {
+      "id": "universal-features",
+      "role": "context qualifiers for grammatical and synset routes",
+      "entries": ["Mood", "Tense", "Person", "Number", "PronType", "Case", "Gender", "VerbForm"]
+    },
+    {
+      "id": "wordnet-operators",
+      "role": "Prolog WordNet synset relation routing",
+      "entries": ["s", "sk", "g", "syntax", "hyp", "ins", "ent", "sim", "mm", "ms", "mp", "der", "cls", "cs", "vgp", "at", "ant", "sa", "ppl", "per", "fr"]
+    }
+  ],
+  "polynomial": {
+    "id": "four-term-characteristic-polynomial",
+    "status": "implemented-partial",
+    "equation": "P(t)=cFS*t^3+cGS*t^2+cRS*t+cUS",
+    "evaluation": "horners-method",
+    "payloadBytes": 16,
+    "coefficients": [
+      { "byteOffset": "0..3", "index": 0, "term": "FS_Weight" },
+      { "byteOffset": "4..7", "index": 1, "term": "GS_Weight" },
+      { "byteOffset": "8..11", "index": 2, "term": "RS_Weight" },
+      { "byteOffset": "12..15", "index": 3, "term": "US_Weight" }
+    ],
+    "glsl": "((aCoefficients.x * uTimeStep + aCoefficients.y) * uTimeStep + aCoefficients.z) * uTimeStep + aCoefficients.w"
+  },
+  "lifecycleSweeps": [
+    {
+      "id": "promote-gc-720",
+      "condition": "tick % 720 === 0",
+      "factorial": "6!",
+      "scope": ["[data-omi-type=\"clock-unit\"]", "[data-omi-type=\"vertex\"]"],
+      "action": "flag dead slots or zero-weight polynomial trajectories with .omi-evicted and remove after a transition",
+      "status": "documented"
+    },
+    {
+      "id": "hard-reset-5040",
+      "condition": "tick % 5040 === 0",
+      "factorial": "7!",
+      "scope": ["[data-omi]"],
+      "action": "clear master pointer, zero volatile shared-memory slots, and reset canvas transforms to origin",
+      "status": "implemented-partial"
+    }
+  ],
+  "implementationStatus": {
+    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix"],
+    "documentedFuture": ["live CoTURN/WebRTC bridge", "HNSW runtime index", "full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
+    "deprecated": ["omi-8-127-0-0-1 generated shorthand"],
+    "referenceOnly": ["large exploratory manifest snippets in dev-docs/Omi Declarative.md", "full transcript content in dev-docs/chat.md"]
+  },
+  "complianceChecks": [
+    {
+      "id": "zero-escape-identity",
+      "requirement": "Generated DOM ids and data-omi attributes use flat hyphen-delimited tokens; raw non-printing controls are represented by printable descriptors."
+    },
+    {
+      "id": "topological-containment",
+      "requirement": "Subtree updates and filtering use id or data-omi prefix containment."
+    },
+    {
+      "id": "factorial-alignment",
+      "requirement": "Volatile memory and route updates respect 720 promote and 5040 hard-reset lifecycle boundaries."
+    },
+    {
+      "id": "non-blocking-ingestion",
+      "requirement": "OMI text transactions resolve through native hyphen and dot token splitting in the hot path."
+    },
+    {
+      "id": "zero-copy-serialization-boundary",
+      "requirement": "Transport and graphics handoff use ArrayBuffer, SharedArrayBuffer, typed arrays, or DataView blocks instead of JSON string objects."
+    },
+    {
+      "id": "context-normalization",
+      "requirement": "Generated browser-local addresses normalize to omi-8-ffff-127-0-0-1."
+    },
+    {
+      "id": "service-bus-labeling",
+      "requirement": "Semantic content routes identify ::1..::8; WordNet uses ::3; TURN proxy metadata uses ::4."
+    }
+  ],
+  "terms": [
+    { "term": "OMI", "definition": "Hyphen-delimited object identity and route token namespace." },
+    { "term": "CIDR", "definition": "Containment and stability model for address prefix projection." },
+    { "term": "IPR", "definition": "IP routing / route-table semantics over OMI token prefixes." },
+    { "term": "DOM", "definition": "Runtime browser object tree and address host." },
+    { "term": "CSSOM", "definition": "Native selector and rule surface for OMI prefix routing." },
+    { "term": "JSDOM", "definition": "Server/test mirror of DOM/CSSOM semantics, documented without adding a dependency." },
+    { "term": "cons", "definition": "Constructs a route/payload cell." },
+    { "term": "car", "definition": "Extracts route/header/context from a cell." },
+    { "term": "cdr", "definition": "Extracts payload/remainder/value from a cell." },
+    { "term": "RS", "definition": "Control predicate segment bounded to 0x00..0x3f." },
+    { "term": "US", "definition": "Unit/codepoint segment bounded to 0x00..0x7f." },
+    { "term": "DataView", "definition": "Byte-level memory interpretation layer for OMI buffers and packets." }
+  ]
+}

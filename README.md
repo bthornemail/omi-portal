@@ -1,40 +1,27 @@
-# OMI POS SCGNN TinyNEAT
+# OMI Portal
 
-This package turns Universal POS tags into canonical transformation-feature tokens for a default OMI graph node policy.
+OMI Portal is the root package for the Omicron Object Model experiments: deterministic POS graph transforms, WordNet centroid addressing, canonical `omi-*` indexes, DOM/CSSOM inspectors, CodeMirror BiDi memory bridges, and A-Frame semantic scenes.
 
-See [docs/](./docs/) for the canonical OMI framework notes on IPv4-mapped IPv6 addressing, `0x00..0x3f` control descriptors, and SharedArrayBuffer memory layout.
+The current package is the merged single-branch target. Demo snapshots under `demos/` are reference material only.
 
-Pipeline:
+## Canonical Entry Points
 
-```text
-text
-  → winkNLP tokenization + POS tagging
-  → POS feature tokens
-  → FS/GS/RS/US chiral channel projection
-  → default SCGNN nodes
-  → JSON Canvas graph
-  → optional WordNet centroid addresses
-  → optional DOM/CSSOM tetrahedron frame
-  → optional 5040-slot Smith chart projection
-  → optional TinyNEAT policy evolution
-```
+- Framework declaration: [docs/omi-object-model.md](./docs/omi-object-model.md)
+- Machine-readable manifest: [docs/omi-object-model.manifest.json](./docs/omi-object-model.manifest.json)
+- Source map from `dev-docs/`: [docs/source-map.md](./docs/source-map.md)
+- Glossary: [GLOSSARY.md](./GLOSSARY.md)
+- Agent notes: [AGENTS.md](./AGENTS.md)
+- Workflow skills: [SKILLS.md](./SKILLS.md)
 
-## Canonical token vocabulary
+## Browser Surfaces
 
-The canonical POS vocabulary is the Universal POS set:
+The browser GUIs live in `public/` and are served from the URL root by Vite:
 
-```text
-ADJ ADP ADV AUX CCONJ DET INTJ NOUN NUM PART PRON PROPN PUNCT SCONJ SYM VERB X
-```
-
-The package maps those POS tags into four chiral channels:
-
-| Channel | Code | JSON Canvas node role | POS projection |
-|---|---:|---|---|
-| FS | `0x1C` | `file` / BLOB egress | `PUNCT`, `SYM` |
-| GS | `0x1D` | `group` / centroid context | `ADJ`, `DET`, `INTJ` |
-| RS | `0x1E` | `link` / routing edge | `VERB`, `AUX`, `ADV`, `ADP`, `SCONJ`, `CCONJ`, `PART` |
-| US | `0x1F` | `text` / Base64 ingress | `NOUN`, `PROPN`, `PRON`, `NUM`, `X` |
+- `/` - 5040 Smith chart POS graph compiler
+- `/document.html` - DOM/CSSOM OMI atom inspector
+- `/aframe.html` - A-Frame WordNet/Prolog broker scene
+- `/bidi.html` - CodeMirror 6 BiDi/DataView bridge
+- `/deterministic_clock_slide_rule_routed.html` - legacy deterministic clock slide-rule reference
 
 ## Install
 
@@ -42,176 +29,81 @@ The package maps those POS tags into four chiral channels:
 npm install
 ```
 
-## Run the browser demo
+## Run
 
 ```bash
 npm run dev
 ```
 
-Open the Vite URL and compile text into a JSON Canvas graph.
+Open the Vite URL. The public HTML files are served from root paths such as `http://localhost:5173/aframe.html`.
 
-The A-Frame 3D scene is available at:
-
-```text
-http://localhost:5173/aframe.html
-```
-
-The animated semantic document demo is available at:
-
-```text
-http://localhost:5173/document.html
-```
-
-## Run the node demo
-
-```bash
-npm run demo -- "The chiral clock routes text into file blobs through graph links."
-```
-
-## Run the WordNet tetrahedron demo
-
-```bash
-npm run demo:wordnet -- "DOM nodes route CSSOM style rules into canvas groups."
-```
-
-The demo uses a mock WordPOS-compatible lookup so it is deterministic and does not require fetching the full WordNet DB.
-
-## Run tests
+## Test And Build
 
 ```bash
 npm test
-```
-
-## Browserify wink-only bundle
-
-The main package uses Vite for the full demo. If you want the exact winkNLP browserify flow:
-
-```bash
-npm run bundle:wink-browserify
-```
-
-This produces:
-
-```text
-public/wink-bundle.js
-```
-
-and exposes:
-
-```js
-window.omiPOSTags("Its quarterly profits jumped 76%.")
+npm run build
 ```
 
 ## Programmatic API
 
 ```js
-import { compileTextToPOSSCGNN } from "./src/index.js";
-
-const compiled = compileTextToPOSSCGNN("The graph routes text to file blobs.");
-console.log(compiled.tokens);
-console.log(compiled.features);
-console.log(compiled.canvas);
+import {
+  buildOmiIndex,
+  compileTextToAnimatedDocument,
+  compileTextToPOSSCGNN,
+  compileTextToWordNetTetraSCGNN,
+  parseOmiAddress
+} from "./src/index.js";
 ```
 
-## WordNet centroid address layer
+Core exports include:
 
-The POS layer remains the transformation-token layer. The WordNet layer supplies deterministic semantic centroid addresses.
+- POS graph compilation and JSON Canvas projection.
+- WordNet centroid compilation and synset cell addressing.
+- OMI address parsing, formatting, UPOS port projection, and index construction.
+- DOM/CSSOM registry helpers for browser-native filtering.
+- CodeMirror BiDi bridge helpers.
+- Prolog WordNet fact broker and OMI Fano token helpers.
+- `*.omi` file pre-header/body compiler helpers.
+
+## Core Model
+
+The POS transform channel remains the existing graph behavior. WordNet synset cells remain centroid identity. The OMI port projection bridges UPOS form to FS/GS/RS/US localhost and RPC-style addresses without replacing the POS graph channel map.
+
+Canonical local context root:
 
 ```text
-text
-  → winkNLP POS tokens
-  → wordpos / wordpos-web WordNet lookup
-  → minimum 6 relation facts per term centroid
-  → deterministic CIDR-style address projection
-  → DOM/CSSOM tetrahedron reference frame
+omi-8-ffff-127-0-0-1
 ```
 
-The merged rule is:
+The older shorthand `omi-8-127-0-0-1` is deprecated compatibility syntax and normalizes to the canonical IPv4-mapped IPv6 form.
 
-```text
-POS tag = transformation token
-WordNet synset relations = semantic centroid address
-DOM/CSSOM = tetrahedral browser object-model frame
-CIDR notation = stability metric and address projection
+## Documentation Set
+
+- [docs/canonical-addressing.md](./docs/canonical-addressing.md)
+- [docs/control-descriptors.md](./docs/control-descriptors.md)
+- [docs/memory-layout.md](./docs/memory-layout.md)
+- [docs/codemirror-bidi-bridge.md](./docs/codemirror-bidi-bridge.md)
+- [docs/prolog-wordnet-aframe.md](./docs/prolog-wordnet-aframe.md)
+- [docs/omi-distributed-protocol.md](./docs/omi-distributed-protocol.md)
+- [docs/omi-file-format.md](./docs/omi-file-format.md)
+- [docs/omi-protocol-sequencing.md](./docs/omi-protocol-sequencing.md)
+
+## Node Demos
+
+```bash
+npm run demo -- "The chiral clock routes text into file blobs through graph links."
+npm run demo:wordnet -- "DOM nodes route CSSOM style rules into canvas groups."
 ```
 
-Each enriched term receives:
+## Browserify Wink Bundle
 
-```text
-ipv6: 2001:db8:.../128   semantic centroid
-ipv4: 127.x.y.z/32       local host-route vertex
+```bash
+npm run bundle:wink-browserify
 ```
 
-A term centroid is stable when its WordNet lookup produces at least six relation facts. Empty results remain addressable through the identity synonym, but they are marked unstable.
-
-### Canonical synset cells
-
-Every WordNet centroid also gets a canonical mnemonic cell address:
-
-```text
-synset:<POS>:<lemma>:5c<S...>:24c<C...>
-```
-
-The 5-cell is the base semantic simplex:
-
-| Cell | Mnemonic | Role | Channel |
-|---|---|---|---|
-| S0 | lemma | identity term | US |
-| S1 | hyper | upward abstraction | GS |
-| S2 | hypo | downward instance | US |
-| S3 | part | part-whole boundary | FS |
-| S4 | oppo | contrast closure | RS |
-
-The 24-cell expands that simplex into documented synset facets such as `syn.id`, `isa.hypernym`, `part.meronym`, `flow.entailment`, `qual.similar`, `opp.antonym`, and context cells. Each cell receives deterministic documentation-safe addresses under `2001:db8::/32` and `127/8`, so a term can be addressed by CIDR, by 5-cell mnemonic, or by 24-cell mnemonic.
-
-### DOM/CSSOM tetrahedron
-
-The browser reference frame has four vertices and six pairwise edges:
-
-| Channel | Corpus | JSON Canvas node role |
-|---|---|---|
-| FS | DOM | `file` |
-| GS | CSSOM | `group` |
-| RS | CSS Typed OM | `link` |
-| US | shared/extended browser interfaces | `text` |
-
-## Animated documents
-
-`compileTextToAnimatedDocument(text, options)` emits DOM-ready semantic atoms:
+This writes `public/wink-bundle.js` and exposes:
 
 ```js
-import { compileTextToAnimatedDocument } from "./src/index.js";
-
-const animated = await compileTextToAnimatedDocument(text, {
-  wordpos,
-  useTinyNEAT: true
-});
-
-document.head.append(Object.assign(document.createElement("style"), {
-  textContent: animated.css
-}));
-document.querySelector("#document").innerHTML = animated.html;
+window.omiPOSTags("Its quarterly profits jumped 76%.");
 ```
-
-Each term atom carries POS channel, CIDR address, WordNet centroid, chirality, projection, and CSS motion variables. TinyNEAT is optional; when disabled or unavailable, the compiler uses a deterministic fallback motion policy.
-
-### Browser wordpos-web wiring
-
-Browser use requires serving the generated `/wordpos` dictionary assets. In a page that can serve `/wordpos/dict`, pass a real WordPOS instance:
-
-```js
-import { compileTextToWordNetTetraSCGNN } from "./src/index.js";
-
-const wordpos = new WordPOS({ dictPath: "/wordpos/dict" });
-await wordpos.ready();
-
-const compiled = await compileTextToWordNetTetraSCGNN(
-  "DOM nodes route CSSOM style rules into canvas groups.",
-  { wordpos, minRelations: 6 }
-);
-```
-
-## Design rule
-
-POS tags are not annotations after the fact. They are the transformation tokens. The default SCGNN node therefore does not need a pretrained semantic embedding to start; it has a deterministic POS/channel address, a control code, a `/32` vertex address, and a URN closure.
-# omi-portal
