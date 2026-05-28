@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OMI Chiral Tetrahedron · A-Frame</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081016;
+      --panel: rgba(8, 16, 22, 0.84);
+      --border: rgba(148, 163, 184, 0.28);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --orange: #f97316;
+      --green: #22c55e;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .hud {
+      position: fixed;
+      z-index: 10;
+      left: 18px;
+      top: 18px;
+      width: min(420px, calc(100vw - 36px));
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .cell {
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.58);
+      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #cbd5e1;
+    }
+    .cell strong {
+      display: block;
+      color: var(--text);
+      font: 700 11px Inter, ui-sans-serif, system-ui, sans-serif;
+      margin-bottom: 3px;
+    }
+    .nav {
+      position: fixed;
+      z-index: 10;
+      right: 18px;
+      top: 18px;
+      display: flex;
+      gap: 8px;
+    }
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .view-dock {
+      position: fixed;
+      z-index: 11;
+      right: 18px;
+      bottom: 18px;
+      width: min(720px, calc(100vw - 36px));
+      display: grid;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .view-toolbar,
+    .view-grid,
+    .modal {
+      pointer-events: auto;
+    }
+    .view-toolbar {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, auto));
+      gap: 8px;
+      align-items: end;
+      justify-content: end;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+    }
+    .field {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    select,
+    input,
+    button {
+      min-height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.88);
+      color: var(--text);
+      font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding: 0 8px;
+    }
+    input[type="number"] {
+      width: 62px;
+    }
+    button {
+      cursor: pointer;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-weight: 700;
+    }
+    .translation {
+      display: flex;
+      gap: 6px;
+    }
+    .translation input {
+      min-width: 0;
+    }
+    .view-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--view-count, 3), minmax(0, 1fr));
+      gap: 8px;
+    }
+    .viewport-card {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(8, 16, 22, 0.78);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+    .viewport-card.active {
+      border-color: rgba(34, 197, 94, 0.9);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.22);
+    }
+    .viewport-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .viewport-head button {
+      min-height: 22px;
+      padding: 0 7px;
+      font-size: 11px;
+    }
+    .viewport-svg {
+      display: block;
+      width: 100%;
+      height: 118px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .viewport-meta {
+      padding: 7px 8px 8px;
+      color: #cbd5e1;
+      font: 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.45;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.52);
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal {
+      width: min(680px, 100%);
+      max-height: min(720px, calc(100vh - 36px));
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(8, 16, 22, 0.96);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+    }
+    .modal header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .modal pre {
+      margin: 0;
+      padding: 14px;
+      white-space: pre-wrap;
+      color: #cbd5e1;
+      font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    #smithTexture {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      left: -10px;
+      top: -10px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    @media (max-width: 700px) {
+      .hud { top: auto; bottom: 12px; left: 12px; width: calc(100vw - 24px); }
+      .nav { right: 12px; top: 12px; }
+      .meta { grid-template-columns: 1fr; }
+      .view-dock { left: 12px; right: 12px; bottom: 12px; width: auto; }
+      .view-toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+      .translation-field,
+      #modal-open { grid-column: 1 / -1; }
+      .translation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .translation input { width: 100%; }
+      .view-grid { grid-template-columns: 1fr; max-height: 36vh; overflow: auto; }
+      .hud { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <h1>ChiralCanvas Tetrahedron</h1>
+    <p>FS, GS, RS, and US are rendered as addressable A-Frame entities. The rear panel is a live canvas texture of the 5040 Smith matrix.</p>
+    <div class="meta" id="hud-meta"></div>
+  </div>
+  <nav class="nav" aria-label="Demo navigation">
+    <a href="/">Smith</a>
+    <a href="/document.html">Document</a>
+  </nav>
+
+  <section class="view-dock" aria-label="Concurrent camera view controls">
+    <div class="view-toolbar">
+      <label class="field">Views
+        <select id="view-count">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <label class="field">Projection
+        <select id="projection-mode">
+          <option value="3d" selected>3D</option>
+          <option value="2d">2D</option>
+        </select>
+      </label>
+      <label class="field">Chirality
+        <select id="chirality-mode">
+          <option value="right" selected>Right</option>
+          <option value="left">Left</option>
+        </select>
+      </label>
+      <label class="field">Edge
+        <select id="edge-view"></select>
+      </label>
+      <label class="field translation-field">Translate
+        <span class="translation">
+          <input id="tx" type="number" step="0.1" value="0" aria-label="Translate X">
+          <input id="ty" type="number" step="0.1" value="0" aria-label="Translate Y">
+          <input id="tz" type="number" step="0.1" value="0" aria-label="Translate Z">
+        </span>
+      </label>
+      <button id="modal-open" type="button">Inspect</button>
+    </div>
+    <div class="view-grid" id="view-grid"></div>
+  </section>
+
+  <div class="modal-backdrop" id="view-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <header>
+        <h2 id="modal-title">View State</h2>
+        <button id="modal-close" type="button">Close</button>
+      </header>
+      <pre id="modal-state"></pre>
+    </div>
+  </div>
+
+  <canvas id="smithTexture" width="512" height="512"></canvas>
+
+  <script type="module">
+    import "aframe";
+    import "aframe-environment-component";
+    import {
+      ChiralSmithCanvas,
+      createSmithMatrix,
+      makeDOMCSSOMTetrahedron,
+      storeSmithTick,
+      writeCanvasGraphToSmithMatrix
+    } from "./src/index.js";
+
+    const tetrahedron = makeDOMCSSOMTetrahedron([], { minRelations: 6 });
+    const matrix = createSmithMatrix({ shared: false });
+    const smithCanvas = new ChiralSmithCanvas(document.getElementById("smithTexture"), matrix, {
+      background: "#081016",
+      grid: "rgba(203, 213, 225, 0.24)",
+      cloud: "rgba(148, 163, 184, 0.42)"
+    });
+
+    const positions = {
+      FS: { x: -2.8, y: 1.15, z: -4.3 },
+      GS: { x: 2.8, y: 1.15, z: -4.3 },
+      RS: { x: 0, y: 3.8, z: -4.7 },
+      US: { x: 0, y: 1.35, z: -8.0 }
+    };
+
+    const colors = {
+      FS: "#38bdf8",
+      GS: "#a78bfa",
+      RS: "#facc15",
+      US: "#22c55e"
+    };
+
+    const geometry = {
+      FS: "primitive: box; width: 1.05; height: 1.05; depth: 1.05",
+      GS: "primitive: octahedron; radius: 0.82",
+      RS: "primitive: tetrahedron; radius: 0.95",
+      US: "primitive: sphere; radius: 0.72"
+    };
+
+    const labelOffsets = {
+      FS: { x: -0.62, y: 0.95, z: 0 },
+      GS: { x: -0.82, y: 0.95, z: 0 },
+      RS: { x: -0.52, y: 1.02, z: 0 },
+      US: { x: 0.46, y: 0.28, z: 0 }
+    };
+
+    const edgePairs = [
+      ["FS", "GS"], ["FS", "RS"], ["FS", "US"],
+      ["GS", "RS"], ["GS", "US"], ["RS", "US"]
+    ];
+
+    const pointsOfInterest = {
+      centroid: { label: "Centroid", x: 0, y: 2.2, z: -5.8 },
+      upper: { label: "RS apex", ...positions.RS },
+      ingress: { label: "US ingress", ...positions.US },
+      matrix: { label: "Smith panel", x: 0, y: 2.15, z: -9.2 }
+    };
+
+    const cameraPresets = [
+      { id: "front", label: "Front", position: { x: 0, y: 2.1, z: 1.2 }, poi: "centroid" },
+      { id: "top", label: "Top", position: { x: 0, y: 8.2, z: -5.8 }, poi: "centroid" },
+      { id: "left", label: "Left", position: { x: -6.6, y: 2.6, z: -5.8 }, poi: "matrix" },
+      { id: "right", label: "Right", position: { x: 6.6, y: 2.6, z: -5.8 }, poi: "matrix" }
+    ];
+
+    const modularViews = [
+      { id: "smith", label: "Smith texture", poi: "matrix", camera: "front" },
+      { id: "wordnet", label: "WordNet labels", poi: "upper", camera: "top" },
+      { id: "control", label: "Control edges", poi: "centroid", camera: "right" }
+    ];
+
+    const state = {
+      viewCount: 3,
+      activeView: 0,
+      projection: "3d",
+      chirality: "right",
+      edgeIndex: 0,
+      translation: { x: 0, y: 0, z: 0 },
+      views: [
+        { camera: "front", poi: "centroid", edgeIndex: 0, module: "smith" },
+        { camera: "left", poi: "matrix", edgeIndex: 1, module: "wordnet" },
+        { camera: "right", poi: "ingress", edgeIndex: 2, module: "control" },
+        { camera: "top", poi: "upper", edgeIndex: 3, module: "smith" },
+        { camera: "front", poi: "centroid", edgeIndex: 4, module: "wordnet" }
+      ]
+    };
+
+    function addVec(a, b) {
+      return { x: a.x + b.x, y: a.y + b.y, z: a.z + b.z };
+    }
+
+    function positionFor(channel) {
+      const base = positions[channel];
+      const projected = state.projection === "2d" ? { ...base, z: -5.8 } : base;
+      return addVec(projected, state.translation);
+    }
+
+    function poiPosition(id) {
+      const poi = pointsOfInterest[id] || pointsOfInterest.centroid;
+      const projected = state.projection === "2d" ? { ...poi, z: -5.8 } : poi;
+      return addVec(projected, state.translation);
+    }
+
+    function setVector3(el, value) {
+      el.setAttribute("position", `${value.x} ${value.y} ${value.z}`);
+    }
+
+    function lookAt(cameraEl, target) {
+      cameraEl.object3D.lookAt(new THREE.Vector3(target.x, target.y, target.z));
+    }
+
+    document.getElementById("hud-meta").innerHTML = tetrahedron.vertices.map((v) => `
+      <div class="cell"><strong>${v.channel} · ${v.label}</strong>${v.controlCode}<br>${v.ipv4}</div>
+    `).join("");
+
+    document.getElementById("edge-view").innerHTML = edgePairs.map(([a, b], i) => (
+      `<option value="${i}">${a}.${b}</option>`
+    )).join("");
+
+    writeCanvasGraphToSmithMatrix(matrix, {
+      nodes: tetrahedron.vertices.map((v) => ({ id: v.id, type: v.type, color: v.color })),
+      edges: tetrahedron.edges
+    }, 0);
+
+    AFRAME.registerComponent("chiral-spin", {
+      schema: { speed: { default: 16 } },
+      tick: function (_time, delta) {
+        this.el.object3D.rotation.y += (delta / 1000) * this.data.speed * Math.PI / 180;
+      }
+    });
+
+    AFRAME.registerComponent("hover-scale", {
+      schema: { to: { default: "1.22 1.22 1.22", type: "vec3" } },
+      init: function () {
+        this.base = this.el.object3D.scale.clone();
+        this.el.addEventListener("mouseenter", () => this.el.object3D.scale.copy(this.data.to));
+        this.el.addEventListener("mouseleave", () => this.el.object3D.scale.copy(this.base));
+      }
+    });
+
+    AFRAME.registerComponent("smith-texture-loop", {
+      tick: function (time) {
+        storeSmithTick(matrix, Math.floor(time / 36));
+        smithCanvas.render();
+        const mesh = this.el.getObject3D("mesh");
+        const map = mesh?.material?.map;
+        if (map) map.needsUpdate = true;
+      }
+    });
+
+    AFRAME.registerComponent("tetrahedron-frame", {
+      init: function () {
+        for (const vertex of tetrahedron.vertices) {
+          const p = positions[vertex.channel];
+          const entity = document.createElement("a-entity");
+          entity.setAttribute("id", `aframe-${vertex.channel.toLowerCase()}`);
+          entity.setAttribute("position", `${p.x} ${p.y} ${p.z}`);
+          entity.setAttribute("geometry", geometry[vertex.channel]);
+          entity.setAttribute("material", `color: ${colors[vertex.channel]}; metalness: 0.25; roughness: 0.38`);
+          entity.setAttribute("shadow", "cast: true; receive: true");
+          entity.setAttribute("hover-scale", "");
+          entity.setAttribute("chiral-spin", `speed: ${vertex.tetrahedronIndex % 2 === 0 ? 12 : -12}`);
+          entity.setAttribute("animation__click", "property: rotation; to: 0 405 0; dur: 900; startEvents: click");
+          this.el.appendChild(entity);
+
+          const label = document.createElement("a-entity");
+          const offset = labelOffsets[vertex.channel];
+          label.setAttribute("id", `label-${vertex.channel.toLowerCase()}`);
+          label.setAttribute("position", `${p.x + offset.x} ${p.y + offset.y} ${p.z + offset.z}`);
+          label.setAttribute("text", `value: ${vertex.channel} ${vertex.controlCode}\\n${vertex.label}\\n${vertex.ipv4}; color: #e5e7eb; width: 2.75; anchor: left; baseline: center`);
+          this.el.appendChild(label);
+        }
+
+        for (const edge of tetrahedron.edges) {
+          const from = positions[edge.label.slice(0, 2)];
+          const to = positions[edge.label.slice(3, 5)];
+          const edgeEntity = document.createElement("a-entity");
+          edgeEntity.setAttribute("id", `edge-${edge.label.toLowerCase().replace(".", "-")}`);
+          edgeEntity.setAttribute("line", `start: ${from.x} ${from.y} ${from.z}; end: ${to.x} ${to.y} ${to.z}; color: #94a3b8; opacity: 0.78`);
+          this.el.appendChild(edgeEntity);
+        }
+
+        applySceneState();
+      }
+    });
+
+    function applySceneState() {
+      const frame = document.querySelector("[tetrahedron-frame]");
+      if (frame) setVector3(frame, { x: 0, y: 0, z: 0 });
+
+      for (const vertex of tetrahedron.vertices) {
+        const p = positionFor(vertex.channel);
+        const entity = document.getElementById(`aframe-${vertex.channel.toLowerCase()}`);
+        if (entity) setVector3(entity, p);
+        const label = document.getElementById(`label-${vertex.channel.toLowerCase()}`);
+        const offset = labelOffsets[vertex.channel];
+        if (label) setVector3(label, { x: p.x + offset.x, y: p.y + offset.y, z: p.z + offset.z });
+      }
+
+      edgePairs.forEach(([a, b], i) => {
+        const edge = document.getElementById(`edge-${a.toLowerCase()}-${b.toLowerCase()}`);
+        if (!edge) return;
+        const from = state.chirality === "right" ? positionFor(a) : positionFor(b);
+        const to = state.chirality === "right" ? positionFor(b) : positionFor(a);
+        const color = i === state.edgeIndex ? (state.chirality === "right" ? "#22c55e" : "#f97316") : "#94a3b8";
+        const opacity = i === state.edgeIndex ? 1 : 0.58;
+        edge.setAttribute("line", `start: ${from.x} ${from.y} ${from.z}; end: ${to.x} ${to.y} ${to.z}; color: ${color}; opacity: ${opacity}`);
+      });
+
+      applyCameraView(state.activeView);
+      renderViewports();
+      renderModalState();
+    }
+
+    function applyCameraView(index) {
+      const view = state.views[index] || state.views[0];
+      const preset = cameraPresets.find((camera) => camera.id === view.camera) || cameraPresets[0];
+      const cameraEl = document.getElementById("mainCamera");
+      if (!cameraEl) return;
+      const cameraPosition = addVec(preset.position, state.translation);
+      setVector3(cameraEl, cameraPosition);
+      lookAt(cameraEl, poiPosition(view.poi || preset.poi));
+    }
+
+    function renderMiniSvg(view, index) {
+      const active = index === state.activeView;
+      const pair = edgePairs[view.edgeIndex % edgePairs.length];
+      const coords = { FS: [30, 78], GS: [150, 78], RS: [90, 22], US: [90, 102] };
+      const edgeLines = edgePairs.map(([a, b], i) => {
+        const hot = i === view.edgeIndex;
+        const from = state.chirality === "right" ? coords[a] : coords[b];
+        const to = state.chirality === "right" ? coords[b] : coords[a];
+        return `<line x1="${from[0]}" y1="${from[1]}" x2="${to[0]}" y2="${to[1]}" stroke="${hot ? (state.chirality === "right" ? "#22c55e" : "#f97316") : "#64748b"}" stroke-width="${hot ? 2.8 : 1}" opacity="${hot ? 1 : 0.56}"/>`;
+      }).join("");
+      const points = Object.entries(coords).map(([ch, [x, y]]) => (
+        `<g><circle cx="${x}" cy="${y}" r="${ch === pair[0] || ch === pair[1] ? 8 : 5}" fill="${colors[ch]}"/><text x="${x + 10}" y="${y + 4}" fill="#e5e7eb" font-size="10">${ch}</text></g>`
+      )).join("");
+      return `
+        <svg class="viewport-svg" viewBox="0 0 180 120" role="img" aria-label="Viewport ${index + 1}">
+          <rect width="180" height="120" fill="#0f172a"/>
+          <path d="M0 96 H180 M90 0 V120" stroke="#1e293b" stroke-width="1"/>
+          ${edgeLines}
+          ${points}
+          <text x="8" y="14" fill="${active ? "#22c55e" : "#94a3b8"}" font-size="10">${state.projection.toUpperCase()} · ${state.chirality}</text>
+        </svg>
+      `;
+    }
+
+    function renderViewports() {
+      const grid = document.getElementById("view-grid");
+      if (!grid) return;
+      grid.style.setProperty("--view-count", state.viewCount);
+      grid.innerHTML = state.views.slice(0, state.viewCount).map((view, index) => {
+        const camera = cameraPresets.find((c) => c.id === view.camera);
+        const poi = pointsOfInterest[view.poi];
+        const module = modularViews.find((m) => m.id === view.module);
+        const edge = edgePairs[view.edgeIndex % edgePairs.length].join(".");
+        return `
+          <article class="viewport-card ${index === state.activeView ? "active" : ""}" data-view="${index}">
+            <div class="viewport-head">
+              <span>${index + 1} · ${camera?.label || view.camera}</span>
+              <button type="button" data-activate="${index}">Use</button>
+            </div>
+            ${renderMiniSvg(view, index)}
+            <div class="viewport-meta">
+              poi=${poi?.label || view.poi}<br>
+              edge=${edge}<br>
+              module=${module?.label || view.module}
+            </div>
+          </article>
+        `;
+      }).join("");
+      grid.querySelectorAll("[data-activate]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeView = Number(button.dataset.activate);
+          state.edgeIndex = state.views[state.activeView].edgeIndex;
+          document.getElementById("edge-view").value = String(state.edgeIndex);
+          applySceneState();
+        });
+      });
+    }
+
+    function renderModalState() {
+      const out = document.getElementById("modal-state");
+      if (!out) return;
+      out.textContent = JSON.stringify({
+        activeView: state.activeView + 1,
+        projection: state.projection,
+        chirality: state.chirality,
+        translation: state.translation,
+        activeEdge: edgePairs[state.edgeIndex].join("."),
+        cameras: cameraPresets,
+        pointsOfInterest,
+        modularViews,
+        visibleViews: state.views.slice(0, state.viewCount)
+      }, null, 2);
+    }
+
+    function syncControls() {
+      document.getElementById("view-count").value = String(state.viewCount);
+      document.getElementById("projection-mode").value = state.projection;
+      document.getElementById("chirality-mode").value = state.chirality;
+      document.getElementById("edge-view").value = String(state.edgeIndex);
+      document.getElementById("tx").value = state.translation.x;
+      document.getElementById("ty").value = state.translation.y;
+      document.getElementById("tz").value = state.translation.z;
+    }
+
+    document.getElementById("view-count").addEventListener("change", (event) => {
+      state.viewCount = Number(event.target.value);
+      state.activeView = Math.min(state.activeView, state.viewCount - 1);
+      applySceneState();
+    });
+    document.getElementById("projection-mode").addEventListener("change", (event) => {
+      state.projection = event.target.value;
+      applySceneState();
+    });
+    document.getElementById("chirality-mode").addEventListener("change", (event) => {
+      state.chirality = event.target.value;
+      applySceneState();
+    });
+    document.getElementById("edge-view").addEventListener("change", (event) => {
+      state.edgeIndex = Number(event.target.value);
+      state.views[state.activeView].edgeIndex = state.edgeIndex;
+      applySceneState();
+    });
+    for (const axis of ["x", "y", "z"]) {
+      document.getElementById(`t${axis}`).addEventListener("change", (event) => {
+        state.translation[axis] = Number(event.target.value) || 0;
+        applySceneState();
+      });
+    }
+    document.getElementById("modal-open").addEventListener("click", () => {
+      renderModalState();
+      document.getElementById("view-modal").classList.add("open");
+    });
+    document.getElementById("modal-close").addEventListener("click", () => {
+      document.getElementById("view-modal").classList.remove("open");
+    });
+    document.getElementById("view-modal").addEventListener("click", (event) => {
+      if (event.target.id === "view-modal") event.currentTarget.classList.remove("open");
+    });
+    window.addEventListener("keydown", (event) => {
+      if (["INPUT", "SELECT", "TEXTAREA", "BUTTON"].includes(event.target?.tagName)) return;
+      if (!/^[1-5]$/.test(event.key)) return;
+      const next = Number(event.key) - 1;
+      if (next >= state.viewCount) return;
+      state.activeView = next;
+      state.edgeIndex = state.views[next].edgeIndex;
+      document.getElementById("edge-view").value = String(state.edgeIndex);
+      applySceneState();
+    });
+
+    syncControls();
+    renderViewports();
+  </script>
+
+  <a-scene
+    renderer="colorManagement: true; antialias: true"
+    cursor="rayOrigin: mouse"
+    raycaster="objects: [hover-scale]"
+    shadow="type: pcfsoft"
+    background="color: #081016">
+    <a-assets timeout="10000"></a-assets>
+
+    <a-entity environment="preset: starry; groundColor: #0f172a; grid: 1x1; dressingAmount: 18; lighting: none"></a-entity>
+    <a-entity tetrahedron-frame></a-entity>
+
+    <a-plane
+      position="0 2.15 -9.2"
+      rotation="0 0 0"
+      width="4.4"
+      height="4.4"
+      material="src: #smithTexture; shader: flat; side: double"
+      smith-texture-loop></a-plane>
+
+    <a-plane
+      position="0 0 -5.8"
+      rotation="-90 0 0"
+      width="12"
+      height="12"
+      color="#111827"
+      material="roughness: 0.92; metalness: 0.05"
+      shadow="receive: true"></a-plane>
+
+    <a-light type="ambient" color="#6b7f8f" intensity="0.65"></a-light>
+    <a-light type="point" intensity="1.8" position="2.5 5 -2.5" castShadow="true"></a-light>
+
+    <a-camera id="mainCamera" position="0 2.1 1.2">
+      <a-cursor color="#f8fafc" fuse="false"></a-cursor>
+    </a-camera>
+  </a-scene>
+</body>
+</html>

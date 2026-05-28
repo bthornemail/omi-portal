@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OMI POS SCGNN Smith Canvas</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f14;
+      --panel: #111827;
+      --panel-2: #0d131c;
+      --border: #263244;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --orange: #f97316;
+      --green: #22c55e;
+      --blue: #60a5fa;
+      --teal: #2dd4bf;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.95fr) minmax(420px, 1.25fr);
+      gap: 18px;
+      min-height: 100vh;
+      padding: 18px;
+    }
+    section {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+    .sub {
+      margin: -6px 0 2px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    textarea {
+      width: 100%;
+      min-height: 132px;
+      resize: vertical;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      line-height: 1.45;
+      font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: 1px solid #334155;
+      border-radius: 6px;
+      background: #1f2937;
+      color: var(--text);
+      min-height: 36px;
+      padding: 0 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { border-color: #475569; background: #243244; }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .metric {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 62px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .value {
+      margin-top: 5px;
+      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      word-break: break-all;
+    }
+    .workers {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .worker {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 9px;
+      min-width: 0;
+    }
+    .worker strong { display: block; font-size: 13px; }
+    .worker span { display: block; margin-top: 4px; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .chart-wrap {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      padding: 16px;
+      min-height: calc(100vh - 36px);
+    }
+    .chart-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+    .top-link {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #1f2937;
+      min-height: 36px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    canvas {
+      width: 100%;
+      min-height: 440px;
+      height: calc(100vh - 180px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1117;
+    }
+    pre {
+      margin: 0;
+      max-height: 240px;
+      overflow: auto;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      color: #cbd5e1;
+      font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      .chart-wrap { min-height: auto; }
+      canvas { height: 520px; }
+      .workers, .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="controls">
+      <h1>ChiralCanvas Smith Matrix</h1>
+      <p class="sub">POS tokens compile to JSON Canvas, then the graph is projected into a 5040-slot shared matrix rendered as Γ, z, and y on a Smith chart.</p>
+
+      <textarea id="input">The chiral clock routes text into file blobs through graph links.</textarea>
+      <div class="row">
+        <button id="compile">Compile Graph</button>
+        <button id="toggle">Run</button>
+        <button id="step">Step</button>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <div class="label">Centroid</div>
+          <div class="value">FS.GS.RS.US/128</div>
+        </div>
+        <div class="metric">
+          <div class="label">Matrix</div>
+          <div class="value" id="matrix-kind">SharedArrayBuffer(5040)</div>
+        </div>
+        <div class="metric">
+          <div class="label">Tick Slot</div>
+          <div class="value" id="tick-slot">0/5040</div>
+        </div>
+        <div class="metric">
+          <div class="label">Active Γ</div>
+          <div class="value" id="gamma-readout">0 + j0</div>
+        </div>
+      </div>
+
+      <div class="workers" id="workers"></div>
+      <pre id="out"></pre>
+    </section>
+
+    <section class="chart-wrap">
+      <div class="chart-head">
+        <div>
+          <h1>5040 Smith Chart</h1>
+          <p class="sub">Tick is impedance-plane ΓZ. Tock is the 180 degree admittance-plane pair ΓY.</p>
+        </div>
+        <div class="legend">
+          <a class="top-link" href="/aframe.html">A-Frame</a>
+          <a class="top-link" href="/document.html">Document</a>
+          <span class="swatch"><span class="dot" style="background:var(--orange)"></span>Tick Z</span>
+          <span class="swatch"><span class="dot" style="background:var(--green)"></span>Tock Y</span>
+          <span class="swatch"><span class="dot" style="background:var(--blue)"></span>r circles</span>
+          <span class="swatch"><span class="dot" style="background:var(--teal)"></span>x arcs</span>
+        </div>
+      </div>
+      <canvas id="smith" aria-label="Smith chart rendering of the 5040-slot chiral matrix"></canvas>
+      <pre id="canvas-out"></pre>
+    </section>
+  </main>
+
+  <script type="module">
+    import {
+      CHANNEL_META,
+      ChiralSmithCanvas,
+      compileTextToPOSSCGNN,
+      createSmithMatrix,
+      loadSmithTick,
+      storeSmithTick,
+      writeCanvasGraphToSmithMatrix
+    } from "./src/index.js";
+
+    const input = document.getElementById("input");
+    const out = document.getElementById("out");
+    const canvasOut = document.getElementById("canvas-out");
+    const tickSlot = document.getElementById("tick-slot");
+    const gammaReadout = document.getElementById("gamma-readout");
+    const matrixKind = document.getElementById("matrix-kind");
+    const workersEl = document.getElementById("workers");
+
+    const matrix = createSmithMatrix({ shared: true });
+    const hasSharedMatrix = typeof SharedArrayBuffer !== "undefined" && matrix.buffer instanceof SharedArrayBuffer;
+    matrixKind.textContent = hasSharedMatrix
+      ? "SharedArrayBuffer(5040)"
+      : "ArrayBuffer fallback(5040)";
+
+    const smith = new ChiralSmithCanvas(document.getElementById("smith"), matrix);
+    const vertices = Object.entries(CHANNEL_META).map(([channel, meta], index) => ({
+      channel,
+      index,
+      code: parseInt(meta.code, 16),
+      address: meta.ipv4,
+      type: meta.nodeType
+    }));
+
+    let compiled = null;
+    let running = false;
+    let raf = 0;
+    let workers = [];
+
+    function makeWorkerURL() {
+      const source = `
+        let view, vertex;
+        const SLOTS = 5040;
+        self.onmessage = (event) => {
+          if (event.data.type === "init") {
+            view = new Int32Array(event.data.buffer);
+            vertex = event.data.vertex;
+            setInterval(() => {
+              if (!view || !vertex) return;
+              const tick = Atomics.load(view, 0) >>> 0;
+              const sector = Math.floor((SLOTS - 1) / 4);
+              const base = 1 + vertex.index * sector;
+              const offset = (tick + vertex.code * 17) % sector;
+              const slot = Math.min(SLOTS - 1, base + offset);
+              const value = ((tick * 1103515245 + vertex.code * 2654435761 + slot) >>> 0) & 0x7fffffff;
+              Atomics.store(view, slot, value);
+              self.postMessage({ channel: vertex.channel, slot, tick });
+            }, 80);
+          }
+        };
+      `;
+      return URL.createObjectURL(new Blob([source], { type: "application/javascript" }));
+    }
+
+    function bootWorkers() {
+      if (!hasSharedMatrix) return;
+      workers.forEach((worker) => worker.terminate());
+      workers = [];
+      const workerURL = makeWorkerURL();
+      vertices.forEach((vertex) => {
+        const worker = new Worker(workerURL);
+        worker.postMessage({ type: "init", buffer: matrix.buffer, vertex });
+        worker.onmessage = (event) => {
+          const el = document.getElementById(`worker-${event.data.channel}`);
+          if (el) el.querySelector("span").textContent = `${vertices.find((v) => v.channel === event.data.channel).address} · slot ${event.data.slot}`;
+        };
+        workers.push(worker);
+      });
+    }
+
+    function renderWorkers() {
+      workersEl.innerHTML = vertices.map((vertex) => `
+        <div class="worker" id="worker-${vertex.channel}">
+          <strong>${vertex.channel} · ${vertex.type}</strong>
+          <span>${vertex.address} · ${vertex.code.toString(16)}</span>
+        </div>
+      `).join("");
+    }
+
+    function compile() {
+      compiled = compileTextToPOSSCGNN(input.value);
+      writeCanvasGraphToSmithMatrix(matrix, compiled.canvas, loadSmithTick(matrix));
+      out.textContent = JSON.stringify({
+        tokens: compiled.tokens,
+        features: compiled.features,
+        nodes: compiled.nodes.length,
+        edges: compiled.edges.length
+      }, null, 2);
+      canvasOut.textContent = JSON.stringify(compiled.canvas, null, 2);
+      smith.render();
+    }
+
+    function advanceTick(delta = 1) {
+      const next = loadSmithTick(matrix) + delta;
+      storeSmithTick(matrix, next);
+    }
+
+    function frame() {
+      if (running) advanceTick(1);
+      const state = smith.render();
+      tickSlot.textContent = `${state.slot}/5040`;
+      gammaReadout.textContent = `${state.point.gamma.re.toFixed(3)} ${state.point.gamma.im >= 0 ? "+" : "-"} j${Math.abs(state.point.gamma.im).toFixed(3)}`;
+      raf = requestAnimationFrame(frame);
+    }
+
+    document.getElementById("compile").addEventListener("click", compile);
+    document.getElementById("step").addEventListener("click", () => {
+      advanceTick(1);
+      const state = smith.render();
+      tickSlot.textContent = `${state.slot}/5040`;
+    });
+    document.getElementById("toggle").addEventListener("click", (event) => {
+      running = !running;
+      event.currentTarget.textContent = running ? "Pause" : "Run";
+    });
+    window.addEventListener("resize", () => {
+      smith.resize();
+      smith.render();
+    });
+    window.addEventListener("beforeunload", () => {
+      cancelAnimationFrame(raf);
+      workers.forEach((worker) => worker.terminate());
+    });
+
+    renderWorkers();
+    compile();
+    bootWorkers();
+    frame();
+  </script>
+</body>
+</html>

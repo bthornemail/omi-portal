@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OMI Animated Document</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081016;
+      --panel: #0f172a;
+      --border: #263244;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 70% 8%, rgba(34,197,94,.12), transparent 28%), var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(320px, .74fr) minmax(420px, 1.26fr);
+      gap: 16px;
+      padding: 18px;
+      min-height: 100vh;
+    }
+    section {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(15, 23, 42, .82);
+    }
+    .controls {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
+    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0b1220;
+      color: var(--text);
+      padding: 12px;
+      font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.45;
+    }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    button, select {
+      min-height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #111827;
+      color: var(--text);
+      padding: 0 10px;
+      font-weight: 700;
+    }
+    label {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    pre {
+      margin: 0;
+      max-height: 280px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0b1220;
+      padding: 12px;
+      color: #cbd5e1;
+      font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+    .document-stage {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .stage-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .stage-head a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #111827;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .paper {
+      min-height: 520px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(8,16,22,.96), rgba(15,23,42,.82));
+      overflow: auto;
+    }
+    .animated-document {
+      font-size: clamp(18px, 2.1vw, 30px);
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .paper { min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="controls">
+      <h1>Document Atom Animator</h1>
+      <p>winkNLP supplies POS transforms, WordNet synsets supply CIDR centroids, CSSOM/DOM define the tetrahedron, and TinyNEAT can modulate term motion.</p>
+      <textarea id="source">Documented synsets animate DOM terms through CSSOM rules and semantic CIDR atoms.</textarea>
+      <div class="row">
+        <button id="compile" type="button">Animate</button>
+        <label>Projection
+          <select id="projection">
+            <option value="mixed">Mixed</option>
+            <option value="2d">2D</option>
+            <option value="3d">3D</option>
+          </select>
+        </label>
+        <label>Chirality
+          <select id="chirality">
+            <option value="native">Native</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </label>
+        <label>TinyNEAT
+          <select id="tinyneat">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+          </select>
+        </label>
+      </div>
+      <pre id="summary"></pre>
+    </section>
+    <section class="document-stage">
+      <div class="stage-head">
+        <div>
+          <h1>Animated Semantic Document</h1>
+          <p>Each visible term is a writable DOM atom with CIDR metadata and CSS motion variables.</p>
+        </div>
+        <a href="/aframe.html">A-Frame</a>
+      </div>
+      <div class="paper">
+        <div id="document" class="animated-document"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { compileTextToAnimatedDocument } from "./src/index.js";
+
+    const wordpos = {
+      async lookup(lemma) {
+        return [{
+          lemma,
+          synonyms: [lemma, `${lemma}_sense`],
+          hypernyms: ["document"],
+          hyponyms: [`${lemma}_term`],
+          meronyms: ["style"],
+          holonyms: ["canvas"],
+          antonyms: ["void"]
+        }];
+      }
+    };
+
+    const source = document.getElementById("source");
+    const docEl = document.getElementById("document");
+    const summary = document.getElementById("summary");
+    const projection = document.getElementById("projection");
+    const chirality = document.getElementById("chirality");
+    const tinyneat = document.getElementById("tinyneat");
+    let compiled;
+
+    function applyOverrides() {
+      if (!compiled) return;
+      for (const atom of docEl.querySelectorAll(".term-atom")) {
+        if (projection.value !== "mixed") atom.dataset.projection = projection.value;
+        if (chirality.value !== "native") atom.dataset.chirality = chirality.value;
+      }
+    }
+
+    async function run() {
+      compiled = await compileTextToAnimatedDocument(source.value, {
+        wordpos,
+        useTinyNEAT: tinyneat.value === "on",
+        populationSize: 8,
+        generations: 1
+      });
+      if (!document.getElementById("animated-document-style")) {
+        const style = document.createElement("style");
+        style.id = "animated-document-style";
+        style.textContent = compiled.css;
+        document.head.appendChild(style);
+      }
+      docEl.innerHTML = compiled.html;
+      applyOverrides();
+      summary.textContent = JSON.stringify({
+        atoms: compiled.atoms.length,
+        stableAtoms: compiled.atoms.filter((atom) => atom.stable).length,
+        channels: compiled.features.channelCounts,
+        tetrahedron: {
+          centroid: compiled.tetrahedron.centroid.ipv6,
+          vertices: compiled.tetrahedron.vertices.map((v) => `${v.channel}:${v.ipv4}`)
+        }
+      }, null, 2);
+    }
+
+    document.getElementById("compile").addEventListener("click", run);
+    projection.addEventListener("change", applyOverrides);
+    chirality.addEventListener("change", applyOverrides);
+    tinyneat.addEventListener("change", run);
+    run();
+  </script>
+</body>
+</html>

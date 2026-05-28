@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deterministic Clock Slide Rule · Chiral Router</title>
+<style>
+:root {
+  --bg0:#070b10;--bg1:#0d131c;--bg2:#111827;--bg3:#1f2937;
+  --border:#243244;--border2:#334155;
+  --purple:#534AB7;--purple-lo:#2a2850;
+  --teal:#0F6E56;--teal-lo:#063028;
+  --amber:#854F0B;--amber-lo:#3a2205;
+  --red:#9b2020;--red-lo:#3a0808;
+  --green:#2e7d32;--green-lo:#0f2c10;
+  --blue:#1565c0;--blue-lo:#0a2540;
+  --cyan:#00838f;--cyan-lo:#002f35;
+  --txt:#e5e7eb;--txt2:#9ca3af;--txt3:#64748b;
+  --mono:'JetBrains Mono',monospace;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg0);color:var(--txt);font-family:var(--mono);font-size:12px;line-height:1.5;overflow-x:hidden}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+/* ── Layout ── */
+.root{display:grid;grid-template-columns:280px 1fr;grid-template-rows:auto auto 1fr;gap:1px;background:var(--border);min-height:100vh}
+.panel{background:var(--bg1);padding:12px}
+.panel-hd{font-size:10px;letter-spacing:.12em;color:var(--txt3);text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* ── Dashboard header ── */
+.topbar{grid-column:1/3;background:linear-gradient(180deg,#0b1220,#081016);padding:14px 16px;display:grid;grid-template-columns:minmax(280px,.8fr) 1.2fr;gap:14px;align-items:center}
+.brand h1{font-size:18px;letter-spacing:0;color:#fff;margin-bottom:4px;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.brand p{font-size:11px;color:var(--txt2);max-width:720px}
+.ops-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.ops-card{background:rgba(15,23,42,.78);border:1px solid var(--border);border-radius:8px;padding:9px 10px;min-height:58px}
+.ops-card .lbl{color:var(--txt3);font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.ops-card .num{font-size:18px;line-height:1;color:#fff;font-weight:800}
+.ops-card .sub{font-size:9px;color:var(--txt2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.8);margin-right:5px}
+.status-dot.ready{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.8)}
+.status-dot.risk{background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,.8)}
+
+/* ── Clock column ── */
+.clock-col{grid-row:2/4}
+
+/* ── State row ── */
+.state-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.state-row .panel{padding:10px}
+
+/* ── Router row ── */
+.router-row{grid-column:2;background:var(--bg1);padding:12px;display:flex;flex-direction:column;gap:10px}
+
+/* ── Controls ── */
+.ctrl-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+button{background:var(--bg3);color:var(--txt);border:1px solid var(--border2);padding:3px 10px;border-radius:var(--r);cursor:pointer;font-family:var(--mono);font-size:11px;transition:background .15s}
+button:hover{background:var(--purple-lo)}
+button.active{background:var(--purple);border-color:var(--purple)}
+
+/* ── Mono readout ── */
+.val{font-family:var(--mono);color:var(--txt)}
+.val-lg{font-size:20px;font-weight:700;color:#fff}
+.muted{color:var(--txt2)}
+.dim{color:var(--txt3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px;margin-bottom:6px;font-size:11px}
+.block .lbl{color:var(--txt3);font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.kv{display:flex;justify-content:space-between;gap:8px}
+.kv .k{color:var(--txt3)}
+.kv .v{color:var(--txt);text-align:right;word-break:break-all}
+
+/* ── Protocol pills ── */
+.proto-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}
+.proto{border-radius:var(--r);border:1px solid var(--border);padding:6px 4px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.proto .name{font-size:10px;font-weight:700;letter-spacing:.08em}
+.proto .state{font-size:9px;margin-top:3px}
+.proto .dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.proto.disconnected{background:var(--bg2);border-color:var(--border)}
+.proto.connecting{border-color:#555}
+.proto.connected{background:var(--bg2);border-color:var(--green)}
+.proto.connected .dot{background:var(--green);box-shadow:0 0 4px var(--green)}
+.proto.active-send .dot{background:#fff;animation:pulse .5s ease-in-out infinite alternate}
+.proto.error{border-color:var(--red)}
+.proto.error .dot{background:var(--red)}
+
+/* ── Decentralized topology dashboard ── */
+.topology-grid{display:grid;grid-template-columns:1.1fr .9fr .9fr;gap:8px}
+.topology-map{background:var(--bg0);border:1px solid var(--border);border-radius:8px;min-height:138px;padding:10px;position:relative;overflow:hidden}
+.topology-map:before{content:"";position:absolute;inset:12px;background:linear-gradient(90deg,transparent 49%,rgba(14,165,233,.15) 50%,transparent 51%),linear-gradient(0deg,transparent 49%,rgba(14,165,233,.1) 50%,transparent 51%);background-size:42px 42px;opacity:.7}
+.node-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:#22c55e;box-shadow:0 0 12px rgba(34,197,94,.8)}
+.node-dot.n0{left:18%;top:55%;background:#38bdf8}.node-dot.n1{left:45%;top:24%;background:#a78bfa}.node-dot.n2{left:68%;top:52%;background:#facc15}.node-dot.n3{left:50%;top:74%;background:#22c55e}
+.topology-line{position:absolute;height:1px;background:rgba(148,163,184,.7);transform-origin:left center}
+.topology-line.l0{left:21%;top:58%;width:31%;transform:rotate(-31deg)}.topology-line.l1{left:48%;top:29%;width:27%;transform:rotate(33deg)}.topology-line.l2{left:22%;top:59%;width:51%;transform:rotate(0deg)}.topology-line.l3{left:51%;top:72%;width:23%;transform:rotate(-32deg)}
+.topology-label{position:absolute;left:10px;bottom:8px;color:var(--txt2);font-size:10px}
+.readiness{display:grid;gap:6px}
+.readiness .block{margin:0}
+.meter{height:7px;border-radius:99px;background:var(--bg0);overflow:hidden;border:1px solid var(--border)}
+.meter span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#38bdf8);width:0%}
+.risk-list{display:grid;gap:6px}
+.risk-item{display:flex;justify-content:space-between;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:7px 8px;font-size:10px}
+.risk-item strong{font-weight:800;color:#fff}
+
+@keyframes pulse{to{opacity:.3}}
+
+/* ── Channel lanes ── */
+.lanes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.lane{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:6px;min-height:90px}
+.lane .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.lane.fs .lbl{color:#5ecfdf}
+.lane.gs .lbl{color:#b49cff}
+.lane.rs .lbl{color:#ffce6a}
+.lane.us .lbl{color:#7de8a8}
+.lane .msg{font-size:9px;color:var(--txt2);border-bottom:1px solid var(--border);padding:2px 0;word-break:break-all;opacity:0;transition:opacity .3s}
+.lane .msg.show{opacity:1}
+.lane .msg.fade{opacity:.3}
+
+/* ── Log panel ── */
+.log{background:var(--bg0);border:1px solid var(--border);border-radius:var(--r);height:120px;overflow-y:auto;padding:6px;font-size:10px;font-family:var(--mono)}
+.log-line{padding:1px 0;border-bottom:1px solid var(--border)}
+.log-line .ts{color:var(--txt3)}
+.log-line .proto-tag{padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;margin:0 4px}
+.log-line.mqtt .proto-tag{background:var(--purple-lo);color:#a99cf5}
+.log-line.http .proto-tag{background:var(--blue-lo);color:#7ab4f5}
+.log-line.ws .proto-tag{background:var(--teal-lo);color:#4ed4b0}
+.log-line.sse .proto-tag{background:var(--amber-lo);color:#f5a623}
+.log-line.rtc .proto-tag{background:var(--cyan-lo);color:#4dd0e1}
+.log-line.sys .proto-tag{background:var(--bg3);color:var(--txt3)}
+
+/* ── Smith chart ── */
+#smith-canvas{display:block;background:var(--bg0);border:1px solid var(--border);border-radius:var(--r)}
+
+/* ── URN display ── */
+.urn-box{background:var(--bg0);border:1px solid var(--border);border-radius:var(--r);padding:6px 8px;font-size:10px;word-break:break-all}
+.urn-box .urn-str{color:#7de8a8}
+.urn-box .urn-label{color:var(--txt3);font-size:9px}
+
+/* ── Trie ── */
+#trie-path{font-size:10px;line-height:1.8;word-break:break-all}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+@media(max-width:980px){
+  .root{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}
+  .topbar,.router-row{grid-column:1}
+  .topbar{grid-template-columns:1fr}
+  .ops-grid{grid-template-columns:repeat(2,1fr)}
+  .clock-col{grid-row:auto}
+  .state-row{grid-template-columns:1fr}
+  .topology-grid{grid-template-columns:1fr}
+  .proto-grid,.lanes{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<h2 class="sr-only">Deterministic Clock Slide Rule with chiral data routing over MQTT, HTTP, WebSocket, SSE, and WebRTC channels</h2>
+
+<div class="root">
+
+  <header class="topbar">
+    <div class="brand">
+      <h1>Decentralized Chiral Network Console</h1>
+      <p>Deterministic clock routing, CIDR-backed node addressing, URN closure, and multi-protocol transport readiness for peer-to-peer document and media exchange.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card">
+        <div class="lbl">network</div>
+        <div class="num"><span class="status-dot" id="net-dot"></span><span id="net-state">standby</span></div>
+        <div class="sub" id="net-sub">0 transports connected</div>
+      </div>
+      <div class="ops-card">
+        <div class="lbl">epoch</div>
+        <div class="num" id="dash-epoch">0</div>
+        <div class="sub">5040 slot cycle</div>
+      </div>
+      <div class="ops-card">
+        <div class="lbl">throughput</div>
+        <div class="num" id="dash-throughput">0</div>
+        <div class="sub">frames sent</div>
+      </div>
+      <div class="ops-card">
+        <div class="lbl">latency</div>
+        <div class="num" id="dash-latency">—</div>
+        <div class="sub">simulated/transport</div>
+      </div>
+      <div class="ops-card">
+        <div class="lbl">closure</div>
+        <div class="num" id="dash-closure">L</div>
+        <div class="sub">CLA carry gate</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ LEFT: Clock face ═══ -->
+  <div class="panel clock-col">
+    <div class="panel-hd">deterministic oscillator</div>
+
+    <svg width="236" height="236" viewBox="0 0 260 260" id="clock-svg">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <circle cx="130" cy="130" r="118" fill="none" stroke="#2a2a42" stroke-width="0.5"/>
+      <g id="tock-ring"></g>
+      <circle cx="130" cy="130" r="82" fill="none" stroke="#2a2a42" stroke-width="0.5"/>
+      <circle cx="130" cy="130" r="52" fill="none" stroke="#1a1a30" stroke-width="0.5"/>
+      <circle cx="130" cy="130" r="22" fill="#13131b" stroke="#3a3a60" stroke-width="0.5"/>
+      <text x="130" y="127" text-anchor="middle" style="font-size:8px;fill:#555480;font-family:'JetBrains Mono',monospace">127.0.0.1</text>
+      <text x="130" y="139" text-anchor="middle" style="font-size:8px;fill:#555480;font-family:'JetBrains Mono',monospace">::8</text>
+      <line id="hand-tick"  x1="130" y1="130" x2="130" y2="18" stroke="#534AB7" stroke-width="2"   stroke-linecap="round" marker-end="url(#arr2)"/>
+      <line id="hand-tock"  x1="130" y1="130" x2="130" y2="54" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" marker-end="url(#arr2)"/>
+      <line id="hand-carry" x1="130" y1="130" x2="130" y2="84" stroke="#854F0B" stroke-width="1"   stroke-linecap="round" marker-end="url(#arr2)"/>
+      <text x="130" y="8"   text-anchor="middle" style="font-size:9px;fill:#555480">rot360 · IPv6</text>
+      <text x="130" y="250" text-anchor="middle" style="font-size:9px;fill:#555480">8 tock · /1–/8</text>
+    </svg>
+
+    <div style="margin-top:8px;font-size:10px;display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:20px;height:2px;background:#534AB7;display:inline-block"></span><span class="dim">tick · rot360 · IPv6</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:20px;height:2px;background:#0F6E56;display:inline-block"></span><span class="dim">tock · rot240 · IPv4</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:20px;height:1px;background:#854F0B;display:inline-block"></span><span class="dim">carry · rot60 · CLA</span></div>
+    </div>
+
+    <div style="margin-top:12px">
+      <canvas id="smith-canvas" width="236" height="236"></canvas>
+    </div>
+
+    <div style="margin-top:8px" class="block">
+      <div class="lbl">smith · Γ pair</div>
+      <div class="kv"><span class="k">Γ_Z</span><span class="v" id="gamma-z">—</span></div>
+      <div class="kv"><span class="k">Γ_Y</span><span class="v" id="gamma-y">—</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT TOP: State readouts ═══ -->
+  <div class="state-row">
+    <div class="panel">
+      <div class="panel-hd">routing epoch</div>
+
+      <div class="ctrl-bar">
+        <button onclick="step(-1)">← prev</button>
+        <span class="val-lg" id="tick-val">0</span>
+        <span class="muted">mod 5040</span>
+        <button onclick="step(1)">next →</button>
+        <button onclick="toggleAuto()" id="auto-btn">▶ run</button>
+      </div>
+
+      <div class="block">
+        <div class="lbl">tick · IPv6 rot360</div>
+        <div class="val" id="ip6-val" style="word-break:break-all">2001:db8::8:0000</div>
+      </div>
+      <div class="block">
+        <div class="lbl">tock · IPv4 rot240</div>
+        <div class="val" id="ip4-val">0.0.0.0/1</div>
+      </div>
+      <div class="block">
+        <div class="lbl">4-bit CLA · A(rot15) B(rot4) → S</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <span class="muted">A=<span class="val" id="cla-a">0000</span></span>
+          <span class="muted">B=<span class="val" id="cla-b">0000</span></span>
+          <span class="muted">S=<span class="val" id="cla-s">0000</span></span>
+          <span class="muted">Cout=<span class="val" id="cla-cout">0</span></span>
+        </div>
+      </div>
+      <div class="block">
+        <div class="lbl">CIDR tock · rot360 mod 8</div>
+        <div class="val" id="cidr-val">—</div>
+      </div>
+      <div class="block">
+        <div class="lbl">rot cascade</div>
+        <div id="rot-chain" style="font-size:10px;line-height:1.8;color:var(--txt2)"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">identity plane · URN tetrahedron</div>
+
+      <div class="block">
+        <div class="lbl">resolved URN · NID:NSS</div>
+        <div class="urn-box"><div class="urn-label">tick ingress (0x1F · text · US)</div><div class="urn-str" id="urn-tick">—</div></div>
+        <div style="margin-top:4px" class="urn-box"><div class="urn-label">tock egress (0x1C · file · FS)</div><div class="urn-str" id="urn-tock">—</div></div>
+      </div>
+
+      <div class="block">
+        <div class="lbl">JSON canvas frame</div>
+        <div id="canvas-frame" style="font-size:10px;line-height:1.8;color:var(--txt2)"></div>
+      </div>
+
+      <div class="block">
+        <div class="lbl">patricia trie · base64 symbol keys</div>
+        <div id="trie-path"></div>
+      </div>
+
+      <div class="block">
+        <div class="lbl">vertex · IPv4 /32 addresses</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px">
+          <div style="color:#5ecfdf">FS 127.0.0.1/32 · 0x1C file</div>
+          <div style="color:#b49cff">GS 127.0.0.2/32 · 0x1D group</div>
+          <div style="color:#ffce6a">RS 127.0.0.3/32 · 0x1E link</div>
+          <div style="color:#7de8a8">US 127.0.0.4/32 · 0x1F text</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT BOTTOM: Router ═══ -->
+  <div class="router-row">
+    <div class="panel-hd">decentralized transport fabric</div>
+
+    <div class="topology-grid">
+      <div class="topology-map">
+        <div class="topology-line l0"></div>
+        <div class="topology-line l1"></div>
+        <div class="topology-line l2"></div>
+        <div class="topology-line l3"></div>
+        <span class="node-dot n0" title="FS file egress"></span>
+        <span class="node-dot n1" title="GS group memory"></span>
+        <span class="node-dot n2" title="RS link routing"></span>
+        <span class="node-dot n3" title="US text ingress"></span>
+        <div class="topology-label" id="topology-label">mesh: FS.GS.RS.US · waiting for transport</div>
+      </div>
+      <div class="readiness">
+        <div class="block">
+          <div class="lbl">transport readiness</div>
+          <div class="meter"><span id="transport-meter"></span></div>
+          <div class="kv" style="margin-top:6px"><span class="k">connected</span><span class="v" id="connected-count">0/5</span></div>
+        </div>
+        <div class="block">
+          <div class="lbl">address stability</div>
+          <div class="meter"><span id="address-meter"></span></div>
+          <div class="kv" style="margin-top:6px"><span class="k">cidr</span><span class="v" id="address-grade">/1</span></div>
+        </div>
+      </div>
+      <div class="risk-list">
+        <div class="risk-item"><span>partition risk</span><strong id="risk-partition">low</strong></div>
+        <div class="risk-item"><span>relay pressure</span><strong id="risk-relay">idle</strong></div>
+        <div class="risk-item"><span>consensus gate</span><strong id="risk-consensus">L</strong></div>
+        <div class="risk-item"><span>active route</span><strong id="risk-route">FS.US</strong></div>
+      </div>
+    </div>
+
+    <!-- Protocol pills -->
+    <div class="proto-grid">
+      <div class="proto disconnected" id="proto-mqtt" onclick="toggleProto('mqtt')">
+        <div class="name"><span class="dot"></span>MQTT</div>
+        <div class="state" id="st-mqtt">off</div>
+        <div class="dim" style="font-size:9px;margin-top:2px">ws://broker</div>
+      </div>
+      <div class="proto disconnected" id="proto-http" onclick="toggleProto('http')">
+        <div class="name"><span class="dot"></span>HTTP</div>
+        <div class="state" id="st-http">off</div>
+        <div class="dim" style="font-size:9px;margin-top:2px">poll/push</div>
+      </div>
+      <div class="proto disconnected" id="proto-ws" onclick="toggleProto('ws')">
+        <div class="name"><span class="dot"></span>WS</div>
+        <div class="state" id="st-ws">off</div>
+        <div class="dim" style="font-size:9px;margin-top:2px">ws://echo</div>
+      </div>
+      <div class="proto disconnected" id="proto-sse" onclick="toggleProto('sse')">
+        <div class="name"><span class="dot"></span>SSE</div>
+        <div class="state" id="st-sse">off</div>
+        <div class="dim" style="font-size:9px;margin-top:2px">text/stream</div>
+      </div>
+      <div class="proto disconnected" id="proto-rtc" onclick="toggleProto('rtc')">
+        <div class="name"><span class="dot"></span>WebRTC</div>
+        <div class="state" id="st-rtc">off</div>
+        <div class="dim" style="font-size:9px;margin-top:2px">datachannel</div>
+      </div>
+    </div>
+
+    <!-- Config row -->
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;font-size:10px">
+      <span class="muted">MQTT broker:</span>
+      <input id="mqtt-url" value="wss://broker.hivemq.com:8884/mqtt" style="flex:1;min-width:160px;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:3px 6px;border-radius:var(--r);font-family:var(--mono);font-size:10px">
+      <span class="muted">topic:</span>
+      <input id="mqtt-topic" value="chiral/clock/tick" style="width:140px;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:3px 6px;border-radius:var(--r);font-family:var(--mono);font-size:10px">
+      <span class="muted">WS echo:</span>
+      <input id="ws-url" value="wss://echo.websocket.org" style="width:160px;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:3px 6px;border-radius:var(--r);font-family:var(--mono);font-size:10px">
+      <span class="muted">emit every</span>
+      <input id="emit-every" type="number" min="1" max="100" value="5" style="width:44px;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:3px 6px;border-radius:var(--r);font-family:var(--mono);font-size:10px">
+      <span class="muted">ticks</span>
+    </div>
+
+    <!-- 4 chiral channel lanes -->
+    <div class="lanes">
+      <div class="lane fs">
+        <div class="lbl">FS · 0x1C · file BLOB egress</div>
+        <div id="lane-fs-msg" class="msg"></div>
+        <div id="lane-fs-cnt" class="dim" style="font-size:9px;margin-top:4px">0 frames</div>
+      </div>
+      <div class="lane gs">
+        <div class="lbl">GS · 0x1D · group memory</div>
+        <div id="lane-gs-msg" class="msg"></div>
+        <div id="lane-gs-cnt" class="dim" style="font-size:9px;margin-top:4px">0 frames</div>
+      </div>
+      <div class="lane rs">
+        <div class="lbl">RS · 0x1E · link routing</div>
+        <div id="lane-rs-msg" class="msg"></div>
+        <div id="lane-rs-cnt" class="dim" style="font-size:9px;margin-top:4px">0 frames</div>
+      </div>
+      <div class="lane us">
+        <div class="lbl">US · 0x1F · text base64</div>
+        <div id="lane-us-msg" class="msg"></div>
+        <div id="lane-us-cnt" class="dim" style="font-size:9px;margin-top:4px">0 frames</div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div class="panel-hd" style="margin-bottom:4px">event log</div>
+    <div class="log" id="event-log"></div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:4px">
+      <div class="block" style="text-align:center">
+        <div class="lbl">sent</div><div class="val" id="stat-sent">0</div>
+      </div>
+      <div class="block" style="text-align:center">
+        <div class="lbl">recv</div><div class="val" id="stat-recv">0</div>
+      </div>
+      <div class="block" style="text-align:center">
+        <div class="lbl">errors</div><div class="val" style="color:var(--red)" id="stat-err">0</div>
+      </div>
+      <div class="block" style="text-align:center">
+        <div class="lbl">latency</div><div class="val" id="stat-lat">—</div>
+      </div>
+      <div class="block" style="text-align:center">
+        <div class="lbl">chirality</div><div class="val" id="stat-chiral">L</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MQTT.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   SECTION 1 · CORE DETERMINISTIC ENGINE (from original)
+══════════════════════════════════════════════════════════ */
+const CIDR = [
+  {prefix:1,mask:"128.0.0.0",addrs:"2,147,483,648",cls:"128 A"},
+  {prefix:2,mask:"192.0.0.0",addrs:"1,073,741,824",cls:"64 A"},
+  {prefix:3,mask:"224.0.0.0",addrs:"536,870,912",cls:"32 A"},
+  {prefix:4,mask:"240.0.0.0",addrs:"268,435,456",cls:"16 A"},
+  {prefix:5,mask:"248.0.0.0",addrs:"134,217,728",cls:"8 A"},
+  {prefix:6,mask:"252.0.0.0",addrs:"67,108,864",cls:"4 A"},
+  {prefix:7,mask:"254.0.0.0",addrs:"33,554,432",cls:"2 A"},
+  {prefix:8,mask:"255.0.0.0",addrs:"16,777,216",cls:"256 B"}
+];
+
+const rot=(x,n,w)=>{const mask=(1n<<w)-1n,s=n%w;return s===0n?(x&mask):(((x<<s)|(x>>(w-s)))&mask)};
+const rot4 =(x,n)=>rot(x,n,4n);
+const rot7 =(x,n)=>rot(x,n,7n);
+const rot15=(x,n)=>rot(x,n,15n);
+const rot16=(x,n)=>rot(x,n,16n);
+const rot60=(x,n)=>rot(x,n,60n);
+const rot120=(x,n)=>rot(x,n,120n);
+const rot240=(x,n)=>rot(x,n,240n);
+const rot360=(x,n)=>rot(x,n,360n);
+
+function cla4(A,B,Cin){
+  const bits=i=>[((A>>i)&1),((B>>i)&1)];
+  const P=[0,1,2,3].map(i=>bits(i)[0]^bits(i)[1]);
+  const G=[0,1,2,3].map(i=>bits(i)[0]&bits(i)[1]);
+  const g=Cin;
+  const C0=G[0]|(P[0]&g);
+  const C1=G[1]|(P[1]&G[0])|(P[1]&P[0]&g);
+  const C2=G[2]|(P[2]&G[1])|(P[2]&P[1]&G[0])|(P[2]&P[1]&P[0]&g);
+  const C3=G[3]|(P[3]&G[2])|(P[3]&P[2]&G[1])|(P[3]&P[2]&P[1]&G[0])|(P[3]&P[2]&P[1]&P[0]&g);
+  return{S:[P[0]^g,P[1]^C0,P[2]^C1,P[3]^C2],Cout:C3};
+}
+
+function toIPv4(n32){const n=Number(n32&0xFFFFFFFFn);return[(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.')}
+function toIPv6short(n){const h=n.toString(16).padStart(32,'0');const segs=h.match(/.{4}/g);return`2001:db8::8:${segs[6]}`}
+function b64sym(str){try{return btoa(str).replace(/=/g,'')}catch(e){return str}}
+
+function computeState(tick){
+  const t=BigInt(tick);
+  const m=t%5040n;
+  const t1=rot7(m,1n),t2=rot15(t1,2n),t3=rot60(t2,3n);
+  const t4=rot120(t3,4n),t5=rot240(t4,5n),t6=rot360(t5,6n);
+  const t7=rot360(rot360(t6,7n),7n);
+  const A=Number(rot4(t1,2n)^rot15(t1,3n))&0xF;
+  const B=Number(rot4(t2,1n)^rot16(t2,4n))&0xF;
+  const cla=cla4(A,B,0);
+  const ip4Seg=Number((t5^127n)&127n);
+  const ip4=`${ip4Seg}.${Number(t1&255n)}.${Number(t2&255n)}.1`;
+  const ip6=toIPv6short(t6);
+  const cidr=CIDR[Number(t6%8n)];
+  const tockIPv4=toIPv4(t5);
+  return{tick,m,t1,t2,t3,t4,t5,t6,t7,A,B,cla,ip4,ip6,cidr,tockIPv4,ip4Seg};
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 2 · URN PORT CLOSURE (4-channel CLA→URN)
+══════════════════════════════════════════════════════════ */
+const NID_MAP=["ietf","uuid","isbn","oid","issn","mac","lex","pin"];
+
+function resolveURN(stateA,stateB,portId){
+  const P=[0,1,2,3].map(i=>((stateA>>i)&1)^((stateB>>i)&1));
+  const G=[0,1,2,3].map(i=>((stateA>>i)&1)&((stateB>>i)&1));
+  const Cin=portId&1;
+  const C0=G[0]|(P[0]&Cin);
+  const C1=G[1]|(P[1]&G[0])|(P[1]&P[0]&Cin);
+  const C2=G[2]|(P[2]&G[1])|(P[2]&P[1]&G[0])|(P[2]&P[1]&P[0]&Cin);
+  const C3=G[3]|(P[3]&G[2])|(P[3]&P[2]&G[1])|(P[3]&P[2]&P[1]&G[0])|(P[3]&P[2]&P[1]&P[0]&Cin);
+  const S=[P[0]^Cin,P[1]^C0,P[2]^C1,P[3]^C2];
+  const nidIdx=((S[1]<<2)|(S[0]<<1)|Cin)%NID_MAP.length;
+  const nss=b64sym(`p${portId}-s${stateB}`);
+  const q=C3?`?sum=${S.join('')}&cout=${C3}`:'';
+  return{urn:`urn:${NID_MAP[nidIdx]}:${nss}${q}`,sum:S.join(''),cout:C3,executable:C3===1};
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 3 · SMITH CHART RENDERER
+══════════════════════════════════════════════════════════ */
+const smithCanvas=document.getElementById('smith-canvas');
+const sctx=smithCanvas.getContext('2d');
+const SW=236,SH=236,SR=98,SXC=118,SYC=118;
+
+function smithProject(r,i){return{x:SXC+r*SR,y:SYC-i*SR}}
+
+function drawSmithGrid(){
+  sctx.clearRect(0,0,SW,SH);
+  sctx.strokeStyle='#1a1a30';
+  sctx.lineWidth=0.5;
+  // outer unit circle
+  sctx.beginPath();sctx.arc(SXC,SYC,SR,0,2*Math.PI);
+  sctx.strokeStyle='#3a3a60';sctx.lineWidth=1;sctx.stroke();
+  // real axis
+  sctx.beginPath();sctx.moveTo(SXC-SR,SYC);sctx.lineTo(SXC+SR,SYC);
+  sctx.strokeStyle='#222236';sctx.lineWidth=0.5;sctx.stroke();
+  // constant resistance circles
+  [0.2,0.5,1,2,5].forEach(r=>{
+    const rad=(1/(r+1))*SR;
+    const cx=SXC+(r/(r+1))*SR;
+    sctx.beginPath();sctx.arc(cx,SYC,rad,0,2*Math.PI);
+    sctx.strokeStyle='rgba(83,74,183,0.18)';sctx.lineWidth=0.5;sctx.stroke();
+  });
+  // constant reactance arcs
+  [0.2,0.5,1,2,5,-0.2,-0.5,-1,-2,-5].forEach(x=>{
+    const rad=Math.abs(1/x)*SR;
+    const cx=SXC+SR;
+    const cy=SYC-(1/x)*SR;
+    sctx.beginPath();sctx.arc(cx,cy,rad,0,2*Math.PI);
+    sctx.strokeStyle=x>0?'rgba(15,110,86,0.12)':'rgba(133,79,11,0.12)';
+    sctx.lineWidth=0.5;sctx.stroke();
+  });
+}
+
+let smithTrailZ=[];
+function renderSmith(tick,t5,t6){
+  const mod=Number(BigInt(tick)%5040n);
+  const theta=(mod/5040)*2*Math.PI;
+  const mag=0.55+0.25*Math.sin(Number(t5%100n)/100*Math.PI);
+  const grZ=mag*Math.cos(theta);
+  const giZ=mag*Math.sin(theta);
+  const grY=-grZ,giY=-giZ;
+
+  drawSmithGrid();
+
+  // trail
+  smithTrailZ.push({r:grZ,i:giZ});
+  if(smithTrailZ.length>80)smithTrailZ.shift();
+  if(smithTrailZ.length>1){
+    sctx.beginPath();
+    const p0=smithProject(smithTrailZ[0].r,smithTrailZ[0].i);
+    sctx.moveTo(p0.x,p0.y);
+    smithTrailZ.forEach((pt,idx)=>{
+      const p=smithProject(pt.r,pt.i);
+      sctx.lineTo(p.x,p.y);
+      sctx.strokeStyle=`rgba(83,74,183,${0.05+0.6*(idx/smithTrailZ.length)})`;
+    });
+    sctx.lineWidth=1;sctx.stroke();
+  }
+
+  // Y admittance point (tock)
+  const pY=smithProject(grY,giY);
+  sctx.beginPath();sctx.arc(pY.x,pY.y,5,0,2*Math.PI);
+  sctx.fillStyle='#0F6E56';sctx.fill();
+
+  // Z impedance point (tick)
+  const pZ=smithProject(grZ,giZ);
+  sctx.beginPath();sctx.arc(pZ.x,pZ.y,5,0,2*Math.PI);
+  sctx.fillStyle='#534AB7';sctx.fill();
+
+  // connector
+  sctx.beginPath();sctx.moveTo(pZ.x,pZ.y);sctx.lineTo(pY.x,pY.y);
+  sctx.strokeStyle='rgba(255,255,255,0.12)';sctx.setLineDash([3,3]);
+  sctx.lineWidth=0.8;sctx.stroke();sctx.setLineDash([]);
+
+  // labels
+  sctx.fillStyle='#534AB7';sctx.font='9px JetBrains Mono,monospace';
+  sctx.fillText('Z',pZ.x+6,pZ.y-3);
+  sctx.fillStyle='#0F6E56';
+  sctx.fillText('Y',pY.x+6,pY.y-3);
+
+  // update readouts
+  document.getElementById('gamma-z').textContent=`(${grZ.toFixed(3)}, ${giZ.toFixed(3)}j)`;
+  document.getElementById('gamma-y').textContent=`(${grY.toFixed(3)}, ${giY.toFixed(3)}j)`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 4 · RENDER STATE
+══════════════════════════════════════════════════════════ */
+function setHand(id,deg,len){
+  const rad=(deg-90)*Math.PI/180;
+  const x2=130+(len-14)*Math.cos(rad);
+  const y2=130+(len-14)*Math.sin(rad);
+  const el=document.getElementById(id);
+  el.setAttribute('x2',x2.toFixed(1));el.setAttribute('y2',y2.toFixed(1));
+}
+function drawTockRing(activeIdx){
+  const g=document.getElementById('tock-ring');g.innerHTML='';
+  for(let i=0;i<8;i++){
+    const deg=(i*45-90)*Math.PI/180,r=103;
+    const x=130+r*Math.cos(deg),y=130+r*Math.sin(deg);
+    const isActive=i===activeIdx;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',x.toFixed(1));c.setAttribute('cy',y.toFixed(1));
+    c.setAttribute('r',isActive?'7':'4');
+    c.setAttribute('fill',isActive?'#534AB7':'#2a2a42');g.appendChild(c);
+    const lx=130+(r+14)*Math.cos(deg),ly=130+(r+14)*Math.sin(deg);
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',lx.toFixed(1));txt.setAttribute('y',ly.toFixed(1));
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('style',`font-size:8px;fill:${isActive?'#534AB7':'#555480'}`);
+    txt.textContent='/'+CIDR[i].prefix;g.appendChild(txt);
+  }
+}
+
+function render(s){
+  document.getElementById('tick-val').textContent=`${s.tick} (${s.m})`;
+  document.getElementById('ip6-val').textContent=s.ip6;
+  document.getElementById('ip4-val').textContent=s.ip4+'/'+s.cidr.prefix;
+  document.getElementById('cla-a').textContent=s.A.toString(2).padStart(4,'0');
+  document.getElementById('cla-b').textContent=s.B.toString(2).padStart(4,'0');
+  document.getElementById('cla-s').textContent=s.cla.S.join('');
+  document.getElementById('cla-cout').textContent=s.cla.Cout;
+  document.getElementById('cidr-val').textContent=`a.0.0.0/${s.cidr.prefix} · ${s.cidr.mask} · ${s.cidr.addrs} addrs`;
+
+  const cx=500+Number(s.t5%240n),cy=s.ip4Seg*4,pfx=Number(s.t6%8n)*4;
+  document.getElementById('canvas-frame').innerHTML=
+    `centroid: 127.0.0.1 over ::8  x=${cx} y=${cy}<br>`+
+    `top:    0.0.0.0/8 [y-=${s.ip4Seg}]<br>`+
+    `bottom: 127.0.0.1/8 [y+=${127-s.ip4Seg}]<br>`+
+    `left:   ${s.ip6}/${s.cidr.prefix+4} [/68 narrow]<br>`+
+    `right:  ${s.ip6}/${Math.max(1,s.cidr.prefix-4)} [/60 broad]`;
+
+  document.getElementById('rot-chain').innerHTML=
+    `t1 rot7:   ${s.t1}<br>t2 rot15:  ${s.t2}<br>t3 rot60:  ${s.t3}<br>`+
+    `t4 rot120: ${s.t4}<br>t5 rot240: ${s.t5}<br>t6 rot360: ${s.t6}<br>t7 rot720: ${s.t7}`;
+
+  const k1=b64sym(s.ip6),k2=b64sym(s.ip4),k3=b64sym(s.tockIPv4);
+  document.getElementById('trie-path').innerHTML=
+    `::root [127.0.0.1/::8]<br>`+
+    ` ├─ tick [${s.ip6}]<br> │  ├─ rot360=${s.t6}<br> │  └─ /${s.cidr.prefix} ${s.cidr.mask}<br>`+
+    ` └─ tock [${s.ip4}]<br>    ├─ rot240=${s.t5}<br>    └─ CLA[${s.cla.S.join('')}] cout=${s.cla.Cout}`;
+
+  // URN port closures
+  const urnTick=resolveURN(s.A,Number(s.t6&15n),0x1F);
+  const urnTock=resolveURN(s.B,Number(s.t5&15n),0x1C);
+  document.getElementById('urn-tick').textContent=urnTick.urn;
+  document.getElementById('urn-tock').textContent=urnTock.urn;
+
+  setHand('hand-tick',Number(s.t6%360n),118);
+  setHand('hand-tock',Number(s.t5%240n)*1.5,82);
+  setHand('hand-carry',Number(s.t3%60n)*6,52);
+  drawTockRing(Number(s.t6%8n));
+  renderSmith(s.tick,s.t5,s.t6);
+
+  document.getElementById('stat-chiral').textContent=urnTick.executable?'R':'L';
+  updateDashboard(s, urnTick);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 5 · CLOCK CONTROL
+══════════════════════════════════════════════════════════ */
+let currentTick=0,autoTimer=null;
+function step(dir){currentTick=Math.max(0,currentTick+dir);const s=computeState(currentTick);render(s);routerOnTick(s)}
+function toggleAuto(){
+  if(autoTimer){clearInterval(autoTimer);autoTimer=null;document.getElementById('auto-btn').textContent='▶ run'}
+  else{autoTimer=setInterval(()=>{currentTick++;const s=computeState(currentTick);render(s);routerOnTick(s)},200);document.getElementById('auto-btn').textContent='⏹ stop'}
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 6 · MULTI-PROTOCOL ROUTER
+══════════════════════════════════════════════════════════ */
+let stats={sent:0,recv:0,err:0,lat:null};
+const laneCounts={fs:0,gs:0,rs:0,us:0};
+
+function updateStats(){
+  document.getElementById('stat-sent').textContent=stats.sent;
+  document.getElementById('stat-recv').textContent=stats.recv;
+  document.getElementById('stat-err').textContent=stats.err;
+  document.getElementById('stat-lat').textContent=stats.lat!=null?stats.lat+'ms':'—';
+  const s=computeState(currentTick);
+  updateDashboard(s, resolveURN(s.A,Number(s.t6&15n),0x1F));
+}
+
+function connectedProtocols(){
+  return Object.values(protoState).filter(Boolean).length;
+}
+
+function updateDashboard(s, urnTick){
+  const connected=connectedProtocols();
+  const readiness=Math.round((connected/5)*100);
+  const addressScore=Math.round((s.cidr.prefix/8)*100);
+  const closure=urnTick?.executable?'R':'L';
+  const route=closure==='R'?'RS.FS':'US.RS';
+  const netDot=document.getElementById('net-dot');
+  document.getElementById('net-state').textContent=connected>2?'ready':connected>0?'forming':'standby';
+  document.getElementById('net-sub').textContent=`${connected} transport${connected===1?'':'s'} connected`;
+  netDot.className=`status-dot ${connected>2?'ready':stats.err>0?'risk':''}`;
+  document.getElementById('dash-epoch').textContent=Number(s.m);
+  document.getElementById('dash-throughput').textContent=stats.sent;
+  document.getElementById('dash-latency').textContent=stats.lat!=null?`${stats.lat}`:'—';
+  document.getElementById('dash-closure').textContent=closure;
+  document.getElementById('connected-count').textContent=`${connected}/5`;
+  document.getElementById('transport-meter').style.width=`${readiness}%`;
+  document.getElementById('address-meter').style.width=`${addressScore}%`;
+  document.getElementById('address-grade').textContent=`/${s.cidr.prefix} · ${s.cidr.mask}`;
+  document.getElementById('topology-label').textContent=`mesh: ${route} · tick ${s.m} · ${s.ip6}`;
+  document.getElementById('risk-partition').textContent=connected===0?'high':connected<3?'medium':'low';
+  document.getElementById('risk-relay').textContent=stats.sent>stats.recv+8?'queued':connected>0?'nominal':'idle';
+  document.getElementById('risk-consensus').textContent=closure;
+  document.getElementById('risk-route').textContent=route;
+}
+
+function log(proto,msg,dir='→'){
+  const el=document.getElementById('event-log');
+  const now=new Date();
+  const ts=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}.${now.getMilliseconds().toString().padStart(3,'0')}`;
+  const div=document.createElement('div');
+  div.className=`log-line ${proto}`;
+  div.innerHTML=`<span class="ts">${ts}</span><span class="proto-tag">${proto.toUpperCase()}</span><span style="color:#555480">${dir}</span> ${msg}`;
+  el.insertBefore(div,el.firstChild);
+  while(el.children.length>120)el.removeChild(el.lastChild);
+}
+
+// Flash a channel lane message
+function lanePush(lane,msg){
+  const el=document.getElementById(`lane-${lane}-msg`);
+  const cnt=document.getElementById(`lane-${lane}-cnt`);
+  laneCounts[lane]++;
+  el.textContent=msg.slice(0,80);
+  el.classList.remove('show','fade');
+  void el.offsetWidth;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.add('fade'),1200);
+  cnt.textContent=laneCounts[lane]+' frames';
+}
+
+// Build the chiral frame payload for a given state
+function buildFrame(s){
+  return{
+    tick:s.tick,mod:Number(s.m),ip6:s.ip6,ip4:s.ip4,
+    cidr:s.cidr.prefix,
+    cla:{A:s.A,B:s.B,S:s.cla.S.join(''),Cout:s.cla.Cout},
+    t5:s.t5.toString(),t6:s.t6.toString(),
+    urnTick:resolveURN(s.A,Number(s.t6&15n),0x1F).urn,
+    urnTock:resolveURN(s.B,Number(s.t5&15n),0x1C).urn,
+    ctrl:{FS:'0x1C',GS:'0x1D',RS:'0x1E',US:'0x1F'},
+    ts:Date.now()
+  };
+}
+
+// Route frame to chiral lanes
+function dispatchToLanes(frame,proto){
+  lanePush('us',`[${proto}] ${frame.urnTick}`);
+  lanePush('rs',`[${proto}] tick=${frame.tick} ip6=${frame.ip6}`);
+  lanePush('gs',`[${proto}] mod=${frame.mod} cidr=/${frame.cidr}`);
+  lanePush('fs',`[${proto}] blob://tock-${b64sym(frame.ip4)}.bin`);
+}
+
+/* ── MQTT ── */
+let mqttClient=null,mqttActive=false;
+function mqttConnect(){
+  const url=document.getElementById('mqtt-url').value.trim();
+  const topic=document.getElementById('mqtt-topic').value.trim();
+  if(mqttClient){mqttClient.end(true);mqttClient=null}
+  setProtoState('mqtt','connecting','connecting…');
+  try{
+    mqttClient=mqtt.connect(url,{
+      clientId:'chiral_'+Math.random().toString(36).slice(2),
+      keepalive:30,connectTimeout:8000,reconnectPeriod:5000
+    });
+    mqttClient.on('connect',()=>{
+      setProtoState('mqtt','connected','connected');
+      mqttClient.subscribe(topic+'/rx',err=>{if(!err)log('mqtt',`subscribed → ${topic}/rx`)});
+      log('mqtt',`connected to ${url}`);
+    });
+    mqttClient.on('message',(t,payload)=>{
+      stats.recv++;updateStats();
+      const msg=payload.toString().slice(0,60);
+      log('mqtt',`← [${t}] ${msg}`,'←');
+      try{const f=JSON.parse(payload.toString());dispatchToLanes(f,'mqtt')}catch{}
+    });
+    mqttClient.on('error',e=>{stats.err++;updateStats();setProtoState('mqtt','error','error');log('mqtt',e.message,'!')});
+    mqttClient.on('close',()=>{setProtoState('mqtt','disconnected','disconnected');log('mqtt','closed','–')});
+  }catch(e){stats.err++;updateStats();setProtoState('mqtt','error','error');log('mqtt',e.message,'!')}
+}
+function mqttDisconnect(){if(mqttClient){mqttClient.end();mqttClient=null}setProtoState('mqtt','disconnected','off')}
+function mqttPublish(frame){
+  if(!mqttClient||!mqttClient.connected)return false;
+  const topic=document.getElementById('mqtt-topic').value.trim();
+  mqttClient.publish(topic+'/tx',JSON.stringify(frame),{qos:1});
+  setProtoFlash('mqtt');stats.sent++;updateStats();
+  log('mqtt',`→ [${topic}/tx] tick=${frame.tick}`);
+  dispatchToLanes(frame,'mqtt');
+  return true;
+}
+
+/* ── WebSocket ── */
+let wsConn=null,wsActive=false;
+function wsConnect(){
+  const url=document.getElementById('ws-url').value.trim();
+  setProtoState('ws','connecting','connecting…');
+  try{
+    wsConn=new WebSocket(url);
+    wsConn.onopen=()=>{setProtoState('ws','connected','connected');log('ws',`connected to ${url}`)};
+    wsConn.onmessage=e=>{
+      stats.recv++;updateStats();
+      log('ws',`← ${e.data.toString().slice(0,60)}`,'←');
+      try{const f=JSON.parse(e.data);dispatchToLanes(f,'ws')}catch{}
+    };
+    wsConn.onerror=e=>{stats.err++;updateStats();setProtoState('ws','error','error');log('ws','connection error','!')};
+    wsConn.onclose=e=>{setProtoState('ws','disconnected','disconnected');log('ws',`closed (${e.code})`,'–')};
+  }catch(e){stats.err++;updateStats();setProtoState('ws','error','error');log('ws',e.message,'!')}
+}
+function wsDisconnect(){if(wsConn){wsConn.close();wsConn=null}setProtoState('ws','disconnected','off')}
+function wsSend(frame){
+  if(!wsConn||wsConn.readyState!==WebSocket.OPEN)return false;
+  wsConn.send(JSON.stringify(frame));
+  setProtoFlash('ws');stats.sent++;updateStats();
+  log('ws',`→ tick=${frame.tick} ip6=${frame.ip6}`);
+  dispatchToLanes(frame,'ws');
+  return true;
+}
+
+/* ── SSE ── */
+let sseSource=null,sseActive=false;
+// We simulate SSE inbound by creating a mock EventSource-like object
+// (real SSE requires a server endpoint; we simulate the outbound SSE framing)
+function sseConnect(){
+  // SSE is server→client; we emulate the framing so the engine behaves correctly
+  setProtoState('sse','connected','simulated');
+  log('sse','SSE mode active – emitting text/event-stream frames locally');
+  sseActive=true;
+}
+function sseDisconnect(){sseActive=false;setProtoState('sse','disconnected','off');log('sse','stopped','–')}
+function sseSend(frame){
+  if(!sseActive)return false;
+  // Format as SSE wire frame (id, event, data lines)
+  const sseFrame=`id: ${frame.tick}\nevent: chiral\ndata: ${JSON.stringify({t6:frame.t6,ip6:frame.ip6,urn:frame.urnTick})}\n\n`;
+  setProtoFlash('sse');stats.sent++;updateStats();
+  log('sse',`→ event:chiral id:${frame.tick} (${sseFrame.length}B)`);
+  dispatchToLanes(frame,'sse');
+  // echo to a hidden textarea for copy-paste testing
+  return sseFrame;
+}
+
+/* ── HTTP (polling simulation) ── */
+let httpActive=false,httpPollTimer=null;
+// In a sandboxed page we can't make real XHR to arbitrary hosts.
+// We simulate the full request/response lifecycle with timing.
+function httpConnect(){
+  httpActive=true;
+  setProtoState('http','connected','polling');
+  log('http','polling simulation active (sandboxed)');
+  httpPollTimer=setInterval(()=>{
+    if(!httpActive)return;
+    const t0=performance.now();
+    // Simulate 5–40 ms network RTT
+    const fakeLatency=5+Math.floor(Math.random()*35);
+    setTimeout(()=>{
+      const lat=Math.round(performance.now()-t0+fakeLatency);
+      stats.recv++;stats.lat=lat;updateStats();
+      const s=computeState(currentTick);
+      const frame=buildFrame(s);
+      log('http',`← 200 OK ${lat}ms tick=${frame.tick}`,'←');
+      dispatchToLanes(frame,'http');
+    },fakeLatency);
+  },2000);
+}
+function httpDisconnect(){httpActive=false;clearInterval(httpPollTimer);setProtoState('http','disconnected','off');log('http','stopped','–')}
+function httpSend(frame){
+  if(!httpActive)return false;
+  const t0=performance.now();
+  const fakeLatency=5+Math.floor(Math.random()*35);
+  setTimeout(()=>{
+    const lat=Math.round(performance.now()-t0+fakeLatency);
+    stats.lat=lat;updateStats();
+    log('http',`← 200 OK ${lat}ms echo`,'←');
+  },fakeLatency);
+  setProtoFlash('http');stats.sent++;updateStats();
+  log('http',`→ POST /chiral tick=${frame.tick} ip4=${frame.ip4}`);
+  dispatchToLanes(frame,'http');
+  return true;
+}
+
+/* ── WebRTC Data Channel ── */
+let rtcPeer=null,rtcChannel=null,rtcActive=false;
+function rtcConnect(){
+  setProtoState('rtc','connecting','connecting…');
+  try{
+    rtcPeer=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+    rtcChannel=rtcPeer.createDataChannel('chiral',{ordered:true,protocol:'chiral/v1'});
+    rtcChannel.onopen=()=>{setProtoState('rtc','connected','channel open');log('rtc','data channel open')};
+    rtcChannel.onmessage=e=>{
+      stats.recv++;updateStats();
+      log('rtc',`← ${e.data.toString().slice(0,60)}`,'←');
+      try{const f=JSON.parse(e.data);dispatchToLanes(f,'rtc')}catch{}
+    };
+    rtcChannel.onerror=e=>{stats.err++;updateStats();log('rtc','channel error','!')};
+    rtcChannel.onclose=()=>{setProtoState('rtc','disconnected','closed');log('rtc','channel closed','–')};
+    rtcPeer.onicecandidate=e=>{if(e.candidate)log('rtc',`ICE ${e.candidate.type}`)};
+    rtcPeer.createOffer().then(o=>{
+      rtcPeer.setLocalDescription(o);
+      log('rtc','SDP offer created (loopback mode)');
+      // For loopback demo: create answerer peer
+      const answerer=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+      answerer.ondatachannel=e=>{
+        const ch=e.channel;
+        ch.onopen=()=>log('rtc','answerer channel open');
+        ch.onmessage=ev=>rtcChannel.dispatchEvent(new MessageEvent('message',{data:ev.data}));
+      };
+      answerer.setRemoteDescription(o).then(()=>answerer.createAnswer()).then(a=>{
+        answerer.setLocalDescription(a);rtcPeer.setRemoteDescription(a);
+        rtcPeer.onicecandidate=e2=>{if(e2.candidate)answerer.addIceCandidate(e2.candidate)};
+        answerer.onicecandidate=e2=>{if(e2.candidate)rtcPeer.addIceCandidate(e2.candidate)};
+        log('rtc','loopback SDP negotiation complete');
+      });
+    }).catch(e=>{stats.err++;updateStats();log('rtc',e.message,'!')});
+  }catch(e){stats.err++;updateStats();setProtoState('rtc','error','error');log('rtc',e.message,'!')}
+}
+function rtcDisconnect(){if(rtcChannel)rtcChannel.close();if(rtcPeer)rtcPeer.close();rtcChannel=null;rtcPeer=null;setProtoState('rtc','disconnected','off');log('rtc','closed','–')}
+function rtcSend(frame){
+  if(!rtcChannel||rtcChannel.readyState!=='open')return false;
+  rtcChannel.send(JSON.stringify(frame));
+  setProtoFlash('rtc');stats.sent++;updateStats();
+  log('rtc',`→ datachannel tick=${frame.tick}`);
+  dispatchToLanes(frame,'rtc');
+  return true;
+}
+
+/* ── Protocol toggle & state helpers ── */
+const protoState={mqtt:false,http:false,ws:false,sse:false,rtc:false};
+function toggleProto(p){
+  if(protoState[p]){
+    protoState[p]=false;
+    ({mqtt:mqttDisconnect,http:httpDisconnect,ws:wsDisconnect,sse:sseDisconnect,rtc:rtcDisconnect})[p]();
+  }else{
+    protoState[p]=true;
+    ({mqtt:mqttConnect,http:httpConnect,ws:wsConnect,sse:sseConnect,rtc:rtcConnect})[p]();
+  }
+}
+function setProtoState(p,cls,txt){
+  const el=document.getElementById(`proto-${p}`);
+  el.className=`proto ${cls}`;
+  document.getElementById(`st-${p}`).textContent=txt;
+  const s=computeState(currentTick);
+  updateDashboard(s, resolveURN(s.A,Number(s.t6&15n),0x1F));
+}
+let flashTimers={};
+function setProtoFlash(p){
+  clearTimeout(flashTimers[p]);
+  document.getElementById(`proto-${p}`).classList.add('active-send');
+  flashTimers[p]=setTimeout(()=>document.getElementById(`proto-${p}`).classList.remove('active-send'),250);
+}
+
+/* ── Router tick hook ── */
+let ticksSinceEmit=0;
+function routerOnTick(s){
+  ticksSinceEmit++;
+  const every=parseInt(document.getElementById('emit-every').value)||5;
+  if(ticksSinceEmit<every)return;
+  ticksSinceEmit=0;
+  const frame=buildFrame(s);
+  mqttPublish(frame);
+  wsSend(frame);
+  sseSend(frame);
+  httpSend(frame);
+  rtcSend(frame);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 7 · BOOT
+══════════════════════════════════════════════════════════ */
+drawSmithGrid();
+render(computeState(0));
+log('sys','chiral router v1 online · SharedArrayBuffer(5040)');
+log('sys','click a protocol pill to connect');
+</script>
+</body>
+</html>
