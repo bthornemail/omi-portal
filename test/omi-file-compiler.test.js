@@ -29,7 +29,7 @@ test("OMI file header parses car control bytes", () => {
 });
 
 test("OMI file compiler reads binary car and dot-notation cdr", () => {
-  const content = "omi-8-ffff-127-0-0-1-0x1a";
+  const content = "omi-ffff-127-0-0-1-0x1a";
   const buffer = encodeOmiFile({
     header: defaultOmiFileHeader({ endian: "little", polarity: "positive", alignment: "float32" }),
     content,
@@ -48,7 +48,7 @@ test("OMI file compiler reads binary car and dot-notation cdr", () => {
 
 test("OMI dot notation parser supports UTF-8 clamped payload fallback", () => {
   const header = parseOmiFileHeader(defaultOmiFileHeader());
-  const cdr = parseOmiDotNotationBody("omi-8-ffff-127-0-0-1-0x1a.NOUN-VERB.hello_world!", header);
+  const cdr = parseOmiDotNotationBody("omi-ffff-127-0-0-1-0x1a.NOUN-VERB.hello_world!", header);
   assert.equal(cdr.payload.kind, "utf8-clamped");
   assert.equal(cdr.payload.text, "hello_world!");
   assert.ok(cdr.payload.vector instanceof Uint8ClampedArray);
@@ -64,7 +64,7 @@ test("OMI file compiler rejects malformed header and context ports", () => {
     /delimiter/
   );
   assert.throws(
-    () => parseOmiDotNotationBody(`omi-8-ffff-127-0-0-1-0x1a.NOUN-NOPE.${payload([1, 2, 3, 4])}`),
+    () => parseOmiDotNotationBody(`omi-ffff-127-0-0-1-0x1a.NOUN-NOPE.${payload([1, 2, 3, 4])}`),
     /UPOS/
   );
 });

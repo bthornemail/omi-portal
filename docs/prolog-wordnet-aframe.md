@@ -5,7 +5,7 @@ OMI service bus `::3` is represented in v1 by a deterministic JavaScript fact br
 The routing model separates three address domains:
 
 - `::1..::8`: semantic content service buses.
-- `::ffff:127.0.0.1`: browser-local context addressing, serialized as `omi-8-ffff-127-0-0-1`.
+- `::ffff:127.0.0.1`: browser-local context addressing, serialized as `omi-ffff-127-0-0-1`.
 - `::/128`: remote codepoint hierarchy marker for non-local routing surfaces.
 
 Within that service range, `::3` is the WordNet synset broker and `::4` is the CoTURN/TURN synset routing proxy. V1 records `turn` transport in the OMI token and data attributes, but does not open a WebRTC or CoTURN socket.

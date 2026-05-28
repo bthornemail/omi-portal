@@ -17,7 +17,7 @@ Only `0x00..0x3f` are valid RS control descriptors. Only `0x00..0x7f` are valid 
 ## Hierarchy
 
 ```text
-omi-8-ffff-127-0-0-1
+omi-ffff-127-0-0-1
   -0x00..0x1f  pre-header descriptor cells
   -0x20..0x3f  record/routing descriptor cells
   -0x00..0x7f  unit/codepoint leaves

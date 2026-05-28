@@ -64,7 +64,7 @@ The system execution loop follows a fixed sequence divided into four distinct ph
 
 ### Phase 3: Routing & Distributed Transports
 
-1. Local vs Remote Filter: The engine reads the car network prefix. If it targets local storage (omi-8-ffff-127-0-0-1), data updates pin directly to local canvas components. If it targets remote or session allocations, it flags the thread for external network transmission.
+1. Local vs Remote Filter: The engine reads the car network prefix. If it targets local storage (omi-ffff-127-0-0-1), data updates pin directly to local canvas components. If it targets remote or session allocations, it flags the thread for external network transmission.
 2. WebRTC Binary Pack: The network worker extracts the 4-term polynomial coefficients from the SharedArrayBuffer using an endian-agnostic DataView. It serializes the array into a tight, 16-byte raw binary structure with no string formatting overhead.
 3. CoTURN UDP Broadcast: The binary packet is written to an open WebRTC data channel initialized with ordered: false and maxRetransmits: 0. This routes the data as a raw, unreliable UDP frame across network firewalls via the CoTURN proxy mesh.
 

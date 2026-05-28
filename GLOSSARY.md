@@ -4,8 +4,8 @@
 
 - **OMI**: Omicron Object Model, a canonical object-addressing layer for browser, memory, graph, and semantic surfaces.
 - **`omi-*`**: Hyphen-delimited OMI identity token family used by DOM ids, `data-omi`, CSSOM selectors, and packet-like routing metadata.
-- **Canonical local context root**: `omi-8-ffff-127-0-0-1`, the OMI spelling of IPv4-mapped loopback `::ffff:127.0.0.1`.
-- **Deprecated shorthand**: `omi-8-127-0-0-1`; accepted for compatibility and normalized to `omi-8-ffff-127-0-0-1`.
+- **Canonical local context root**: `omi-ffff-127-0-0-1`, the OMI spelling of IPv4-mapped loopback `::ffff:127.0.0.1`.
+- **Deprecated shorthand**: `omi-8-127-0-0-1`; accepted for compatibility and normalized to `omi-ffff-127-0-0-1`.
 - **`::1..::8`**: Semantic service bus range used by the framework docs for local object-model surfaces.
 - **`::/128`**: Remote codepoint/root hierarchy placeholder documented as a future routing surface.
 - **CIDR projection**: The use of IP prefix containment as a route-table and subtree language for OMI atoms.

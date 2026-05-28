@@ -200,8 +200,7 @@ export function mockHIDDevice(options = {}) {
   };
 }
 
-const LOCAL_FS = "8";
-const LOCAL_GS = "ffff-127-0-0-1";
+const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
 
 export const ASCII_OPCODES = Object.freeze({
   "0x00": "NUL", "0x01": "SOH", "0x02": "STX", "0x03": "ETX",
@@ -237,24 +236,23 @@ export class OmiHardwarePeripheralEngine {
   cdr(cell) { return cell.cdr; }
 
   parsePeripheralAddress(idString) {
-    const cleanStr = String(idString || "").replace(/^(local-|remote-)/, "");
+    const cleanStr = String(idString || "");
     if (!cleanStr.startsWith("omi-")) return null;
+    if (!cleanStr.startsWith(CANONICAL_ROOT)) {
+      return { isSecureContext: false, error: "External or unauthorized network domain path" };
+    }
 
-    const tokens = cleanStr.split("-");
-    const fsToken = tokens[1];
-    const gsToken = tokens.slice(2, 7).join("-");
-    const asciiOp = tokens[7];
+    const subPath = cleanStr.substring(CANONICAL_ROOT.length + 1);
+    const tokens = subPath.split("-");
+    const asciiOp = tokens[0];
     const slotIdx = tokens.findIndex((t) => /^slot\d+$/.test(t));
-    const device = slotIdx > 8 ? tokens.slice(8, slotIdx).join("-") : tokens[8] || "";
+    const device = slotIdx > 1 ? tokens.slice(1, slotIdx).join("-") : tokens[1] || "";
     const b64Data = tokens[tokens.length - 1];
 
-    const asciiMnemonic = ASCII_OPCODES[asciiOp] || null;
-    const isSecureContext = fsToken === LOCAL_FS && gsToken === LOCAL_GS;
-
     return {
-      isSecureContext,
-      fsToken, gsToken,
-      asciiControl: { hexCode: asciiOp, mnemonic: asciiMnemonic },
+      isSecureContext: true,
+      contextRoot: CANONICAL_ROOT,
+      asciiControl: { hexCode: asciiOp, mnemonic: ASCII_OPCODES[asciiOp] || null },
       portAllocation: device,
       coefficients: b64Data && b64Data.length > 10
         ? this.decodePayloadBits(b64Data) : null
@@ -300,5 +298,5 @@ export function formatHardwareAddress({ bus, port, slot, payload } = {}) {
   const portName = port || "device0";
   const slotStr = `slot${slot || 0}`;
   const b64 = payload || "AAAAAAAAAAAAAAAAAAAAAA";
-  return `omi-${LOCAL_FS}-${LOCAL_GS}-${op}-${portName}-${slotStr}-${b64}`;
+  return `${CANONICAL_ROOT}-${op}-${portName}-${slotStr}-${b64}`;
 }

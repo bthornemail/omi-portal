@@ -30,7 +30,7 @@ test("OMI Object Model manifest declares required canonical sections", async () 
     assert.ok(Object.hasOwn(manifest, key), `missing manifest key ${key}`);
   }
 
-  assert.equal(manifest.canonicalRoot.omi, "omi-8-ffff-127-0-0-1");
+  assert.equal(manifest.canonicalRoot.omi, "omi-ffff-127-0-0-1");
   assert.equal(manifest.canonicalRoot.ipv6, "::ffff:127.0.0.1");
   assert.equal(manifest.canonicalRoot.remoteCodepointRoot, "::/128");
   assert.equal(manifest.protocol.version, "Omi-v1.2.0");

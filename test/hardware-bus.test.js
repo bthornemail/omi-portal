@@ -93,11 +93,11 @@ test("ASCII_HARDWARE_BUS maps opcodes to ports", () => {
   assert.equal(ASCII_HARDWARE_BUS["0x05"], "hid-descriptor");
 });
 
-test("parsePeripheralAddress validates secure local context", () => {
+test("parsePeripheralAddress validates secure local context with new streamlined format", () => {
   const engine = new OmiHardwarePeripheralEngine(new ArrayBuffer(5040 * 8));
   const b64 = Buffer.from(new Float32Array([1.5, 2, -0.5, 10]).buffer).toString("base64url");
   const result = engine.parsePeripheralAddress(
-    `omi-8-ffff-127-0-0-1-0x01-serial-cdc0-slot720-${b64}`
+    `omi-ffff-127-0-0-1-0x01-serial-cdc0-slot720-${b64}`
   );
   assert.equal(result.isSecureContext, true);
   assert.equal(result.asciiControl.hexCode, "0x01");
@@ -107,18 +107,18 @@ test("parsePeripheralAddress validates secure local context", () => {
 
 test("parsePeripheralAddress rejects non-omi strings", () => {
   const engine = new OmiHardwarePeripheralEngine(new ArrayBuffer(5040 * 8));
-  assert.equal(engine.parsePeripheralAddress("garbage"), null);
+  const result = engine.parsePeripheralAddress("garbage");
+  assert.equal(result, null);
 });
 
-test("parsePeripheralAddress handles local- prefix", () => {
+test("parsePeripheralAddress rejects external network addresses", () => {
   const engine = new OmiHardwarePeripheralEngine(new ArrayBuffer(5040 * 8));
   const b64 = Buffer.from(new Float32Array([1, 0, 0, 0]).buffer).toString("base64url");
   const result = engine.parsePeripheralAddress(
-    `local-omi-8-ffff-127-0-0-1-0x04-usb-vendor-pid412-slot1440-${b64}`
+    `omi-8-ffff-10-0-0-1-0x04-usb-vendor-pid412-slot1440-${b64}`
   );
-  assert.equal(result.isSecureContext, true);
-  assert.equal(result.asciiControl.hexCode, "0x04");
-  assert.equal(result.portAllocation, "usb-vendor-pid412");
+  assert.equal(result.isSecureContext, false);
+  assert.ok(result.error);
 });
 
 test("ingestSerialBytePacket writes bytes into SAB slot", () => {
@@ -148,9 +148,9 @@ test("asciiOpcodeForBus maps bus names to ASCII codes", () => {
   assert.equal(asciiOpcodeForBus("webhid"), "0x05");
 });
 
-test("formatHardwareAddress builds valid OMI address", () => {
+test("formatHardwareAddress builds valid OMI address without FS prefix", () => {
   const addr = formatHardwareAddress({ bus: "webusb", port: "vendor-0x1234", slot: 1440 });
-  assert.ok(addr.startsWith("omi-8-ffff-127-0-0-1-0x04-vendor-0x1234-slot1440-"));
+  assert.ok(addr.startsWith("omi-ffff-127-0-0-1-0x04-vendor-0x1234-slot1440-"));
 });
 
 test("OmiHardwarePeripheralEngine cons/car/cdr", () => {

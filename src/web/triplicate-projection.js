@@ -34,20 +34,24 @@ export class OmiTriplicateProjectionEngine {
   parseTriplicateAddress(omiIdStr) {
     if (!omiIdStr || !omiIdStr.startsWith("omi-")) return null;
 
-    const cleanStr = omiIdStr.substring(4);
-    const tokens = cleanStr.split("-");
+    let subPath;
+    if (omiIdStr.startsWith("omi-ffff-127-0-0-1")) {
+      subPath = omiIdStr.substring("omi-ffff-127-0-0-1".length + 1);
+    } else if (omiIdStr.startsWith("omi-8-ffff-127-0-0-1")) {
+      subPath = omiIdStr.substring("omi-8-ffff-127-0-0-1".length + 1);
+    } else {
+      return { isSubnetValid: false, error: "External or unauthorized network domain path" };
+    }
 
-    const fsToken = tokens[0];
-    const gsMatrix = tokens.slice(1, 6).join("-");
-    const rsControlHex = tokens[6];
+    const tokens = subPath.split("-");
+    const controlCode = tokens[0];
     const trailingB64 = tokens[tokens.length - 1];
 
-    const is48BitSubnetValid = fsToken === "8" && gsMatrix === "ffff-127-0-0-1";
-
     return {
-      isSubnetValid: is48BitSubnetValid,
+      isSubnetValid: true,
       subnetMask: "::/48",
-      controlCode: rsControlHex,
+      contextRoot: "omi-ffff-127-0-0-1",
+      controlCode,
       coefficients: trailingB64 && trailingB64.length > 10
         ? this.decodePayloadBits(trailingB64) : null
     };

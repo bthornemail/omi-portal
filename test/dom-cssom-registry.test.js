@@ -41,8 +41,8 @@ test("DOM/CSSOM registry filters by OMI prefix and atom routing keys", async () 
   const atom = registry.atoms[0];
   const synsetCell = atom.synsetCells.fiveCell.active[0];
 
-  assert.ok(filterDOMCSSOMAtoms(registry, { omiPrefix: "omi-8" }).length > 0);
-  assert.ok(filterDOMCSSOMAtoms(registry, { omiPrefix: "omi-8-ffff-127-0-0-1" }).length > 0);
+  assert.ok(filterDOMCSSOMAtoms(registry, { omiPrefix: "omi-ffff" }).length > 0);
+  assert.ok(filterDOMCSSOMAtoms(registry, { omiPrefix: "omi-ffff-127-0-0-1" }).length > 0);
   assert.ok(filterDOMCSSOMAtoms(registry, { graphChannel: atom.channel }).includes(atom));
   assert.ok(filterDOMCSSOMAtoms(registry, { omiPortChannel: atom.omi.portChannel }).includes(atom));
   assert.ok(filterDOMCSSOMAtoms(registry, { posHex: atom.omi.posHex }).includes(atom));

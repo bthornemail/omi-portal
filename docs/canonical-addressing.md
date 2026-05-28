@@ -6,22 +6,18 @@ OMI uses a hyphen-delimited string form so DOM, CSSOM, workers, and binary buffe
 
 ```text
 IPv6 semantic form: ::ffff:127.0.0.1
-OMI token form:     omi-8-ffff-127-0-0-1
-```
+OMI token form:     omi-ffff-127-0-0-1
 
-`omi-8-ffff-127-0-0-1` is the canonical browser-local boundary. It means:
+`omi-ffff-127-0-0-1` is the canonical browser-local boundary. It means:
 
 - `omi`: OMI protocol marker.
 - `8`: local document/process frame, corresponding to the `::8` service/document frame used by the framework.
 - `ffff`: IPv4-mapped IPv6 marker from `::ffff:0:0/96`.
 - `127-0-0-1`: constrained IPv4 loopback host inside the mapped IPv6 frame.
 
-The older shorthand `omi-8-127-0-0-1` is deprecated. Parsers may accept it as legacy input, but generated addresses normalize to `omi-8-ffff-127-0-0-1`.
+The older shorthand `omi-8-127-0-0-1` is deprecated. Parsers may accept it as legacy input, but generated addresses normalize to `omi-ffff-127-0-0-1`.
 
-## Canonical Leaf Form
-
-```text
-omi-8-ffff-127-0-0-1-0xRS-0xUS-payload
+omi-ffff-127-0-0-1-0xRS-0xUS-payload
 ```
 
 - `0xRS`: record/control descriptor, bounded to `0x00..0x3f`.
@@ -31,17 +27,10 @@ omi-8-ffff-127-0-0-1-0xRS-0xUS-payload
 Example:
 
 ```text
-omi-8-ffff-127-0-0-1-0x1a-0x41-AAC_QEAAAL_AykAQA
-```
+omi-ffff-127-0-0-1-0x1a-0x41-AAC_QEAAAL_AykAQA
 
-## Prefix Containment
-
-OMI preserves IPv6-style prefix thinking in DOM/CSSOM selectors:
-
-```css
-[data-omi^="omi-8"] {}
-[data-omi^="omi-8-ffff"] {}
-[data-omi^="omi-8-ffff-127-0-0-1"] {}
+[data-omi^="omi-ffff"] {}
+[data-omi^="omi-ffff-127-0-0-1"] {}
 [data-omi*="-0x1a-"] {}
 ```
 

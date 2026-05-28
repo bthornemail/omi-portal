@@ -9,38 +9,11 @@ OMI treats an `omi-*` token as both an object identity and a route. The same tok
 The canonical browser-local context root is the IPv4-mapped IPv6 loopback frame:
 
 ```text
-::ffff:127.0.0.1  ->  omi-8-ffff-127-0-0-1
-```
+::ffff:127.0.0.1  ->  omi-ffff-127-0-0-1
 
-Generated addresses must use `omi-8-ffff-127-0-0-1`. The older `omi-8-127-0-0-1` form is deprecated shorthand. Parsers may accept it, but writers normalize to the IPv4-mapped form.
+Generated canonical addresses must use `omi-ffff-127-0-0-1`. The older encoded FS prefix `omi-8-ffff-127-0-0-1` is accepted for backward compatibility. The shorthand `omi-8-127-0-0-1` is also accepted but normalized to the canonical form. Parsers accept all variants; writers emit only the canonical root.
 
-OMI has three primary address domains:
-
-| Domain | IPv6 notation | OMI meaning |
-|---|---|---|
-| Semantic service buses | `::1..::8` | content/process delivery, RPC, and semantic subsystem routing |
-| Local context root | `::ffff:127.0.0.1` | browser-local DOM/CSSOM/JSDOM context boundary |
-| Remote codepoint hierarchy | `::/128` | remote or deferred codepoint hierarchy marker |
-
-The service-bus range is:
-
-| Bus | Role |
-|---|---|
-| `::1` | loopback IPC and local synchronization |
-| `::2` | Lisp signaler for `cons`, `car`, and `cdr` packet structure |
-| `::3` | Prolog WordNet synset broker |
-| `::4` | CoTURN/TURN synset routing proxy |
-| `::5` | HNSW/vector memory indexer, documented future surface |
-| `::6` | CodeMirror 6 transaction bridge |
-| `::7` | Fano clock guard for 720/5040 lifecycle |
-| `::8` | master canvas and browser object surface |
-
-## Address Grammar
-
-The canonical leaf form is:
-
-```text
-omi-8-ffff-127-0-0-1-0xRS-0xUS-payload
+omi-ffff-127-0-0-1-0xRS-0xUS-payload
 ```
 
 The parts are:
@@ -89,8 +62,8 @@ CSSOM prefix matching is the native subtree query model:
 
 ```css
 [data-omi^="omi-8"] {}
-[data-omi^="omi-8-ffff"] {}
-[data-omi^="omi-8-ffff-127-0-0-1"] {}
+[data-omi^="omi-ffff"] {}
+[data-omi^="omi-ffff-127-0-0-1"] {}
 ```
 
 Each hyphen-delimited segment narrows the route. This gives OMI the same containment intuition as CIDR prefix routing while remaining a legal selector-friendly string.
@@ -165,7 +138,7 @@ cdr: content.context.payload dot notation
 The pre-header declares chirality/endian BOM, polarity/BiDi flow, Float32/Float64 alignment, and the hyphen delimiter bridge. The CDR body stays printable:
 
 ```text
-omi-8-ffff-127-0-0-1-0x1a.NOUN-VERB-SYM.AAC_QEAAAL_AykAQA
+omi-ffff-127-0-0-1-0x1a.NOUN-VERB-SYM.AAC_QEAAAL_AykAQA
 ```
 
 See [OMI File Format](./omi-file-format.md) for the binary frame and runtime compiler API.
@@ -212,7 +185,7 @@ The lambda-cube CDR syntax is:
 Example:
 
 ```text
-omi-8-ffff-127-0-0-1-0x1a.NOUN-VERB-SYM.AAC_QEAAAL_AykAQA
+omi-ffff-127-0-0-1-0x1a.NOUN-VERB-SYM.AAC_QEAAAL_AykAQA
 ```
 
 The dot (`.`) splits the content, context, and payload tables. The hyphen (`-`) stays inside each table as the structural token delimiter.
@@ -316,78 +289,9 @@ The distributed protocol prospectus adds compliance checks on top of the object 
 1. Generated identities use flat hyphen-delimited OMI tokens and printable descriptor fields.
 2. DOM/CSSOM subtree operations use prefix containment over `id` or `data-omi`.
 3. Volatile memory and route updates respect 720 promote and 5040 reset lifecycle boundaries.
-4. Local context addresses normalize to `omi-8-ffff-127-0-0-1`.
-5. Semantic service routes identify `::1..::8`, with WordNet on `::3` and TURN proxy metadata on `::4`.
+4. Local context addresses normalize to `omi-ffff-127-0-0-1`.
 
-See [OMI Distributed Protocol Prospectus](./omi-distributed-protocol.md) for the verification-focused architecture statement.
-
-## Protocol Sequencing
-
-This section defines the chronological orchestration, data marshal cycles, and execution invariants of the OMI protocol across all computing surfaces. The system enforces strict step-by-step determinism to ensure zero-copy transmission between CodeMirror 6 text edits, shared memory rings, and hardware GPU draw calls.
-
-### Unified Global Lifecycle & Execution Sequence Matrix
-
-The diagram below shows how an input transaction flows natively through the system components. The process relies entirely on unescaped, hyphen-delimited string identities, bypassing string serialization overhead.
-
-```text
- [ CodeMirror 6 ] ──────────────► [ Omi Kernel Core ] ─────────────► [ Shared Worker ]
-   Text Mutation                   Token Splitting                  720/5040 GC Sweeps
-  (Character Array)               (Content/Context)                 (Atomic Boundary)
-                                          │
-                                          ▼
- [ WebGL 2 Canvas ] ◄────────────── [ DataView SAB ] ◄────────────► [ WebRTC Data Channel ]
-   GPU Vertex Shader               5040 * 8 Byte Ring               Unreliable UDP Frame
-  (Horner's Polynomial)           (Zero-Copy Shared Memory)         (CoTURN Proxy Mesh)
-```
-
-The system execution loop follows a fixed sequence divided into four distinct phases:
-
-```text
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                          PHASE 1: INGESTION & COMPILATION                               │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. CodeMirror 6 Transaction ──► 2. Lexical Token Split ──► 3. Identity Ingest (Car/Cdr) │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-                                          │
-                                          ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                          PHASE 2: MEMORY MAPPING & TIME METRICS                         │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│ 4. Atomic Stride Verification ──► 5. 7-Tick Cascades ──► 6. CLA Vector Resolution       │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-                                          │
-                                          ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                          PHASE 3: ROUTING & TRANSPORTS                                  │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│ 7. Local vs Remote Filter ──► 8. WebRTC Binary Pack ──► 9. CoTURN UDP Broadcast         │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-                                          │
-                                          ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                          PHASE 4: SPATIAL ACCELERATION & EVICTION                       │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│ 10. GPU Buffering ──► 11. Horner's Method Shader Draw ──► 12. 720/5040 Lifecycle Sweep  │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Sequence Phase Specifications
-
-#### Phase 1: Ingestion & Lexical Compilation
-
-1. CM6 Transaction Capture: A multi-user interaction or local keystroke triggers an EditorView update. The transaction captures a raw character stream fragment containing an omi- sequence.
-2. Lexical Token Splitting: The character stream is split along hyphen (-) and dot (.) boundaries. The system converts it into an array of unescaped alpha-numeric strings, executing at O(K) time complexity.
-3. Identity Ingest (Car/Cdr): The token structure passes through the Lisp transformer model. The car isolates the process or routing headers (local- vs remote-), while the cdr maps the semantic ports and the Base64-encoded vector payload.
-
-#### Phase 2: Memory Mapping & Time Metrics
-
-1. Atomic Stride Verification: The thread-safe memory manager queries the timeline registry index. A 64-bit atomic counter checks the current global loop position.
-2. 7-Tick Cascades: The bitwise clock orchestrator runs the 7 distinct bitwidth rotator combinators. This aligns the current loop index with the rot7, rot15, rot60, rot120, rot240, rot360, and rot720 radial alignment profiles.
-3. CLA Vector Resolution: The computed rotator states pass directly into the concurrent 4-Bit Carry-Lookahead Adder (CLA). The adder resolves intermediate generate (G) and propagate (P) carry conditions across the shared memory space.
-
-#### Phase 3: Routing & Distributed Transports
-
-1. Local vs Remote Filter: The engine reads the car network prefix. If it targets local storage (omi-8-ffff-127-0-0-1), data updates pin directly to local canvas components. If it targets remote or session allocations, it flags the thread for external network transmission.
+1. Local vs Remote Filter: The engine reads the car network prefix. If it targets local storage (omi-ffff-127-0-0-1), data updates pin directly to local canvas components. If it targets remote or session allocations, it flags the thread for external network transmission.
 2. WebRTC Binary Pack: The network worker extracts the 4-term polynomial coefficients from the SharedArrayBuffer using an endian-agnostic DataView. It serializes the array into a tight, 16-byte raw binary structure with no string formatting overhead.
 3. CoTURN UDP Broadcast: The binary packet is written to an open WebRTC data channel initialized with ordered: false and maxRetransmits: 0. This routes the data as a raw, unreliable UDP frame across network firewalls via the CoTURN proxy mesh.
 

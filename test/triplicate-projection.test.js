@@ -13,19 +13,20 @@ test("CENTROID_COEFFICIENTS have correct values", () => {
   assert.ok(CENTROID_COEFFICIENTS.octaplex24Cell > 0.5);
 });
 
-test("parseTriplicateAddress validates ::/48 prefix", () => {
+test("parseTriplicateAddress validates ::/48 prefix with new streamlined format", () => {
   const sab = new ArrayBuffer(5040 * 8);
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([1.5, 2, -0.5, 10]);
   const result = engine.parseTriplicateAddress(
-    `omi-8-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`
+    `omi-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`
   );
   assert.equal(result.isSubnetValid, true);
   assert.equal(result.subnetMask, "::/48");
+  assert.equal(result.contextRoot, "omi-ffff-127-0-0-1");
   assert.equal(result.controlCode, "0x24");
 });
 
-test("parseTriplicateAddress rejects bad FS byte", () => {
+test("parseTriplicateAddress rejects external network addresses", () => {
   const sab = new ArrayBuffer(5040 * 8);
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([1, 0, 0, 0]);
@@ -34,6 +35,7 @@ test("parseTriplicateAddress rejects bad FS byte", () => {
   );
   assert.ok(result);
   assert.equal(result.isSubnetValid, false);
+  assert.ok(result.error);
 });
 
 test("parseTriplicateAddress returns null for non-omi strings", () => {
@@ -43,12 +45,23 @@ test("parseTriplicateAddress returns null for non-omi strings", () => {
   assert.equal(engine.parseTriplicateAddress(""), null);
 });
 
+test("parseTriplicateAddress accepts old omi-8-ffff-... format for backward compat", () => {
+  const sab = new ArrayBuffer(5040 * 8);
+  const engine = new OmiTriplicateProjectionEngine(sab);
+  const b64 = encodeFloats([1.5, 2, -0.5, 10]);
+  const result = engine.parseTriplicateAddress(
+    `omi-8-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`
+  );
+  assert.equal(result.isSubnetValid, true);
+  assert.equal(result.controlCode, "0x24");
+});
+
 test("calculateTriplicateProjection applies 24-cell modifier", () => {
   const sab = new ArrayBuffer(5040 * 8);
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([1, 0, 0, 0]);
   const result = engine.calculateTriplicateProjection(
-    `omi-8-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`,
+    `omi-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`,
     1440n
   );
   const t = (1440 % 5040) / 5040;
@@ -61,7 +74,7 @@ test("calculateTriplicateProjection applies 5-cell modifier", () => {
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([1, 0, 0, 0]);
   const result = engine.calculateTriplicateProjection(
-    `omi-8-ffff-127-0-0-1-0x05-p1-slot720-${b64}`,
+    `omi-ffff-127-0-0-1-0x05-p1-slot720-${b64}`,
     720n
   );
   const t = (720 % 5040) / 5040;
@@ -74,7 +87,7 @@ test("calculateTriplicateProjection falls back to tetrahedron for unknown code",
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([1, 0, 0, 0]);
   const result = engine.calculateTriplicateProjection(
-    `omi-8-ffff-127-0-0-1-0x42-p0-slot0-${b64}`,
+    `omi-ffff-127-0-0-1-0x42-p0-slot0-${b64}`,
     0n
   );
   assert.equal(result, 0);
@@ -85,7 +98,7 @@ test("calculateTriplicateProjection with [0,1,0,0] matches Horner", () => {
   const engine = new OmiTriplicateProjectionEngine(sab);
   const b64 = encodeFloats([0, 1, 0, 0]);
   const result = engine.calculateTriplicateProjection(
-    `omi-8-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`,
+    `omi-ffff-127-0-0-1-0x24-p3-slot1440-${b64}`,
     1440n
   );
   const t = (1440 % 5040) / 5040;

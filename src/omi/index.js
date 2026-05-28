@@ -1,7 +1,6 @@
 import { fnv1a32 } from "../addressing/cidr.js";
 import { CHANNEL_META, normalizePosTag, POS_INDEX } from "../pos-tags.js";
 
-export const DEFAULT_OMI_FS = "8";
 export const DEFAULT_OMI_GS = "ffff-127-0-0-1";
 export const DEPRECATED_OMI_GS_SHORTHAND = "127-0-0-1";
 
@@ -31,11 +30,8 @@ function parseHexByte(input, max, label) {
   return { hex, value };
 }
 
-function normalizeFs(fs = DEFAULT_OMI_FS) {
-  const value = String(fs || DEFAULT_OMI_FS).toLowerCase();
-  if (!/^[0-9a-f]{1,4}$/.test(value)) throw new TypeError(`Invalid OMI FS frame: ${fs}`);
-  return value;
-}
+const CANONICAL_ROOT = "ffff-127-0-0-1";
+const FS_RE = /^[0-9a-f]{1,4}$/;
 
 function normalizeGs(gs = DEFAULT_OMI_GS) {
   const parts = Array.isArray(gs) ? gs : String(gs || DEFAULT_OMI_GS).split(/[.-]/);
@@ -59,25 +55,34 @@ function normalizePayload(payload) {
 }
 
 export function parseOmiAddress(input) {
-  const raw = String(input || "");
+  const raw = String(input || "").replace(/^(local-|remote-)/, "");
   if (!raw.startsWith("omi-")) throw new TypeError(`Invalid OMI prefix: ${input}`);
   const tokens = raw.split("-");
-  if (tokens.length < 8) throw new TypeError(`Incomplete OMI address: ${input}`);
   if (tokens[0] !== "omi") throw new TypeError(`Invalid OMI prefix: ${input}`);
 
-  const fs = normalizeFs(tokens[1]);
-  const hasMappedPrefix = String(tokens[2]).toLowerCase() === "ffff";
-  const gsEnd = hasMappedPrefix ? 7 : 6;
-  const deprecatedShorthand = !hasMappedPrefix;
-  const gs = normalizeGs(tokens.slice(2, gsEnd));
+  let fs = "8";
+  let gsStart, gsEnd;
+
+  if (tokens[1] === "ffff") {
+    gsStart = 1;
+    gsEnd = 6;
+  } else if (tokens[1] === "8") {
+    gsStart = 2;
+    gsEnd = tokens[2] === "ffff" ? 7 : 6;
+  } else {
+    throw new TypeError(`Invalid OMI address: expected omi-ffff-... or omi-8-... got omi-${tokens[1]}-`);
+  }
+
+  if (tokens.length < gsEnd + 2) throw new TypeError(`Incomplete OMI address: ${input}`);
+  const gs = normalizeGs(tokens.slice(gsStart, gsEnd));
   const rs = parseHexByte(tokens[gsEnd], 0x3f, "RS control");
   const us = parseHexByte(tokens[gsEnd + 1], 0x7f, "US unit");
   const payload = normalizePayload(tokens.slice(gsEnd + 2).join("-"));
 
   return {
     raw,
-    address: formatOmiAddress({ fs, gs, rs: rs.hex, us: us.hex, payload }),
-    deprecatedShorthand,
+    address: formatOmiAddress({ gs, rs: rs.hex, us: us.hex, payload }),
+    deprecatedShorthand: tokens[1] !== "8" || tokens[2] !== "ffff",
     fs,
     gs,
     gsIPv4: gs.split("-").slice(1).join("."),
@@ -91,12 +96,11 @@ export function parseOmiAddress(input) {
 }
 
 export function formatOmiAddress(parts = {}) {
-  const fs = normalizeFs(parts.fs);
   const gs = normalizeGs(parts.gs);
   const rs = parseHexByte(parts.rs ?? parts.controlCode ?? "0x00", 0x3f, "RS control").hex;
   const us = parseHexByte(parts.us ?? parts.unit ?? "0x00", 0x7f, "US unit").hex;
   const payload = normalizePayload(parts.payload);
-  return ["omi", fs, ...gs.split("-"), rs, us, payload].filter(Boolean).join("-");
+  return ["omi", ...gs.split("-"), rs, us, payload].filter(Boolean).join("-");
 }
 
 export function projectUPOSPort(posTag) {
@@ -129,7 +133,6 @@ export function makeOmiAddressForAtom(atom = {}, options = {}) {
   const usValue = options.us ?? (fnv1a32(seed) & 0x7f);
   const payload = options.payload === false ? undefined : options.payload || encodeBase64Url(atom.id || atom.term || atom.label || seed);
   const address = formatOmiAddress({
-    fs: options.fs || DEFAULT_OMI_FS,
     gs: options.gs || DEFAULT_OMI_GS,
     rs: options.rs || projected.posHex,
     us: hexByte(usValue),

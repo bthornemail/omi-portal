@@ -13,7 +13,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 
 ## Current Canonical Roots
 
-- Address root: `omi-8-ffff-127-0-0-1`
+- Address root: `omi-ffff-127-0-0-1`
 - Main framework doc: `docs/omi-object-model.md`
 - Manifest: `docs/omi-object-model.manifest.json`
 - GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`

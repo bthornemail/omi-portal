@@ -73,7 +73,7 @@ The POS transform channel remains the existing graph behavior. WordNet synset ce
 Canonical local context root:
 
 ```text
-omi-8-ffff-127-0-0-1
+omi-ffff-127-0-0-1
 ```
 
 The older shorthand `omi-8-127-0-0-1` is deprecated compatibility syntax and normalizes to the canonical IPv4-mapped IPv6 form.

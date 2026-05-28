@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "canonicalRoot": {
-    "omi": "omi-8-ffff-127-0-0-1",
+    "omi": "omi-ffff-127-0-0-1",
     "ipv6": "::ffff:127.0.0.1",
     "deprecatedShorthand": "omi-8-127-0-0-1",
     "remoteCodepointRoot": "::/128",
@@ -20,7 +20,7 @@
       "role": "topological object-model exploration",
       "canonicalStatus": "canonicalized",
       "keyConcepts": ["CIDR containment", "DOM hierarchy", "CSSOM prefix matching", "cons/car/cdr IPC", "720/5040 lifecycle", "A-Frame"],
-      "sourceNotes": "Contains the broadest OMI topology narrative. Deprecated localhost shorthand examples normalize to omi-8-ffff-127-0-0-1."
+      "sourceNotes": "Contains the broadest OMI topology narrative. Deprecated localhost shorthand examples normalize to omi-ffff-127-0-0-1."
     },
     {
       "path": "dev-docs/Omi Declarative.md",
@@ -89,7 +89,7 @@
     {
       "id": "local-context-root",
       "notation": "::ffff:127.0.0.1",
-      "omiPrefix": "omi-8-ffff-127-0-0-1",
+      "omiPrefix": "omi-ffff-127-0-0-1",
       "status": "implemented",
       "meaning": "Browser-local context boundary for DOM, CSSOM, JSDOM, SVG, A-Frame, and JSON Canvas projections."
     },
@@ -111,7 +111,7 @@
   "tokenLayouts": [
     {
       "id": "canonical-fs-gs-rs-us",
-      "shape": "omi-8-ffff-127-0-0-1-0xRS-0xUS-payload",
+      "shape": "omi-ffff-127-0-0-1-0xRS-0xUS-payload",
       "status": "implemented",
       "meaning": "Canonical browser-local OMI address with bounded RS control and US unit/codepoint fields."
     },
@@ -351,7 +351,7 @@
     },
     {
       "id": "context-normalization",
-      "requirement": "Generated browser-local addresses normalize to omi-8-ffff-127-0-0-1."
+      "requirement": "Generated browser-local addresses normalize to omi-ffff-127-0-0-1."
     },
     {
       "id": "service-bus-labeling",
