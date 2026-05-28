@@ -56,8 +56,7 @@ export class OmiSemanticMemoryBroker {
   }
 
   searchByVector(vector, k = 10) {
-    const results = this.hnsw.search(vector, k);
-    return results.map(([id, distance]) => ({ id, distance }));
+    return this.hnsw.search(vector, k);
   }
 
   getTemporalSlot(tick) {

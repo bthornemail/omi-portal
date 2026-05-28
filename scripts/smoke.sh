@@ -13,7 +13,7 @@ echo "================================================================="
 
 echo "[1/4] Orchestrating multi-stage container build infrastructure..."
 docker compose down --volumes --remove-orphans > /dev/null 2>&1 || true
-docker compose up --build -d omi-kernel-node
+docker compose up --build -d omi-portal
 
 echo "[2/4] Awaiting hardware healthcheck endpoint stabilization..."
 TIMEOUT=15
@@ -22,11 +22,11 @@ STATUS="starting"
 while [ "$STATUS" != "healthy" ]; do
     if [ $COUNTER -gt $TIMEOUT ]; then
         echo " -> Error: Container failed to reach healthy status within ${TIMEOUT}s limit."
-        docker compose logs omi-kernel-node
+        docker compose logs omi-portal
         exit 1
     fi
     sleep 1
-    STATUS=$(docker inspect --format='{{.State.Health.Status}}' omi-core-gateway 2>/dev/null || echo "starting")
+    STATUS=$(docker inspect --format='{{.State.Health.Status}}' omi-portal-1 2>/dev/null || echo "starting")
     COUNTER=$((COUNTER + 1))
 done
 echo " -> Success: Container health check reports optimal execution status."

@@ -141,6 +141,30 @@
       main { padding: 10px; }
       .metric-grid { grid-template-columns: 1fr; }
     }
+    #stream-log {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      font: 11px/1.4 ui-monospace, monospace;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--cyan);
+    }
+    #stream-log .warn { color: #fbbf24; }
+    #stream-log .reset { color: var(--pink); }
+    #stream-log .vector { color: #60a5fa; }
+    .stream-bar {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    }
+    .stream-bar .dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    }
+    .dot.connected { background: #22c55e; }
+    .dot.disconnected { background: #ef4444; }
+    .dot.pending { background: #fbbf24; }
   </style>
 </head>
 <body>
@@ -177,6 +201,11 @@
         <div class="metric"><span>Root</span><strong>omi-ffff-127-0-0-1</strong></div>
       </div>
       <pre id="cell-readout"></pre>
+      <div class="stream-bar">
+        <span class="dot disconnected" id="stream-dot"></span>
+        <span id="stream-label" style="font:11px monospace;color:var(--muted)">disconnected</span>
+      </div>
+      <pre id="stream-log"></pre>
     </section>
   </main>
 
@@ -253,6 +282,66 @@
       metric.tick.textContent = String(engineProbe.advanceClockTimeline());
     });
     tokenReadout.textContent = positiveToken.replaceAll("\u202a", "\\u202A").replaceAll("\u202d", "\\u202D");
+
+    // === SSE STREAM CLIENT ===
+    const STREAM_URLS = [
+      "http://69.48.202.32:8080/omi-stream",
+      "http://74.208.190.29:8080/omi-stream"
+    ];
+    const streamDot = document.getElementById("stream-dot");
+    const streamLabel = document.getElementById("stream-label");
+    const streamLog = document.getElementById("stream-log");
+
+    function logStream(origin, event, data) {
+      const cls = event === "hard-reset" ? "reset" : event === "vector-update" ? "vector" : "warn";
+      const time = new Date().toLocaleTimeString();
+      streamLog.innerHTML += `<span class="${cls}">[${time}] <strong>${origin}</strong> <em>${event}</em> ${JSON.stringify(data)}</span>\n`;
+      streamLog.scrollTop = streamLog.scrollHeight;
+    }
+
+    function connectSSE(url) {
+      const source = new EventSource(url);
+      const origin = new URL(url).hostname;
+
+      source.onopen = () => {
+        streamDot.className = "dot connected";
+        streamLabel.textContent = `connected to ${origin}`;
+        logStream(origin, "open", {});
+      };
+
+      source.addEventListener("handshake", (e) => {
+        const data = JSON.parse(e.data);
+        logStream(origin, "handshake", data);
+      });
+
+      source.addEventListener("promote-gc", (e) => {
+        const data = JSON.parse(e.data);
+        logStream(origin, "promote-gc", data);
+        if (data.slot) document.getElementById("metric-tick").textContent = String(data.slot);
+      });
+
+      source.addEventListener("hard-reset", (e) => {
+        const data = JSON.parse(e.data);
+        logStream(origin, "hard-reset", data);
+        document.getElementById("metric-tick").textContent = "0";
+      });
+
+      source.addEventListener("vector-update", (e) => {
+        const data = JSON.parse(e.data);
+        logStream(origin, "vector-update", data);
+        if (typeof data.value === "number") {
+          document.getElementById("metric-depth").textContent = data.value.toFixed(2);
+        }
+      });
+
+      source.onerror = () => {
+        streamDot.className = "dot disconnected";
+        streamLabel.textContent = `disconnected from ${origin}`;
+        logStream(origin, "error", {});
+      };
+    }
+
+    for (const url of STREAM_URLS) connectSSE(url);
   </script>
 </body>
 </html>

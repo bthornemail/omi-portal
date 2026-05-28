@@ -1,0 +1,33 @@
+FROM alpine:3.20 AS softmmu-runtime
+
+RUN apk add --no-cache \
+    qemu-system-x86_64 \
+    qemu-system-i386 \
+    qemu-system-aarch64 \
+    qemu-system-arm \
+    qemu-system-riscv64 \
+    qemu-system-riscv32 \
+    qemu-system-ppc64 \
+    qemu-system-mips64 \
+    nodejs \
+    npm \
+    bash
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci --quiet
+
+COPY . .
+
+RUN echo "=== BASELINE UNIT REGRESSION SUITE ===" \
+    && npm test
+
+RUN echo "=== SOFTMMU FULL SYSTEM BOOT MATRIX ===" \
+    && node test/softmmu-system.test.js
+
+RUN npm run build
+
+LABEL omi.validator-type="softmmu-full-system"
+LABEL omi.service-bus="::1..::8"
+LABEL omi.context-root="omi-ffff-127-0-0-1"
