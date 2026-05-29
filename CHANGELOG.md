@@ -6,7 +6,15 @@
 - v0.0.1 — multi-arch: linux/amd64, linux/arm64, linux/arm/v7
 - Full CI pipeline: unit → build → QEMU cross-arch → smoke
 - OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice
-- 324+ tests passing, 0 failing
+- 324+ tests passing, 0 failing (initial release baseline)
+
+### Current State (v0.0.1, post-release additions)
+- 619 tests, 0 failures; build produces 166 modules
+- 4 execution targets: JS, C99, WASM, eBPF/XDP
+- 7 protocol layers: Physical → Transport → Geometric → Algebraic → Projective → Atomic → Telemetry
+- RULES.omi through rule 0x57; bidi.css 47 selector groups
+- Ring overwrite policy (OW-1 through OW-5); IPv6 wire profile (profile.net.v0)
+- WAN latency telemetry: SSE probe daemon port 8082, /wan-metrics, /wan-dashboard.html
 
 ---
 
@@ -37,8 +45,8 @@
 - `Makefile` — Updated with docker-bake, release, qemu-setup targets
 
 ### Tests
-- 324 tests, 0 failures
-- 169 modules transformed in build (7.42 kB bidi chunk)
+- 324 tests, 0 failures (historic baseline; current: 619)
+- 169 modules transformed in build (historic; current: 166)
 - QEMU cross-arch validated on linux/amd64, linux/arm64, linux/arm/v7
 
 ### Breaking Changes

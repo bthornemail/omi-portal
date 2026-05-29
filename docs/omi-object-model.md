@@ -21,7 +21,7 @@ The parts are:
 | Part | Meaning |
 |---|---|
 | `omi` | namespace marker |
-| `8` | FS frame, master browser surface |
+| `ffff` | FS frame, master browser surface (`8` is legacy alias) |
 | `ffff-127-0-0-1` | GS frame, IPv4-mapped localhost context |
 | `0xRS` | RS control predicate, bounded to `0x00..0x3f` |
 | `0xUS` | US unit/codepoint, bounded to `0x00..0x7f` |
@@ -61,8 +61,8 @@ OMI separates browser object responsibilities:
 CSSOM prefix matching is the native subtree query model:
 
 ```css
-[data-omi^="omi-8"] {}
 [data-omi^="omi-ffff"] {}
+[data-omi^="omi-ffff-127-0-0-1"] {}
 [data-omi^="omi-ffff-127-0-0-1"] {}
 ```
 

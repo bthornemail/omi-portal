@@ -14,7 +14,7 @@ IPv6: [x * 2^(128-n), x * 2^(128-n) + 2^(128-n) - 1]
 For a fixed prefix length, subnets form a partition. Any two subnets are either disjoint or nested. OMI mirrors this property with hyphen-delimited token prefixes, so DOM ancestry and CSSOM prefix selection can behave like route-table containment:
 
 ```css
-[data-omi^="omi-8"] {}
+[data-omi^="omi-ffff"] {}
 [data-omi^="omi-ffff-127-0-0-1"] {}
 ```
 

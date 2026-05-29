@@ -1,73 +1,79 @@
-# OMI Portal v0.3.0 — Production Release Pipeline
+# OMI Portal v0.0.1 — Monolithic Protocol Stack
 
 ## Summary
 
-Production-grade multi-arch container release pipeline with full QEMU cross-architecture verification. The Omicron Object Model kernel is complete with 5 core modules (CIDR, sexagesimal, inversion, lisp, lattice), specification docs, and a GitHub Actions CI/CD pipeline that builds and tests across linux/amd64, linux/arm64, and linux/arm/v7.
+Production-grade multi-arch container release with complete 7-layer OMI protocol stack: Physical Signal Integrity → Transport Ladder → C0 Matrix Planes → Branchless Quadratic Zero-Sum Lexer → Transylvania Lottery Fano Resolution → Lock-Free CAS Ring Indexer → Live SSE Telemetry. Four execution targets (JS, C99, WASM, eBPF/XDP) produce byte-identical structural proofs.
 
-**324 tests pass, 0 fail. Build produces 169 modules.**
+**619 tests pass, 0 fail. Build produces 166 modules.**
 
 ## What's New
 
-- **OMI Kernel (5 modules)** — CIDR-v0 address parser, 16-bit delta evaluator, sexagesimal stride lattice, central inversion mirror, S-expression nil-terminator, factorial lattice weights
-- **Specification Docs** — `docs/omi-whitepaper.md` (first-principles white paper), `docs/omi-core-spec.md` (normative specification)
-- **Dockerfile** — Multi-stage production build with test stage, non-root user, buildx multi-arch ARG, OCI labels, COOP/COEP healthcheck
-- **Dockerfile.qemu** — QEMU user-mode test container for cross-architecture validation
-- **docker-bake.hcl** — Buildx bake matrix with GHA cache and provenance attestation
-- **GitHub Actions CI** — Unit tests + QEMU multi-arch matrix (linux/amd64, arm64, arm/v7) + Docker smoke test
-- **GitHub Actions Release** — Tagged multi-arch image push to GHCR, attestation, GitHub Release
-- **Release Automation** — `scripts/release.sh` handles version bump, tagging, multi-arch bake, and release creation
-- **Makefile** — Updated with `docker-build`, `docker-push`, `release`, `qemu-setup`, `qemu-test` targets
+- **Δ_C-Orbit Lexer** — 128-bit instruction word with branchless quadratic error surface Q(S)=E_var+E_const, Fano plane projective binding, Transylvania lottery resolution (≤14 steps), boot anchor at 0x7c00
+- **4 Execution Targets** — Reference (JS), Portable (C99), Executable (WASM), Kernel (eBPF/XDP) all produce identical outputs
+- **eBPF/XDP Dual Gate** — IPv6 saddr-as-frame zero-copy extraction, Gate 1 Q(S)=0, Gate 2 manually unrolled Δ_C orbit (1474 bytes JIT-compiled)
+- **Lock-Free Ring Indexer** — 64-bit slot packing (provenance:16|steps:8|LL:8|NN:16|MM:16), CAS cursor, epoch wraparound guard, OW-1 through OW-5 overwrite policy
+- **IPv6 Wire Profile** — profile.net.v0: 128-bit source address IS the OMI frame, Ethernet offset 0x16, big-endian uint16_t[8], genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`
+- **WAN Latency Telemetry** — SSE probe daemon on port 8082, `/wan-metrics` stream, `/wan-dashboard.html` live dashboard, sub-millisecond edge-tunnel link
+- **Barcode Carrier Taxonomy** — ITF/Code39 physical guards, 1D precision ladder (Codabar→Code128→Code16K→Code93), C0 matrix planes (Aztec/Maxi/JABCode/BeeTag)
+- **RULES.omi** — 0x01 through 0x57 covering all algebraic, carrier, gate, wire profile, and telemetry invariants
 
 ## Pipeline Architecture
 
 ```
-Commit/PR → CI (unit + QEMU matrix + smoke)
-                              ↓
-Tag push → Release (multi-arch bake + push + attestation + GitHub Release)
-                              ↓
-Consumer → docker pull ghcr.io/anomalyco/omi-portal:latest
+Ingress (IPv6 saddr / barcode / wire) → Physical Guard → Linear Decode → C0 Parse
+                                                                                ↓
+Live SSE Telemetry ← CAS Ring Receipt ← User-Space Handoff ← eBPF Gate 2: Δ_C ≤14 ← eBPF Gate 1: Q(S)=0
 ```
 
 ## Test Results
 
 ```
-ℹ tests 324
-ℹ pass  324
+ℹ tests 619
+ℹ suites 29
+ℹ pass  619
 ℹ fail  0
 ```
 
 ## Quick Start
 
 ```bash
-# Clone and develop
-git clone https://github.com/anomalyco/omi-portal.git
+# Develop
+git clone <repo>
 cd omi-portal
 make compile        # npm ci + build
-make test           # run unit tests
+make test           # 619 unit tests
 
 # Docker
 make stage          # compose up with nginx runtime
 make smoke          # verify COOP/COEP headers
 
 # Multi-arch QEMU tests
-make qemu-test      # run tests on linux/amd64 + linux/arm64 via QEMU
+make qemu-test      # cross-arch on amd64 + arm64 via QEMU
 
-# Release (tag, build, push)
-make release minor  # bump minor, build multi-arch, push to GHCR
+# eBPF gate
+make compile-ebpf-gate
+make test-ebpf-pipeline
+
+# WAN telemetry (tunnel core)
+make start-telemetry
+# Open http://74.208.190.29:8082/wan-dashboard.html
+
+# Release
+make release patch  # bump semver, tag, build, push
 ```
 
 ## Multi-Arch Images
 
-- `ghcr.io/anomalyco/omi-portal:latest` (linux/amd64, linux/arm64, linux/arm/v7)
-- `ghcr.io/anomalyco/omi-portal-test:latest` (QEMU test images)
+- linux/amd64, linux/arm64, linux/arm/v7
+- Buildx bake matrix with GHA cache and provenance attestation
 
 ## Architectural Invariants
 
-- `Ο` opens the frame
-- `--` compresses zero hextets
-- `/48` anchors the local frame
-- `δ_C(x)` is the period-8 delta evaluator
-- `Inv(x) = x ⊕ 0x5A3C` is the one instruction
-- `()! = ()` is the empty-cons fixed point
-- SAB(5040×8) is the runtime memory ring
-- The browser is the projection surface
+- `Ο` (U+039F) cardinal boundary / `ο` (U+03BF) chiral cons
+- `δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C` (period-8)
+- `Q(S) = E_var + E_const === 0` — sole structural validity predicate
+- `Inv(x) = x ⊕ 0x5A3C` — central inversion mirror
+- `()! = ()` — empty-cons fixed point
+- `5040 = 7!` — master replay ring size
+- SAB(5040×8) — runtime memory ring
+- Browser is the projection surface

@@ -491,3 +491,22 @@ svg {
   stroke-width: 3.5px;
   filter: drop-shadow(0 0 14px #00ffcc);
 }
+
+/* 46. Isolated telemetry metrics port — amber dashed stroke */
+[id*="-0000-0000-0000-1f92/"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 47. Ring-decoupled telemetry frame — neon glow */
+[id$="-7463-0001/128"] {
+  stroke: #00ffcc !important;
+  filter: drop-shadow(0 0 10px #00ffcc);
+  animation: telemetryGlowPulse 1s infinite alternate;
+}
+
+@keyframes telemetryGlowPulse {
+  0% { opacity: 0.6; transform: scale(1.0); }
+  100% { opacity: 1.0; transform: scale(1.03) translateZ(10px); }
+}

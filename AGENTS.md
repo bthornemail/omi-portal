@@ -80,7 +80,7 @@ make release patch          # full release (tag, multi-arch build, push to GHCR)
 ### CI Pipeline (GitHub Actions)
 
 - `.github/workflows/ci.yml` — on push/PR to main: unit tests + QEMU multi-arch matrix (linux/amd64, arm64, arm/v7) + Docker smoke test with COOP/COEP verification
-- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `ghcr.io/anomalyco/omi-portal` with provenance attestation + GitHub Release
+- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to container registry with provenance attestation + GitHub Release
 
 ### Docker Architecture
 

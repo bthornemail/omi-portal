@@ -329,3 +329,21 @@ omi-0000-0000-0000-0000-0000-0000-0000-0016/128 MUST anchor-wire-packet-segment-
 #   be treated as an orientation failure and dropped instantly via hardware
 #   driver link evictions.
 omi-0000-0000-0000-0000-0000-0000-0000-2000/112 MUST evict-byte-swapped-wire-frames
+
+# [Rule 0x55]: Isolated Metrics Server Allocation
+#   Telemetry event streams MUST propagate via an isolated background port.
+#   Streaming latency metrics SHALL NOT consume socket threads dedicated
+#   to main ingress gates.
+omi-0000-0000-0000-0000-0000-0000-0000-1f92/128 MUST allocate-isolated-metrics-port
+
+# [Rule 0x56]: Non-Allocating Latency Frame Broadcasts
+#   Inbound latency payloads emitted at /wan-metrics MUST pack natively
+#   into unescaped JSON. Broadcasting metrics MUST NOT alter the active
+#   index pointers of the 5040 replay ring.
+omi-0000-0000-0000-0000-0000-0000-7463-0001/128 MUST isolate-telemetry-from-replay-ring
+
+# [Rule 0x57]: Direct Cross-Origin Isolation Enforcement
+#   The /wan-dashboard.html user interface surface MUST declare strict
+#   COOP/COEP headers. Failure to protect these headers MUST block the
+#   browser context from mapping shared arrays.
+omi-0000-0000-0000-0000-0000-0000-0000-00a4/128 MUST enforce-telemetry-coop-coep-headers
