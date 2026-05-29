@@ -9,7 +9,7 @@ import { join } from 'node:path';
 
 class OmiUserSpaceValidationSuite {
   constructor() {
-    this.targetUrl = "http://localhost:8080/bidi.html";
+    this.targetUrl = "http://localhost:5173/bidi.html";
     this.outputFrameDir = join(process.cwd(), 'dist', 'frames');
     this.screenshotPath = join(this.outputFrameDir, 'canvas-snapshot.png');
   }
@@ -23,7 +23,7 @@ class OmiUserSpaceValidationSuite {
 
   executeHeadlessBrowserCapture() {
     console.log(`[User-Space Engine] Spawning Guix-pinned Headless Chromium engine...`);
-    const chromiumCommand = `headless-chromium --headless --disable-gpu --no-sandbox --window-size=800,600 --screenshot=${this.screenshotPath} ${this.targetUrl} > /dev/null 2>&1`;
+    const chromiumCommand = `chromium --headless --disable-gpu --no-sandbox --window-size=800,600 --screenshot=${this.screenshotPath} ${this.targetUrl} > /dev/null 2>&1`;
     try {
       execSync(`xvfb-run --server-args="-screen 0 800x600x24" ${chromiumCommand}`);
       console.log(`  - Headless layout frame captured successfully.`);

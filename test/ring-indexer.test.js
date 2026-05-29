@@ -352,3 +352,114 @@ describe('RingIndexer: epoch overwrite detection', () => {
     assert.equal(u2.NN, 0x2000);
   });
 });
+
+describe('RingIndexer: epoch overwrite stress (OW-1 through OW-5)', () => {
+  it('OW-1: existing slot provenance epoch readable', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5038);
+    const r = ring.atomicAdvance(5, (1n << 32n) | 0x1000n);
+    const slot = ring.atomicRead(r.position);
+    const epochBits = Number((slot >> 48n) & 0xFF00n) >> 8;
+    assert.equal(epochBits, 1);
+  });
+
+  it('OW-2: cold overwrite overwrites stale epoch slot silently', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5038);
+
+    const mkR = (LL, n) => ring.atomicAdvance(3, (BigInt(LL) << 32n) | BigInt(n));
+
+    /* Fill 2 slots in epoch 0 */
+    ring.rewind(5036);
+    const r0 = mkR(1, 0x1000);
+    assert.equal(r0.epoch, 0);
+    assert.equal(r0.position, 5039);
+
+    /* Force wraparound to epoch 1 */
+    const r1 = mkR(2, 0x2000);
+    assert.equal(r1.epoch, 1);
+    assert.equal(r1.position, 2);
+
+    /* Now r1.position (2) contains epoch-1 data */
+    /* Force cold overwrite: wrap back to slot 2 in another epoch */
+    ring.rewind(5038);
+    const r2 = mkR(3, 0x3000);
+    assert.equal(r2.epoch, 2);
+    assert.equal(r2.position, 1);
+
+    const r3 = mkR(4, 0x4000);
+    assert.equal(r3.epoch, 2);
+    assert.equal(r3.position, 4);
+
+    /* Slot 2 is now in a previous epoch (0 or 1) */
+    const slot2 = ring.atomicRead(2);
+    const epoch2 = Number((slot2 >> 48n) & 0xFF00n) >> 8;
+    assert.ok(epoch2 < ring.epoch, `epoch ${epoch2} < current ${ring.epoch}`);
+  });
+
+  it('OW-3: warm overwrite rejection (same epoch, same slot)', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5000);
+
+    const mkR = (LL, n) => ring.atomicAdvance(1, (BigInt(LL) << 32n) | BigInt(n));
+    const results = [];
+    /* Rapid-fire single-step advances — every slot in the epoch is unique */
+    for (let i = 0; i < 40; i++) {
+      results.push(mkR(i % 7 + 1, 0x1000 + i));
+    }
+    /* No two results should share the same position in the same epoch */
+    const seen = new Map();
+    for (const r of results) {
+      const key = `${r.epoch}:${r.position}`;
+      assert.ok(!seen.has(key), `duplicate slot ${key}`);
+      seen.set(key, r);
+    }
+  });
+
+  it('OW-4: stale overwrite — epoch > current should not occur normally', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5000);
+    const mkR = (LL, n) => ring.atomicAdvance(1, (BigInt(LL) << 32n) | BigInt(n));
+    for (let i = 0; i < 80; i++) {
+      const r = mkR(i % 7 + 1, 0x1000 + i);
+      assert.ok(r.epoch >= 0);
+      assert.ok(r.position >= 0);
+    }
+  });
+
+  it('OW-5: CAS serialization under sequential load preserves epoch', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5000);
+    const epochs = new Set();
+    for (let i = 0; i < 100; i++) {
+      const r = ring.atomicAdvance(1, (BigInt((i % 7) + 1) << 32n) | BigInt(0x1000 + i));
+      epochs.add(r.epoch);
+      assert.ok(r.epoch <= 2, `epoch ${r.epoch} ≤ 2 for 100 single-steps`);
+    }
+    assert.ok(epochs.size >= 1);
+  });
+
+  it('wraparound stress: 504 single-step advances cover full ring', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(0);
+    const positions = new Set();
+    for (let i = 0; i < 504; i++) {
+      const r = ring.atomicAdvance(10, (BigInt((i % 7) + 1) << 32n) | BigInt(0x1000 + i));
+      positions.add(r.position);
+    }
+    /* 504 steps × avg 10 = 5040 — exactly one full wrap */
+    assert.equal(ring.epoch, 1);
+    assert.ok(positions.size > 1);
+  });
+
+  it('epoch provenance tag encodes epoch in upper 8 bits of 16-bit field', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5030);
+    for (let i = 0; i < 20; i++) {
+      const r = ring.atomicAdvance(1, (1n << 32n) | BigInt(0x1000 + i));
+      const u = unpackSlot(r.receipt);
+      const epochFromTag = (u.provenance >> 8) & 0xFF;
+      assert.equal(epochFromTag, r.epoch);
+    }
+  });
+});

@@ -294,3 +294,38 @@ omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST map-matrix-to-c0-control-pla
 #   Free variable vectors S2 (NN) and S5 (MM) MUST pass through completely
 #   unpenalized.
 omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST validate-branchless-quad-lexer-gate
+
+# [Rule 0x4F]: Kernel-Level Gate 1 Quadratic Enforcement
+#   The eBPF driver MUST apply the multivariate zero-sum quadratic equation
+#   Q(S) == 0. Any inbound network buffer yielding non-zero error energy
+#   MUST be dropped immediately via XDP_DROP at the NIC driver layer.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST execute-ebpf-gate-1-eviction
+
+# [Rule 0x50]: Kernel-Level Gate 2 Projective Fano Loop
+#   The BPF filter MUST execute unrolled Δ_C tracking steps to verify orbit
+#   convergence. If a token's trajectory fails to reach closure inside k < 15
+#   steps, it MUST be dropped.
+omi-0000-0000-0000-0000-0000-0000-13b0-000e/128 MUST restrict-ebpf-fano-resolution-ceiling
+
+# [Rule 0x51]: Token-Derived Trajectory Modulations
+#   Resolver loops inside the eBPF kernel space MUST modulate constants via
+#   C = (LL × 0x1337) & 0xFFFF. Fano points outside the valid range 0x01..0x07
+#   MUST be rejected to block variance drift.
+omi-0100-7c00-0000-0000-0000-0000-0436-0000/48 MUST enforce-ebpf-fano-range-limits
+
+# [Rule 0x52]: Zero-Copy Source Address Instruction Carrier
+#   Under profile.net.v0, the 128-bit IPv6 source address MUST act as the
+#   OMI frame S. Network routing stacks SHALL NOT allocate secondary buffers
+#   for payload extraction.
+omi-0000-0000-0000-0000-0000-0000-7463-0000/128 MUST assert-zero-copy-ipv6-saddr-carrier
+
+# [Rule 0x53]: Canonical Ingress Header Offset
+#   The segment vector S MUST map precisely at Ethernet frame byte offset
+#   22 (0x16).
+omi-0000-0000-0000-0000-0000-0000-0000-0016/128 MUST anchor-wire-packet-segment-offset
+
+# [Rule 0x54]: Endianness Detection Threshold
+#   Any incoming network frame producing an error score Q(S) >= 2*10^9 MUST
+#   be treated as an orientation failure and dropped instantly via hardware
+#   driver link evictions.
+omi-0000-0000-0000-0000-0000-0000-0000-2000/112 MUST evict-byte-swapped-wire-frames

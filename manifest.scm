@@ -6,7 +6,7 @@
 
 (specifications->manifest
   (list "bash"
-        "chromium"
+        "ungoogled-chromium"
         "coreutils"
         "ffmpeg"
         "findutils"
@@ -18,4 +18,5 @@
         "pkg-config"
         "qemu"
         "sed"
-        "xorg-server-xvfb"))
+        "xvfb-run"
+        "xorg-server"))

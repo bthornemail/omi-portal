@@ -4,10 +4,12 @@
         release release-dry-run \
         benchmark-concurrency-stress benchmark-parallel-stress benchmark-stress-all \
         build-c99-core test-c99-core test-c99-core-guix \
+        compile-ebpf-gate test-ebpf-pipeline \
         ratio-symmetry-test radix-context-test \
         run-wan-edge run-wan-tunnel wan-probe wan-probe-verify \
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
         build-gui-reference test-user-space-ui \
+        test-wire-profile \
         clean purge
 
 # ============================================================
@@ -112,6 +114,31 @@ test-c99-core: build-c99-core
 test-c99-core-guix:
 	@echo "[C99 Substrate] Running conformance mirror inside Guix host envelope..."
 	guix shell -m manifest.scm -- make test-c99-core
+
+# ============================================================
+# eBPF/XDP KERNEL GATE
+# ============================================================
+
+compile-ebpf-gate:
+	@echo "[Omi Kernel-Core] Compiling unrolled eBPF/XDP packet filter..."
+	clang -O2 -target bpf -g -I/usr/include/x86_64-linux-gnu \
+		-c src/omi/ebpf/delta_orbital_gate.bpf.c \
+		-o dist/delta_orbital_gate.o
+	@echo "  - Object stored at dist/delta_orbital_gate.o"
+
+test-ebpf-pipeline: compile-ebpf-gate
+	@echo "[Omi Kernel-Core] Verifying kernel verifier accepts the program..."
+	bpftool prog load dist/delta_orbital_gate.o /sys/fs/bpf/delta_orbital_gate
+	@echo "[Omi Kernel-Core] Running 613+ test full stack integration suite..."
+	node --test test/*.test.js
+
+# ============================================================
+# WIRE PROFILE
+# ============================================================
+
+test-wire-profile:
+	@echo "[Omi Wire Profile] Running profile.net.v0 network layer verification..."
+	node --test test/wire-profile.test.js
 
 ratio-symmetry-test:
 	@echo "[Omi Ratio Substrate] Verifying projective reciprocity rules..."
