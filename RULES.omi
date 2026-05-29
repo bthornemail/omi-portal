@@ -229,3 +229,26 @@ omi-0000-0000-0000-0000-0000-0000-0000-0002/128 MUST enforce-maximum-bitblip-tol
 omi-0000-0000-0000-0000-13b0-0000-0000-0000/48 MUST barcode-format-uss16k
 omi-0000-0000-0000-0000-0078-0000-0000-0000/48 MUST barcode-format-beetag
 omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST barcode-format-maxi-aztec
+
+# [Rule 0x27]: Quadratic Instruction Lexer Invariant
+#   The 8-segment instruction word MUST satisfy the branchless quadratic
+#   zero-sum invariant: Q(S) = E_var + E_const = 0.
+#   E_var enforces LL coherence across segments 0, 3, 4, 7.
+#   E_const enforces fixed opcode alignment on segments 0, 1, 3, 4, 6, 7.
+#   Free variables S₂ (NNNN) and S₅ (MMMM) pass unpenalized.
+#   Any non-zero Q(S) indicates a structurally malformed token.
+omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 MUST quadratic-lexer-invariant
+
+# [Rule 0x28]: Δ_C-Orbit Lexer Invariant
+#   The instruction word MUST lie on a valid Δ_C period-8 trajectory with
+#   consistent Fano point LL. The orbital lexer combines the quadratic
+#   zero-set (K(LL) = 0) with the Δ_C dynamical core and the Fano plane
+#   resolution bound (Steps ≤ 15). The lexer evaluates as:
+#     Q(N, M) = 0  ∧  fano_intercept(a, b, c) ≥ 0
+#   No parsing. No branching. No string operations.
+#   The LL variable identifies the Fano point: LL ∈ {0x01..0x07} → PG(2,2).
+#   Brackets [0xLL00] and [0xLLff] declare the CBOS origin and closure boundary
+#   on the same projective point. Any two rays with distinct LL₁ ≠ LL₂ resolve
+#   their intersection within the Fano lottery bound of ≤ 15 Δ_C steps.
+#   Constitutional foundation: cons() ≠ ()!  ⇒  0 ≠ 1
+omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 MUST delta-orbital-lexer-invariant

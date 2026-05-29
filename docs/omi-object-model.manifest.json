@@ -59,10 +59,17 @@
     },
     {
       "path": "dev-docs/Monotone Causal Reed–Solomon Gossip Storage Protocol (MCRSGSP).md",
-      "role": "distributed storage protocol prospectus",
+      "role": "distributed causal storage and erasure coding",
       "canonicalStatus": "reference-only",
-      "keyConcepts": ["Reed-Solomon erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "monotone set semantics", "coordination-free reconstruction"],
-      "sourceNotes": "RFC-style specification for fragment-based storage over unreliable transport. Relevant to OMI Phase 3 CoTURN/WebRTC unreliable UDP transport and the webrtc-udp-transceiver documented-future engine. The causal ordering and anti-entropy repair models complement the 5040-tick deterministic timeline for distributed scenarios."
+      "keyConcepts": ["Reed-Solomon GF(2^8)", "fragment store", "version vectors", "gossip protocol", "anti-entropy repair", "causal closure", "HNSW"],
+      "sourceNotes": "Describes the distributed fragment storage layer. Core components are implemented in src/distributed/."
+    },
+    {
+      "path": "ONTOLOGY.md",
+      "role": "binary quadratic meta-mask lexer specification",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["quadratic error function", "zero-set membership", "branchless lexing", "LL variable coherence", "free payload pass-through"],
+      "sourceNotes": "Defines the algebraic lexer that treats instruction validation as surface membership: Q(S) = E_var + E_const = 0."
     }
   ],
   "addressSpaces": [
@@ -204,7 +211,8 @@
     { "id": "webusb-interface-controller", "status": "implemented", "role": "WebUSB raw endpoint access routed through ::11" },
     { "id": "webhid-device-controller", "status": "implemented", "role": "WebHID structured report bus routed through ::12" },
     { "id": "causal-closure", "status": "implemented", "role": "distributed causal closure with frontier-based merge and causally consistent event ordering" },
-    { "id": "polytope-webgl", "status": "implemented", "role": "WebGL 2.0 polytope rendering with Fano-plane vertex projections and 4D/3D barycentric indexing" }
+    { "id": "polytope-webgl", "status": "implemented", "role": "WebGL 2.0 polytope rendering with Fano-plane vertex projections and 4D/3D barycentric indexing" },
+    { "id": "delta-orbital-core", "status": "implemented", "role": "Δ_C period-8 orbit engine with Fano plane incidence matrix: deltaC(), fanoIntercept(), verifyOrbitLexer(). Proves frame admissibility via Q(N,M) = 0 and ray resolution within the Fano lottery bound of ≤15 steps." }
   ],
   "sequencing": {
     "id": "canonical-omi-protocol-sequencing",
@@ -265,7 +273,8 @@
     { "id": "axiomatic-kernel", "signature": "evaluateAxiom(axiom, premises)", "role": "axiomatic proof kernel for OMI invariant verification using Peano-style axioms", "status": "implemented" },
     { "id": "triplicate-projection", "signature": "calculateTriplicateProjection(address, coefficients)", "role": "3D polytope coordinate projection from 24-cell / 5-cell / tetrahedron modifiers using Horner evaluation", "status": "implemented" },
     { "id": "chiral-urn", "signature": "drawChiralUrn(seed)", "role": "deterministic pseudo-random draw from a chiral-urn distribution over OMI-CIDR stride slots", "status": "implemented" },
-    { "id": "chiral-fifo-engine", "signature": "ChiralFifoEngine(capacity)", "role": "bounded FIFO ring buffer with chiral read/write heads and stride-aligned tick advancement", "status": "implemented" }
+    { "id": "chiral-fifo-engine", "signature": "ChiralFifoEngine(capacity)", "role": "bounded FIFO ring buffer with chiral read/write heads and stride-aligned tick advancement", "status": "implemented" },
+    { "id": "delta-orbital-lexer", "signature": "verifyOrbitLexer(S), fanoIntercept(a, b, c), deltaC(x, c)", "role": "Δ_C-orbit lexer: validates 128-bit instruction words lie on a valid period-8 Δ_C trajectory with consistent Fano point LL. The binary quadratic form Q(N,M) = K(LL) = 0 proves frame admissibility. The Fano plane guarantees any two distinct rays resolve within ≤15 steps.", "status": "implemented" }
   ],
   "routingTables": [
     {
@@ -332,7 +341,7 @@
     }
   ],
   "implementationStatus": {
-    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix", "RS erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "fragment store", "CoTURN TURN proxy", "WebRTC transport", "HNSW vector index", "WebSerial port bus", "WebUSB interface bus", "WebHID device bus", "boolean kernel (src/omi/boolean-kernel.js)", "trigraph preprocessor (src/omi/trigraph-preprocessor.js)", "place-value interpreter (src/omi/place-value-interpreter.js)", "axiomatic kernel (src/omi/axiomatic-kernel.js)", "causal closure (src/distributed/causal-closure.js)", "polytope WebGL (src/web/polytope-webgl.js)", "triplicate projection (src/web/triplicate-projection.js)", "chiral urn (src/runtime/chiral-urn.js)", "chiral FIFO engine (src/runtime/chiral-fifo-engine.js)"],
+    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix", "RS erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "fragment store", "CoTURN TURN proxy", "WebRTC transport", "HNSW vector index", "WebSerial port bus", "WebUSB interface bus", "WebHID device bus", "boolean kernel (src/omi/boolean-kernel.js)", "trigraph preprocessor (src/omi/trigraph-preprocessor.js)", "place-value interpreter (src/omi/place-value-interpreter.js)", "axiomatic kernel (src/omi/axiomatic-kernel.js)", "causal closure (src/distributed/causal-closure.js)", "polytope WebGL (src/web/polytope-webgl.js)", "triplicate projection (src/web/triplicate-projection.js)", "chiral urn (src/runtime/chiral-urn.js)", "chiral FIFO engine (src/runtime/chiral-fifo-engine.js)", "delta-orbital-lexer (src/omi/delta-orbital-lexer.js)"],
     "documentedFuture": ["full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
     "deprecated": ["omi-8-127-0-0-1 generated shorthand"],
     "referenceOnly": ["large exploratory manifest snippets in dev-docs/Omi Declarative.md", "full transcript content in dev-docs/chat.md"]
