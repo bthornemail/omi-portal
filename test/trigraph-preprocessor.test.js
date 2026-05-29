@@ -7,7 +7,7 @@ const SAB = new SharedArrayBuffer(5040 * 8);
 test("OmiTrigraphPreprocessor constructs with SAB", () => {
   const pp = new OmiTrigraphPreprocessor(SAB);
   assert.ok(pp instanceof OmiTrigraphPreprocessor);
-  assert.equal(pp.CANONICAL_ROOT, "omi-ffff-127-0-0-1");
+  assert.equal(pp.CANONICAL_ROOT, "ffff-127-0-0-1");
 });
 
 test("preprocessAndEvaluateStream returns valid for clean symmetric tape", () => {

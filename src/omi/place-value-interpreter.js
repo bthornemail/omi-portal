@@ -12,7 +12,7 @@ export class OmiPlaceValueInterpreter {
     }
     this.sab = sharedArrayBuffer;
     this.view = new DataView(this.sab);
-    this.CANONICAL_ROOT = "omi-ffff-127-0-0-1";
+    this.CANONICAL_ROOT = "ffff-127-0-0-1";
   }
 
   cons(car, cdr) { return Object.freeze({ car, cdr }); }
@@ -20,11 +20,16 @@ export class OmiPlaceValueInterpreter {
   cdr(cell) { return cell.cdr; }
 
   evaluateMaskDegree(omiTokenString) {
-    if (!omiTokenString || !omiTokenString.startsWith(this.CANONICAL_ROOT)) {
+    if (!omiTokenString) {
       return this.cons({ valid: false, error: "Root Boundary Infraction" }, null);
     }
 
-    const subPath = omiTokenString.substring(this.CANONICAL_ROOT.length + 1);
+    const rootIdx = omiTokenString.indexOf(this.CANONICAL_ROOT);
+    if (rootIdx < 0) {
+      return this.cons({ valid: false, error: "Root Boundary Infraction" }, null);
+    }
+
+    const subPath = omiTokenString.substring(rootIdx + this.CANONICAL_ROOT.length + 1);
     const trigraphTallyCount = subPath.split("??-").length - 1;
 
     if (trigraphTallyCount > 3) {

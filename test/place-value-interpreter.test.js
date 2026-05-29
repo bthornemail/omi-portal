@@ -11,7 +11,7 @@ function writeSlot(sab, slot, value) {
 test("OmiPlaceValueInterpreter constructs with SAB", () => {
   const pv = new OmiPlaceValueInterpreter(SAB);
   assert.ok(pv instanceof OmiPlaceValueInterpreter);
-  assert.equal(pv.CANONICAL_ROOT, "omi-ffff-127-0-0-1");
+  assert.equal(pv.CANONICAL_ROOT, "ffff-127-0-0-1");
 });
 
 test("constructor throws on undersized SAB", () => {

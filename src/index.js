@@ -58,6 +58,7 @@ export * from "./omi/index.js";
 export * from "./omi/chiral-lexer.js";
 export * from "./omi/trigraph-preprocessor.js";
 export * from "./omi/place-value-interpreter.js";
+export * from "./omi/omicron-kernel.js";
 export * from "./omi/fano-prolog.js";
 export * from "./omi/file-compiler.js";
 export * from "./wordnet/prolog-broker.js";

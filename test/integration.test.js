@@ -8,10 +8,10 @@ import { OmiTrigraphPreprocessor } from "../src/omi/trigraph-preprocessor.js";
 const SAB = new SharedArrayBuffer(5040 * 8);
 
 test("omi workspace canonical root invariant", () => {
-  const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
-  assert.ok(CANONICAL_ROOT.startsWith("omi-"));
+  const CANONICAL_ROOT = "ffff-127-0-0-1";
   assert.equal(CANONICAL_ROOT.includes(":"), false);
   assert.equal(CANONICAL_ROOT.includes("/"), false);
+  assert.ok(!CANONICAL_ROOT.startsWith("omi-"));
 });
 
 test("omi workspace SAB allocation invariant", () => {

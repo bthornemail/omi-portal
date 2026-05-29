@@ -3,7 +3,7 @@ import { OmiSymmetricalChiralLexer } from "./chiral-lexer.js";
 export class OmiTrigraphPreprocessor {
   constructor(sharedArrayBuffer) {
     this.lexer = new OmiSymmetricalChiralLexer(sharedArrayBuffer);
-    this.CANONICAL_ROOT = "omi-ffff-127-0-0-1";
+    this.CANONICAL_ROOT = "ffff-127-0-0-1";
   }
 
   cons(car, cdr) { return Object.freeze({ car, cdr }); }

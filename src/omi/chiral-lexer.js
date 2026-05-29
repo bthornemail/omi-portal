@@ -3,7 +3,8 @@ import { OmiChiralFifoEngine } from "../runtime/chiral-fifo-engine.js";
 export class OmiSymmetricalChiralLexer {
   constructor(sharedArrayBuffer) {
     this.fifo = new OmiChiralFifoEngine(sharedArrayBuffer);
-    this.CANONICAL_ROOT = "omi-ffff-127-0-0-1";
+    this.CANONICAL_ROOT = "ffff-127-0-0-1";
+    this.UNICODE_OMICRON = "\u03bf";
     this.MIRROR_TAIL = "1-0-0-721-ffff-imo";
   }
 
@@ -12,7 +13,13 @@ export class OmiSymmetricalChiralLexer {
   cdr(cell) { return cell.cdr; }
 
   evaluateChiralTapeStream(rawInputBufferString) {
-    if (!rawInputBufferString || !rawInputBufferString.startsWith("omi-")) {
+    if (!rawInputBufferString) {
+      return this.cons({ valid: false, error: "Empty input" }, null);
+    }
+
+    const hasOmiPrefix = rawInputBufferString.startsWith("omi-");
+    const hasOmicronPrefix = rawInputBufferString.startsWith(this.UNICODE_OMICRON);
+    if (!hasOmiPrefix && !hasOmicronPrefix) {
       return this.cons({ valid: false, error: "Missing Start-of-Tape Prefix Code" }, null);
     }
 
@@ -24,7 +31,7 @@ export class OmiSymmetricalChiralLexer {
     const tokens = raw.split("-");
     const endFlag = tokens[tokens.length - 1];
 
-    const controlHexReg = tokens[1];
+    const controlHexReg = hasOmiPrefix ? tokens[1] : tokens[1];
     const opcodeInt = parseInt(controlHexReg, 16);
     const isFExpressionDeclaration = (opcodeInt >= 0x00 && opcodeInt <= 0x3F);
 
@@ -43,7 +50,7 @@ export class OmiSymmetricalChiralLexer {
     }
     const base64CdrData = base64Parts.length > 0 ? base64Parts.join("-") : null;
 
-    const isLocalSecureContext = (addressSubnet === "ffff-127-0-0-1");
+    const isLocalSecureContext = (addressSubnet === this.CANONICAL_ROOT);
     const isSymmetricalTapeValid = isFExpressionDeclaration && isLocalSecureContext && endFlag === "imo";
 
     return this.cons(

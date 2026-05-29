@@ -6,7 +6,7 @@ const SAB = new SharedArrayBuffer(5040 * 8);
 
 test("OmiSymmetricalChiralLexer initializes with mirror targets", () => {
   const lexer = new OmiSymmetricalChiralLexer(SAB);
-  assert.equal(lexer.CANONICAL_ROOT, "omi-ffff-127-0-0-1");
+  assert.equal(lexer.CANONICAL_ROOT, "ffff-127-0-0-1");
   assert.equal(lexer.MIRROR_TAIL, "1-0-0-721-ffff-imo");
 });
 
@@ -23,6 +23,19 @@ test("evaluateChiralTapeStream approves symmetric omi-to-imo tape", () => {
   assert.equal(header.chiralityPolarity, "LEFT_SNUB_CHIRAL");
   assert.equal(header.metadata.addressSubnet, "ffff-127-0-0-1");
   assert.ok(payload instanceof Float32Array);
+});
+
+test("evaluateChiralTapeStream approves ο- prefix omicron tape", () => {
+  const lexer = new OmiSymmetricalChiralLexer(SAB);
+  const mockB64 = "AADAPwAAAEAAAAC_AAAgQQ";
+  const token = `\u03bf-0x02-ffff-127-0-0-1-slot720-${mockB64}-1-0-0-721-ffff-imo`;
+
+  const cell = lexer.evaluateChiralTapeStream(token);
+  const header = lexer.car(cell);
+
+  assert.equal(header.valid, true);
+  assert.equal(header.chiralityPolarity, "LEFT_SNUB_CHIRAL");
+  assert.equal(header.metadata.addressSubnet, "ffff-127-0-0-1");
 });
 
 test("evaluateChiralTapeStream rejects tokens missing mirror tail", () => {
