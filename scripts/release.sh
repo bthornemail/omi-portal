@@ -66,7 +66,7 @@ node -e "
 # 4. Update CHANGELOG.md header
 echo "[2/6] Updating CHANGELOG.md..."
 DATE=$(date +%Y-%m-%d)
-sed -i "1s/^/# Changelog\n\n## ${NEW_TAG} (${DATE})\n\n### Release\n- ${NEW_TAG} — multi-arch: linux/amd64, linux/arm64, linux/arm/v7\n- Full CI pipeline: unit → build → QEMU cross-arch → smoke\n- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice\n- 324+ tests passing, 0 failing\n\n---\n\n/" CHANGELOG.md
+sed -i "1s|^|# Changelog\n\n## ${NEW_TAG} (${DATE})\n\n### Release\n- ${NEW_TAG} — multi-arch: linux/amd64, linux/arm64, linux/arm/v7\n- Full CI pipeline: unit → build → QEMU cross-arch → smoke\n- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice\n- 324+ tests passing, 0 failing\n\n---\n\n|" CHANGELOG.md
 
 # 5. Commit and tag
 echo "[3/6] Committing and tagging..."
