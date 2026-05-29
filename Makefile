@@ -7,6 +7,7 @@
         ratio-symmetry-test radix-context-test \
         run-wan-edge run-wan-tunnel wan-probe wan-probe-verify \
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
+        build-gui-reference test-user-space-ui \
         clean purge
 
 # ============================================================
@@ -212,6 +213,22 @@ boot-riscv64:
 boot-ppc64:
 	docker compose run --rm qemu-system-emulators sh -c \
 		"qemu-system-ppc64 -machine mac99 -m 512 -nographic -drive file=/data/disk.img,format=raw,if=none,id=hd0"
+
+# ============================================================
+# USER-SPACE VALIDATION
+# ============================================================
+
+.PHONY: build-gui-reference test-user-space-ui
+
+build-gui-reference:
+	@echo "[User-Space Core] Resetting layout references and frame directories..."
+	rm -rf test/reference-gui.png dist/frames
+	@echo "[User-Space Core] Capturing baseline structural canvas layout..."
+	guix shell -m manifest.scm -- node scripts/user-space-test.js
+
+test-user-space-ui:
+	@echo "[User-Space Core] Initializing headless browser and FFmpeg SSIM checks..."
+	guix shell -m manifest.scm -- node scripts/user-space-test.js
 
 # ============================================================
 # CLEANUP

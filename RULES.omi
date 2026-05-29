@@ -185,3 +185,47 @@ omi-0000-0000-0000-0000-0000-0c00-0000-0000/96 MUST virt-ctrl-mmio-device-base
 #   Command codes written to the register line MUST execute hypervisor interrupts.
 #   1 = System Reset, 2 = Core Halt, 3 = Hardware Critical Panic Eviction.
 omi-0000-0000-0000-0000-0000-0c00-0004-0003/128 MUST hypervisor-command-panic
+
+# [Rule 0x20]: USS-16K / Code 16K Linear Carrier
+#   Stride segment 0x13B0 (5040) MUST trigger 1D stacked linear barcode
+#   transport through Pascal's Triangle framing. Segment[6]=0x0036 acts as
+#   the 2-of-5 track rotation anchor; segment[7] carries checksum.
+omi-0000-0000-0000-0000-13b0-0036-0000-0000/48 MUST linear-code16k-carrier
+
+# [Rule 0x21]: BeeTag 25-bit Matrix Carrier
+#   Stride segment 0x0078 (120) MUST trigger 5x5 BEEtag matrix transport.
+#   Each 5-bit group encodes one polyform cell via 2-of-5 mapping.
+#   Segment[5] carries the 25-bit payload across 5 cell slots.
+omi-0000-0000-0000-0000-0078-0000-0000-0000/48 MUST matrix-beetag-carrier
+
+# [Rule 0x22]: MaxiCode 25-bit Identity Matrix
+#   Stride segment 0x02D0 (720) + seg[5] bit-0 = 1 MUST trigger MaxiCode
+#   5x5 identity matrix: 15-bit polyform type declaration + 10-bit ECC.
+omi-0000-0000-0000-0000-02d0-0001-0000-0000/48 MUST matrix-maxicode-identity
+
+# [Rule 0x23]: Aztec Code Spiral RS Carrier
+#   Stride segment 0x02D0 (720) + seg[5] bit-0 = 0 MUST trigger Aztec
+#   spiral Reed-Solomon encoding. Segment[6] selects layer count (1-32)
+#   which determines codeword size (6/8/10/12 bits) and RS correction level.
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST spiral-aztec-rs-carrier
+
+# [Rule 0x24]: 2-of-5 Barcode Group Validator
+#   Every 5-bit group within a barcode carrier token MUST have exactly
+#   two bits set (0b11000, 0b10100, 0b10010, 0b10001, 0b01100, 0b01010,
+#   0b01001, 0b00110, 0b00101, 0b00011). Groups with ≠2 bits set MUST
+#   be flagged as invalid and trigger a bitblip correction pass.
+omi-0000-0000-0000-0000-0000-001f-0000-0000/48 MUST enforce-two-of-five-valid
+
+# [Rule 0x25]: Maximum Bitblip Tolerance Fence
+#   An incoming packet containing more than 2 bitblip errors against the
+#   format-specific ECC bitboard mask MUST be evicted. Single-bit errors
+#   MUST be auto-corrected via syndrome XOR before memory ring storage.
+omi-0000-0000-0000-0000-0000-0000-0000-0002/128 MUST enforce-maximum-bitblip-tolerance
+
+# [Rule 0x26]: Canonical Barcode Format Registry
+#   Segment[4] stride values 0x13B0, 0x0078, 0x02D0 are the canonical
+#   barcode carrier stride anchors. Segment[5] bit-0 modulates the
+#   0x02D0 stride between MaxiCode (1) and Aztec (0) sub-formats.
+omi-0000-0000-0000-0000-13b0-0000-0000-0000/48 MUST barcode-format-uss16k
+omi-0000-0000-0000-0000-0078-0000-0000-0000/48 MUST barcode-format-beetag
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST barcode-format-maxi-aztec

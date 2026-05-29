@@ -6,12 +6,16 @@
 
 (specifications->manifest
   (list "bash"
+        "chromium"
         "coreutils"
+        "ffmpeg"
         "findutils"
         "gcc-toolchain"
         "git"
         "grep"
         "make"
+        "nss"
         "pkg-config"
         "qemu"
-        "sed"))
+        "sed"
+        "xorg-server-xvfb"))
