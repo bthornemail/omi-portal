@@ -98,3 +98,40 @@ omi-0000-0000-0000-0000-0000-0000-0000-0000/96/10-1 EQUALS omi-0000-0000-0000-00
 # [Rule 0x0D] Timeline Loop Suffix Constraint
 #   The /96/5040 suffix MUST mark the hard reset fence.
 omi-0000-0000-0000-0000-0000-0000-0000-0000/96/5040 MUST hard-reset-fence
+
+# [Rule 0x0E]: Circular Slide Rule Pivot Constraint
+#   Stride segment matching 0x02D0 (720) MUST lock hardware tracks 2 and 5.
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST circular-slide-rule-pivot
+
+# [Rule 0x0F]: Combinatorial 2-of-5 Structural Validator
+#   Slot segment matching 0x0036 (54) MUST dictate the primary track rotation angle.
+omi-0000-0000-0000-0000-0000-0036-0000-0000/48 MUST combinatorial-two-of-five
+
+# [Rule 0x10]: Open-World Terminal Fractal Depth Fence
+#   Lattice layer segment matching 0x0007 MUST halt recursive sub-node iterations.
+omi-0000-0000-0000-0000-0000-0000-0007-0000/48 MUST terminal-fractal-fence
+
+# [Rule 0x11]: IPv4-Mapped Default Track Pair
+#   Segment[5] matching 0xFFFF MUST activate tracks 4 and 5 as the default
+#   active pair, embedding the 32-bit IPv4 address into segments[6-7].
+omi-0000-0000-0000-0000-0000-ffff-0000-0000/48 MUST ipv4-mapped-default-pair
+
+# [Rule 0x12]: RFC 4193 Unique Local Address Space Anchor
+#   Every private global fabric block MUST initialize within the fc00::/7 range.
+#   The (8x-8) dimensional layer anchors the ULA isolation boundary.
+omi-fc00-0000-0000-0000-0000-0000-0000-0000/7 MUST unique-local-fabric-base
+
+# [Rule 0x13]: IPv4-Mapped Linear Gateway Mapping
+#   The ::ffff:0:0/96 prefix MUST serve as the hardware marker for legacy transitions.
+#   The (4x-4) dimensional layer bridges the IPv4-embedded translation plane.
+omi-0000-0000-0000-0000-0000-ffff-0000-0000/96 MUST ipv4-mapped-linear-gateway
+
+# [Rule 0x14]: Default LAN Network Frame (192.168.1.0/24)
+#   The hex translation c0a8-0100 MUST lock local network communication tracks.
+#   The (2x-2) dimensional layer anchors the default private subnet boundary.
+omi-0000-0000-0000-0000-0000-ffff-c0a8-0100/120 MUST local-lan-default-frame
+
+# [Rule 0x15]: The Terminal Loopback Core Pivot Point (x-1 Dimension)
+#   The native localhost loopback axis via process bus ::8 MUST freeze arithmetic drift.
+#   The (x-1) dimensional layer closes the projective cascade at the fixed-point center.
+omi-0000-0000-0000-0000-0000-0000-0000-0008/128 MUST terminal-core-pivot-point

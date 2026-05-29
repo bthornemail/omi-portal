@@ -94,6 +94,11 @@ omi-0000-0000-0000-0000-0000-0000-0000-0001/48 FACT nil-terminator-fixed-point
 omi-0000-0000-0000-0000-0000-0000-0001-0001/48 FACT synset-five-cell-centroid
 omi-0000-0000-0000-0000-0000-0000-0002-0001/48 FACT synset-twentyfour-cell-centroid
 
+# --- Section 5: IPv4-Mapped Default Address Bindings ---
+# Segment[5] = 0xFFFF signals the IPv4-mapped ::ffff:0:0/96 prefix.
+# Tracks 4 and 5 form the default active pair, carrying the embedded 32-bit IPv4 address.
+omi-0000-0000-0000-0000-0000-ffff-0000-0000/48 FACT ipv4-mapped-address-base
+
 # --- Section 7: Live Public Node Port Mappings ---
 # Edge Node Domain Subnet (2607:f1c0:f062:e900::/80)
 omi-2607-f1c0-f062-e900-0000-0000-0000-0001/80 FACT remote-node-EDGE-VM

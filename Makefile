@@ -121,6 +121,24 @@ radix-context-test:
 	node --test test/radix-context.test.js
 
 # ============================================================
+# CIRCULAR SLIDE RULE
+# ============================================================
+
+.PHONY: sliderule-combinatorial-test
+
+sliderule-combinatorial-test:
+	@echo "[Omi SlideRule] Executing 5-track mechanical E6B verification loops..."
+	node --test test/sliderule-sync.test.js
+	@echo "[Omi SlideRule] Mechanical flight computer validation matrix verified green."
+
+.PHONY: projective-lan-cascade-test
+
+projective-lan-cascade-test:
+	@echo "[Omi Cascade Scale] Verifying (8x-8)(4x-4)(2x-2)(x-1) network dimensions..."
+	node --test test/sliderule-sync.test.js
+	@echo "[Omi Cascade Scale] Projective network scaling cascade verified green."
+
+# ============================================================
 # WAN INTERNET VALIDATION
 # ============================================================
 

@@ -9,6 +9,7 @@ import http from "node:http";
 import { readFileSync, existsSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { OmiAxiomaticKernel } from "../src/omi/axiomatic-kernel.js";
+import { OmiSexagesimalSlideRuleKernel } from "../src/omi/sliderule-kernel.js";
 
 const PORT = 8080;
 const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
@@ -19,6 +20,7 @@ let activeSSEClients = [];
 const mem = new SharedArrayBuffer(POLYTOPE_SLOTS * 8);
 const view = new DataView(mem);
 const kernel = new OmiAxiomaticKernel();
+const slideRuleEngine = new OmiSexagesimalSlideRuleKernel(mem);
 
 await kernel.loadAxiomaticFile("RULES.omi", kernel.rulesRegistry);
 await kernel.loadAxiomaticFile("FACTS.omi", kernel.factsRegistry);
@@ -26,6 +28,37 @@ await kernel.loadAxiomaticFile("FACTS.omi", kernel.factsRegistry);
 function broadcastSSEMessage(eventType, dataObject) {
   const raw = `event: ${eventType}\ndata: ${JSON.stringify(dataObject)}\n\n`;
   activeSSEClients.forEach((res) => res.write(raw));
+}
+
+function handleIncomingNetworkToken(rawToken) {
+  const token = rawToken.trim();
+
+  const isAxiomaticallyValid = kernel.verifyPacketCompliance(token);
+  if (!isAxiomaticallyValid) {
+    return { accepted: false, reason: "AXIOMATIC_EVICTION" };
+  }
+
+  const transformationCell = slideRuleEngine.evaluateCircularSlideRule(token);
+  const slideruleMetadata = slideRuleEngine.car(transformationCell);
+
+  if (!slideruleMetadata.accepted) {
+    return { accepted: false, reason: "TWO_OF_FIVE_EVICTION" };
+  }
+
+  const broadcastPayload = JSON.stringify({
+    token,
+    angle: slideruleMetadata.computedSlideAngle,
+    slot: slideruleMetadata.targetMemorySlot,
+    isTerminalDepth: slideruleMetadata.isTerminalFractalDepth
+  });
+  broadcastSSEMessage("vector-update", {
+    token,
+    angle: slideruleMetadata.computedSlideAngle,
+    slot: slideruleMetadata.targetMemorySlot,
+    isTerminalDepth: slideruleMetadata.isTerminalFractalDepth
+  });
+
+  return { accepted: true, metadata: slideruleMetadata, broadcastPayload };
 }
 
 const BOOT_SIGNATURE = 0xaa55;
@@ -67,6 +100,31 @@ const server = http.createServer((req, res) => {
       const isCompliant = kernel.verifyPacketCompliance(body.trim());
       res.writeHead(isCompliant ? 200 : 400, { "Content-Type": "text/plain; charset=utf-8" });
       res.end(isCompliant ? "COMPLIANT_SUBSTRATE_TOKEN_ACCEPTED" : "EVICTION_FAULT_DISMISSED");
+    });
+    return;
+  }
+
+  if (parsedUrl.pathname === "/process-token" && req.method === "POST") {
+    let body = "";
+    req.setEncoding("utf8");
+    req.on("data", (chunk) => {
+      body += chunk;
+      if (body.length > 4096) req.destroy();
+    });
+    req.on("end", () => {
+      const result = handleIncomingNetworkToken(body.trim());
+      if (result.accepted) {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({
+          status: "ACCEPTED",
+          angle: result.metadata.computedSlideAngle,
+          slot: result.metadata.targetMemorySlot,
+          isTerminalDepth: result.metadata.isTerminalFractalDepth
+        }));
+      } else {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ status: "REJECTED", reason: result.reason }));
+      }
     });
     return;
   }
@@ -173,6 +231,7 @@ const server = http.createServer((req, res) => {
     services: {
       stream: "/omi-stream",
       verifyPacket: "/verify-packet",
+      processToken: "/process-token",
       topology: "/topology",
       sabRead: "/omi-sab-read?slot=N",
       sabWrite: "/omi-sab-write",
