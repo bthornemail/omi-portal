@@ -1,0 +1,29 @@
+# syntax=docker/dockerfile:1.7
+ARG NODE_VERSION=24-alpine
+
+FROM --platform=$TARGETPLATFORM node:${NODE_VERSION} AS stress-validation
+
+ARG TARGETPLATFORM
+ARG TARGETARCH
+
+RUN test "$TARGETARCH" = "amd64"
+
+WORKDIR /build
+
+RUN apk add --no-cache build-base
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY . .
+
+RUN echo "=== OMI NATIVE STRESS VALIDATION [${TARGETPLATFORM}] ===" && \
+    make test-c99-core && \
+    find test -maxdepth 1 -name "*.test.js" ! -name "softmmu-system.test.js" -print | sort | xargs node --test && \
+    node scripts/stress-suite.js && \
+    node scripts/stress-parallel.js
+
+LABEL org.opencontainers.image.title="OMI Portal — Native Stress Validation"
+LABEL org.opencontainers.image.description="Native amd64 C99/JS conformance plus 5M-packet SLA stress gate"
+LABEL org.opencontainers.image.source="https://github.com/anomalyco/omi-portal"
+LABEL omi.validator-type="native-stress"

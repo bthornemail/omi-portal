@@ -5,6 +5,7 @@
         benchmark-concurrency-stress benchmark-parallel-stress benchmark-stress-all \
         build-c99-core test-c99-core test-c99-core-guix \
         ratio-symmetry-test radix-context-test \
+        run-wan-edge run-wan-tunnel wan-probe wan-probe-verify \
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
         clean purge
 
@@ -118,6 +119,26 @@ ratio-symmetry-test:
 radix-context-test:
 	@echo "[Omi Radix Substrate] Verifying omicron radix delimiter rules..."
 	node --test test/radix-context.test.js
+
+# ============================================================
+# WAN INTERNET VALIDATION
+# ============================================================
+
+run-wan-edge:
+	@echo "[WAN Engine] Launching public Edge Node endpoint daemon..."
+	OMI_NODE_ROLE=edge node scripts/wan-sync.js
+
+run-wan-tunnel:
+	@echo "[WAN Engine] Launching public Tunnel Core replication daemon..."
+	OMI_NODE_ROLE=tunnel node scripts/wan-sync.js
+
+wan-probe:
+	@echo "[WAN Engine] Probing IPv4/IPv6 TCP reachability..."
+	node scripts/wan-probe.js
+
+wan-probe-verify:
+	@echo "[WAN Engine] Probing IPv4/IPv6 /verify-packet reachability..."
+	node scripts/wan-probe.js --verify
 
 # ============================================================
 # SOFTMMU FULL-SYSTEM BOOT

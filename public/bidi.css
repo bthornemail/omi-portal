@@ -133,6 +133,17 @@ svg {
   filter: drop-shadow(0 0 8px #ff0055);
 }
 
+/* 16. WAN node projection selectors */
+[id*="omi-2607-f1c0-f062-e900-"] {
+  stroke: #00ffcc;
+  filter: drop-shadow(0 0 8px #00ffcc);
+}
+
+[id*="omi-2607-f1c0-f0b7-df00-"] {
+  stroke: #ff0055;
+  filter: drop-shadow(0 0 10px #ff0055);
+}
+
 @keyframes octahedralPulse {
   0% { transform: scale(1) translateZ(10px); opacity: 0.6; }
   100% { transform: scale(1.05) translateZ(25px); opacity: 0.95; }
@@ -143,7 +154,7 @@ svg {
   100% { stroke-dashoffset: 8; }
 }
 
-/* 16, 17. Telemetry panel */
+/* 17, 18. Telemetry panel */
 #omi-telemetry-panel {
   position: absolute;
   top: 10px;

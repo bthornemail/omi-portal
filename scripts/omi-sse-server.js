@@ -8,6 +8,7 @@
 import http from "node:http";
 import { readFileSync, existsSync } from "node:fs";
 import { extname, resolve } from "node:path";
+import { OmiAxiomaticKernel } from "../src/omi/axiomatic-kernel.js";
 
 const PORT = 8080;
 const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
@@ -17,6 +18,10 @@ let activeSSEClients = [];
 
 const mem = new SharedArrayBuffer(POLYTOPE_SLOTS * 8);
 const view = new DataView(mem);
+const kernel = new OmiAxiomaticKernel();
+
+await kernel.loadAxiomaticFile("RULES.omi", kernel.rulesRegistry);
+await kernel.loadAxiomaticFile("FACTS.omi", kernel.factsRegistry);
 
 function broadcastSSEMessage(eventType, dataObject) {
   const raw = `event: ${eventType}\ndata: ${JSON.stringify(dataObject)}\n\n`;
@@ -32,6 +37,39 @@ const server = http.createServer((req, res) => {
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
 
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+
+  if (parsedUrl.pathname === "/healthz" && req.method === "GET") {
+    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+    res.end("OMI_SSE_PROXY:OK");
+    return;
+  }
+
+  if (parsedUrl.pathname === "/topology" && req.method === "GET") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      role: "EDGE_NODE",
+      omiAddress: "omi-2607-f1c0-f062-e900-0000-0000-0000-0001/80",
+      peerAddress: "omi-2607-f1c0-f0b7-df00-0000-0000-0000-0001/80",
+      ipv4: "69.48.202.32",
+      ipv6: "2607:f1c0:f062:e900::1"
+    }));
+    return;
+  }
+
+  if (parsedUrl.pathname === "/verify-packet" && req.method === "POST") {
+    let body = "";
+    req.setEncoding("utf8");
+    req.on("data", (chunk) => {
+      body += chunk;
+      if (body.length > 4096) req.destroy();
+    });
+    req.on("end", () => {
+      const isCompliant = kernel.verifyPacketCompliance(body.trim());
+      res.writeHead(isCompliant ? 200 : 400, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end(isCompliant ? "COMPLIANT_SUBSTRATE_TOKEN_ACCEPTED" : "EVICTION_FAULT_DISMISSED");
+    });
+    return;
+  }
 
   const MIME = {
     ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
@@ -134,6 +172,8 @@ const server = http.createServer((req, res) => {
     ipv6: "2607:f1c0:f062:e900::1",
     services: {
       stream: "/omi-stream",
+      verifyPacket: "/verify-packet",
+      topology: "/topology",
       sabRead: "/omi-sab-read?slot=N",
       sabWrite: "/omi-sab-write",
       boot: "/omi-boot"

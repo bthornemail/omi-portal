@@ -62,16 +62,16 @@ target "runtime-release" {
 }
 
 # -----------------------------------------------------------
-# Target: OMI stress validation (multi-arch)
+# Target: OMI native stress validation
 # -----------------------------------------------------------
 target "stress-validation" {
-  dockerfile = "Dockerfile"
-  target     = "stress"
+  dockerfile = "Dockerfile.stress"
+  target     = "stress-validation"
   tags       = [
     "${REGISTRY}/omi-portal-stress:${TAG}",
     "${REGISTRY}/omi-portal-stress:${OMI_VERSION}"
   ]
-  platforms  = ["linux/amd64", "linux/arm64"]
+  platforms  = ["linux/amd64"]
   cache-from = ["type=gha"]
   cache-to   = ["type=gha,mode=max"]
 }

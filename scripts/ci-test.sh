@@ -35,19 +35,7 @@ run_qemu() {
     return 0
   fi
 
-  # Run tests on each target platform via QEMU user-mode
-  for platform in linux/amd64 linux/arm64; do
-    echo " -> Testing on ${platform}..."
-    if docker run --rm --platform "$platform" \
-      -v "$(pwd):/test" -w /test \
-      "node:24-alpine" \
-      sh -c "apk add --no-cache build-base >/dev/null && npm ci --ignore-scripts --quiet && make test-c99-core && find test -maxdepth 1 -name '*.test.js' ! -name 'softmmu-system.test.js' -print | sort | xargs node --test" 2>/dev/null; then
-      echo " -> [PASS] ${platform} tests pass"
-    else
-      echo " -> [FAIL] ${platform} tests failed"
-      exit 1
-    fi
-  done
+  docker buildx bake qemu-test
 
   echo " -> All QEMU cross-arch tests pass"
 }

@@ -20,17 +20,6 @@ RUN make test-c99-core && \
     find test -maxdepth 1 -name "*.test.js" ! -name "softmmu-system.test.js" -print | sort | xargs node --test
 
 # ============================================================
-# STAGE 2B: stress — run unit and benchmark gates
-# ============================================================
-FROM test AS stress
-ARG TARGETARCH
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      node scripts/stress-suite.js && node scripts/stress-parallel.js; \
-    else \
-      echo "Skipping native nanosecond SLA stress under emulated ${TARGETARCH}; C99 and filtered JS conformance already passed."; \
-    fi
-
-# ============================================================
 # STAGE 3: builder — production build
 # ============================================================
 FROM base AS builder

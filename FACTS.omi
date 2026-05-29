@@ -93,3 +93,10 @@ omi-0000-0000-0000-0000-0000-0000-0007-0000/48 FACT lattice-layer-7-replay-ring
 omi-0000-0000-0000-0000-0000-0000-0000-0001/48 FACT nil-terminator-fixed-point
 omi-0000-0000-0000-0000-0000-0000-0001-0001/48 FACT synset-five-cell-centroid
 omi-0000-0000-0000-0000-0000-0000-0002-0001/48 FACT synset-twentyfour-cell-centroid
+
+# --- Section 7: Live Public Node Port Mappings ---
+# Edge Node Domain Subnet (2607:f1c0:f062:e900::/80)
+omi-2607-f1c0-f062-e900-0000-0000-0000-0001/80 FACT remote-node-EDGE-VM
+
+# Central Tunnel Core Subnet (2607:f1c0:f0b7:df00::/80)
+omi-2607-f1c0-f0b7-df00-0000-0000-0000-0001/80 FACT remote-node-TUNNEL-VM
