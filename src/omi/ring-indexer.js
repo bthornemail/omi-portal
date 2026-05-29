@@ -11,11 +11,14 @@ export const SLOT_MM_MASK     = 0xFFFFn;
 
 export const MAX_VALID_STEPS = 14;
 
-export function packReceipt(truthRowBigInt, steps, provenanceTag = 0n) {
-  const s = BigInt(Math.min(steps, MAX_VALID_STEPS)) & 0xFFn;
-  const p = provenanceTag & 0xFFFFn;
-  const row48 = truthRowBigInt & 0xFFFFFFFFFFFFn;
-  return (p << 48n) | (s << 40n) | row48;
+export function packReceipt(provenance, steps, LL, NN, MM) {
+  const clampedSteps = Math.min(Math.max(0, steps), MAX_VALID_STEPS);
+  const p = BigInt(provenance) & 0xFFFFn;
+  const s = BigInt(clampedSteps) & 0xFFn;
+  const l = BigInt(LL) & 0xFFn;
+  const n = BigInt(NN) & 0xFFFFn;
+  const m = BigInt(MM) & 0xFFFFn;
+  return (p << 48n) | (s << 40n) | (l << 32n) | (n << 16n) | m;
 }
 
 export function unpackSlot(slotValue) {
@@ -27,24 +30,46 @@ export function unpackSlot(slotValue) {
   return { provenance, steps, LL, NN, MM };
 }
 
+export const CURSOR_ATOMIC_BYTES = 8;
+export const CURSOR_ATOMIC_INDEX = 0;
+
 export class OmiRingIndexer {
   constructor(bufferOrSize = 5040) {
-    const size = typeof bufferOrSize === 'number'
+    const ringSize = typeof bufferOrSize === 'number'
       ? bufferOrSize * BYTES_PER_SLOT
       : bufferOrSize.byteLength;
-    const buf = bufferOrSize instanceof SharedArrayBuffer ||
-                bufferOrSize instanceof ArrayBuffer
+    const ringBuf = bufferOrSize instanceof SharedArrayBuffer ||
+                    bufferOrSize instanceof ArrayBuffer
       ? bufferOrSize
-      : new SharedArrayBuffer(size);
+      : new SharedArrayBuffer(ringSize);
 
-    this.sab = buf;
-    this.slots = new BigInt64Array(buf);
-    this.cursor = BOOT_SLOT;
+    this.sab = ringBuf;
+    this.slots = new BigInt64Array(ringBuf);
+
+    const SabT = typeof SharedArrayBuffer !== 'undefined'
+      ? SharedArrayBuffer : ArrayBuffer;
+    this.cursorSab = new SabT(CURSOR_ATOMIC_BYTES);
+    this.cursorAtomic = new BigInt64Array(this.cursorSab);
+    this.cursorAtomic[0] = BigInt(BOOT_SLOT);
+    this._cursor = BOOT_SLOT;
     this.epoch = 0;
   }
 
   get position() {
-    return this.cursor;
+    if (this.cursorSab instanceof SharedArrayBuffer) {
+      return Number(Atomics.load(this.cursorAtomic, CURSOR_ATOMIC_INDEX));
+    }
+    return Number(this.cursorAtomic[CURSOR_ATOMIC_INDEX]);
+  }
+
+  set position(value) {
+    const v = BigInt(((value % POLYTOPE_SLOTS) + POLYTOPE_SLOTS) % POLYTOPE_SLOTS);
+    if (this.cursorSab instanceof SharedArrayBuffer) {
+      Atomics.store(this.cursorAtomic, CURSOR_ATOMIC_INDEX, v);
+    } else {
+      this.cursorAtomic[CURSOR_ATOMIC_INDEX] = v;
+    }
+    this._cursor = Number(v);
   }
 
   readSlot(index) {
@@ -60,7 +85,7 @@ export class OmiRingIndexer {
 
   atomicRead(index) {
     const i = ((index % POLYTOPE_SLOTS) + POLYTOPE_SLOTS) % POLYTOPE_SLOTS;
-    if (this.slots.buffer instanceof SharedArrayBuffer) {
+    if (this.sab instanceof SharedArrayBuffer) {
       return Atomics.load(this.slots, i);
     }
     return this.slots[i];
@@ -68,7 +93,7 @@ export class OmiRingIndexer {
 
   atomicWrite(index, value) {
     const i = ((index % POLYTOPE_SLOTS) + POLYTOPE_SLOTS) % POLYTOPE_SLOTS;
-    if (this.slots.buffer instanceof SharedArrayBuffer) {
+    if (this.sab instanceof SharedArrayBuffer) {
       Atomics.store(this.slots, i, value);
     } else {
       this.slots[i] = value;
@@ -78,19 +103,42 @@ export class OmiRingIndexer {
 
   advance(steps, truthRow, provenanceTag = 0n) {
     const s = Math.min(steps, MAX_VALID_STEPS);
-    this.cursor = (this.cursor + s) % POLYTOPE_SLOTS;
-    const receipt = packReceipt(truthRow, s, provenanceTag);
-    this.writeSlot(this.cursor, receipt);
-    return { position: this.cursor, receipt, steps: s };
+    const oldPos = this._cursor;
+    const newPos = (oldPos + s) % POLYTOPE_SLOTS;
+    if (newPos < oldPos) this.epoch++;
+    this._cursor = newPos;
+    const LL = Number((truthRow >> 32n) & 0xFFn);
+    const NN = Number((truthRow >> 16n) & 0xFFFFn);
+    const MM = Number(truthRow & 0xFFFFn);
+    const tag = provenanceTag || (BigInt(this.epoch) << 8n);
+    const receipt = packReceipt(tag, s, LL, NN, MM);
+    this.writeSlot(this._cursor, receipt);
+    return { position: this._cursor, receipt, steps: s, epoch: this.epoch };
   }
 
   atomicAdvance(steps, truthRow, provenanceTag = 0n) {
     const s = Math.min(steps, MAX_VALID_STEPS);
-    const next = (this.cursor + s) % POLYTOPE_SLOTS;
-    const receipt = packReceipt(truthRow, s, provenanceTag);
-    this.atomicWrite(next, receipt);
-    this.cursor = next;
-    return { position: this.cursor, receipt, steps: s };
+    const LL = Number((truthRow >> 32n) & 0xFFn);
+    const NN = Number((truthRow >> 16n) & 0xFFFFn);
+    const MM = Number(truthRow & 0xFFFFn);
+    const tag = provenanceTag || 0n;
+
+    while (true) {
+      const oldCursor = Atomics.load(this.cursorAtomic, CURSOR_ATOMIC_INDEX);
+      const newCursor = (Number(oldCursor) + s) % POLYTOPE_SLOTS;
+      const cas = Atomics.compareExchange(
+        this.cursorAtomic, CURSOR_ATOMIC_INDEX,
+        oldCursor, BigInt(newCursor)
+      );
+      if (cas === oldCursor) {
+        if (newCursor < Number(oldCursor)) this.epoch++;
+        const epochTag = provenanceTag || (BigInt(this.epoch) << 8n);
+        const receipt = packReceipt(epochTag, s, LL, NN, MM);
+        this.atomicWrite(newCursor, receipt);
+        this._cursor = newCursor;
+        return { position: newCursor, receipt, steps: s, epoch: this.epoch };
+      }
+    }
   }
 
   bootstrapGenesis(LL = 0x01, bootAddress = 0x7C00) {
@@ -100,25 +148,24 @@ export class OmiRingIndexer {
     const rotr2 = ((bootAddress >> 2) | (bootAddress << 14)) & 0xFFFF;
     const MM = (rotl1 ^ rotl3 ^ rotr2 ^ C) & 0xFFFF;
 
-    const truthRow = (BigInt(LL) << 32n) | (BigInt(bootAddress) << 16n) | BigInt(MM);
-
-    this.cursor = BOOT_SLOT;
-    this.writeSlot(this.cursor, packReceipt(truthRow, 1, 0n));
+    this.cursorAtomic[CURSOR_ATOMIC_INDEX] = BigInt(BOOT_SLOT);
+    this._cursor = BOOT_SLOT;
+    this.writeSlot(this._cursor, packReceipt(0n, 1, LL, bootAddress, MM));
 
     return {
-      position: this.cursor,
+      position: this._cursor,
       LL, NN: bootAddress, MM,
       steps: 1
     };
   }
 
   getFactorials() {
-    return tickFactorials(this.cursor);
+    return tickFactorials(this.position);
   }
 
   getReceiptChain(length = 7) {
     const chain = [];
-    let pos = this.cursor;
+    let pos = this.position;
     for (let i = 0; i < length; i++) {
       const slotValue = this.readSlot(pos);
       chain.push({ index: pos, slotValue, ...unpackSlot(slotValue) });
@@ -130,8 +177,9 @@ export class OmiRingIndexer {
 
   rewind(toIndex) {
     const i = ((toIndex % POLYTOPE_SLOTS) + POLYTOPE_SLOTS) % POLYTOPE_SLOTS;
-    this.cursor = i;
-    return this.cursor;
+    this._cursor = i;
+    this.cursorAtomic[CURSOR_ATOMIC_INDEX] = BigInt(i);
+    return this._cursor;
   }
 }
 

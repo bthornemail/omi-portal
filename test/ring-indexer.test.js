@@ -3,14 +3,12 @@ import assert from 'node:assert/strict';
 import {
   OmiRingIndexer, createRingIndexer,
   packReceipt, unpackSlot,
-  BOOT_SLOT, MAX_VALID_STEPS,
-  SLOT_DIVIDEND_MASK, SLOT_STEPS_MASK
+  BOOT_SLOT, MAX_VALID_STEPS, CURSOR_ATOMIC_BYTES, CURSOR_ATOMIC_INDEX
 } from '../src/omi/ring-indexer.js';
 
 describe('RingIndexer: slot packing', () => {
   it('packReceipt encodes truth row with steps and provenance', () => {
-    const truthRow = (1n << 32n) | (0x7C00n << 16n) | 0x1434n;
-    const packed = packReceipt(truthRow, 1, 0xABCDn);
+    const packed = packReceipt(0xABCDn, 1, 1, 0x7C00, 0x1434);
     const unpacked = unpackSlot(packed);
     assert.equal(unpacked.provenance, 0xABCD);
     assert.equal(unpacked.steps, 1);
@@ -20,14 +18,12 @@ describe('RingIndexer: slot packing', () => {
   });
 
   it('packReceipt clamps steps to MAX_VALID_STEPS', () => {
-    const truthRow = (2n << 32n) | 0x1234n;
-    const packed = packReceipt(truthRow, 99, 0n);
+    const packed = packReceipt(0n, 99, 2, 0, 0x1234);
     assert.equal(unpackSlot(packed).steps, MAX_VALID_STEPS);
   });
 
   it('unpackSlot extracts zero-provenance receipt', () => {
-    const truthRow = (5n << 32n) | (0xDEADn << 16n) | 0xBEEFn;
-    const packed = packReceipt(truthRow, 7, 0n);
+    const packed = packReceipt(0n, 7, 5, 0xDEAD, 0xBEEF);
     const u = unpackSlot(packed);
     assert.equal(u.provenance, 0);
     assert.equal(u.steps, 7);
@@ -198,21 +194,161 @@ describe('RingIndexer: rewinding', () => {
 
 describe('RingIndexer: dividend space', () => {
   it('provenance tag occupies bits 63-48', () => {
-    const ring = new OmiRingIndexer();
-    const truthRow = (1n << 32n) | (0x7C00n << 16n) | 0x1434n;
-    const packed = packReceipt(truthRow, 1, 0xA5A5n);
-    ring.writeSlot(0, packed);
-    const slot = ring.readSlot(0);
-    const extracted = Number((slot >> 48n) & 0xFFFFn);
+    const packed = packReceipt(0xA5A5n, 1, 1, 0x7C00, 0x1434);
+    const extracted = Number((packed >> 48n) & 0xFFFFn);
     assert.equal(extracted, 0xA5A5);
   });
 
   it('steps occupies bits 47-40, leaving 24-bit dividend total', () => {
-    const truthRow = (1n << 32n) | (0x7C00n << 16n) | 0x1434n;
-    const packed = packReceipt(truthRow, 3, 0xABn);
+    const packed = packReceipt(0xABn, 3, 1, 0x7C00, 0x1434);
     const steps = Number((packed >> 40n) & 0xFFn);
     const provenance = Number((packed >> 48n) & 0xFFFFn);
     assert.equal(steps, 3);
     assert.equal(provenance, 0xAB);
+  });
+});
+
+describe('RingIndexer: atomic CAS cursor', () => {
+  it('two sequential atomicAdvance calls produce distinct slots', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(100);
+
+    const r1 = ring.atomicAdvance(3, (1n << 32n) | 0x1000n);
+    const r2 = ring.atomicAdvance(5, (2n << 32n) | 0x2000n);
+
+    assert.equal(r1.position, 103);
+    assert.equal(r2.position, 108);
+    assert.notEqual(r1.position, r2.position);
+  });
+
+  it('atomicAdvance CAS wins serialized ordering', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(0);
+
+    const r1 = ring.atomicAdvance(2, (1n << 32n) | 0x1000n);
+    const r2 = ring.atomicAdvance(2, (2n << 32n) | 0x2000n);
+
+    assert.equal(r1.position, 2);
+    assert.equal(r2.position, 4);
+
+    const s1 = ring.readSlot(2);
+    const s2 = ring.readSlot(4);
+    assert.notEqual(s1, s2);
+  });
+
+  it('atomicAdvance wraps at 5040', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5035);
+
+    const r1 = ring.atomicAdvance(10, (1n << 32n) | 0x1000n);
+    assert.equal(r1.position, 5);
+
+    const r2 = ring.atomicAdvance(3, (2n << 32n) | 0x2000n);
+    assert.equal(r2.position, 8);
+  });
+
+  it('cursor is disjoint from ring buffer slots', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(42);
+
+    const cursorValue = ring.position;
+    assert.equal(cursorValue, 42);
+
+    const slot42 = ring.readSlot(42);
+    assert.equal(slot42, 0n);
+  });
+
+  it('setter position updates cursor', () => {
+    const ring = new OmiRingIndexer();
+    ring.position = 500;
+    assert.equal(ring.position, 500);
+  });
+
+  it('CURSOR_ATOMIC_BYTES is 8', () => {
+    assert.equal(CURSOR_ATOMIC_BYTES, 8);
+  });
+});
+
+describe('RingIndexer: epoch overwrite detection', () => {
+  it('epoch starts at 0', () => {
+    const ring = new OmiRingIndexer();
+    assert.equal(ring.epoch, 0);
+  });
+
+  it('epoch increments on wraparound via advance', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5038);
+    const r = ring.advance(5, (1n << 32n) | 0x1234n);
+    assert.equal(r.position, 3);
+    assert.equal(r.epoch, 1);
+    assert.equal(ring.epoch, 1);
+  });
+
+  it('epoch increments only once per wraparound', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5030);
+    for (let i = 0; i < 5; i++) {
+      ring.advance(3, (1n << 32n) | BigInt(0x1000 + i));
+    }
+    assert.equal(ring.epoch, 1);
+  });
+
+  it('epoch increments on wraparound via atomicAdvance', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5036);
+    const r = ring.atomicAdvance(10, (1n << 32n) | 0x1234n);
+    assert.equal(r.position, 6);
+    assert.equal(r.epoch, 1);
+  });
+
+  it('epoch stored in provenance when no tag given', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5038);
+    const r = ring.advance(5, (1n << 32n) | 0x1234n);
+    const u = unpackSlot(r.receipt);
+    assert.equal((u.provenance >> 8) & 0xFF, 1);
+  });
+
+  it('caller provenance tag overrides epoch', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(100);
+    const r = ring.advance(3, (1n << 32n) | 0x1234n, 0xA5A5n);
+    const u = unpackSlot(r.receipt);
+    assert.equal(u.provenance, 0xA5A5);
+  });
+
+  it('multiple epochs distinguishable in receipt chain', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5020);
+    const epochs = new Set();
+    for (let i = 0; i < 30; i++) {
+      const r = ring.advance(1, (BigInt((i % 7) + 1) << 32n) | BigInt(0x1000 + i));
+      epochs.add(r.epoch);
+    }
+    assert.ok(epochs.size >= 2, `expected at least 2 epochs, got ${epochs.size}`);
+  });
+
+  it('epoch stored in receipt survives round-trip across wrap', () => {
+    const ring = new OmiRingIndexer();
+    ring.rewind(5038);
+
+    const mkRow = (LL, NN, MM) => (BigInt(LL) << 32n) | (BigInt(NN) << 16n) | BigInt(MM);
+
+    const r1 = ring.advance(3, mkRow(1, 0x1000, 0));
+    assert.equal(r1.epoch, 1);
+    assert.equal(r1.position, 1);
+
+    const r2 = ring.advance(2, mkRow(2, 0x2000, 0));
+    assert.equal(r2.epoch, 1);
+    assert.equal(r2.position, 3);
+
+    const s1 = ring.readSlot(1);
+    const u1 = unpackSlot(s1);
+    assert.equal(u1.NN, 0x1000);
+    assert.equal((u1.provenance >> 8) & 0xFF, 1);
+
+    const s2 = ring.readSlot(3);
+    const u2 = unpackSlot(s2);
+    assert.equal(u2.NN, 0x2000);
   });
 });

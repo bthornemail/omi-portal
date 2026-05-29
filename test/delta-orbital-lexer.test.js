@@ -19,6 +19,7 @@ import {
   GENESIS_ORBIT_EPOCH, GENESIS_ORBIT_PHASE, GENESIS_B_DIGIT,
   SAB_BOOT_SLOT
 } from '../src/omi/delta-orbital-lexer.js';
+import { OmiRingIndexer, unpackSlot } from '../src/omi/ring-indexer.js';
 
 test('Δ_C: single step is 16-bit', () => {
   const result = deltaC(0x0500);
@@ -50,6 +51,16 @@ test('Δ_C: orbit from seed reaches back after 8 steps', () => {
   const seed = 0x0500;
   const back = deltaCEight(seed);
   assert.equal(back, seed);
+});
+
+test('Δ_C: period-8 holds for all 65536 16-bit values', () => {
+  for (let x = 0; x <= 0xFFFF; x++) {
+    const back = deltaCEight(x);
+    if (back !== x) {
+      assert.equal(back, x,
+        `Δ_C⁸(x) ≠ x at x=${x} (0x${x.toString(16)})`);
+    }
+  }
 });
 
 test('Δ_C: orbit positions are distinct for non-degenerate seed', () => {
@@ -549,4 +560,94 @@ test('Boot: verifyInstructionPipeline packedRow includes steps in bits 40-47', (
   const steps = result.receipt.steps;
   const extracted = Number((result.receipt.packedRow >> 40n) & 0xFFn);
   assert.equal(extracted, steps);
+});
+
+test('Endian: byte-swapped S1 (0xbf03 != 0x03bf) fails Gate 1', () => {
+  const S = new Uint16Array([0x0100, 0xBF03, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0x01FF]);
+  assert.notEqual(verifyOrbitLexer(S), 0);
+  assert.equal(isOrbitLexerValid(S), false);
+});
+
+test('Endian: byte-swapped S6 (0x9f03 != 0x039f) fails Gate 1', () => {
+  const S = new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x9F03, 0x01FF]);
+  assert.notEqual(verifyOrbitLexer(S), 0);
+  assert.equal(isOrbitLexerValid(S), false);
+});
+
+test('Endian: both delimiters swapped produces Q(S) in billions', () => {
+  const S = new Uint16Array([0x0100, 0xBF03, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x9F03, 0x01FF]);
+  const q = verifyOrbitLexer(S);
+  assert.ok(q > 1000000);
+});
+
+test('Endian: byte-swapped CBOS (0x0001 != 0x0100) fails Gate 1', () => {
+  const S = new Uint16Array([0x0001, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0x01FF]);
+  assert.notEqual(verifyOrbitLexer(S), 0);
+});
+
+test('Endian: byte-swapped closure (0xFF01 != 0x01FF) fails Gate 1', () => {
+  const S = new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0xFF01]);
+  assert.notEqual(verifyOrbitLexer(S), 0);
+});
+
+test('Endian: LE read of BE stream yields distinct error magnitude for each swap', () => {
+  const swaps = [
+    { desc: 'S1 swapped',  S: new Uint16Array([0x0100, 0xBF03, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0x01FF]) },
+    { desc: 'S6 swapped',  S: new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x9F03, 0x01FF]) },
+    { desc: 'S1+S6 swapped', S: new Uint16Array([0x0100, 0xBF03, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x9F03, 0x01FF]) },
+    { desc: 'CBOS swapped', S: new Uint16Array([0x0001, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0x01FF]) },
+    { desc: 'closure swapped', S: new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0xFF01]) },
+    { desc: 'S3 high swapped', S: new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x012B, 0x2F01, 0x1434, 0x039F, 0x01FF]) },
+    { desc: 'S4 high swapped', S: new Uint16Array([0x0100, 0x03BF, 0x7C00, 0x2B01, 0x012F, 0x1434, 0x039F, 0x01FF]) },
+  ];
+  const errors = swaps.map(s => ({ desc: s.desc, q: verifyOrbitLexer(s.S) }));
+  const nonzero = errors.filter(e => e.q !== 0);
+  assert.equal(nonzero.length, swaps.length);
+  const magnitudes = new Set(errors.map(e => e.q));
+  assert.ok(magnitudes.size > 1);
+});
+
+test('Inverse relation: proper NN->MM orbit resolves within 14 steps', () => {
+  for (let LL = 1; LL <= 7; LL++) {
+    const C = (LL * 0x1337) & 0xFFFF;
+    const NN = 0x1000 + LL * 0x100;
+    const rotl1 = ((NN << 1) | (NN >> 15)) & 0xFFFF;
+    const rotl3 = ((NN << 3) | (NN >> 13)) & 0xFFFF;
+    const rotr2 = ((NN >> 2) | (NN << 14)) & 0xFFFF;
+    const MM = (rotl1 ^ rotl3 ^ rotr2 ^ C) & 0xFFFF;
+    const steps = fanoTruthResolver(LL, NN, MM);
+    assert.ok(steps >= 1 && steps <= 14, `LL=${LL} NN=0x${NN.toString(16)} MM=0x${MM.toString(16)} steps=${steps}`);
+  }
+});
+
+test('Inverse relation: wrong MM for given LL exceeds 14 steps', () => {
+  for (let LL = 1; LL <= 7; LL++) {
+    const steps = fanoTruthResolver(LL, 0x7C00, 0xDEAD);
+    assert.equal(steps, -1);
+  }
+});
+
+test('Delineation chain: byte-string -> truth row -> steps -> cursor advance', () => {
+  const raw = [0x0100, 0x03BF, 0x7C00, 0x2B01, 0x2F01, 0x1434, 0x039F, 0x01FF];
+  const S = new Uint16Array(raw);
+
+  const { LL } = extractTruthRow(S);
+  assert.equal(LL, 0x01);
+
+  const steps = fanoTruthResolver(LL, S[2], S[5]);
+  assert.equal(steps, 1);
+
+  const truthRow = (BigInt(LL) << 32n) | (BigInt(S[2]) << 16n) | BigInt(S[5]);
+
+  const ring = new OmiRingIndexer();
+  ring.rewind(1504);
+  const result = ring.atomicAdvance(steps, truthRow, 0x0000n);
+  assert.equal(result.position, 1505);
+  assert.equal(result.steps, 1);
+
+  const slot = ring.readSlot(1505);
+  const { provenance, steps: storedSteps, LL: storedLL, NN: storedNN } = unpackSlot(slot);
+  assert.equal(storedLL, 0x01);
+  assert.equal(storedSteps, 1);
+  assert.equal(storedNN, 0x7C00);
 });

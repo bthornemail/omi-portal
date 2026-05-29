@@ -250,5 +250,23 @@ omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 MUST quadratic-lexer-invariant
 #   Brackets [0xLL00] and [0xLLff] declare the CBOS origin and closure boundary
 #   on the same projective point. Any two rays with distinct LL₁ ≠ LL₂ resolve
 #   their intersection within the Fano lottery bound of ≤ 15 Δ_C steps.
-#   Constitutional foundation: cons() ≠ ()!  ⇒  0 ≠ 1
+# Constitutional foundation: cons() ≠ ()!  ⇒  0 ≠ 1
 omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 MUST delta-orbital-lexer-invariant
+
+# [Rule 0x2C]: Degenerate Multivariate Quadratic Predicate
+#   Frame structural validity MUST be determined exclusively via
+#   Q(S) = E_var + E_const === 0. No conforming implementation or
+#   virtual device layer shall use a different validity macro.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST enforce-abi-quadratic-predicate
+
+# [Rule 0x2D]: Bounded Transylvania Lottery Resolver
+#   The trajectory track k from input column NN to output MM under
+#   lens LL MUST close. Every matching proof statement MUST resolve
+#   its path length inside the boundary: 0 ≤ k < 15.
+omi-0000-0000-0000-0000-0000-0000-13b0-000e/128 MUST restrict-transylvania-lottery-steps
+
+# [Rule 0x2E]: The 64-Bit Disjoint Storage Layout
+#   Written receipts MUST pack as provenance:16 | steps:8 | LL:8 | NN:16 | MM:16.
+#   Conforming runtimes MUST store these receipts across 5040 memory
+#   slots via lock-free CAS loops.
+omi-0000-0000-0000-0000-0000-0000-0000-00c8/128 MUST execute-disjoint-slot-packing

@@ -452,3 +452,18 @@ svg {
   image-rendering: pixelated;
   shape-rendering: crispEdges;
 }
+
+/* 42. Endianness Orientation Detection per ABI v0 §13
+   Conforming Big-Endian frames (Q(S) = 0 surface): neon cyan */
+[id^="omi-"][id*="-03bf-"][id*="-039f-"] {
+  stroke: #00ffcc;
+  stroke-width: 1.5px;
+  transform-style: preserve-3d;
+}
+
+/* Corrupted / byte-swapped frames (massive error energy): crimson warning */
+[id^="omi-0005-"][id*="-bf03-"] {
+  stroke: #ff0055 !important;
+  stroke-width: 3px;
+  stroke-dasharray: 2, 2;
+}
