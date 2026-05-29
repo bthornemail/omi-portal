@@ -366,6 +366,36 @@ export function bootstrapSystemKernel(rawMemoryBuffer, byteOffset = GENESIS_BOOT
   };
 }
 
+export function ingestMonolithicCarrierStream(S, ringIndexer, isSignalGuarded = true) {
+  if (!isSignalGuarded) {
+    return { accepted: false, reason: "PHYSICAL_LAYER_SIGNAL_INTEGRITY_FAULT" };
+  }
+  if (!S || S.length < 8) {
+    return { accepted: false, reason: "TRANSPORT_LAYER_SEGMENT_EXTRACTION_FAULT" };
+  }
+  if (!isOrbitLexerValid(S)) {
+    return { accepted: false, reason: "ALGEBRAIC_LAYER_STRUCTURAL_PROOF_FAULT" };
+  }
+  const truthRow = extractTruthRow(S);
+  if (!truthRow) {
+    return { accepted: false, reason: "PROJECTIVE_LAYER_EXTRACTION_FAULT" };
+  }
+  const steps = fanoTruthResolver(truthRow.LL, truthRow.NN, truthRow.MM);
+  const isWithinFanoCeiling = (steps >= 0 && steps < 15);
+  if (!isWithinFanoCeiling) {
+    return { accepted: false, reason: "PROJECTIVE_LAYER_RESOLUTION_DIVERGENCE_FAULT" };
+  }
+  const casResult = ringIndexer.atomicAdvance(steps, truthRow.row);
+  return {
+    accepted: true,
+    status: "SYSTEM_FLOW_STATE_ACTIVE",
+    allocatedSlot: casResult.position,
+    resolutionSteps: steps,
+    packedRow: truthRow.row,
+    receipt: casResult.receipt
+  };
+}
+
 export const SAB_BOOT_SLOT = 1504;
 
 export { CHIRAL_DELIMITER, CARDINAL_DELIMITER, DELTA_C_CONSTANT,

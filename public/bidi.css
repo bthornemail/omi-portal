@@ -467,3 +467,27 @@ svg {
   stroke-width: 3px;
   stroke-dasharray: 2, 2;
 }
+
+/* 43. 1D Linear Precision Transport Ladder — stride 0x13B0 (5040) amber */
+[id*="-13b0-"] {
+  fill: none;
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 2, 4, 6, 2;
+}
+
+/* 44. 2D Geometric C0 Control Planes — stride 0x02D0 (720) neon cyan */
+[id*="-02d0-"] {
+  fill: rgba(0, 255, 204, 0.04);
+  stroke: #00ffcc;
+  stroke-width: 1.5px;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+/* 45. Fully resolved genesis frame — boot launch pulse */
+[id="omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48"] {
+  stroke: #00ffcc !important;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 12px #00ffcc);
+}

@@ -270,3 +270,19 @@ omi-0000-0000-0000-0000-0000-0000-13b0-000e/128 MUST restrict-transylvania-lotte
 #   Conforming runtimes MUST store these receipts across 5040 memory
 #   slots via lock-free CAS loops.
 omi-0000-0000-0000-0000-0000-0000-0000-00c8/128 MUST execute-disjoint-slot-packing
+
+# [Rule 0x4B]: Physical Signal Integrity Predicate
+#   Hardware decoders MUST verify the ITF clock sync and Code39 start/stop
+#   guards before any segment memory extraction or precision ladder step.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST assert-physical-signal-guards
+
+# [Rule 0x4C]: 1D Linear Precision Transport Ladder
+#   Linear carriers (Codabar/128/16K/93) MUST act as data link frame carriers.
+#   Higher precision tiers MUST verify and witness every segment track below.
+omi-0000-0000-0000-0000-13b0-0000-0000-0000/48 MUST enforce-linear-precision-ladder
+
+# [Rule 0x4D]: 2D Geometric C0 Control Code Mappings
+#   Matrix formats MUST map to the C0 control structure: File (Aztec),
+#   Group (MaxiCode), Record (JABCode), Unit (BeeTag). They SHALL NOT
+#   bypass the Gate 1 quad verifier.
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST map-matrix-to-c0-control-planes
