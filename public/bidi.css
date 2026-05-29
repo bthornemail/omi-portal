@@ -488,6 +488,6 @@ svg {
 /* 45. Fully resolved genesis frame — boot launch pulse */
 [id="omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48"] {
   stroke: #00ffcc !important;
-  stroke-width: 3px;
-  filter: drop-shadow(0 0 12px #00ffcc);
+  stroke-width: 3.5px;
+  filter: drop-shadow(0 0 14px #00ffcc);
 }

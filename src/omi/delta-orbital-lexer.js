@@ -366,7 +366,7 @@ export function bootstrapSystemKernel(rawMemoryBuffer, byteOffset = GENESIS_BOOT
   };
 }
 
-export function ingestMonolithicCarrierStream(S, ringIndexer, isSignalGuarded = true) {
+export function ingestMonolithicInfrastructureStream(S, ringIndexer, isSignalGuarded = true) {
   if (!isSignalGuarded) {
     return { accepted: false, reason: "PHYSICAL_LAYER_SIGNAL_INTEGRITY_FAULT" };
   }
@@ -395,6 +395,8 @@ export function ingestMonolithicCarrierStream(S, ringIndexer, isSignalGuarded = 
     receipt: casResult.receipt
   };
 }
+
+export const ingestMonolithicCarrierStream = ingestMonolithicInfrastructureStream;
 
 export const SAB_BOOT_SLOT = 1504;
 
