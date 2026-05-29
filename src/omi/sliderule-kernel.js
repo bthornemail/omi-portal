@@ -56,7 +56,17 @@ export class OmiSexagesimalSlideRuleKernel {
       Atomics.store(this.bigIntArray, targetMemorySlot, asBigInt);
     }
 
-    const projective = this.evaluateProjectiveNetworks(hexBlocks.map(s => parseInt(s, 16) || 0));
+    const segNums = hexBlocks.map(s => parseInt(s, 16) || 0);
+    const projective = this.evaluateProjectiveNetworks(segNums);
+    const boot = this.evaluateHardwareBootstrap(segNums);
+
+    const insn = (segNums[0] << 16) | segNums[1];
+    const qemu = this.evaluateQemuSubstrate(segNums, insn, 60);
+
+    const currentLockCnt = segNums[4];
+    const mmioOffsetAddress = segNums[6];
+    const commandRegisterValue = segNums[7];
+    const atomic = this.evaluateAtomicSubstrate(segNums, currentLockCnt, mmioOffsetAddress, commandRegisterValue);
 
     const metadataHeader = {
       accepted: isValidTwoOfFive,
@@ -66,7 +76,10 @@ export class OmiSexagesimalSlideRuleKernel {
       computedSlideAngle,
       targetMemorySlot,
       isTerminalFractalDepth: (track5 === 0x0007),
-      projective
+      projective,
+      boot,
+      qemu,
+      atomic
     };
 
     return this.cons(metadataHeader, omiAddressString);
@@ -94,6 +107,99 @@ export class OmiSexagesimalSlideRuleKernel {
       isDefaultLanFrame,
       isLocalhostPivot,
       hasFullProjectiveDefinition: (isUlaCompliant || isIPv4Mapped || isDefaultLanFrame || isLocalhostPivot)
+    };
+  }
+
+  evaluateHardwareBootstrap(segmentsArray) {
+    if (!segmentsArray || segmentsArray.length < 8) return null;
+
+    const seg0 = segmentsArray[0];
+    const seg1 = segmentsArray[1];
+    const seg7 = segmentsArray[7];
+
+    const isUlaCompliant = ((seg0 & 0xFE00) === 0xFC00);
+
+    const isBootEntryReached = (seg1 === 0x7C00);
+
+    const isSignatureValidated = (seg7 === 0xAA55);
+
+    const isMonolithicBootActive = (isUlaCompliant && isBootEntryReached && isSignatureValidated);
+
+    return {
+      isUlaCompliant,
+      isBootEntryReached,
+      isSignatureValidated,
+      isMonolithicBootActive,
+      targetBootSlotOffset: isMonolithicBootActive ? 0x7C00 % 5040 : 0
+    };
+  }
+
+  evaluateQemuSubstrate(segmentsArray, rawInstructionWord, clockInputHz) {
+    if (!segmentsArray || segmentsArray.length < 8) return null;
+
+    const seg2 = segmentsArray[2];
+    const seg7 = segmentsArray[7];
+
+    const fixedMask = 0xFFFFFFF0;
+    const fixedBits = 0x039F5A30;
+    const isDecodetreeMatch = ((rawInstructionWord & fixedMask) === fixedBits);
+
+    const isParallelMttcgActive = (seg2 === 0x5A3C);
+
+    const isClockTreeSynchronized = (clockInputHz === 60 && seg7 === 0x003C);
+
+    return {
+      isDecodetreeMatch,
+      isParallelMttcgActive,
+      isClockTreeSynchronized,
+      isHardwareSubstrateSecure: (isDecodetreeMatch && isParallelMttcgActive && isClockTreeSynchronized)
+    };
+  }
+
+  evaluateAtomicSubstrate(segmentsArray, currentLockCnt, mmioOffsetAddress, commandRegisterValue) {
+    if (!segmentsArray || segmentsArray.length < 8) return null;
+
+    const seg0 = segmentsArray[0];
+    const seg4 = segmentsArray[4];
+    const seg5 = segmentsArray[5];
+    const seg6 = segmentsArray[6];
+
+    const isAcquireFenceActive = (seg0 === 0xFFFF && segmentsArray[7] === 0x00A0);
+
+    const isLockCntMemoryLocked = (seg4 > 0 && currentLockCnt > 0);
+    const isSafeToMutateMemory = (currentLockCnt === 0);
+
+    const isVirtCtrlMapped = (seg5 === 0x0C00);
+
+    let executedHypervisorAction = "NO_OP_IDLE";
+    let isSystemFaultDetected = false;
+
+    if (isVirtCtrlMapped && mmioOffsetAddress === 0x0004 && seg6 === 0x0004) {
+      switch (commandRegisterValue) {
+        case 1:
+          executedHypervisorAction = "SYSTEM_HARD_RESET";
+          break;
+        case 2:
+          executedHypervisorAction = "CORE_HALT_EXECUTION";
+          break;
+        case 3:
+          executedHypervisorAction = "HARDWARE_CRITICAL_PANIC_EVICTION";
+          isSystemFaultDetected = true;
+          break;
+        default:
+          executedHypervisorAction = "INVALID_COMMAND_FAULT";
+          isSystemFaultDetected = true;
+      }
+    }
+
+    return {
+      isAcquireFenceActive,
+      isLockCntMemoryLocked,
+      isSafeToMutateMemory,
+      isVirtCtrlMapped,
+      executedHypervisorAction,
+      isSystemFaultDetected,
+      isAtomicFabricSecure: (!isLockCntMemoryLocked || isSafeToMutateMemory) && !isSystemFaultDetected
     };
   }
 }

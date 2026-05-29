@@ -189,7 +189,79 @@ svg {
   100% { transform: scale(1.08) translateZ(15px); filter: drop-shadow(0 0 14px #ff0055); }
 }
 
-/* 21. WAN node projection selectors */
+/* 21. Target RAM boot entry (0x7C00) — amber execution path */
+[id^="omi-"][id*="-7c00-"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 22. Master boot record signature (0xAA55) — neon green */
+[id*="-aa55/"] {
+  stroke: #00ffcc;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px #00ffcc);
+}
+
+/* 23. Monolithic hardware boot (fc00 + 7c00 + aa55) — magenta pulse */
+[id^="omi-fc00-7c00-"][id*="-aa55/"] {
+  stroke: #ff0055;
+  stroke-width: 3.5px;
+  animation: hardwareBootPulse 1s infinite alternate ease-in-out;
+}
+
+@keyframes hardwareBootPulse {
+  0% { transform: scale(1.0) translateZ(0px); opacity: 0.7; }
+  100% { transform: scale(1.05) translateZ(30px); opacity: 1.0; filter: drop-shadow(0 0 18px #ff0055); }
+}
+
+/* 24. MTTCG parallel lane (5a3c with /96) — magenta glow */
+[id*="-5a3c-"][id*="/96/"] {
+  stroke: #ff0055;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 8px #ff0055);
+}
+
+/* 25. Hardware QOM clock source (0x003C terminal) — cyan tick pulse */
+[id*="-003c/128"] {
+  stroke: #00ffcc;
+  stroke-width: 2.5px;
+  stroke-dasharray: 6, 2;
+  animation: clockTreeTickPulse 1.0s infinite alternate linear;
+}
+
+@keyframes clockTreeTickPulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #00ffcc); }
+}
+
+/* 26. Atomic acquire fence (ffff...00a0/128) — amber sync dash */
+[id^="omi-ffff-"][id$="-00a0/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 27. Mapped virt-ctrl MMIO device blocks (0x0C00) — magenta boundary */
+[id*="-0c00-"] {
+  fill: rgba(255, 0, 85, 0.03);
+  stroke: #ff0055;
+  stroke-width: 1.5px;
+}
+
+/* 28. Critical hardware panic (0C00-0004-0003) — crimson target flare */
+[id$="-0c00-0004-0003/128"] {
+  stroke: #ff0055;
+  stroke-width: 3.5px;
+  animation: hardwarePanicGlow 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes hardwarePanicGlow {
+  0% { transform: scale(1.0); filter: drop-shadow(0 0 4px #ff0055); opacity: 0.6; }
+  100% { transform: scale(1.06) translateZ(20px); filter: drop-shadow(0 0 16px #ff0055); opacity: 1.0; }
+}
+
+/* 29. WAN node projection selectors */
 [id*="omi-2607-f1c0-f062-e900-"] {
   stroke: #00ffcc;
   filter: drop-shadow(0 0 8px #00ffcc);

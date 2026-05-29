@@ -135,3 +135,53 @@ omi-0000-0000-0000-0000-0000-ffff-c0a8-0100/120 MUST local-lan-default-frame
 #   The native localhost loopback axis via process bus ::8 MUST freeze arithmetic drift.
 #   The (x-1) dimensional layer closes the projective cascade at the fixed-point center.
 omi-0000-0000-0000-0000-0000-0000-0000-0008/128 MUST terminal-core-pivot-point
+
+# [Rule 0x16]: Target RAM Bootstrap Execution Entry Point (0x7C00)
+#   Every baseline system initialization sequence MUST target the second segment as 7c00.
+#   The (8x-8)/(4x-4) boundary activates the boot execution entry vector.
+omi-0000-7c00-0000-0000-0000-0000-0000-0000/32 MUST boot-execution-entry-point
+
+# [Rule 0x17]: Mandatory Master Boot Record Signature (0xAA55)
+#   Every boot-stage allocation tape MUST terminate with an exact aa55 validation flag.
+#   The (x-1) dimensional layer closes the boot sequence with the terminal signature.
+omi-0000-0000-0000-0000-0000-0000-0000-aa55/128 MUST boot-signature-validation
+
+# [Rule 0x18]: Unified Hardware Boot Strap Intersection
+#   An address crossing the ULA base, 0x7C00 execution, and 0xAA55 signature blocks
+#   MUST bypass virtual memory paging and instantiate the platform root kernel natively.
+omi-fc00-7c00-0000-0000-0000-0000-0000-aa55/128 MUST execute-monolithic-hardware-boot
+
+# [Rule 0x19]: Decodetree Instruction Pattern Constraint
+#   Incoming instruction bits MUST pass the exact bitwise fixedmask condition check.
+#   (insn & 0xFFFFFFF0) == 0x039F5A3C MUST match hardware opcode inversion.
+#   This rule is a static bitmask assertion; no omi-prefix address is required.
+
+# [Rule 0x1A]: MTTCG CPU Core Thread Caching Bounds
+#   Multi-threaded translation blocks MUST write parallel execution traces
+#   directly to the third segment without hitting single-threaded loop blockades.
+omi-0000-0000-5a3c-0001-0000-0000-0000-0000/48 MUST mttcg-parallel-lane-sync
+
+# [Rule 0x1B]: Hardware QOM Clock Tree Distribution Anchor
+#   The primary machine clock source (TYPE_CLOCK) MUST distribute its tick output
+#   to synchronize the 720 GC promotes and 5040 timeline loop boundary fences.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST hardware-qom-clock-source
+
+# [Rule 0x1C]: Sequentially Consistent Atomic Acquire Fence
+#   Ingress thread registration MUST enforce memory barrier synchronization hooks.
+#   ffff:0000:0000:0000:0000:0000:0000:00a0 = smp_mb_acquire compilation barrier.
+omi-ffff-0000-0000-0000-0000-0000-0000-00a0/128 MUST atomic-acquire-memory-fence
+
+# [Rule 0x1D]: QemuLockCnt Visitor Tracking Alignment
+#   Dynamic reader counters MUST map to the fifth segment block to protect active memory arrays.
+#   A non-zero counter value MUST explicitly block array deletion and hard reset sweeps.
+omi-0000-0000-0000-0000-0001-0000-0000-0000/48 MUST lockcnt-active-reader-visit
+
+# [Rule 0x1E]: Virtual System Controller MMIO Base (virt-ctrl)
+#   The 256-byte MMIO base register layout MUST anchor at segment position 0x0C00.
+#   Address 0x00 maps to read-only features; address 0x04 maps to write-only commands.
+omi-0000-0000-0000-0000-0000-0c00-0000-0000/96 MUST virt-ctrl-mmio-device-base
+
+# [Rule 0x1F]: Hardware System Control Commands (virt-ctrl Offset 0x04)
+#   Command codes written to the register line MUST execute hypervisor interrupts.
+#   1 = System Reset, 2 = Core Halt, 3 = Hardware Critical Panic Eviction.
+omi-0000-0000-0000-0000-0000-0c00-0004-0003/128 MUST hypervisor-command-panic
