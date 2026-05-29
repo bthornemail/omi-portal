@@ -35,7 +35,7 @@ else
   LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
   LATEST_VERSION="${LATEST_TAG#v}"
 
-  IFS='.' read -r MAJ MIN PAT <<< "$LATEST_VERSION"
+  IFS='.' read -r MAJ MIN PAT <<< "${LATEST_VERSION}.0.0"
   case "$VERSION_SPEC" in
     major) MAJ=$((MAJ + 1)); MIN=0; PAT=0 ;;
     minor) MIN=$((MIN + 1)); PAT=0 ;;
