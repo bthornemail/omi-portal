@@ -1,17 +1,19 @@
 services:
-  omi-kernel-node:
+  # ============================================================
+  # OMI Portal — production nginx runtime
+  # ============================================================
+  omi-portal:
     build:
       context: .
-      dockerfile: Dockerfile.softmmu
+      dockerfile: Dockerfile
       target: runtime
-    container_name: omi-core-gateway
+    container_name: omi-portal
     restart: always
-    volumes:
-      - shared-bus:/tmp/omi-bus
     ports:
       - "8080:80"
     labels:
-      omi.context-root: "omi-ffff-127-0-0-1"
+      omi.context-root: "ffff-127--/48"
+      omi.service-bus: "::1..::8"
       omi.memory-stride: "40320B"
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
@@ -20,22 +22,25 @@ services:
       retries: 3
       start_period: 10s
 
-  qemu-system-emulators:
+  # ============================================================
+  # OMI QEMU SoftMMU — full-system emulation matrix
+  # ============================================================
+  qemu-emulators:
     build:
       context: .
       dockerfile: Dockerfile.softmmu
-      target: emulator
+      target: softmmu-runtime
     container_name: omi-qemu-matrix
-    restart: on-failure
-    depends_on:
-      - omi-kernel-node
+    profiles:
+      - qemu
+    restart: "no"
     security_opt:
       - apparmor:unconfined
     devices:
       - "/dev/kvm:/dev/kvm"
     volumes:
-      - shared-bus:/tmp/omi-bus
+      - /tmp/omi-bus:/tmp/omi-bus
 
 volumes:
-  shared-bus:
+  omi-bus:
     driver: local

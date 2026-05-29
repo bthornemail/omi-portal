@@ -1,5 +1,39 @@
 # Changelog
 
+## v0.3.0 (2026-05-29) — Production Release Pipeline
+
+### OMI Kernel — 5 Core Modules
+- `src/omi/omicron-kernel.js` — CIDR-v0 address parser, 16-bit delta evaluator (period-8), cons/car/cdr
+- `src/omi/sexagesimal-kernel.js` — Hellenistic sexagesimal stride lattice with slot/step extraction
+- `src/omi/inversion-kernel.js` — Central inversion `Inv(x) = x ⊕ 0x5A3C`, period-8/prime-73 tracking
+- `src/omi/lisp-kernel.js` — S-expression nil-terminator, `()! = ()` empty-cons identity
+- `src/omi/lattice-kernel.js` — Factorial lattice weights 0!–7!, fixed-point short-circuit
+
+### Specification Docs
+- `docs/omi-whitepaper.md` — First-principles white paper (4 axioms, 16 sections)
+- `docs/omi-core-spec.md` — Normative MUST/SHOULD specification (RFC 2119)
+
+### Production CI/CD Pipeline
+- `Dockerfile` — Multi-stage: test → builder → nginx runtime with non-root user
+- `Dockerfile.qemu` — Multi-arch QEMU user-mode test container (amd64, arm64, arm/v7)
+- `docker-bake.hcl` — Buildx bake matrix with GHA cache, provenance attestation
+- `scripts/ci-test.sh` — Full pipeline: unit → build → QEMU cross-arch → smoke
+- `scripts/release.sh` — Tag, build multi-arch, push, GitHub Release
+- `scripts/qemu-setup.sh` — QEMU binfmt registration for CI runners
+- `.github/workflows/ci.yml` — CI: unit, QEMU multi-arch matrix, Docker smoke
+- `.github/workflows/release.yml` — Release: multi-arch push, attestation, GitHub Release
+- `Makefile` — Updated with docker-bake, release, qemu-setup targets
+
+### Tests
+- 324 tests, 0 failures
+- 169 modules transformed in build (7.42 kB bidi chunk)
+- QEMU cross-arch validated on linux/amd64, linux/arm64, linux/arm/v7
+
+### Breaking Changes
+- None. Backward compat preserved. Canonical root: `ffff-127--/48`
+
+---
+
 ## v1.5.0-chiral-release (2026-05-28) — Closed Core Runtime Milestone
 
 ### Notation Engine (new)

@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1.7
+# Multi-arch QEMU user-mode test container
+# Build with: docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -f Dockerfile.qemu .
+ARG NODE_VERSION=24-alpine
+
+FROM --platform=$TARGETPLATFORM node:${NODE_VERSION} AS qemu-test
+
+ARG TARGETPLATFORM
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+RUN echo "Building for ${TARGETPLATFORM} (arch=${TARGETARCH}, variant=${TARGETVARIANT:-none})"
+
+WORKDIR /test
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY . .
+
+ENV OMI_ARCH=${TARGETARCH}
+ENV OMI_PLATFORM=${TARGETPLATFORM}
+ENV NODE_OPTIONS="--experimental-vm-modules"
+
+RUN echo "=== OMI QEMU TEST SUITE [${TARGETPLATFORM}] ===" && \
+    npm test
+
+LABEL org.opencontainers.image.title="OMI Portal — QEMU Test"
+LABEL org.opencontainers.image.description="Multi-arch QEMU user-mode test for ${TARGETPLATFORM}"
+LABEL org.opencontainers.image.source="https://github.com/anomalyco/omi-portal"
+LABEL omi.arch="${TARGETARCH}"
+LABEL omi.platform="${TARGETPLATFORM}"

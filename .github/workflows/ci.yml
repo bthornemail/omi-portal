@@ -1,0 +1,134 @@
+name: OMI CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================
+  # UNIT TESTS + BUILD (native)
+  # ============================================================
+  unit-and-build:
+    name: Unit + Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          MODULES=$(ls -1 dist/assets/*.js 2>/dev/null | wc -l)
+          echo "Build produces ${MODULES} modules"
+          test "$MODULES" -gt 0
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 3
+
+  # ============================================================
+  # QEMU MULTI-ARCH TESTS (cross-architecture via Docker + QEMU)
+  # ============================================================
+  qemu-cross-arch:
+    name: QEMU ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU binfmt
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64,arm
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run tests on ${{ matrix.platform }}
+        run: |
+          docker run --rm --platform ${{ matrix.platform }} \
+            -v ${{ github.workspace }}:/test -w /test \
+            node:24-alpine \
+            sh -c "npm ci --ignore-scripts --quiet && npm test"
+
+  # ============================================================
+  # DOCKER BUILD + SMOKE TEST
+  # ============================================================
+  docker-smoke:
+    name: Docker Smoke Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [unit-and-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build runtime image
+        uses: docker/bake-action@v5
+        with:
+          targets: runtime
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
+
+      - name: Start compose and wait for health
+        run: |
+          docker compose up -d omi-kernel-node
+          TIMEOUT=30
+          COUNTER=0
+          while [ "$(docker inspect --format='{{.State.Health.Status}}' omi-core-gateway 2>/dev/null || echo starting)" != "healthy" ]; do
+            if [ $COUNTER -gt $TIMEOUT ]; then
+              echo "ERROR: unhealthy after ${TIMEOUT}s"
+              docker compose logs omi-kernel-node
+              exit 1
+            fi
+            sleep 2
+            COUNTER=$((COUNTER + 2))
+          done
+
+      - name: Verify COOP/COEP headers
+        run: |
+          HEADERS=$(curl -sI http://localhost:8080/)
+          echo "COOP/COEP verification:"
+          echo "$HEADERS" | grep -i "Cross-Origin-Opener-Policy" || { echo "FAIL: COOP missing"; exit 1; }
+          echo "$HEADERS" | grep -i "Cross-Origin-Embedder-Policy" || { echo "FAIL: COEP missing"; exit 1; }
+          echo "[PASS] COOP/COEP headers verified"
+
+      - name: Smoke test index page
+        run: |
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/)
+          test "$STATUS" = "200" || { echo "FAIL: HTTP $STATUS"; exit 1; }
+          echo "[PASS] HTTP 200 OK"
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down --volumes --remove-orphans

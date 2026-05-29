@@ -64,3 +64,27 @@ For GUI changes, also run Vite and smoke the affected public page:
 ```bash
 npm run dev
 ```
+
+## Production Pipeline
+
+For a full CI/CD pipeline verification (multi-arch QEMU tests, Docker smoke test):
+
+```bash
+make test                   # unit tests
+make docker-build           # multi-arch buildx bake (requires Docker + QEMU binfmt)
+make qemu-test              # QEMU cross-arch tests via Docker
+make release-dry-run patch  # dry-run release (no push)
+make release patch          # full release (tag, multi-arch build, push to GHCR)
+```
+
+### CI Pipeline (GitHub Actions)
+
+- `.github/workflows/ci.yml` — on push/PR to main: unit tests + QEMU multi-arch matrix (linux/amd64, arm64, arm/v7) + Docker smoke test with COOP/COEP verification
+- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `ghcr.io/anomalyco/omi-portal` with provenance attestation + GitHub Release
+
+### Docker Architecture
+
+- `Dockerfile` — Multi-stage: `base` (npm ci) → `test` (npm test) → `builder` (npm run build) → `runtime` (nginx, non-root `omi` user, COOP/COEP, HEALTHCHECK)
+- `Dockerfile.qemu` — Multi-arch test container for `--platform linux/amd64|arm64|arm/v7`
+- `docker-bake.hcl` — Buildx bake matrix with GHA cache, provenance attestation, and release tag variants
+- `Dockerfile.softmmu` — QEMU full-system emulator suite (x86_64, i386, aarch64, riscv64, ppc64, mips64)
