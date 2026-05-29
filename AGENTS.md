@@ -24,6 +24,11 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - `360 = 6×60` orientation field
 - `720 = 2×360` / `6!` mirrored orientation
 - `5040 = 7!` master Fano permutation cycle
+- `Inv(x) = x ⊕ 0x5A3C` = central inversion bitwise mirror (balanced symmetry under prime ideal 73)
+- `()! = ()` = empty-cons identity law (the fixed point); `0! = 1` is the numeric form
+- `() ≠ ()!` = syntactic distinction between value (state) and operation (transition)
+- `!` = execution suffix / cons closure trigger
+- Factorial lattice: `0!→1→2!→2→3!→6→4!→24→5!→120→6!→720→7!→5040`
 
 ## Current Canonical Roots
 
@@ -31,7 +36,11 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Main framework doc: `docs/omi-object-model.md`
 - Manifest: `docs/omi-object-model.manifest.json`
 - GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`
+- CIDR kernel: `src/omi/omicron-kernel.js`
 - Sexagesimal kernel: `src/omi/sexagesimal-kernel.js`
+- Inversion kernel: `src/omi/inversion-kernel.js`
+- Lisp kernel: `src/omi/lisp-kernel.js`
+- Lattice kernel: `src/omi/lattice-kernel.js`
 
 ## Implementation Expectations
 

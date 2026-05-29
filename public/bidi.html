@@ -43,6 +43,10 @@
             stroke-dasharray: 2;
         }
 
+        [data-omi-phase="chiral-origin"] [data-omi-type="inversion-vertex"] {
+            stroke: var(--neon-cyan);
+        }
+
         [id*="-slot720-"] {
             stroke: var(--neon-amber);
             stroke-width: 1.5px;
@@ -67,6 +71,46 @@
             filter: drop-shadow(0 0 10px #ff0055);
         }
 
+        [id*="-0x5a3c-"] {
+            stroke: var(--neon-magenta);
+            filter: drop-shadow(0 0 10px #ff0055);
+        }
+
+        [id*="-0x5a3c-"] [data-omi-type="inversion-vertex"]:hover {
+            transform: translateZ(50px) rotateY(180deg) rotateX(15deg);
+            fill: rgba(255, 0, 85, 0.25);
+        }
+
+        [id$="-0!"] {
+            stroke: #ffaa00;
+            stroke-dasharray: 4;
+        }
+
+        [id$="-0!"] circle {
+            fill: rgba(255, 170, 0, 0.1);
+            filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4));
+        }
+
+        [data-omi-lattice] {
+            transform-style: preserve-3d;
+            transition: transform 0.15s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        [data-fixed-point="true"] {
+            display: none !important;
+            visibility: hidden;
+        }
+
+        [data-omi-lattice="3-octahedral"] path {
+            stroke-width: 1.5px;
+            animation: localSpacePulse 2s ease-in-out infinite;
+        }
+
+        [data-omi-lattice="7-replay-ring"] circle {
+            stroke-width: 2px;
+            filter: drop-shadow(0 0 12px #ff0055);
+        }
+
         .chiral-inverted {
             stroke-dasharray: 4;
             animation: pulseInversion 0.2s infinite linear;
@@ -75,6 +119,11 @@
         @keyframes pulseInversion {
             0% { stroke-dashoffset: 0; }
             100% { stroke-dashoffset: 8; }
+        }
+
+        @keyframes localSpacePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         #omi-telemetry-panel {
@@ -104,6 +153,9 @@
         #stream-log .reset { color: var(--neon-magenta); }
         #stream-log .vector { color: #60a5fa; }
         #stream-log .sexagesimal { color: #ff8800; }
+        #stream-log .inversion { color: #ff0055; }
+        #stream-log .lisp-nil { color: #ffaa00; }
+        #stream-log .lattice { color: #a855f7; }
         .dot {
             width: 8px; height: 8px; border-radius: 50%; display: inline-block;
         }
@@ -115,43 +167,76 @@
 
     <h1>OMI-CIDR-v0 128-BIT PROJECTION SURFACE</h1>
 
-    <svg id="Ο-ffff-127--/48" data-omi-subnet="::/48" width="100%" height="420" style="border:1px solid rgba(0,255,204,0.05);">
+    <svg id="\u039f-ffff-127--/48" data-omi-subnet="::/48" width="100%" height="420" style="border:1px solid rgba(0,255,204,0.05);">
         <g data-omi-space="hellenistic-sexagesimal-matrix">
 
             <g data-omi-scope="global-root">
-                <circle id="Ο--/0"
+                <circle id="\u039f--/0"
                         data-omi-type="cidr-vertex"
-                        cx="100" cy="210" r="16" />
+                        cx="60" cy="210" r="16" />
+            </g>
+
+            <g data-omi-scope="central-inversion-mirror">
+                <g data-omi-phase="chiral-origin">
+                    <circle id="\u03bf-ffff-127-0-0-1-0x02-slot720/128-vertex"
+                            data-omi-type="inversion-vertex"
+                            cx="200" cy="210" r="14" />
+                </g>
+                <g data-omi-phase="central-mirror">
+                    <circle id="\u03bf-ffff-127-0-0-1-0x02-0x5a3c-slot720-\u039f-vertex"
+                            data-omi-type="inversion-vertex"
+                            cx="400" cy="210" r="14" />
+                </g>
             </g>
 
             <g data-omi-scope="sexagesimal-stride720">
-                <g id="Ο-ffff-127-0-0-1-0x02-slot720-step15/128"
+                <g id="\u039f-ffff-127-0-0-1-0x02-slot720-step15/128"
                    data-omi-astronomy="sexagesimal-digit"
                    data-omi-stride="720" data-omi-step="15">
-                    <circle id="Ο-ffff-127-0-0-1-0x02-slot720-step15/128-YmFzZTY0"
+                    <circle id="\u039f-ffff-127-0-0-1-0x02-slot720-step15/128-YmFzZTY0"
                             data-omi-type="cidr-vertex"
-                            cx="280" cy="210" r="22" />
+                            cx="560" cy="210" r="22" />
                 </g>
             </g>
 
             <g data-omi-scope="sexagesimal-stride120">
-                <g id="Ο-ffff-127-0-0-1-0x04-slot120-step59/128"
+                <g id="\u039f-ffff-127-0-0-1-0x04-slot120-step59/128"
                    data-omi-astronomy="sexagesimal-digit"
                    data-omi-stride="120" data-omi-step="59">
-                    <rect id="Ο-ffff-127-0-0-1-0x04-slot120-step59/128-MzkAQA"
+                    <rect id="\u039f-ffff-127-0-0-1-0x04-slot120-step59/128-MzkAQA"
                           data-omi-type="cidr-vertex"
-                          x="440" y="160" width="80" height="80" />
+                          x="660" y="160" width="60" height="60" />
                 </g>
             </g>
 
             <g data-omi-scope="sexagesimal-stride5040">
-                <g id="Ο-ffff-127-0-0-1-0x01-slot5040-step0/128"
+                <g id="\u039f-ffff-127-0-0-1-0x01-slot5040-step0/128"
                    data-omi-astronomy="sexagesimal-digit"
                    data-omi-stride="5040" data-omi-step="0">
-                    <circle id="Ο-ffff-127-0-0-1-0x01-slot5040-step0/128"
+                    <circle id="\u039f-ffff-127-0-0-1-0x01-slot5040-step0/128"
                             data-omi-type="cidr-vertex"
-                            cx="650" cy="210" r="16" />
+                            cx="780" cy="210" r="16" />
                 </g>
+            </g>
+
+            <g data-omi-scope="s-expression-nil-terminator">
+                <circle id="omi-fano-p2-ffff-127-0-0-1-vau-nil-env-0!"
+                        data-omi-cell="null-terminator"
+                        cx="920" cy="210" r="12" />
+            </g>
+
+            <g data-omi-scope="factorial-lattice-layer3">
+                <path id="omi-3!-0x1a-0x41-vau-x-env-hyp-slot6"
+                      data-omi-lattice="3-octahedral"
+                      d="M 100 120 L 120 150 L 80 150 Z"
+                      fill="rgba(0,255,204,0.1)" stroke="#00ffcc" />
+            </g>
+
+            <g data-omi-scope="factorial-lattice-layer7">
+                <circle id="omi-7!-ffff-127-0-0-1-0x5a3c-slot5040-\u039f"
+                        data-omi-lattice="7-replay-ring"
+                        cx="920" cy="320" r="18"
+                        fill="none" stroke="#ff0055" />
             </g>
 
         </g>
@@ -166,6 +251,9 @@
         <div>[Sexagesimal Stride]: <span id="telemetry-stride" class="metric-highlight">—</span></div>
         <div>[Sexagesimal Step]: <span id="telemetry-step" class="metric-highlight">—</span></div>
         <div>[Fractional Ratio]: <span id="telemetry-ratio" class="metric-highlight">—</span></div>
+        <div>[Central Inversion Gate]: <span id="telemetry-gate" class="metric-highlight">—</span></div>
+        <div>[List Terminator]: <span id="telemetry-nil" class="metric-highlight">—</span></div>
+        <div>[Factorial Layer]: <span id="telemetry-layer" class="metric-highlight">—</span></div>
         <div style="margin-top:8px">
             <span class="dot disconnected" id="stream-dot"></span>
             <span id="stream-label" style="color:var(--neon-cyan)">disconnected</span>
@@ -177,6 +265,9 @@
     <script type="module">
         import { OmiOmicronKernel } from "../src/omi/omicron-kernel.js";
         import { OmiSexagesimalKernel } from "../src/omi/sexagesimal-kernel.js";
+        import { OmiCentralInversionKernel } from "../src/omi/inversion-kernel.js";
+        import { OmiLispKernel } from "../src/omi/lisp-kernel.js";
+        import { OmiFactorialLatticeKernel } from "../src/omi/lattice-kernel.js";
 
         const connectionIndicator = document.getElementById('telemetry-connection');
         const operatorDisplay = document.getElementById('telemetry-operator');
@@ -186,6 +277,9 @@
         const strideDisplay = document.getElementById('telemetry-stride');
         const stepDisplay = document.getElementById('telemetry-step');
         const ratioDisplay = document.getElementById('telemetry-ratio');
+        const gateDisplay = document.getElementById('telemetry-gate');
+        const nilDisplay = document.getElementById('telemetry-nil');
+        const layerDisplay = document.getElementById('telemetry-layer');
         const streamDot = document.getElementById('stream-dot');
         const streamLabel = document.getElementById('stream-label');
         const streamLog = document.getElementById('stream-log');
@@ -200,6 +294,9 @@
         const virtualSab = new SharedArrayBuffer(5040 * 8);
         const kernel = new OmiOmicronKernel(virtualSab);
         const sexaKernel = new OmiSexagesimalKernel(virtualSab);
+        const invKernel = new OmiCentralInversionKernel(virtualSab);
+        const lispKernel = new OmiLispKernel(virtualSab);
+        const latticeKernel = new OmiFactorialLatticeKernel(virtualSab);
 
         const STREAM_URLS = [
             "http://69.48.202.32:8080/omi-stream",
@@ -219,9 +316,66 @@
                     ratio: sexaHeader.astronomy.fractionalRatio
                 }, "sexagesimal");
             } else {
-                strideDisplay.textContent = "—";
-                stepDisplay.textContent = "—";
-                ratioDisplay.textContent = "—";
+                strideDisplay.textContent = "\u2014";
+                stepDisplay.textContent = "\u2014";
+                ratioDisplay.textContent = "\u2014";
+            }
+        }
+
+        function processInversionToken(tokenStr) {
+            const invCell = invKernel.parseInversionAddress(tokenStr);
+            const invHeader = invKernel.car(invCell);
+            if (invHeader.valid && invHeader.hasCentralInversionGate) {
+                gateDisplay.textContent = "DETECTED (0x5A3C)";
+                gateDisplay.style.color = "var(--neon-magenta)";
+                logStream("inversion", "gate", { slot: invHeader.targetTimelineSlot }, "inversion");
+            } else {
+                gateDisplay.textContent = invHeader.valid ? "absent" : "\u2014";
+                gateDisplay.style.color = "#fff";
+            }
+            const gateNode = document.getElementById("\u03bf-ffff-127-0-0-1-0x02-0x5a3c-slot720-\u039f-vertex");
+            if (gateNode && invHeader.valid && invHeader.hasCentralInversionGate) {
+                gateNode.classList.add("chiral-inverted");
+            } else if (gateNode) {
+                gateNode.classList.remove("chiral-inverted");
+            }
+        }
+
+        function processLispToken(tokenStr) {
+            if (!tokenStr.startsWith("omi-")) {
+                nilDisplay.textContent = "\u2014";
+                return;
+            }
+            const lispCell = lispKernel.evaluateLispToken(tokenStr);
+            const lispHeader = lispKernel.car(lispCell);
+            if (lispHeader.isListTerminatorActive) {
+                nilDisplay.textContent = "ACTIVE (0! = 1)";
+                nilDisplay.style.color = "#ffaa00";
+                logStream("lisp-nil", "terminator", {
+                    weight: lispHeader.structuralMemoryWeight
+                }, "lisp-nil");
+            } else {
+                nilDisplay.textContent = "inactive";
+                nilDisplay.style.color = "#fff";
+            }
+        }
+
+        function processLatticeToken(tokenStr) {
+            if (!tokenStr.startsWith("omi-")) {
+                layerDisplay.textContent = "\u2014";
+                return;
+            }
+            const latCell = latticeKernel.resolveLatticeToken(tokenStr);
+            const latHeader = latticeKernel.car(latCell);
+            if (latHeader.valid !== false) {
+                layerDisplay.textContent = `${latHeader.factorialLayer} (weight ${latHeader.allocatedWeight})`;
+                logStream("lattice", "layer", {
+                    layer: latHeader.factorialLayer,
+                    weight: latHeader.allocatedWeight,
+                    fixedPoint: latHeader.isFixedPointZeroFrame
+                }, "lattice");
+            } else {
+                layerDisplay.textContent = "\u2014";
             }
         }
 
@@ -263,6 +417,9 @@
                     }
 
                     processSexagesimalToken(targetTokenStr);
+                    processInversionToken(targetTokenStr);
+                    processLispToken(targetTokenStr);
+                    processLatticeToken(targetTokenStr);
 
                     logStream(origin, "vector-update", {
                         token: targetTokenStr.substring(0, 48) + "...",
@@ -290,15 +447,18 @@
             source.addEventListener('hard-reset', () => {
                 console.log("[Omi Kernel] Global 5040 clock ring loop reset detected.");
                 logStream(origin, "hard-reset", {});
-                const nodes = document.querySelectorAll('[data-omi-type="cidr-vertex"]');
+                const nodes = document.querySelectorAll('[data-omi-type="cidr-vertex"], [data-omi-type="inversion-vertex"]');
                 nodes.forEach(node => {
                     node.classList.remove('chiral-inverted');
                     node.style.transform = "translate3d(0px, 0px, 0px)";
                 });
-                degreeDisplay.textContent = "Degree 0 (Constant) — System Reset Completed";
-                strideDisplay.textContent = "—";
-                stepDisplay.textContent = "—";
-                ratioDisplay.textContent = "—";
+                degreeDisplay.textContent = "Degree 0 (Constant) \u2014 System Reset Completed";
+                strideDisplay.textContent = "\u2014";
+                stepDisplay.textContent = "\u2014";
+                ratioDisplay.textContent = "\u2014";
+                gateDisplay.textContent = "\u2014";
+                nilDisplay.textContent = "\u2014";
+                layerDisplay.textContent = "\u2014";
             });
         }
 
