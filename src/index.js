@@ -60,6 +60,7 @@ export * from "./omi/trigraph-preprocessor.js";
 export * from "./omi/place-value-interpreter.js";
 export * from "./omi/omicron-kernel.js";
 export * from "./omi/fano-prolog.js";
+export * from "./omi/axiomatic-kernel.js";
 export * from "./omi/file-compiler.js";
 export * from "./wordnet/prolog-broker.js";
 export * from "./wordnet/relation-space.js";

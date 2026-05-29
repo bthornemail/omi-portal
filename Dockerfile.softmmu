@@ -1,4 +1,6 @@
-FROM alpine:3.20 AS softmmu-runtime
+ARG NODE_VERSION=24-alpine
+
+FROM node:${NODE_VERSION} AS softmmu-runtime
 
 RUN apk add --no-cache \
     qemu-system-x86_64 \
@@ -6,12 +8,10 @@ RUN apk add --no-cache \
     qemu-system-aarch64 \
     qemu-system-arm \
     qemu-system-riscv64 \
-    qemu-system-riscv32 \
     qemu-system-ppc64 \
     qemu-system-mips64 \
-    nodejs \
-    npm \
-    bash
+    bash \
+    build-base
 
 WORKDIR /app
 
@@ -20,13 +20,11 @@ RUN npm ci --quiet
 
 COPY . .
 
-RUN echo "=== BASELINE UNIT REGRESSION SUITE ===" \
-    && npm test
+RUN echo "=== C99 CONFORMANCE MIRROR ===" \
+    && make test-c99-core
 
 RUN echo "=== SOFTMMU FULL SYSTEM BOOT MATRIX ===" \
-    && node test/softmmu-system.test.js
-
-RUN npm run build
+    && node --test test/softmmu-system.test.js
 
 LABEL omi.validator-type="softmmu-full-system"
 LABEL omi.service-bus="::1..::8"

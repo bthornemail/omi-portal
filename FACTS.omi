@@ -1,0 +1,95 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) - UNIVERSAL FACT DEFINITIONS
+# File Target: /FACTS.omi
+# Specification Level: Universal POS & Feature Token Matrix
+# ============================================================================
+#
+# This file declares factual assignments for language-agnostic data
+# processing. Universal Part-of-Speech tags and morphological properties
+# are encoded directly into structural bit positions. All entries use
+# the single-notation omi-<8-hex>/<prefix> CIDR format.
+#
+# Grammar:
+#   <omi-address>/<prefix> FACT <assignment-value>
+
+# --- Section 1: Universal Part-of-Speech Hex Indices ---
+# Segment[3] — mapped directly via the fourth 16-bit block.
+omi-0000-0000-0000-0001-0000-0000-0000-0000/48 FACT universal-pos-NOUN
+omi-0000-0000-0000-0002-0000-0000-0000-0000/48 FACT universal-pos-VERB
+omi-0000-0000-0000-0003-0000-0000-0000-0000/48 FACT universal-pos-ADJ
+omi-0000-0000-0000-0004-0000-0000-0000-0000/48 FACT universal-pos-PRON
+omi-0000-0000-0000-0005-0000-0000-0000-0000/48 FACT universal-pos-PROPN
+omi-0000-0000-0000-0006-0000-0000-0000-0000/48 FACT universal-pos-ADV
+omi-0000-0000-0000-0007-0000-0000-0000-0000/48 FACT universal-pos-ADP
+omi-0000-0000-0000-0008-0000-0000-0000-0000/48 FACT universal-pos-CCONJ
+omi-0000-0000-0000-0009-0000-0000-0000-0000/48 FACT universal-pos-NUM
+omi-0000-0000-0000-000a-0000-0000-0000-0000/48 FACT universal-pos-DET
+omi-0000-0000-0000-000b-0000-0000-0000-0000/48 FACT universal-pos-PART
+omi-0000-0000-0000-000c-0000-0000-0000-0000/48 FACT universal-pos-SCONJ
+omi-0000-0000-0000-000d-0000-0000-0000-0000/48 FACT universal-pos-INTJ
+omi-0000-0000-0000-000e-0000-0000-0000-0000/48 FACT universal-pos-PUNCT
+omi-0000-0000-0000-000f-0000-0000-0000-0000/48 FACT universal-pos-SYM
+omi-0000-0000-0000-0010-0000-0000-0000-0000/48 FACT universal-pos-X
+omi-0000-0000-0000-0017-0000-0000-0000-0000/48 FACT universal-pos-AUX
+
+# --- Section 2: Universal Feature Geometric Traverses ---
+# Segment[4] (Stride) — morphological gender and case features.
+omi-0000-0000-0000-0000-0078-0000-0000-0000/48 FACT stride-120-feature-frame
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 FACT stride-720-feature-frame
+omi-0000-0000-0000-0000-13b0-0000-0000-0000/48 FACT stride-5040-feature-frame
+
+# Segment[5] (Slot) — feature value positions within a stride frame.
+omi-0000-0000-0000-0000-0000-0001-0000-0000/48 FACT feature-number-singular
+omi-0000-0000-0000-0000-0000-0002-0000-0000/48 FACT feature-number-plural
+omi-0000-0000-0000-0000-0000-0003-0000-0000/48 FACT feature-number-dual
+omi-0000-0000-0000-0000-0000-0004-0000-0000/48 FACT feature-number-paucal
+omi-0000-0000-0000-0000-0000-0005-0000-0000/48 FACT feature-gender-masculine
+omi-0000-0000-0000-0000-0000-0006-0000-0000/48 FACT feature-gender-feminine
+omi-0000-0000-0000-0000-0000-0007-0000-0000/48 FACT feature-gender-neuter
+omi-0000-0000-0000-0000-0000-0008-0000-0000/48 FACT feature-case-nominative
+omi-0000-0000-0000-0000-0000-0009-0000-0000/48 FACT feature-case-accusative
+omi-0000-0000-0000-0000-0000-000a-0000-0000/48 FACT feature-case-dative
+omi-0000-0000-0000-0000-0000-000b-0000-0000/48 FACT feature-case-genitive
+omi-0000-0000-0000-0000-0000-000c-0000-0000/48 FACT feature-tense-present
+omi-0000-0000-0000-0000-0000-000d-0000-0000/48 FACT feature-tense-past
+omi-0000-0000-0000-0000-0000-000e-0000-0000/48 FACT feature-tense-future
+omi-0000-0000-0000-0000-0000-000f-0000-0000/48 FACT feature-mood-indicative
+omi-0000-0000-0000-0000-0000-0010-0000-0000/48 FACT feature-mood-subjunctive
+omi-0000-0000-0000-0000-0000-0011-0000-0000/48 FACT feature-mood-imperative
+omi-0000-0000-0000-0000-0000-0012-0000-0000/48 FACT feature-mood-conditional
+omi-0000-0000-0000-0000-0000-0013-0000-0000/48 FACT feature-aspect-perfect
+omi-0000-0000-0000-0000-0000-0014-0000-0000/48 FACT feature-aspect-progressive
+omi-0000-0000-0000-0000-0000-0015-0000-0000/48 FACT feature-aspect-habitual
+omi-0000-0000-0000-0000-0000-0016-0000-0000/48 FACT feature-person-first
+omi-0000-0000-0000-0000-0000-0017-0000-0000/48 FACT feature-person-second
+omi-0000-0000-0000-0000-0000-0018-0000-0000/48 FACT feature-person-third
+omi-0000-0000-0000-0000-0000-0019-0000-0000/48 FACT feature-degree-positive
+omi-0000-0000-0000-0000-0000-001a-0000-0000/48 FACT feature-degree-comparative
+omi-0000-0000-0000-0000-0000-001b-0000-0000/48 FACT feature-degree-superlative
+omi-0000-0000-0000-0000-0000-001c-0000-0000/48 FACT feature-polarity-positive
+omi-0000-0000-0000-0000-0000-001d-0000-0000/48 FACT feature-polarity-negative
+omi-0000-0000-0000-0000-0000-001e-0000-0000/48 FACT feature-reflexive-yes
+omi-0000-0000-0000-0000-0000-001f-0000-0000/48 FACT feature-possessive-yes
+omi-0000-0000-0000-0000-0000-0020-0000-0000/48 FACT feature-animacy-animate
+omi-0000-0000-0000-0000-0000-0021-0000-0000/48 FACT feature-animacy-inanimate
+omi-0000-0000-0000-0000-0000-0022-0000-0000/48 FACT feature-verbform-finite
+omi-0000-0000-0000-0000-0000-0023-0000-0000/48 FACT feature-verbform-infinitive
+omi-0000-0000-0000-0000-0000-0024-0000-0000/48 FACT feature-verbform-participle
+omi-0000-0000-0000-0000-0000-0025-0000-0000/48 FACT feature-verbform-gerund
+
+# --- Section 3: Structural Factorial Lattice Weights ---
+# Segment[6] — mapped directly via the seventh 16-bit block.
+omi-0000-0000-0000-0000-0000-0000-0000-0000/48 FACT lattice-layer-0-fixed-point
+omi-0000-0000-0000-0000-0000-0000-0001-0000/48 FACT lattice-layer-1-monadic
+omi-0000-0000-0000-0000-0000-0000-0002-0000/48 FACT lattice-layer-2-dyadic
+omi-0000-0000-0000-0000-0000-0000-0003-0000/48 FACT lattice-layer-3-octahedral
+omi-0000-0000-0000-0000-0000-0000-0004-0000/48 FACT lattice-layer-4-24-cell
+omi-0000-0000-0000-0000-0000-0000-0005-0000/48 FACT lattice-layer-5-120-cell
+omi-0000-0000-0000-0000-0000-0000-0006-0000/48 FACT lattice-layer-6-720-sweep
+omi-0000-0000-0000-0000-0000-0000-0007-0000/48 FACT lattice-layer-7-replay-ring
+
+# --- Section 4: Prolog WordNet Synset Bindings ---
+# Segment[7] with nil terminator — synset cell centroids.
+omi-0000-0000-0000-0000-0000-0000-0000-0001/48 FACT nil-terminator-fixed-point
+omi-0000-0000-0000-0000-0000-0000-0001-0001/48 FACT synset-five-cell-centroid
+omi-0000-0000-0000-0000-0000-0000-0002-0001/48 FACT synset-twentyfour-cell-centroid

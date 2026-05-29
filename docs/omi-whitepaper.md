@@ -20,10 +20,10 @@ The Omicron Object Model, abbreviated **Omi**, is a first-principles computation
 
 Omi defines a cons-like object calculus using the Unicode Omicron codepoints as its canonical machine operators. The uppercase Greek Omicron `Ο` (`U+039F`) is the **cardinal boundary operator**. The lowercase Greek omicron `ο` (`U+03BF`) is the **chiral execution operator**. Human-readable strings such as `omi-` and `-imo` are not the machine canon; they are programmer-safe aliases for systems that need ASCII-readable notation.
 
-The object model is addressed by **OMI-CIDR**, a 128-bit address grammar inspired by IPv6 prefix notation. OMI-CIDR uses hyphen-separated 16-bit fields, double-hyphen zero compression, and CIDR prefix lengths such as `/48` and `/128`. The canonical local frame is:
+The object model is addressed by **OMI-CIDR**, a 128-bit address grammar inspired by IPv6 prefix notation. The current implementation uses the ASCII-safe `omi-` prefix, eight hyphen-separated 16-bit hex fields, and CIDR prefix lengths such as `/48` and `/128`. A canonical local substrate frame is:
 
 ```text
-Ο-ffff-127--/48
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 This local frame does not exhaust the address space. It scopes the first 48 bits and leaves the remaining 80 bits available for local execution, devices, slots, masks, semantic lanes, and runtime processes.
@@ -145,7 +145,7 @@ Omi objects live in a 128-bit address space modeled after CIDR prefix scoping.
 The canonical local frame is:
 
 ```text
-Ο-ffff-127--/48
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 This means:
@@ -222,27 +222,27 @@ Numeric identity and structural identity are both preserved.
 An OMI-CIDR address is formed from:
 
 ```text
-operator-address/prefix
+omi-<8-hex-segments>/<prefix>
 ```
 
 Where:
 
 ```text
-operator = Ο | ο
-address  = 8 hextets, possibly compressed with --
-prefix   = integer 0..128
+omi      = ASCII-safe OMI marker
+address  = 8 lowercase 4-digit hex segments
+prefix   = integer 0..128, with /48 used by the current substrate
 ```
 
 Example:
 
 ```text
-Ο-ffff-127--/48
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 Example with execution metadata:
 
 ```text
-ο-ffff-127--/48-0x02-mask3-slot720-step15
+omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48
 ```
 
 ### 3.2 Operators
@@ -318,13 +318,13 @@ A valid parser must expand compressed addresses to exactly 8 fields and reject s
 The local canonical frame is:
 
 ```text
-Ο-ffff-127--/48
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 Expanded:
 
 ```text
-Ο-ffff-0127-0000-0000-0000-0000-0000-0000/48
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 This local frame has full 128-bit scoping. The `/48` prefix is not the whole address. It is the address boundary.
@@ -345,12 +345,11 @@ process-local execution
 Example refinements:
 
 ```text
-Ο-ffff-127--/48
-Ο-ffff-127-0-0--/64
-Ο-ffff-127-0-0-1--/80
-Ο-ffff-127-0-0-1-0x02--/96
-Ο-ffff-127-0-0-1-0x02-mask3--/112
-Ο-ffff-127-0-0-1-0x02-mask3-slot720/128
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
+omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48
+omi-ffff-0008-0000-003b-0078-0036-0000-0000/48
+omi-ffff-0001-0000-0000-13b0-0036-0000-0000/48
+omi-ffff-0000-0000-0000-0000-0000-0000-0001/48
 ```
 
 ---
@@ -416,14 +415,14 @@ thread-local computation
 An addressed chiral cons may look like:
 
 ```text
-ο-ffff-127--/48-0x02-mask3-slot720-step15-payload
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48.payload
 ```
 
 Interpretation:
 
 ```text
-operator = ο
-car      = ffff-127--/48-0x02-mask3-slot720-step15
+operator = omi alias for chiral/cardinal segment decoding
+car      = omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 cdr      = payload
 ```
 
@@ -767,18 +766,18 @@ Valid factorial strides:
 Example:
 
 ```text
-ο-ffff-127--/48-0x02-mask3-slot720-step15
+omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
 
 This means:
 
 ```text
-operator = ο
-local frame = ffff-127--/48
-opcode = 0x02
-mask = 3
-slot = 720
-sexagesimal step = 15
+operator alias = omi
+chiral phase = ffff
+service bus = 0002
+step = 000f (15)
+stride = 02d0 (720)
+slot = 0036 (54)
 ```
 
 A fractional ratio may be derived as:
@@ -802,28 +801,24 @@ Omi is designed to project into browser-visible surfaces without heavy syntax fr
 
 The canonical browser projection may use SVG, CSSOM, WebGL, or Canvas.
 
-Recommended DOM attributes:
+The current reference implementation (`public/bidi.html`) uses matching `id` and `data-omi-address` attributes containing the full 8-segment OMI-CIDR address. CSSOM geometry routing is performed with id-prefix and id-substring selectors over pure hexadecimal segments in `public/bidi.css`.
 
-```text
-data-omi-type="cidr-vertex"
-data-omi-astronomy="sexagesimal-digit"
-data-omi-operator="cardinal"
-data-omi-operator="chiral"
+```html
+<circle
+  id="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48"
+  data-omi-address="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48" />
 ```
 
-Recommended selectors:
+Selectors:
 
 ```css
-[id^="Ο-ffff-127-"] { }
-[id^="ο-ffff-127-"] { }
-[id*="--"] { }
-[id*="-slot120"] { }
-[id*="-slot720"] { }
-[id*="-slot5040"] { }
-[id*="-step"] { }
-[data-omi-type="cidr-vertex"] { }
-[data-omi-astronomy="sexagesimal-digit"] { }
-[id$="/128"] { }
+[id^="omi-"] { }
+[id*="-039f-"] { }
+[id*="-5a3c-"] { }
+[id*="-02d0-"] { }
+[id*="-000f-"] { }
+[id*="-0001/"] { }
+[id$="/48"] { }
 ```
 
 The browser projection layer is not the core semantics. It is a view.
@@ -842,6 +837,28 @@ src/omi/sexagesimal-kernel.js
 src/omi/inversion-kernel.js
 src/omi/lisp-kernel.js
 src/omi/lattice-kernel.js
+src/omi/boolean-kernel.js
+src/omi/trigraph-preprocessor.js
+src/omi/place-value-interpreter.js
+src/omi/axiomatic-kernel.js
+src/runtime/chiral-urn.js
+src/runtime/chiral-fifo-engine.js
+src/runtime/polytope-sab.js
+src/web/polytope-webgl.js
+src/web/triplicate-projection.js
+src/bidi/omi-bidi-cm6-bridge.js
+src/distributed/coturn-proxy.js
+src/distributed/webrtc-transport.js
+src/distributed/hnsw-index.js
+src/distributed/erasure.js
+src/distributed/version-vector.js
+src/distributed/gossip.js
+src/distributed/anti-entropy.js
+src/distributed/fragment-store.js
+src/distributed/causal-closure.js
+src/wordnet/prolog-broker.js
+RULES.omi
+FACTS.omi
 test/omicron-cidr.test.js
 test/omicron-cidr-128.test.js
 test/omicron-kernel.test.js
@@ -849,7 +866,30 @@ test/omicron-sexagesimal.test.js
 test/omicron-inversion.test.js
 test/lisp-nil.test.js
 test/factorial-lattice.test.js
+test/boolean-kernel.test.js
+test/trigraph-preprocessor.test.js
+test/place-value-interpreter.test.js
+test/axiomatic.test.js
+test/chiral-fifo.test.js
+test/distributed-erasure.test.js
+test/distributed-version-vector.test.js
+test/distributed-gossip.test.js
+test/distributed-anti-entropy.test.js
+test/distributed-fragment-store.test.js
+test/distributed-coturn.test.js
+test/distributed-webrtc.test.js
+test/distributed-hnsw.test.js
+test/triplicate-projection.test.js
+test/polytope-webgl.test.js
+test/omi-file-compiler.test.js
+test/docs-manifest.test.js
+test/bidi-cm6-bridge.test.js
+test/prolog-wordnet-broker.test.js
 public/bidi.html
+public/bidi.js
+public/bidi.css
+public/aframe.html
+public/document.html
 AGENTS.md
 ```
 
@@ -875,7 +915,7 @@ cons/car/cdr primitives
 Current reported state:
 
 ```text
-324 tests pass
+342 tests pass
 0 tests fail
 production build completes
 ```
@@ -889,9 +929,9 @@ A conforming OMI-CORE-v0 implementation MUST:
 ```text
 recognize Ο and ο operators
 parse OMI-CIDR addresses
-expand -- zero compression to 8 hextets
+parse 8 explicit 16-bit hex segments
 support prefix lengths /0 through /128
-recognize Ο-ffff-127--/48 as the canonical local frame
+recognize omi-<8-hex-segments>/48 substrate addresses
 implement the 16-bit delta evaluator (period-8 verified)
 implement the central inversion mirror Inv(x) = x ⊕ 0x5A3C
 support SharedArrayBuffer(5040 × 8) or equivalent memory abstraction

@@ -1,49 +1,61 @@
 # Canonical OMI Addressing
 
-OMI uses a hyphen-delimited string form so DOM, CSSOM, workers, and binary buffers can share one addressable identity model.
-
-## Canonical Local Root
+OMI uses one browser-safe CIDR token shape for DOM ids, CSSOM selectors, JavaScript demux, and axiom-file rows:
 
 ```text
-IPv6 semantic form: ::ffff:127.0.0.1
-OMI token form:     omi-ffff-127-0-0-1
-
-`omi-ffff-127-0-0-1` is the canonical browser-local boundary. It means:
-
-- `omi`: OMI protocol marker.
-- `8`: local document/process frame, corresponding to the `::8` service/document frame used by the framework.
-- `ffff`: IPv4-mapped IPv6 marker from `::ffff:0:0/96`.
-- `127-0-0-1`: constrained IPv4 loopback host inside the mapped IPv6 frame.
-
-The older shorthand `omi-8-127-0-0-1` is deprecated. Parsers may accept it as legacy input, but generated addresses normalize to `omi-ffff-127-0-0-1`.
-
-omi-ffff-127-0-0-1-0xRS-0xUS-payload
+omi-<seg0>-<seg1>-<seg2>-<seg3>-<seg4>-<seg5>-<seg6>-<seg7>/<prefix>
 ```
 
-- `0xRS`: record/control descriptor, bounded to `0x00..0x3f`.
-- `0xUS`: unit/codepoint descriptor, bounded to `0x00..0x7f`.
-- `payload`: optional URL-safe Base64 payload.
+Each segment is a 4-digit lowercase hexadecimal field. The canonical GUI and axiom files use `/48` for local substrate frames.
+
+## 8-Segment Map
+
+```text
+[chiral] [bus] [inversion] [step/pos] [stride] [slot] [layer] [nil]
+```
+
+| Segment | Meaning | Valid examples |
+|---:|---|---|
+| 0 | Chiral/cardinal phase | `ffff`, `039f` |
+| 1 | Service bus | `0001` through `0008` |
+| 2 | Inversion gate | `0000`, `5a3c` |
+| 3 | Step or UPOS port | `0000` through `003b`, UPOS bindings `0001` through `0017` |
+| 4 | Factorial stride | `0078`, `02d0`, `13b0` |
+| 5 | Sexagesimal slot | `0000` through `0036` |
+| 6 | Factorial layer | `0000` through `0007` |
+| 7 | Nil terminator | `0000`, `0001` |
 
 Example:
 
 ```text
-omi-ffff-127-0-0-1-0x1a-0x41-AAC_QEAAAL_AykAQA
-
-[data-omi^="omi-ffff"] {}
-[data-omi^="omi-ffff-127-0-0-1"] {}
-[data-omi*="-0x1a-"] {}
+omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48
 ```
 
-Each added token narrows the subtree. The hyphen is the structural delimiter for CSSOM prefix matching, worker routing, and buffer indexing.
+This decodes as cardinal phase, service bus `::2`, active inversion gate, step `15`, stride `720`, slot `54`, layer `0`, and active sequence.
 
-## Related IPv6 Spaces
+## DOM And CSSOM Rules
 
-These spaces are not the local root, but can be modeled as future OMI frames:
+Generated substrate elements carry the same value in both `id` and `data-omi-address`:
 
-- `64:ff9b::/96`: NAT64 transcription or translation bridge.
-- `fc00::/7`: private decentralized network identities.
-- `fe80::/10`: link-local scope.
-- `ff00::/8`: multicast scope.
-- `2001:db8::/32` and `3fff::/20`: documentation/examples only.
+```html
+<circle
+  id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+  data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48" />
+```
 
-Unicode BiDi, BOM/CBOS, and DataView endianness do not replace the address root. They are interpretation constraints encoded inside RS descriptors or `data-omi-*` metadata.
+CSSOM geometry selectors use id-prefix and id-substring matching over hex fields:
+
+```css
+[id^="omi-"] {}
+[id*="-02d0-"] {}
+[id*="-5a3c-"] {}
+[id*="-0001/"] {}
+```
+
+JavaScript lookup may use `data-omi-address`, but geometric styling does not rely on `data-*` selectors.
+
+## Local Context Root
+
+The older localhost bridge spelling `omi-ffff-127-0-0-1` belongs to the earlier FS/GS/RS/US address layer. The current pure substrate uses the 8-segment form above. Legacy parsers may still accept older examples, but new DOM ids, CSS selectors, axiom rows, and stress packets should use the 8-segment `/48` form.
+
+Unicode BiDi, BOM/CBOS, and DataView endianness are interpretation constraints. They do not replace the 8-segment address grammar.

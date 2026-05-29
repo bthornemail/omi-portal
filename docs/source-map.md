@@ -1,26 +1,16 @@
 # OMI Documentation Source Map
 
-This source map explains how the exploratory `dev-docs/` files feed the canonical OMI Object Model documentation. It is a curated index, not a generated transcript.
+This file is now a historical source index. The original exploratory `dev-docs/` folder has been removed from the active workspace, so canonical documentation is maintained directly in `docs/` and the structured manifest.
 
-## Canonical Sources
+## Current Canonical Sources
 
-### `dev-docs/OMI( omi- ) Object Model.md`
+- [OMI Object Model](./omi-object-model.md): top-level declaration of addressing, DOM/CSSOM/JSDOM surfaces, Lisp transformers, routing semantics, and memory layout.
+- [OMI Core Spec](./omi-core-spec.md): implementation-facing substrate rules for pure OMI-CIDR ids, `data-omi-address`, and CSSOM selectors.
+- [Canonical Addressing](./canonical-addressing.md): current 8-segment `/48` address grammar.
+- [OMI File Format](./omi-file-format.md): binary `car` pre-header and printable dot-delimited `cdr` payload.
+- [OMI Protocol Sequencing](./omi-protocol-sequencing.md): phase ordering across editor, memory, transport, GPU, and lifecycle surfaces.
+- [OMI Object Model Manifest](./omi-object-model.manifest.json): machine-readable declaration used by documentation integrity tests.
 
-Role: topological object-model exploration.
+## Historical Note
 
-Extracted declarations:
-
-- CIDR-style containment maps to hyphen-delimited OMI token prefixes.
-- DOM hierarchy and CSSOM prefix selectors are the native browser routing surface.
-- `cons`, `car`, and `cdr` model route/payload transfer cells.
-- 720/5040 timeline cycles frame memory lifecycle.
-- A-Frame, SVG, and CodeMirror are multi-modal surfaces for the same address space.
-
-Canonicalization:
-
-- Any `omi-8-127-0-0-1` example normalizes to `omi-ffff-127-0-0-1`.
-
-  omi-ffff-127-0-0-1
-```
-
-The deprecated shorthand may remain accepted as input for compatibility. New docs, ids, and `data-omi` attributes should use the canonical IPv4-mapped IPv6 form.
+Some manifest `sources` entries still name their original `dev-docs/*.md` paths to preserve provenance. Those paths are not required to exist in the active package. New implementation and documentation work should cite the canonical files above.

@@ -7,6 +7,7 @@ ARG NGINX_VERSION=1.27-alpine
 # ============================================================
 FROM node:${NODE_VERSION} AS base
 WORKDIR /build
+RUN apk add --no-cache build-base
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
@@ -15,7 +16,19 @@ RUN npm ci --ignore-scripts
 # ============================================================
 FROM base AS test
 COPY . .
-RUN npm test
+RUN make test-c99-core && \
+    find test -maxdepth 1 -name "*.test.js" ! -name "softmmu-system.test.js" -print | sort | xargs node --test
+
+# ============================================================
+# STAGE 2B: stress — run unit and benchmark gates
+# ============================================================
+FROM test AS stress
+ARG TARGETARCH
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      node scripts/stress-suite.js && node scripts/stress-parallel.js; \
+    else \
+      echo "Skipping native nanosecond SLA stress under emulated ${TARGETARCH}; C99 and filtered JS conformance already passed."; \
+    fi
 
 # ============================================================
 # STAGE 3: builder — production build

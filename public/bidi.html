@@ -1,468 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omi Protocol: OMI-CIDR-v0 128-Bit Projection Surface</title>
-    <style>
-        :root {
-            --neon-cyan: #00ffcc;
-            --neon-magenta: #ff0055;
-            --neon-amber: #ffff00;
-            --bg-dark: #07080b;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--neon-cyan);
-            font-family: 'Courier New', monospace;
-            padding: 30px;
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            border-bottom: 1px solid rgba(0, 255, 204, 0.2);
-            padding-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        [data-omi-type="cidr-vertex"] {
-            fill: rgba(0, 255, 204, 0.05);
-            stroke: var(--neon-cyan);
-            stroke-width: 1px;
-            transform-box: fill-box;
-            transform-origin: center;
-            transform-style: preserve-3d;
-            transition: transform 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), fill 0.1s linear;
-        }
-
-        [data-omi-astronomy="sexagesimal-digit"] {
-            stroke: var(--neon-cyan);
-            stroke-dasharray: 2;
-        }
-
-        [data-omi-phase="chiral-origin"] [data-omi-type="inversion-vertex"] {
-            stroke: var(--neon-cyan);
-        }
-
-        [id*="-slot720-"] {
-            stroke: var(--neon-amber);
-            stroke-width: 1.5px;
-        }
-
-        [id*="-slot120-"] {
-            stroke: #ff8800;
-            stroke-width: 1.5px;
-        }
-
-        [id$="/128"], [id*="/128-"] {
-            stroke-width: 2px;
-        }
-
-        [id*="-step15"] {
-            transform: translateZ(40px) rotateX(15deg) rotateY(-15deg);
-            fill: rgba(0, 255, 204, 0.2);
-        }
-
-        [id*="-step59"] {
-            stroke: var(--neon-magenta);
-            filter: drop-shadow(0 0 10px #ff0055);
-        }
-
-        [id*="-0x5a3c-"] {
-            stroke: var(--neon-magenta);
-            filter: drop-shadow(0 0 10px #ff0055);
-        }
-
-        [id*="-0x5a3c-"] [data-omi-type="inversion-vertex"]:hover {
-            transform: translateZ(50px) rotateY(180deg) rotateX(15deg);
-            fill: rgba(255, 0, 85, 0.25);
-        }
-
-        [id$="-0!"] {
-            stroke: #ffaa00;
-            stroke-dasharray: 4;
-        }
-
-        [id$="-0!"] circle {
-            fill: rgba(255, 170, 0, 0.1);
-            filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4));
-        }
-
-        [data-omi-lattice] {
-            transform-style: preserve-3d;
-            transition: transform 0.15s cubic-bezier(0.1, 0.8, 0.2, 1);
-        }
-
-        [data-fixed-point="true"] {
-            display: none !important;
-            visibility: hidden;
-        }
-
-        [data-omi-lattice="3-octahedral"] path {
-            stroke-width: 1.5px;
-            animation: localSpacePulse 2s ease-in-out infinite;
-        }
-
-        [data-omi-lattice="7-replay-ring"] circle {
-            stroke-width: 2px;
-            filter: drop-shadow(0 0 12px #ff0055);
-        }
-
-        .chiral-inverted {
-            stroke-dasharray: 4;
-            animation: pulseInversion 0.2s infinite linear;
-        }
-
-        @keyframes pulseInversion {
-            0% { stroke-dashoffset: 0; }
-            100% { stroke-dashoffset: 8; }
-        }
-
-        @keyframes localSpacePulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        #omi-telemetry-panel {
-            margin-top: 20px;
-            background: rgba(0, 255, 204, 0.02);
-            border: 1px solid rgba(0, 255, 204, 0.1);
-            padding: 15px;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-
-        .metric-highlight { color: #fff; font-weight: bold; }
-
-        #stream-log {
-            margin-top: 16px;
-            background: rgba(0, 255, 204, 0.02);
-            border: 1px solid rgba(0, 255, 204, 0.1);
-            border-radius: 6px;
-            padding: 10px;
-            font: 11px/1.4 'Courier New', monospace;
-            max-height: 180px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-            color: var(--neon-cyan);
-        }
-        #stream-log .reset { color: var(--neon-magenta); }
-        #stream-log .vector { color: #60a5fa; }
-        #stream-log .sexagesimal { color: #ff8800; }
-        #stream-log .inversion { color: #ff0055; }
-        #stream-log .lisp-nil { color: #ffaa00; }
-        #stream-log .lattice { color: #a855f7; }
-        .dot {
-            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
-        }
-        .dot.connected { background: #22c55e; }
-        .dot.disconnected { background: #ef4444; }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+  <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMI Protocol — IPv6-CIDR Single Notation Substrate</title>
+  <link rel="stylesheet" href="bidi.css">
 </head>
 <body>
 
-    <h1>OMI-CIDR-v0 128-BIT PROJECTION SURFACE</h1>
+  <div id="omi-telemetry-panel">
+    <div>Bus Connection: <span id="t-bus-conn" class="metric-val">--</span></div>
+    <div>Operator: <span id="t-operator" class="metric-val">--</span></div>
+    <div>Codepoint: <span id="t-codepoint" class="metric-val">--</span></div>
+    <div>Token: <span id="t-token" class="metric-val">--</span></div>
+    <div>Polynomial Order: <span id="t-poly" class="metric-val">--</span></div>
+    <div>Stride: <span id="t-stride" class="metric-val">--</span></div>
+    <div>Step: <span id="t-step" class="metric-val">--</span></div>
+    <div>Ratio: <span id="t-ratio" class="metric-val">--</span></div>
+    <div>Inversion Gate: <span id="t-inversion" class="metric-val">--</span></div>
+    <div>List Terminator: <span id="t-lisp-nil" class="metric-val">--</span></div>
+    <div>Factorial Layer: <span id="t-lattice" class="metric-val">--</span></div>
+    <div>Stream Status: <span id="t-stream-dot" class="omi-inactive"></span></div>
+  </div>
 
-    <svg id="\u039f-ffff-127--/48" data-omi-subnet="::/48" width="100%" height="420" style="border:1px solid rgba(0,255,204,0.05);">
-        <g data-omi-space="hellenistic-sexagesimal-matrix">
+  <svg id="OMI-UNIVERSAL-GUI-ROOT" width="100%" height="480"
+       viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <g>
 
-            <g data-omi-scope="global-root">
-                <circle id="\u039f--/0"
-                        data-omi-type="cidr-vertex"
-                        cx="60" cy="210" r="16" />
-            </g>
+      <!-- Bit map: [chiral] [bus] [inversion] [step] [stride] [slot] [layer] [nil] /prefix -->
+      <!--            ffff     0002   0000        000f   02d0    0036   0000    0000  /48   -->
 
-            <g data-omi-scope="central-inversion-mirror">
-                <g data-omi-phase="chiral-origin">
-                    <circle id="\u03bf-ffff-127-0-0-1-0x02-slot720/128-vertex"
-                            data-omi-type="inversion-vertex"
-                            cx="200" cy="210" r="14" />
-                </g>
-                <g data-omi-phase="central-mirror">
-                    <circle id="\u03bf-ffff-127-0-0-1-0x02-0x5a3c-slot720-\u039f-vertex"
-                            data-omi-type="inversion-vertex"
-                            cx="400" cy="210" r="14" />
-                </g>
-            </g>
+      <!-- Chiral origin vertex — step 15, stride 720, slot 54 -->
+      <circle id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+              data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+              cx="150" cy="200" r="14" />
 
-            <g data-omi-scope="sexagesimal-stride720">
-                <g id="\u039f-ffff-127-0-0-1-0x02-slot720-step15/128"
-                   data-omi-astronomy="sexagesimal-digit"
-                   data-omi-stride="720" data-omi-step="15">
-                    <circle id="\u039f-ffff-127-0-0-1-0x02-slot720-step15/128-YmFzZTY0"
-                            data-omi-type="cidr-vertex"
-                            cx="560" cy="210" r="22" />
-                </g>
-            </g>
+      <!-- Inversion gate mirror — cardinal phase, 0x5A3C triggered -->
+      <circle id="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48"
+              data-omi-address="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48"
+              cx="450" cy="200" r="14" />
 
-            <g data-omi-scope="sexagesimal-stride120">
-                <g id="\u039f-ffff-127-0-0-1-0x04-slot120-step59/128"
-                   data-omi-astronomy="sexagesimal-digit"
-                   data-omi-stride="120" data-omi-step="59">
-                    <rect id="\u039f-ffff-127-0-0-1-0x04-slot120-step59/128-MzkAQA"
-                          data-omi-type="cidr-vertex"
-                          x="660" y="160" width="60" height="60" />
-                </g>
-            </g>
+      <!-- High-density stride 120 — step 59, bus ::8 -->
+      <rect id="omi-ffff-0008-0000-003b-0078-0036-0000-0000/48"
+            data-omi-address="omi-ffff-0008-0000-003b-0078-0036-0000-0000/48"
+            x="640" y="80" width="60" height="60" />
 
-            <g data-omi-scope="sexagesimal-stride5040">
-                <g id="\u039f-ffff-127-0-0-1-0x01-slot5040-step0/128"
-                   data-omi-astronomy="sexagesimal-digit"
-                   data-omi-stride="5040" data-omi-step="0">
-                    <circle id="\u039f-ffff-127-0-0-1-0x01-slot5040-step0/128"
-                            data-omi-type="cidr-vertex"
-                            cx="780" cy="210" r="16" />
-                </g>
-            </g>
+      <!-- Stride 5040 liveness ring -->
+      <circle id="omi-ffff-0001-0000-0000-13b0-0036-0000-0000/48"
+              data-omi-address="omi-ffff-0001-0000-0000-13b0-0036-0000-0000/48"
+              cx="400" cy="500" r="30" />
 
-            <g data-omi-scope="s-expression-nil-terminator">
-                <circle id="omi-fano-p2-ffff-127-0-0-1-vau-nil-env-0!"
-                        data-omi-cell="null-terminator"
-                        cx="920" cy="210" r="12" />
-            </g>
+      <!-- Lisp nil-terminator fixed point — segment[7] = 0001 -->
+      <circle id="omi-ffff-0000-0000-0000-0000-0000-0000-0001/48"
+              data-omi-address="omi-ffff-0000-0000-0000-0000-0000-0000-0001/48"
+              cx="400" cy="360" r="12" />
 
-            <g data-omi-scope="factorial-lattice-layer3">
-                <path id="omi-3!-0x1a-0x41-vau-x-env-hyp-slot6"
-                      data-omi-lattice="3-octahedral"
-                      d="M 100 120 L 120 150 L 80 150 Z"
-                      fill="rgba(0,255,204,0.1)" stroke="#00ffcc" />
-            </g>
+      <!-- Factorial lattice layer 3! — segment[6] = 0003 -->
+      <polygon id="omi-ffff-0008-0000-0000-0000-0000-0003-0000/48"
+               data-omi-address="omi-ffff-0008-0000-0000-0000-0000-0003-0000/48"
+               points="350,400 450,400 400,480" />
 
-            <g data-omi-scope="factorial-lattice-layer7">
-                <circle id="omi-7!-ffff-127-0-0-1-0x5a3c-slot5040-\u039f"
-                        data-omi-lattice="7-replay-ring"
-                        cx="920" cy="320" r="18"
-                        fill="none" stroke="#ff0055" />
-            </g>
+      <!-- Factorial lattice layer 7! — segment[6] = 0007 -->
+      <circle id="omi-ffff-0000-0000-0000-0000-0000-0007-0000/48"
+              data-omi-address="omi-ffff-0000-0000-0000-0000-0000-0007-0000/48"
+              cx="400" cy="200" r="180" fill="none" />
 
-        </g>
-    </svg>
+      <!-- Reciprocal suffix pair — 1-2 and 2-1 resolve to the same projective slot -->
+      <circle id="omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96/1-2"
+              data-omi-address="omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96/1-2"
+              cx="250" cy="130" r="9" />
 
-    <div id="omi-telemetry-panel">
-        <div>[Bus Connection]: <span id="telemetry-connection" class="metric-highlight">Initializing Stream...</span></div>
-        <div>[Operator]: <span id="telemetry-operator" class="metric-highlight">—</span></div>
-        <div>[Codepoint]: <span id="telemetry-codepoint" class="metric-highlight">—</span></div>
-        <div>[Last Ingested Token]: <span id="telemetry-token" class="metric-highlight">None</span></div>
-        <div>[Polynomial Order]: <span id="telemetry-degree" class="metric-highlight">Degree 0 (Constant)</span></div>
-        <div>[Sexagesimal Stride]: <span id="telemetry-stride" class="metric-highlight">—</span></div>
-        <div>[Sexagesimal Step]: <span id="telemetry-step" class="metric-highlight">—</span></div>
-        <div>[Fractional Ratio]: <span id="telemetry-ratio" class="metric-highlight">—</span></div>
-        <div>[Central Inversion Gate]: <span id="telemetry-gate" class="metric-highlight">—</span></div>
-        <div>[List Terminator]: <span id="telemetry-nil" class="metric-highlight">—</span></div>
-        <div>[Factorial Layer]: <span id="telemetry-layer" class="metric-highlight">—</span></div>
-        <div style="margin-top:8px">
-            <span class="dot disconnected" id="stream-dot"></span>
-            <span id="stream-label" style="color:var(--neon-cyan)">disconnected</span>
-        </div>
-    </div>
+      <circle id="omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96/2-1"
+              data-omi-address="omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96/2-1"
+              cx="550" cy="130" r="9" />
 
-    <pre id="stream-log"></pre>
+      <!-- Omicron radix delimiter examples — payload remains base64url after delimiter removal -->
+      <circle id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/96/οAAC_QEAAAL_AykAQA"
+              data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/96/οAAC_QEAAAL_AykAQA"
+              cx="250" cy="270" r="9" />
 
-    <script type="module">
-        import { OmiOmicronKernel } from "../src/omi/omicron-kernel.js";
-        import { OmiSexagesimalKernel } from "../src/omi/sexagesimal-kernel.js";
-        import { OmiCentralInversionKernel } from "../src/omi/inversion-kernel.js";
-        import { OmiLispKernel } from "../src/omi/lisp-kernel.js";
-        import { OmiFactorialLatticeKernel } from "../src/omi/lattice-kernel.js";
+      <circle id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/96/ΟMzkAQA"
+              data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/96/ΟMzkAQA"
+              cx="550" cy="270" r="9" />
 
-        const connectionIndicator = document.getElementById('telemetry-connection');
-        const operatorDisplay = document.getElementById('telemetry-operator');
-        const codepointDisplay = document.getElementById('telemetry-codepoint');
-        const tokenDisplay = document.getElementById('telemetry-token');
-        const degreeDisplay = document.getElementById('telemetry-degree');
-        const strideDisplay = document.getElementById('telemetry-stride');
-        const stepDisplay = document.getElementById('telemetry-step');
-        const ratioDisplay = document.getElementById('telemetry-ratio');
-        const gateDisplay = document.getElementById('telemetry-gate');
-        const nilDisplay = document.getElementById('telemetry-nil');
-        const layerDisplay = document.getElementById('telemetry-layer');
-        const streamDot = document.getElementById('stream-dot');
-        const streamLabel = document.getElementById('stream-label');
-        const streamLog = document.getElementById('stream-log');
+    </g>
+  </svg>
 
-        function logStream(origin, event, data, cssClass) {
-            const cls = cssClass || (event === "hard-reset" ? "reset" : "vector");
-            const time = new Date().toLocaleTimeString();
-            streamLog.innerHTML += `<span class="${cls}">[${time}] <strong>${origin}</strong> <em>${event}</em> ${JSON.stringify(data)}</span>\n`;
-            streamLog.scrollTop = streamLog.scrollHeight;
-        }
+  <pre id="stream-log"></pre>
 
-        const virtualSab = new SharedArrayBuffer(5040 * 8);
-        const kernel = new OmiOmicronKernel(virtualSab);
-        const sexaKernel = new OmiSexagesimalKernel(virtualSab);
-        const invKernel = new OmiCentralInversionKernel(virtualSab);
-        const lispKernel = new OmiLispKernel(virtualSab);
-        const latticeKernel = new OmiFactorialLatticeKernel(virtualSab);
-
-        const STREAM_URLS = [
-            "http://69.48.202.32:8080/omi-stream",
-            "http://74.208.190.29:8080/omi-stream"
-        ];
-
-        function processSexagesimalToken(tokenStr) {
-            const sexaCell = sexaKernel.parseSexagesimalAddress(tokenStr);
-            const sexaHeader = sexaKernel.car(sexaCell);
-            if (sexaHeader.valid) {
-                strideDisplay.textContent = sexaHeader.astronomy.currentStrideValue;
-                stepDisplay.textContent = sexaHeader.astronomy.sexagesimalStepDigit;
-                ratioDisplay.textContent = sexaHeader.astronomy.fractionalRatio.toFixed(4);
-                logStream("sexagesimal", "stride", {
-                    stride: sexaHeader.astronomy.currentStrideValue,
-                    step: sexaHeader.astronomy.sexagesimalStepDigit,
-                    ratio: sexaHeader.astronomy.fractionalRatio
-                }, "sexagesimal");
-            } else {
-                strideDisplay.textContent = "\u2014";
-                stepDisplay.textContent = "\u2014";
-                ratioDisplay.textContent = "\u2014";
-            }
-        }
-
-        function processInversionToken(tokenStr) {
-            const invCell = invKernel.parseInversionAddress(tokenStr);
-            const invHeader = invKernel.car(invCell);
-            if (invHeader.valid && invHeader.hasCentralInversionGate) {
-                gateDisplay.textContent = "DETECTED (0x5A3C)";
-                gateDisplay.style.color = "var(--neon-magenta)";
-                logStream("inversion", "gate", { slot: invHeader.targetTimelineSlot }, "inversion");
-            } else {
-                gateDisplay.textContent = invHeader.valid ? "absent" : "\u2014";
-                gateDisplay.style.color = "#fff";
-            }
-            const gateNode = document.getElementById("\u03bf-ffff-127-0-0-1-0x02-0x5a3c-slot720-\u039f-vertex");
-            if (gateNode && invHeader.valid && invHeader.hasCentralInversionGate) {
-                gateNode.classList.add("chiral-inverted");
-            } else if (gateNode) {
-                gateNode.classList.remove("chiral-inverted");
-            }
-        }
-
-        function processLispToken(tokenStr) {
-            if (!tokenStr.startsWith("omi-")) {
-                nilDisplay.textContent = "\u2014";
-                return;
-            }
-            const lispCell = lispKernel.evaluateLispToken(tokenStr);
-            const lispHeader = lispKernel.car(lispCell);
-            if (lispHeader.isListTerminatorActive) {
-                nilDisplay.textContent = "ACTIVE (0! = 1)";
-                nilDisplay.style.color = "#ffaa00";
-                logStream("lisp-nil", "terminator", {
-                    weight: lispHeader.structuralMemoryWeight
-                }, "lisp-nil");
-            } else {
-                nilDisplay.textContent = "inactive";
-                nilDisplay.style.color = "#fff";
-            }
-        }
-
-        function processLatticeToken(tokenStr) {
-            if (!tokenStr.startsWith("omi-")) {
-                layerDisplay.textContent = "\u2014";
-                return;
-            }
-            const latCell = latticeKernel.resolveLatticeToken(tokenStr);
-            const latHeader = latticeKernel.car(latCell);
-            if (latHeader.valid !== false) {
-                layerDisplay.textContent = `${latHeader.factorialLayer} (weight ${latHeader.allocatedWeight})`;
-                logStream("lattice", "layer", {
-                    layer: latHeader.factorialLayer,
-                    weight: latHeader.allocatedWeight,
-                    fixedPoint: latHeader.isFixedPointZeroFrame
-                }, "lattice");
-            } else {
-                layerDisplay.textContent = "\u2014";
-            }
-        }
-
-        function connectSSE(url) {
-            const source = new EventSource(url);
-            const origin = new URL(url).hostname;
-
-            source.onopen = () => {
-                connectionIndicator.textContent = `ONLINE (Bound to ${origin}:8080/omi-stream)`;
-                connectionIndicator.style.color = "var(--neon-cyan)";
-                streamDot.className = "dot connected";
-                streamLabel.textContent = `connected to ${origin}`;
-                logStream(origin, "open", {});
-            };
-
-            source.onerror = () => {
-                connectionIndicator.textContent = "OFFLINE (Re-route loop active)";
-                connectionIndicator.style.color = "var(--neon-magenta)";
-                streamDot.className = "dot disconnected";
-                streamLabel.textContent = `disconnected from ${origin}`;
-                logStream(origin, "error", {});
-            };
-
-            source.addEventListener('vector-update', (event) => {
-                try {
-                    const packetData = JSON.parse(event.data);
-                    if (!packetData || !packetData.token) return;
-
-                    const targetTokenStr = packetData.token;
-                    tokenDisplay.textContent = targetTokenStr;
-
-                    const cell = kernel.evaluateOmicronTape(targetTokenStr);
-                    const header = kernel.car(cell);
-
-                    if (header.valid) {
-                        operatorDisplay.textContent = header.operator;
-                        codepointDisplay.textContent = header.codepoint;
-                        degreeDisplay.textContent = `Degree ${header.algebraic.polynomialOrderDegree} (${header.algebraic.isPhaseInverted ? "inverted" : "direct"})`;
-                    }
-
-                    processSexagesimalToken(targetTokenStr);
-                    processInversionToken(targetTokenStr);
-                    processLispToken(targetTokenStr);
-                    processLatticeToken(targetTokenStr);
-
-                    logStream(origin, "vector-update", {
-                        token: targetTokenStr.substring(0, 48) + "...",
-                        operator: header.operator,
-                        codepoint: header.codepoint,
-                        degree: header.algebraic.polynomialOrderDegree,
-                        valid: header.valid
-                    });
-
-                    const targetNode = document.getElementById(targetTokenStr);
-                    if (targetNode) {
-                        if (header.algebraic.isPhaseInverted) {
-                            targetNode.classList.add('chiral-inverted');
-                        } else {
-                            targetNode.classList.remove('chiral-inverted');
-                        }
-                        const zDepth = header.algebraic.polynomialOrderDegree * 25;
-                        targetNode.style.transform = `translate3d(0, 0, ${zDepth}px) rotateX(15deg)`;
-                    }
-                } catch (err) {
-                    // transient frame parsing anomalies
-                }
-            });
-
-            source.addEventListener('hard-reset', () => {
-                console.log("[Omi Kernel] Global 5040 clock ring loop reset detected.");
-                logStream(origin, "hard-reset", {});
-                const nodes = document.querySelectorAll('[data-omi-type="cidr-vertex"], [data-omi-type="inversion-vertex"]');
-                nodes.forEach(node => {
-                    node.classList.remove('chiral-inverted');
-                    node.style.transform = "translate3d(0px, 0px, 0px)";
-                });
-                degreeDisplay.textContent = "Degree 0 (Constant) \u2014 System Reset Completed";
-                strideDisplay.textContent = "\u2014";
-                stepDisplay.textContent = "\u2014";
-                ratioDisplay.textContent = "\u2014";
-                gateDisplay.textContent = "\u2014";
-                nilDisplay.textContent = "\u2014";
-                layerDisplay.textContent = "\u2014";
-            });
-        }
-
-        for (const url of STREAM_URLS) connectSSE(url);
-    </script>
+  <script type="module" src="bidi.js"></script>
 </body>
 </html>

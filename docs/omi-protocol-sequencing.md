@@ -1,5 +1,7 @@
 # OMI Protocol Sequencing
 
+> **Aspirational notice:** This document describes a target pipeline architecture. The integrated sequencer engine, rotator combinators (rot7/15/60/120/240/360/720), WebGL Horner shader, and orchestrated phase pipeline are not yet fully implemented as a single composable module. Individual components (CoTURN proxy, WebRTC transport, HNSW index, erasure coding, causal version vectors, gossip protocol) exist in `src/distributed/`. The CodeMirror BiDi bridge exists in `src/bidi/`. A unified sequencer (`omi-core-sequencer.js`) does not yet exist. This document defines the aspirational choreography for when those components are wired together.
+
 This document defines the chronological orchestration, data marshal cycles, and execution invariants of the OMI protocol across all computing surfaces. The system enforces strict step-by-step determinism to ensure zero-copy transmission between CodeMirror 6 text edits, shared memory rings, and hardware GPU draw calls.
 
 ## Unified Global Lifecycle & Execution Sequence Matrix

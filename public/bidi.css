@@ -1,0 +1,204 @@
+/**
+ * OMI PROTOCOL: PURE IPV6-CIDR SUBSTRING TRANSFORM ENGINE
+ * File Target: public/bidi.css
+ * Invariant Configuration: omi- Prefixed Hex Segment Wildcards [Zero-Mixed-Notation]
+ */
+
+body {
+  background-color: #06070a;
+  color: #f0f4f8;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+svg {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* 1. Base neon cyan — all omi-prefixed CIDR nodes */
+[id^="omi-"] {
+  fill: rgba(0, 255, 204, 0.08);
+  stroke: #00ffcc;
+  stroke-width: 1px;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+/* 2. Cardinal phase (039f segment) — thicker stroke */
+[id*="-039f-"] {
+  stroke-width: 2px;
+}
+
+/* 3. Stride 720 (02d0 segment) — amber */
+[id*="-02d0-"] {
+  stroke: #ffaa00;
+  stroke-width: 1.5px;
+}
+
+/* 4. Stride 120 (0078 segment) — orange */
+[id*="-0078-"] {
+  stroke: #ff6600;
+}
+
+/* 5. Stride 5040 (13b0 segment) — cyan emphasis */
+[id*="-13b0-"] {
+  stroke: #00ffcc;
+  stroke-width: 2px;
+  fill: rgba(0, 255, 204, 0.15);
+}
+
+/* 6. Step 15 depth shift (000f segment) */
+[id*="-000f-"] {
+  transform: translate3d(0, 0, 40px);
+  fill: rgba(0, 255, 204, 0.2);
+}
+
+/* 7. Step 59 flare (003b segment) — magenta glow */
+[id*="-003b-"] {
+  stroke: #ff0055;
+  filter: drop-shadow(0 0 8px #ff0055);
+}
+
+/* 8. Inversion gate (5a3c segment) — magenta glow + hover flip */
+[id*="-5a3c-"] {
+  stroke: #ff0055;
+  filter: drop-shadow(0 0 12px #ff0055);
+}
+
+[id*="-5a3c-"]:hover {
+  transform: rotateY(180deg) translateZ(20px);
+  fill: rgba(255, 0, 85, 0.15);
+}
+
+/* 9. Nil terminator (segment[7] = 0001) — amber dash */
+[id*="-0001/"] {
+  stroke: #ffaa00;
+  stroke-dasharray: 2, 2;
+  filter: drop-shadow(0 0 6px rgba(255, 170, 0, 0.6));
+}
+
+/* 10. Lattice layer 3! (segment[6] = 0003) — octahedral pulse */
+[id*="-0003-0000/"] {
+  fill: rgba(0, 255, 204, 0.1);
+  stroke: #00ffcc;
+  animation: octahedralPulse 1.6s ease-in-out infinite alternate;
+}
+
+/* 11. Lattice layer 7! (segment[6] = 0007) — magenta replay ring */
+[id*="-0007-0000/"] {
+  stroke: #ff0055;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 15px #ff0055);
+}
+
+/* 12. Bus ::8 segment — higher opacity fill */
+[id*="-0008-"] {
+  fill: rgba(0, 255, 204, 0.15);
+}
+
+/* 13. Endpoint /48 canonical — default stroke weight */
+[id$="/48"] {
+  stroke-width: 1.5px;
+}
+
+/* 14. Chiral inverted animation dash */
+.chiral-inverted {
+  stroke-dasharray: 4;
+  animation: pulseInversion 0.2s infinite linear;
+}
+
+/* 15. Projective suffixes and omicron radix delimiters */
+[id$="/96/5040"] {
+  stroke: #ff0055;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 10px #ff0055);
+}
+
+[id*="/96/1-2"],
+[id*="/96/2-1"] {
+  stroke: #00ffcc;
+  stroke-dasharray: 4, 4;
+}
+
+[id*="/96/ο"] {
+  stroke: #ffaa00;
+  stroke-width: 1.5px;
+}
+
+[id*="/96/Ο"] {
+  stroke: #ff0055;
+  filter: drop-shadow(0 0 8px #ff0055);
+}
+
+@keyframes octahedralPulse {
+  0% { transform: scale(1) translateZ(10px); opacity: 0.6; }
+  100% { transform: scale(1.05) translateZ(25px); opacity: 0.95; }
+}
+
+@keyframes pulseInversion {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 8; }
+}
+
+/* 16, 17. Telemetry panel */
+#omi-telemetry-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 180px);
+  gap: 6px;
+  background: rgba(6, 7, 10, 0.85);
+  border: 1px solid #141923;
+  padding: 10px;
+  z-index: 100;
+  font-size: 11px;
+  color: #8a99ad;
+  line-height: 1.6;
+}
+
+.metric-val {
+  color: #00ffcc;
+  font-weight: bold;
+}
+
+.omi-active {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ffcc;
+}
+
+.omi-inactive {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #ff0055;
+  border-radius: 50%;
+}
+
+#stream-log {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: rgba(6, 7, 10, 0.85);
+  border: 1px solid #141923;
+  border-radius: 6px;
+  padding: 10px;
+  font: 11px/1.4 'Courier New', monospace;
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #00ffcc;
+  z-index: 100;
+}
+
+#stream-log .reset { color: #ff0055; }
+#stream-log .vector { color: #60a5fa; }

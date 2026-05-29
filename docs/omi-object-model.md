@@ -163,7 +163,7 @@ Universal POS and Universal Features form a semantic routing table over content 
 | WordNet operators | synset relation routing, such as `hyp`, `sim`, `ent`, `ant`, and `der` |
 | Synset ids | 9-byte WordNet database identities |
 
-The current package implements canonical OMI addressing, DOM/CSSOM registry helpers, CodeMirror BiDi bridge, Prolog WordNet fact broker, A-Frame synset rendering, JSON Canvas exports, and 5040-cycle Smith matrix support. CoTURN, WebRTC, HNSW, and full Prolog execution remain documented future surfaces unless represented by local deterministic metadata.
+The current package implements canonical OMI addressing, DOM/CSSOM registry helpers, CodeMirror BiDi bridge, Prolog WordNet fact broker, A-Frame synset rendering, JSON Canvas exports, 5040-cycle Smith matrix support, and a full distributed networking stack. CoTURN TURN proxy, WebRTC transport, HNSW vector index, Reed-Solomon erasure coding, causal version vectors, gossip protocol, and anti-entropy repair are all implemented in `src/distributed/`. Full Prolog runtime execution remains a documented future surface.
 
 ## Linguistic Port Portability And Lambda Cube Mapping
 

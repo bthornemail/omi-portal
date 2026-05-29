@@ -54,39 +54,109 @@ The repository demo page is available at:
 
 ## DOM/CSSOM Target
 
+The demo surface at `/bidi.html` uses CIDR-hyphenated element IDs and `data-omi-address` attributes.
+
 ```html
-<div id="omi-framework-root" class="omi-viewport-container">
-  <div id="omi-cm6-editor-surface" class="omi-editor-viewport"></div>
-  <svg id="omi-webgl-canvas-surface" width="800" height="400" data-service-bus="8">
-    <g id="omi-bidi-tiling-grid">
-      <path id="omi-node-active-bidi-mesh" data-omi-type="bidi-canvas-tile" d="M 0 0 H 30 V 30 H 0 Z"></path>
-    </g>
-  </svg>
+<div id="omi-telemetry-panel">
+  <div>Bus Connection: <span id="t-bus-conn" class="metric-val">--</span></div>
+  <div>Operator: <span id="t-operator" class="metric-val">--</span></div>
+  <div>Codepoint: <span id="t-codepoint" class="metric-val">--</span></div>
+  <div>Token: <span id="t-token" class="metric-val">--</span></div>
+  <div>Polynomial Order: <span id="t-poly" class="metric-val">--</span></div>
+  <div>Stride: <span id="t-stride" class="metric-val">--</span></div>
+  <div>Step: <span id="t-step" class="metric-val">--</span></div>
+  <div>Ratio: <span id="t-ratio" class="metric-val">--</span></div>
+  <div>Inversion Gate: <span id="t-inversion" class="metric-val">--</span></div>
+  <div>List Terminator: <span id="t-lisp-nil" class="metric-val">--</span></div>
+  <div>Factorial Layer: <span id="t-lattice" class="metric-val">--</span></div>
+  <div>Stream Status: <span id="t-stream-dot" class="omi-inactive"></span></div>
 </div>
+
+<svg id="OMI-UNIVERSAL-GUI-ROOT" width="100%" height="480"
+     viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <!-- Chiral origin vertex -- step 15, stride 720, slot 54 -->
+    <circle id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+            data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+            cx="150" cy="200" r="14" />
+    <!-- Inversion gate mirror -->
+    <circle id="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48"
+            data-omi-address="omi-039f-0002-5a3c-000f-02d0-0036-0000-0000/48"
+            cx="450" cy="200" r="14" />
+    <!-- High-density stride 120 -->
+    <rect id="omi-ffff-0008-0000-003b-0078-0036-0000-0000/48"
+          data-omi-address="omi-ffff-0008-0000-003b-0078-0036-0000-0000/48"
+          x="640" y="80" width="60" height="60" />
+    <!-- Stride 5040 liveness ring -->
+    <circle id="omi-ffff-0001-0000-0000-13b0-0036-0000-0000/48"
+            data-omi-address="omi-ffff-0001-0000-0000-13b0-0036-0000-0000/48"
+            cx="400" cy="500" r="30" />
+    <!-- Lisp nil-terminator fixed point -->
+    <circle id="omi-ffff-0000-0000-0000-0000-0000-0000-0001/48"
+            data-omi-address="omi-ffff-0000-0000-0000-0000-0000-0000-0001/48"
+            cx="400" cy="360" r="12" />
+    <!-- Factorial lattice layer 3! -->
+    <polygon id="omi-ffff-0008-0000-0000-0000-0000-0003-0000/48"
+             data-omi-address="omi-ffff-0008-0000-0000-0000-0000-0003-0000/48"
+             points="350,400 450,400 400,480" />
+    <!-- Factorial lattice layer 7! -->
+    <circle id="omi-ffff-0000-0000-0000-0000-0000-0007-0000/48"
+            data-omi-address="omi-ffff-0000-0000-0000-0000-0000-0007-0000/48"
+            cx="400" cy="200" r="180" fill="none" />
+  </g>
+</svg>
+
+<pre id="stream-log"></pre>
 ```
+
+CSSOM routing uses CIDR-substring ID selectors on `<svg>` child elements. The canonical base selector applies neon-cyan fill and stroke to all `[id^="omi-"]` nodes. Semantics are encoded as hex segment values within the hyphen-delimited CIDR id:
 
 ```css
-[data-omi-type="bidi-canvas-tile"] {
-  transform-style: preserve-3d;
-  transform-origin: center;
-  transition: transform 0.12s cubic-bezier(0.1, 0.8, 0.2, 1), fill 0.15s ease;
-}
-
-[data-bidi-flow="LRE-LRO"] {
-  unicode-bidi: bidi-override;
-  direction: ltr;
-  fill: rgba(0, 255, 204, 0.2);
+/* Base neon cyan -- all omi-prefixed CIDR nodes */
+[id^="omi-"] {
+  fill: rgba(0, 255, 204, 0.08);
   stroke: #00ffcc;
+  stroke-width: 1px;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1);
 }
 
-[data-bidi-flow="RLE-RLO"] {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  fill: rgba(255, 0, 85, 0.2);
+/* Cardinal phase (039f segment) -- thicker stroke */
+[id*="-039f-"] {
+  stroke-width: 2px;
+}
+
+/* Stride 720 (02d0 segment) -- amber */
+[id*="-02d0-"] {
+  stroke: #ffaa00;
+  stroke-width: 1.5px;
+}
+
+/* Stride 120 (0078 segment) -- orange */
+[id*="-0078-"] {
+  stroke: #ff6600;
+}
+
+/* Stride 5040 (13b0 segment) -- cyan emphasis */
+[id*="-13b0-"] {
+  stroke: #00ffcc;
+  stroke-width: 2px;
+  fill: rgba(0, 255, 204, 0.15);
+}
+
+/* Inversion gate (5a3c segment) -- magenta glow + hover flip */
+[id*="-5a3c-"] {
   stroke: #ff0055;
-  stroke-dasharray: 4 2;
+  filter: drop-shadow(0 0 12px #ff0055);
+}
+[id*="-5a3c-"]:hover {
+  transform: rotateY(180deg) translateZ(20px);
+  fill: rgba(255, 0, 85, 0.15);
 }
 ```
+
+The complete set of 14+ CSSOM segment selectors is defined in `public/bidi.css`.
 
 ## Transaction Shape
 

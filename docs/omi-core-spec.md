@@ -422,9 +422,18 @@ A conforming implementation MUST reject the following:
 
 ### 13.1 DOM Attributes
 
-A conforming implementation SHOULD use the following `data-*` attributes for browser projection:
+The reference implementation in `public/bidi.html` uses `data-omi-address` attributes mirroring the OMI-CIDR address in the element `id`:
 
 ```html
+<circle id="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+        data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
+        cx="150" cy="200" r="14" />
+```
+
+An aspirational projection layer MAY alternatively use the following categorical `data-*` attributes:
+
+```html
+data-omi-address="omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48"
 data-omi-type="cidr-vertex"
 data-omi-astronomy="sexagesimal-digit"
 data-omi-operator="cardinal|chiral"
@@ -436,24 +445,42 @@ data-omi-step="0..59"
 data-fixed-point="true"
 ```
 
+These categorical attributes are NOT YET IMPLEMENTED in the current reference browser surface. Implementations MAY adopt them for richer CSSOM routing.
+
 ### 13.2 CSSOM Selectors
 
-A conforming implementation SHOULD support CSS attribute selectors for runtime styling:
+The current reference implementation (`public/bidi.css`) uses CIDR-substring ID selectors. Implementations SHOULD use the following patterns for runtime styling:
+
+```css
+/* Prefix-based: all OMI nodes */
+[id^="omi-"] { }
+
+/* Substring segment: cardinal phase, stride, inversion gate, etc. */
+[id*="-039f-"] { }   /* cardinal boundary operator */
+[id*="-5a3c-"] { }   /* inversion gate (0x5A3C) */
+[id*="-02d0-"] { }   /* stride 720 (0x02d0 = 720) */
+[id*="-0078-"] { }   /* stride 120 (0x0078 = 120) */
+[id*="-13b0-"] { }   /* stride 5040 (0x13b0 = 5040) */
+[id*="-000f-"] { }   /* step 15 depth shift */
+[id*="-003b-"] { }   /* step 59 flare */
+[id*="-0001/"] { }   /* nil terminator (segment[7] = 0001) */
+
+/* Suffix-based: canonical frame */
+[id$="/48"] { }
+```
+
+An aspirational implementation MAY additionally support:
 
 ```css
 [data-omi-type="cidr-vertex"] { }
 [data-omi-astronomy="sexagesimal-digit"] { }
 [data-omi-phase="chiral-origin"] { }
 [data-omi-phase="central-mirror"] { }
-[id*="-step15"] { }
-[id*="-step59"] { }
-[id*="-slot720-"] { }
-[id*="-slot120-"] { }
-[id*="-slot5040-"] { }
-[id*="-0x5a3c-"] { }
-[id$="-0!"] { }
+[data-omi-cell="active-stream"] { }
 [data-fixed-point="true"] { }
 ```
+
+These `data-*` attribute selectors are NOT YET IMPLEMENTED in the current reference stylesheet.
 
 ### 13.3 Rendering Constraints
 
@@ -530,7 +557,25 @@ The reference implementation that this specification is derived from is located 
 | `src/omi/inversion-kernel.js` | Central inversion gate and prime-ideal tracking |
 | `src/omi/lisp-kernel.js` | S-expression nil-terminator and empty-cons identity |
 | `src/omi/lattice-kernel.js` | Factorial lattice weights and fixed-point short-circuit |
-| `public/bidi.html` | Browser projection surface with all kernel wiring |
+| `src/omi/boolean-kernel.js` | First-order Boolean logic kernel |
+| `src/omi/trigraph-preprocessor.js` | Trigraph-to-operator normalization |
+| `src/omi/place-value-interpreter.js` | Sexagesimal/mixed-base place-value evaluator |
+| `src/omi/axiomatic-kernel.js` | Axiomatic proof kernel for OMI invariants |
+| `src/runtime/chiral-urn.js` | Deterministic chiral-urn random draw over stride slots |
+| `src/runtime/chiral-fifo-engine.js` | Bounded FIFO ring with chiral read/write heads |
+| `src/web/polytope-webgl.js` | WebGL 2 polytope rendering with Fano projections |
+| `src/web/triplicate-projection.js` | 3D polytope coordinate projection (24-cell/5-cell) |
+| `src/bidi/omi-bidi-cm6-bridge.js` | CodeMirror 6 BiDi text-to-DataView bridge |
+| `src/distributed/coturn-proxy.js` | CoTURN TURN proxy transport |
+| `src/distributed/webrtc-transport.js` | WebRTC data channel transport |
+| `src/distributed/hnsw-index.js` | HNSW approximate nearest-neighbor index |
+| `src/distributed/erasure.js` | Reed-Solomon GF(2^8) erasure coding |
+| `src/distributed/version-vector.js` | Causal version vector ordering |
+| `src/distributed/gossip.js` | Push-pull gossip protocol |
+| `src/distributed/anti-entropy.js` | Anti-entropy divergence repair |
+| `src/distributed/fragment-store.js` | Fragment storage for erasure-coded payloads |
+| `src/distributed/causal-closure.js` | Causal closure with frontier-based merge |
+| `public/bidi.html` | Browser projection surface |
 | `test/omicron-kernel.test.js` | Kernel tests |
 | `test/omicron-cidr.test.js` | CIDR-v0 structural tests |
 | `test/omicron-cidr-128.test.js` | 128-bit CIDR standard tests |
@@ -538,6 +583,22 @@ The reference implementation that this specification is derived from is located 
 | `test/omicron-inversion.test.js` | Central inversion tests |
 | `test/lisp-nil.test.js` | Lisp nil-terminator tests |
 | `test/factorial-lattice.test.js` | Factorial lattice tests |
+| `test/boolean-kernel.test.js` | Boolean kernel tests |
+| `test/trigraph-preprocessor.test.js` | Trigraph preprocessor tests |
+| `test/place-value-interpreter.test.js` | Place-value interpreter tests |
+| `test/axiomatic-kernel.test.js` | Axiomatic kernel tests |
+| `test/chiral-urn.test.js` | Chiral urn tests |
+| `test/chiral-fifo-engine.test.js` | Chiral FIFO engine tests |
+| `test/erasure.test.js` | Erasure coding tests |
+| `test/version-vector.test.js` | Version vector tests |
+| `test/gossip.test.js` | Gossip protocol tests |
+| `test/anti-entropy.test.js` | Anti-entropy tests |
+| `test/fragment-store.test.js` | Fragment store tests |
+| `test/coturn-proxy.test.js` | CoTURN proxy tests |
+| `test/webrtc-transport.test.js` | WebRTC transport tests |
+| `test/hnsw-index.test.js` | HNSW index tests |
+| `test/triplicate-projection.test.js` | Triplicate projection tests |
+| `test/polytope-webgl.test.js` | Polytope WebGL tests |
 
 ## Appendix B: Version History
 

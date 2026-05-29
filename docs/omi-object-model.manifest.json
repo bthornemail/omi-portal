@@ -202,7 +202,9 @@
     { "id": "jsdom-validation-environment", "status": "documented", "role": "headless DOM/CSSOM mirror without runtime dependency" },
     { "id": "webserial-port-controller", "status": "implemented", "role": "Web Serial API virtual COM port buffer routed through ::10" },
     { "id": "webusb-interface-controller", "status": "implemented", "role": "WebUSB raw endpoint access routed through ::11" },
-    { "id": "webhid-device-controller", "status": "implemented", "role": "WebHID structured report bus routed through ::12" }
+    { "id": "webhid-device-controller", "status": "implemented", "role": "WebHID structured report bus routed through ::12" },
+    { "id": "causal-closure", "status": "implemented", "role": "distributed causal closure with frontier-based merge and causally consistent event ordering" },
+    { "id": "polytope-webgl", "status": "implemented", "role": "WebGL 2.0 polytope rendering with Fano-plane vertex projections and 4D/3D barycentric indexing" }
   ],
   "sequencing": {
     "id": "canonical-omi-protocol-sequencing",
@@ -256,7 +258,14 @@
     { "id": "omi-parse", "signature": "parseOmiAddress(input)", "role": "parse and normalize canonical FS/GS/RS/US address", "status": "implemented" },
     { "id": "cssom-prefix", "signature": "[data-omi^=\"...\"]", "role": "native subtree and route-prefix selection", "status": "implemented" },
     { "id": "cidr-projection", "signature": "toIPv6Centroid(seed), toIPv4HostRoute(seed)", "role": "semantic centroid and local route projection", "status": "implemented" },
-    { "id": "dataview-projection", "signature": "DataView(buffer)", "role": "byte-level endian, packet, and timeline interpretation", "status": "implemented" }
+    { "id": "dataview-projection", "signature": "DataView(buffer)", "role": "byte-level endian, packet, and timeline interpretation", "status": "implemented" },
+    { "id": "boolean-kernel", "signature": "evaluateBooleanExpression(expr, context)", "role": "first-order Boolean logic kernel with OMI-CIDR address slot predicates", "status": "implemented" },
+    { "id": "trigraph-preprocessor", "signature": "normalizeTrigraphs(input)", "role": "preprocessor that expands ?-prefixed trigraph tokens into canonical OMI operator forms", "status": "implemented" },
+    { "id": "place-value-interpreter", "signature": "evaluatePlaceValue(expression, base)", "role": "sexagesimal and mixed-base place-value expression evaluator", "status": "implemented" },
+    { "id": "axiomatic-kernel", "signature": "evaluateAxiom(axiom, premises)", "role": "axiomatic proof kernel for OMI invariant verification using Peano-style axioms", "status": "implemented" },
+    { "id": "triplicate-projection", "signature": "calculateTriplicateProjection(address, coefficients)", "role": "3D polytope coordinate projection from 24-cell / 5-cell / tetrahedron modifiers using Horner evaluation", "status": "implemented" },
+    { "id": "chiral-urn", "signature": "drawChiralUrn(seed)", "role": "deterministic pseudo-random draw from a chiral-urn distribution over OMI-CIDR stride slots", "status": "implemented" },
+    { "id": "chiral-fifo-engine", "signature": "ChiralFifoEngine(capacity)", "role": "bounded FIFO ring buffer with chiral read/write heads and stride-aligned tick advancement", "status": "implemented" }
   ],
   "routingTables": [
     {
@@ -323,7 +332,7 @@
     }
   ],
   "implementationStatus": {
-    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix", "RS erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "fragment store", "CoTURN TURN proxy", "WebRTC transport", "HNSW vector index", "WebSerial port bus", "WebUSB interface bus", "WebHID device bus"],
+    "implemented": ["canonical OMI parser/formatter", "DOM/CSSOM registry", "CodeMirror BiDi bridge", "Prolog WordNet fact broker", "A-Frame synset rendering", "JSON Canvas export", "Smith 5040 matrix", "RS erasure coding", "causal version vectors", "gossip propagation", "anti-entropy repair", "fragment store", "CoTURN TURN proxy", "WebRTC transport", "HNSW vector index", "WebSerial port bus", "WebUSB interface bus", "WebHID device bus", "boolean kernel (src/omi/boolean-kernel.js)", "trigraph preprocessor (src/omi/trigraph-preprocessor.js)", "place-value interpreter (src/omi/place-value-interpreter.js)", "axiomatic kernel (src/omi/axiomatic-kernel.js)", "causal closure (src/distributed/causal-closure.js)", "polytope WebGL (src/web/polytope-webgl.js)", "triplicate projection (src/web/triplicate-projection.js)", "chiral urn (src/runtime/chiral-urn.js)", "chiral FIFO engine (src/runtime/chiral-fifo-engine.js)"],
     "documentedFuture": ["full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
     "deprecated": ["omi-8-127-0-0-1 generated shorthand"],
     "referenceOnly": ["large exploratory manifest snippets in dev-docs/Omi Declarative.md", "full transcript content in dev-docs/chat.md"]

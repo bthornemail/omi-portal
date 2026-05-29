@@ -39,11 +39,23 @@ test("OMI Object Model manifest declares required canonical sections", async () 
 test("OMI Object Model manifest covers every dev-docs markdown source", async () => {
   const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const devDocsDir = join(repoRoot.pathname, "dev-docs");
-  const devDocs = (await readdir(devDocsDir))
-    .filter((name) => name.endsWith(".md"))
-    .map((name) => `dev-docs/${name}`)
-    .sort();
   const sources = manifest.sources.map((source) => source.path).sort();
+  const devDocs = await readdir(devDocsDir)
+    .then((names) => names
+      .filter((name) => name.endsWith(".md"))
+      .map((name) => `dev-docs/${name}`)
+      .sort())
+    .catch((error) => {
+      if (error.code !== "ENOENT") throw error;
+      return null;
+    });
+
+  if (devDocs === null) {
+    assert.ok(sources.length > 0, "manifest should retain curated dev-docs source entries");
+    assert.ok(sources.every((source) => source.startsWith("dev-docs/") && source.endsWith(".md")));
+    return;
+  }
+
   assert.deepEqual(sources, devDocs);
 });
 

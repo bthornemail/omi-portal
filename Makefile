@@ -1,7 +1,10 @@
 .PHONY: compile test stage smoke \
-        qemu-setup qemu-test \
-        docker-build docker-bake docker-push \
+        guix-env-init qemu-setup qemu-test \
+        docker-build docker-bake docker-push docker-stress softmmu-test run-all-virt-gates \
         release release-dry-run \
+        benchmark-concurrency-stress benchmark-parallel-stress benchmark-stress-all \
+        build-c99-core test-c99-core test-c99-core-guix \
+        ratio-symmetry-test radix-context-test \
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
         clean purge
 
@@ -27,11 +30,20 @@ smoke: stage
 # QEMU MULTI-ARCH
 # ============================================================
 
+guix-env-init:
+	@echo "[Guix Host Envelope] Validating reproducible virtualization tool manifest..."
+	@command -v guix >/dev/null
+	guix shell -m manifest.scm -- sh -c 'qemu-system-x86_64 --version >/dev/null && make --version >/dev/null && git --version >/dev/null && pkg-config --version >/dev/null'
+	@echo "[Host Docker Boundary] Validating Docker Engine, Compose, and Buildx..."
+	@docker --version
+	@docker compose version
+	@docker buildx version
+
 qemu-setup:
 	./scripts/qemu-setup.sh
 
 qemu-test: qemu-setup
-	./scripts/ci-test.sh --qemu
+	./scripts/ci-test.sh qemu
 
 # ============================================================
 # DOCKER MULTI-ARCH BUILD
@@ -45,8 +57,22 @@ docker-setup:
 docker-build: docker-setup
 	docker buildx bake
 
+docker-bake: docker-setup
+	docker buildx bake artifact-boundary
+
 docker-push: docker-setup
 	REGISTRY="${REGISTRY}" TAG="${TAG}" docker buildx bake --push
+
+docker-stress: docker-setup
+	docker buildx bake stress-validation
+
+softmmu-test: docker-setup
+	docker buildx bake softmmu-test
+
+run-all-virt-gates: guix-env-init docker-build qemu-test docker-stress softmmu-test
+	@echo "============================================================================"
+	@echo "[Omi Artifact Boundary] Guix, Docker Buildx, QEMU user-mode, stress, and SoftMMU gates passed."
+	@echo "============================================================================"
 
 # ============================================================
 # RELEASE
@@ -57,6 +83,41 @@ release:
 
 release-dry-run:
 	./scripts/release.sh --dry-run $(filter-out $@,$(MAKECMDGOALS))
+
+# ============================================================
+# STRESS / BENCHMARK
+# ============================================================
+
+benchmark-concurrency-stress:
+	@echo "[Omi Engine Scale] Spawning high-volume virtual multi-user packet channels..."
+	node scripts/stress-suite.js
+
+benchmark-parallel-stress:
+	@echo "[Omi Engine Scale] Running Worker/vm.Script/Atomics/Symbol validation..."
+	node scripts/stress-parallel.js
+
+benchmark-stress-all: benchmark-concurrency-stress benchmark-parallel-stress
+
+build-c99-core:
+	@echo "[C99 Substrate] Compiling architecture mirror..."
+	@mkdir -p .cache
+	gcc -O3 -Wall -Wextra -std=c99 src/omi/axiomatic.c test/test_axiomatic.c -o .cache/test_omi_c99
+
+test-c99-core: build-c99-core
+	@echo "[C99 Substrate] Running conformance mirror fixtures..."
+	.cache/test_omi_c99
+
+test-c99-core-guix:
+	@echo "[C99 Substrate] Running conformance mirror inside Guix host envelope..."
+	guix shell -m manifest.scm -- make test-c99-core
+
+ratio-symmetry-test:
+	@echo "[Omi Ratio Substrate] Verifying projective reciprocity rules..."
+	node --test test/ratio-symmetry.test.js
+
+radix-context-test:
+	@echo "[Omi Radix Substrate] Verifying omicron radix delimiter rules..."
+	node --test test/radix-context.test.js
 
 # ============================================================
 # SOFTMMU FULL-SYSTEM BOOT

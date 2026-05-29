@@ -1,0 +1,100 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) - AXIOMATIC RULES DIRECTORY
+# File Target: /RULES.omi
+# Specification Level: RFC2119 Coherent Substrate Invariants
+# ============================================================================
+#
+# This file encodes the strict mathematical constraints governing the 128-bit
+# IPv6-CIDR address space. Every row defines a mandatory architectural
+# behavior mapped to a specific 16-bit hex segment offset. All compilers,
+# Web Workers, and background threads evaluate these rules at bare-metal
+# speed using basic hyphen-only (-) splits with zero notation overhead.
+#
+# Grammar:
+#   <omi-address>/<prefix> MUST <invariant-name>
+#
+# The <prefix> is always /48 for local canonical frames.
+
+# [Rule 0x01] Chiral and Cardinal Phase Segregation
+#   Segment[0] — MUST evaluate the first 16-bit block arithmetically.
+#   ffff = Left Chiral execution path (ο, U+03BF)
+#   039f = Right Cardinal terminal execution path (Ο, U+039F)
+omi-ffff-0000-0000-0000-0000-0000-0000-0000/48 MUST chiral-origin
+omi-039f-0000-0000-0000-0000-0000-0000-0000/48 MUST cardinal-enclosure
+
+# [Rule 0x02] Service Port Separation
+#   Segment[1] — MUST route operational channels via the second block.
+#   0001 through 0008 represent dedicated multi-threaded service buses.
+omi-0000-0001-0000-0000-0000-0000-0000-0000/48 MUST service-bus-loopback
+omi-0000-0002-0000-0000-0000-0000-0000-0000/48 MUST service-bus-lisp
+omi-0000-0003-0000-0000-0000-0000-0000-0000/48 MUST service-bus-prolog
+omi-0000-0004-0000-0000-0000-0000-0000-0000/48 MUST service-bus-turn
+omi-0000-0005-0000-0000-0000-0000-0000-0000/48 MUST service-bus-hnsw
+omi-0000-0006-0000-0000-0000-0000-0000-0000/48 MUST service-bus-cm6
+omi-0000-0007-0000-0000-0000-0000-0000-0000/48 MUST service-bus-fano
+omi-0000-0008-0000-0000-0000-0000-0000-0000/48 MUST service-bus-canvas
+
+# [Rule 0x03] Reversible Central Inversion
+#   Segment[2] — MUST trigger the bitwise mirror filter when the third
+#   16-bit block matches 5a3c. Failure to maintain perfect bitwise
+#   reversibility MUST fault the execution node.
+omi-0000-0000-5a3c-0000-0000-0000-0000-0000/48 MUST central-inversion-mirror
+
+# [Rule 0x04] Universal POS Port Allocation
+#   Segment[3] — MUST interpret the fourth 16-bit block as a Universal
+#   Part-of-Speech index. Values 0x0001–0x0017 map to the 17 UPOS tags
+#   in the Universal Dependencies v2 scheme.
+omi-0000-0000-0000-0001-0000-0000-0000-0000/48 MUST pos-noun
+omi-0000-0000-0000-0002-0000-0000-0000-0000/48 MUST pos-verb
+omi-0000-0000-0000-0003-0000-0000-0000-0000/48 MUST pos-adj
+omi-0000-0000-0000-0004-0000-0000-0000-0000/48 MUST pos-pron
+omi-0000-0000-0000-0005-0000-0000-0000-0000/48 MUST pos-propnoun
+omi-0000-0000-0000-0006-0000-0000-0000-0000/48 MUST pos-adv
+omi-0000-0000-0000-0007-0000-0000-0000-0000/48 MUST pos-adp
+omi-0000-0000-0000-0008-0000-0000-0000-0000/48 MUST pos-cconj
+omi-0000-0000-0000-0009-0000-0000-0000-0000/48 MUST pos-num
+omi-0000-0000-0000-000a-0000-0000-0000-0000/48 MUST pos-det
+omi-0000-0000-0000-000b-0000-0000-0000-0000/48 MUST pos-part
+omi-0000-0000-0000-000c-0000-0000-0000-0000/48 MUST pos-sconj
+omi-0000-0000-0000-000d-0000-0000-0000-0000/48 MUST pos-intj
+omi-0000-0000-0000-000e-0000-0000-0000-0000/48 MUST pos-punct
+omi-0000-0000-0000-000f-0000-0000-0000-0000/48 MUST pos-sym
+omi-0000-0000-0000-0010-0000-0000-0000-0000/48 MUST pos-x
+omi-0000-0000-0000-0017-0000-0000-0000-0000/48 MUST pos-aux
+
+# [Rule 0x05] Factorial Stride Bounds
+#   Segment[4] — MUST be a valid factorial stride value.
+#   Canonical strides: 0078 (120), 02d0 (720), 13b0 (5040).
+omi-0000-0000-0000-0000-0078-0000-0000-0000/48 MUST stride-120
+omi-0000-0000-0000-0000-02d0-0000-0000-0000/48 MUST stride-720
+omi-0000-0000-0000-0000-13b0-0000-0000-0000/48 MUST stride-5040
+
+# [Rule 0x06] Sexagesimal Slot Bounds
+#   Segment[5] — MUST be in the Hellenistic range 0x0000–0x0036 (0–54).
+omi-0000-0000-0000-0000-0000-0036-0000-0000/48 MUST slot-54-max
+
+# [Rule 0x07] Factorial Layer Enumeration
+#   Segment[6] — MUST decode to a valid factorial layer 0–7.
+omi-0000-0000-0000-0000-0000-0000-0000-0000/48 MUST layer-0-fixed-point
+omi-0000-0000-0000-0000-0000-0000-0001-0000/48 MUST layer-1-monadic
+omi-0000-0000-0000-0000-0000-0000-0002-0000/48 MUST layer-2-dyadic
+omi-0000-0000-0000-0000-0000-0000-0003-0000/48 MUST layer-3-octahedral
+omi-0000-0000-0000-0000-0000-0000-0004-0000/48 MUST layer-4-24-cell
+omi-0000-0000-0000-0000-0000-0000-0005-0000/48 MUST layer-5-120-cell
+omi-0000-0000-0000-0000-0000-0000-0006-0000/48 MUST layer-6-720-sweep
+omi-0000-0000-0000-0000-0000-0000-0007-0000/48 MUST layer-7-replay-ring
+
+# [Rule 0x08] Lisp Empty-Cons Fixed Point
+#   Segment[7] — 0001 MUST represent the terminal closure loop.
+#   Evaluation of this segment MUST return itself immediately without
+#   bit rotation (the ()! = () identity law).
+omi-0000-0000-0000-0000-0000-0000-0000-0001/48 MUST fixed-point-zero-frame
+
+# [Rule 0x0C] Projective Reciprocal Ratio Suffixes
+#   Ratios and their reciprocals MUST resolve to identical layout channels.
+omi-0000-0000-0000-0000-0000-0000-0000-0000/96/1-2 EQUALS omi-0000-0000-0000-0000-0000-0000-0000-0000/96/2-1
+omi-0000-0000-0000-0000-0000-0000-0000-0000/96/10-1 EQUALS omi-0000-0000-0000-0000-0000-0000-0000-0000/96/1-10
+
+# [Rule 0x0D] Timeline Loop Suffix Constraint
+#   The /96/5040 suffix MUST mark the hard reset fence.
+omi-0000-0000-0000-0000-0000-0000-0000-0000/96/5040 MUST hard-reset-fence

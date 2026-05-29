@@ -17,6 +17,14 @@ group "default" {
   targets = ["runtime", "qemu-test"]
 }
 
+group "stress" {
+  targets = ["stress-validation"]
+}
+
+group "artifact-boundary" {
+  targets = ["runtime", "qemu-test", "stress-validation", "softmmu-test"]
+}
+
 # -----------------------------------------------------------
 # Group: release (explicit tag push)
 # -----------------------------------------------------------
@@ -34,7 +42,7 @@ target "runtime" {
     "${REGISTRY}/omi-portal:${TAG}",
     "${REGISTRY}/omi-portal:${OMI_VERSION}"
   ]
-  platforms  = ["linux/amd64", "linux/arm64", "linux/arm/v7"]
+  platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=gha"]
   cache-to   = ["type=gha,mode=max"]
   attest     = ["type=provenance,mode=min"]
@@ -54,6 +62,21 @@ target "runtime-release" {
 }
 
 # -----------------------------------------------------------
+# Target: OMI stress validation (multi-arch)
+# -----------------------------------------------------------
+target "stress-validation" {
+  dockerfile = "Dockerfile"
+  target     = "stress"
+  tags       = [
+    "${REGISTRY}/omi-portal-stress:${TAG}",
+    "${REGISTRY}/omi-portal-stress:${OMI_VERSION}"
+  ]
+  platforms  = ["linux/amd64", "linux/arm64"]
+  cache-from = ["type=gha"]
+  cache-to   = ["type=gha,mode=max"]
+}
+
+# -----------------------------------------------------------
 # Target: QEMU multi-arch test
 # -----------------------------------------------------------
 target "qemu-test" {
@@ -63,7 +86,22 @@ target "qemu-test" {
     "${REGISTRY}/omi-portal-test:${TAG}",
     "${REGISTRY}/omi-portal-test:${OMI_VERSION}"
   ]
-  platforms  = ["linux/amd64", "linux/arm64", "linux/arm/v7"]
+  platforms  = ["linux/amd64", "linux/arm64"]
+  cache-from = ["type=gha"]
+  cache-to   = ["type=gha,mode=max"]
+}
+
+# -----------------------------------------------------------
+# Target: QEMU SoftMMU full-system test
+# -----------------------------------------------------------
+target "softmmu-test" {
+  dockerfile = "Dockerfile.softmmu"
+  target     = "softmmu-runtime"
+  tags       = [
+    "${REGISTRY}/omi-portal-softmmu:${TAG}",
+    "${REGISTRY}/omi-portal-softmmu:${OMI_VERSION}"
+  ]
+  platforms  = ["linux/amd64"]
   cache-from = ["type=gha"]
   cache-to   = ["type=gha,mode=max"]
 }
