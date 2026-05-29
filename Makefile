@@ -10,6 +10,7 @@
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
         build-gui-reference test-user-space-ui \
         test-wire-profile \
+        start-telemetry stop-telemetry test-telemetry \
         clean purge
 
 # ============================================================
@@ -204,6 +205,19 @@ wan-probe:
 wan-probe-verify:
 	@echo "[WAN Engine] Probing IPv4/IPv6 /verify-packet reachability..."
 	node scripts/wan-probe.js --verify
+
+start-telemetry:
+	@echo "[Telemetry] Starting WAN latency probe daemon..."
+	PROBE_PORT=8082 ./scripts/run-telemetry.sh start
+
+stop-telemetry:
+	@echo "[Telemetry] Stopping WAN latency probe daemon..."
+	./scripts/run-telemetry.sh stop
+
+test-telemetry:
+	@echo "[Telemetry] Probing WAN latency probe status..."
+	curl -s http://127.0.0.1:8082/healthz && echo "" && echo "[Telemetry] Probe OK"
+	curl -s http://127.0.0.1:8082/wan-status
 
 .PHONY: atomic-concurrency-test live-block-backup-sync
 

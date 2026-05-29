@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+  <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMI — WAN Latency Dashboard</title>
+  <link rel="stylesheet" href="bidi.css">
+  <style>
+    body { background: #0a0a12; color: #c0c0d0; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
+    .dashboard { max-width: 1200px; margin: 0 auto; }
+    h1 { color: #00ffcc; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 20px 0; }
+    h1 span { color: #ff0055; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,255,204,0.15); padding: 16px; border-radius: 4px; }
+    .card h2 { font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; color: #00ffcc88; margin: 0 0 12px 0; }
+    .metric-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.85em; }
+    .metric-row .label { color: #888; }
+    .metric-row .value { color: #00ffcc; font-weight: bold; }
+    .value.warn { color: #ffaa00; }
+    .value.down { color: #ff0055; }
+    .value.up { color: #00ffcc; }
+    #wan-svg { width: 100%; height: 200px; }
+    .sparkline { display: flex; align-items: flex-end; height: 40px; gap: 1px; margin-top: 8px; }
+    .sparkline .bar { width: 4px; background: #00ffcc44; border-radius: 1px 1px 0 0; min-height: 1px; }
+    .sparkline .bar.high { background: #ff0055aa; }
+    #log { font-size: 0.75em; line-height: 1.5; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 8px; margin-top: 8px; }
+    #log .info { color: #888; }
+    #log .ok { color: #00ffcc; }
+    #log .fail { color: #ff0055; }
+    #log .warn { color: #ffaa00; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .dot.ok { background: #00ffcc; }
+    .dot.fail { background: #ff0055; }
+    .full { grid-column: 1 / -1; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <h1>⟨WAN⟩ <span>Latency</span> Telemetry</h1>
+
+  <svg id="wan-svg" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="80" x2="500" y2="80" stroke="#00ffcc44" stroke-width="1" stroke-dasharray="4,4"/>
+    <circle id="edge-node" cx="100" cy="80" r="18" fill="none" stroke="#00ffcc" stroke-width="2"/>
+    <text x="100" y="48" text-anchor="middle" fill="#00ffcc88" font-size="9">EDGE</text>
+    <text x="100" y="112" text-anchor="middle" fill="#00ffcc88" font-size="8">69.48.202.32</text>
+    <circle id="tunnel-node" cx="500" cy="80" r="18" fill="none" stroke="#ff0055" stroke-width="2"/>
+    <text x="500" y="48" text-anchor="middle" fill="#ff005588" font-size="9">TUNNEL</text>
+    <text x="500" y="112" text-anchor="middle" fill="#ff005588" font-size="8">74.208.190.29</text>
+    <line id="link-line" x1="118" y1="80" x2="482" y2="80" stroke="#00ffcc" stroke-width="1.5" opacity="0.6"/>
+    <text id="link-rtt" x="300" y="74" text-anchor="middle" fill="#00ffcc" font-size="11" font-weight="bold">-- ms</text>
+    <circle id="pulse-dot" cx="300" cy="94" r="3" fill="#00ffcc" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Connectivity</h2>
+      <div class="metric-row"><span class="label">Edge</span><span class="value" id="m-edge-status"><span class="dot fail"></span>probing</span></div>
+      <div class="metric-row"><span class="label">HTTP RTT</span><span class="value" id="m-http-rtt">-- ms</span></div>
+      <div class="metric-row"><span class="label">Ping Avg</span><span class="value" id="m-ping-avg">-- ms</span></div>
+      <div class="metric-row"><span class="label">Packet Loss</span><span class="value" id="m-pkt-loss">-- %</span></div>
+      <div class="metric-row"><span class="label">Availability</span><span class="value" id="m-uptime">-- %</span></div>
+      <div class="sparkline" id="spark-rtt"></div>
+    </div>
+
+    <div class="card">
+      <h2>Token Pipeline</h2>
+      <div class="metric-row"><span class="label">Verify Endpoint</span><span class="value" id="m-verify-status"><span class="dot fail"></span>pending</span></div>
+      <div class="metric-row"><span class="label">Verify RTT</span><span class="value" id="m-verify-rtt">-- ms</span></div>
+      <div class="metric-row"><span class="label">Cycle Time</span><span class="value" id="m-cycle-ms">-- ms</span></div>
+      <div class="metric-row"><span class="label">SSE Clients</span><span class="value" id="m-sse-clients">0</span></div>
+      <div class="metric-row"><span class="label">Probes</span><span class="value" id="m-probe-count">0</span></div>
+      <div class="sparkline" id="spark-verify"></div>
+    </div>
+
+    <div class="card full">
+      <h2>Topology</h2>
+      <div class="metric-row"><span class="label">Edge OMI</span><span class="value" id="m-omi-addr" style="font-size:0.75em">--</span></div>
+      <div class="metric-row"><span class="label">Peer (us)</span><span class="value" id="m-peer-addr" style="font-size:0.75em">--</span></div>
+    </div>
+
+    <div class="card full">
+      <h2>Event Log</h2>
+      <div id="log"><span class="info">[--:--:--] awaiting probe data...</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROBE_PORT = 8082;
+const HOST = location.hostname || "74.208.190.29";
+const SSE_URL = `http://${HOST}:${PROBE_PORT}/wan-metrics`;
+const STATUS_URL = `http://${HOST}:${PROBE_PORT}/wan-status`;
+
+const rttHistory = [];
+const verifyHistory = [];
+const maxSparkBars = 60;
+
+function $(id) { return document.getElementById(id); }
+
+function setMetric(id, val, cls) {
+  const el = $(id);
+  if (el) { el.textContent = val; if (cls) el.className = 'value ' + cls; }
+}
+
+function renderSparkline(containerId, history, threshold) {
+  const container = $(containerId);
+  if (!container) return;
+  const max = Math.max(...history, 1);
+  container.innerHTML = history.map((v) =>
+    `<div class="bar${v > (threshold || 10) ? ' high' : ''}" style="height:${(v / max) * 100}%"></div>`
+  ).join('');
+}
+
+function log(msg, cls = "info") {
+  const el = $("log");
+  if (!el) return;
+  const time = new Date().toLocaleTimeString();
+  el.innerHTML += `<span class="${cls}">[${time}] ${msg}</span>\n`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateDashboard(probe) {
+  const health = probe.health || {};
+  const verify = probe.verify || {};
+  const ping = probe.ping || {};
+
+  const edgeOk = probe.edgeOk === true;
+
+  setMetric("m-sse-clients", String(probe.sseClients || 0));
+  setMetric("m-probe-count", String(probe.probeCount || 0));
+
+  setMetric("m-edge-status", edgeOk ? "OK" : "DOWN", edgeOk ? "up" : "down");
+  $("m-edge-status").innerHTML = `<span class="dot ${edgeOk ? 'ok' : 'fail'}"></span>${edgeOk ? 'connected' : 'down'}`;
+
+  const httpRtt = typeof probe.rttMs === "number" ? probe.rttMs.toFixed(2) : "--";
+  setMetric("m-http-rtt", httpRtt + " ms");
+
+  const pingAvg = typeof probe.pingAvg === "number" ? probe.pingAvg.toFixed(2) : "--";
+  setMetric("m-ping-avg", pingAvg + " ms");
+
+  const pktLoss = typeof probe.pingLoss === "number" ? probe.pingLoss.toFixed(0) : "--";
+  setMetric("m-pkt-loss", pktLoss + " %", parseInt(pktLoss) > 0 ? "warn" : "");
+
+  const uptime = typeof probe.uptime === "number" ? (probe.uptime * 100).toFixed(1) : "--";
+  setMetric("m-uptime", uptime + " %");
+
+  if (typeof probe.rttMs === "number") {
+    rttHistory.push(probe.rttMs);
+    if (rttHistory.length > maxSparkBars) rttHistory.shift();
+    renderSparkline("spark-rtt", rttHistory, 5);
+  }
+
+  const verifyOk = probe.verifyOk === true;
+  setMetric("m-verify-status", verifyOk ? "OK" : "REJECTED", "warn");
+  $("m-verify-status").innerHTML = `<span class="dot ${verifyOk ? 'ok' : 'warn'}"></span>${verifyOk ? 'accepted' : 'evicted'}`;
+
+  setMetric("m-verify-rtt", (typeof probe.verifyMs === "number" ? probe.verifyMs.toFixed(2) : "--") + " ms");
+  setMetric("m-cycle-ms", (typeof probe.cycleMs === "number" ? probe.cycleMs.toFixed(0) : "--") + " ms");
+
+  if (typeof probe.verifyMs === "number") {
+    verifyHistory.push(probe.verifyMs);
+    if (verifyHistory.length > maxSparkBars) verifyHistory.shift();
+    renderSparkline("spark-verify", verifyHistory, 8);
+  }
+
+  const link = $("link-rtt");
+  if (link) link.textContent = typeof probe.rttMs === "number" ? probe.rttMs.toFixed(1) + " ms" : "-- ms";
+
+  const linkLine = $("link-line");
+  if (linkLine) {
+    linkLine.setAttribute("stroke", edgeOk ? "#00ffcc" : "#ff0055");
+    linkLine.setAttribute("opacity", edgeOk ? "0.6" : "0.3");
+  }
+}
+
+function fetchStatus() {
+  fetch(STATUS_URL)
+    .then((r) => r.json())
+    .then((data) => {
+      setMetric("m-sse-clients", String(data.sseClients));
+      setMetric("m-probe-count", String(data.historyCount));
+      if (data.lastProbe) updateDashboard(data.lastProbe);
+    })
+    .catch(() => {});
+}
+
+let eventSource = null;
+
+function connectSSE() {
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource(SSE_URL);
+
+  eventSource.onopen = () => log("SSE connected", "ok");
+
+  eventSource.onerror = () => {
+    log("SSE disconnected — reconnecting in 3s", "fail");
+    setTimeout(connectSSE, 3000);
+  };
+
+  eventSource.addEventListener("handshake", (e) => {
+    try {
+      const data = JSON.parse(e.data);
+      log(`SSE handshake: edge=${data.edge} tunnel=${data.tunnel}`, "info");
+    } catch { log("SSE handshake received", "info"); }
+  });
+
+  eventSource.addEventListener("wan-latency", (e) => {
+    try {
+      const probe = JSON.parse(e.data);
+      updateDashboard(probe);
+    } catch { /* skip bad frame */ }
+  });
+}
+
+function fetchTopology() {
+  fetch(STATUS_URL.replace("/wan-status", "/wan-topology"))
+    .then((r) => r.json())
+    .then((data) => {
+      const topo = data.edgeTopology;
+      if (topo) {
+        setMetric("m-omi-addr", topo.omiAddress || "--");
+        setMetric("m-peer-addr", topo.peerAddress || "--");
+      }
+    })
+    .catch(() => {});
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  connectSSE();
+  setTimeout(fetchTopology, 500);
+  setInterval(fetchTopology, 120000);
+});
+</script>
+</body>
+</html>
