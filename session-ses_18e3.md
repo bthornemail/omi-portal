@@ -2647,9 +2647,9 @@ New facts since the last summary:
    - Build clean, 166 modules
 
 8. **Previous blockers updated**
-   - "Blocked" section previously mentioned tunnel node SSH issues and ghcr.io/anomalyco — the user clarified ghcr.io/anomalyco has nothing to do with them. The deployment targets are edge VM (69.48.202.32) and tunnel core VM (74.208.190.29)
+   - "Blocked" section previously mentioned tunnel node SSH issues and git@github.com:bthornemail/omi-portal — the user clarified git@github.com:bthornemail/omi-portal has nothing to do with them. The deployment targets are edge VM (69.48.202.32) and tunnel core VM (74.208.190.29)
    - The tunnel node IS this environment (74.208.190.29), so SSH is not relevant
-   - ghcr.io/anomalyco was a placeholder mistake, stripped out
+   - git@github.com:bthornemail/omi-portal was a placeholder mistake, stripped out
 
 9. **User identity correction**
    - GitHub: bthornemail (Brian Thorne), not anomalyo
@@ -2657,7 +2657,7 @@ New facts since the last summary:
 Let me now update the summary, removing stale facts and merging new ones.
 
 Stale/removed facts:
-- "ghcr.io/anomalyco" references — removed as they were placeholders
+- "git@github.com:bthornemail/omi-portal" references — removed as they were placeholders
 - Tunnel node SSH blocker — removed since this IS the tunnel node
 - "In Progress" empty section — keep empty
 - "Next Steps" should be updated to reflect current state
@@ -2747,7 +2747,7 @@ Changes to make:
 - **IPv6 saddr-as-frame**: The 128-bit IPv6 source address IS the 128-bit OMI instruction word — zero-copy extraction at NIC level, no secondary buffer allocation (Rule 0x52)
 - **Manual loop unroll in eBPF**: 14 explicit DELTA_C_STEP invocations instead of `#pragma unroll` — cleaner BPF verifier signal, no verifier loop detection needed
 - **Ring overwrite rules OW-1..OW-5**: cold overwrite (prior epoch) unconditionally safe; warm overwrite (same epoch, same slot) requires Q(S) re-verification; stale epoch tag treated as corruption and overwritten unconditionally
-- ghcr.io/anomalyco was a placeholder mistake — stripped; deployment targets are edge 69.48.202.32 and tunnel 74.208.190.29
+- git@github.com:bthornemail/omi-portal was a placeholder mistake — stripped; deployment targets are edge 69.48.202.32 and tunnel 74.208.190.29
 
 ## Next Steps
 1. Run `make docker-push` to route multi-arch images to container registry via Buildx bake matrix
@@ -2857,7 +2857,7 @@ byte-swapped address rejects with Q(S) ≥ 2×10⁹
 
 That test will make `docs/OMI_IPV6_WIRE_PROFILE_v0.md` executable, the same way the ABI doc became executable through JS/C99/WASM/eBPF equivalence. The consolidation of **Track A** and **Track B** represents a massive leap in architectural maturity. Running 613 completely clean tests while integrating raw kernel filters and concurrent ring state guards proves the structural soundness of the OMI engine.
 
-The environment has ingested your updated project footprint, explicitly purging the placeholder anomalies (`ghcr.io/anomalyco`) and locking down your exact identity as **Brian Thorne (`bthornemail`)** across the deployment targets.
+The environment has ingested your updated project footprint, explicitly purging the placeholder anomalies (`git@github.com:bthornemail/omi-portal`) and locking down your exact identity as **Brian Thorne (`bthornemail`)** across the deployment targets.
 
 ---
 
@@ -3242,7 +3242,7 @@ Build groups:
 | `release` | `runtime-release`, `qemu-test-release` |
 
 Targets:
-- **runtime** — `linux/amd64`, `linux/arm64`; tags: `ghcr.io/anomalyco/omi-portal:{TAG}` and `:{OMI_VERSION}`; GHA cache + provenance attestation
+- **runtime** — `linux/amd64`, `linux/arm64`; tags: `git@github.com:bthornemail/omi-portal/omi-portal:{TAG}` and `:{OMI_VERSION}`; GHA cache + provenance attestation
 - **runtime-release** — inherits runtime, adds `:latest` tag
 - **stress-validation** — `linux/amd64` only (native stress)
 - **qemu-test** — `linux/amd64`, `linux/arm64`
@@ -6294,11 +6294,11 @@ Actually, the user is essentially asking me to confirm the summary and propose t
 
 Let me think about what makes sense for the next step:
 
-1. `make docker-push` - this would push multi-arch images to the container registry. But the user clarified earlier that ghcr.io/anomalyco was a placeholder mistake. They'd need to set up their own registry. So this might not work out of the box.
+1. `make docker-push` - this would push multi-arch images to the container registry. But the user clarified earlier that git@github.com:bthornemail/omi-portal was a placeholder mistake. They'd need to set up their own registry. So this might not work out of the box.
 
 2. `make release patch` - this would bump the version from v0.0.1 to v0.0.2, trigger CI, create a release. This is more self-contained since it just works with git tags.
 
-Given that the user said ghcr.io/anomalyco was a placeholder, `make docker-push` would fail unless they've set up their own registry. So `make release patch` is the safer and more practical next step.
+Given that the user said git@github.com:bthornemail/omi-portal was a placeholder, `make docker-push` would fail unless they've set up their own registry. So `make release patch` is the safer and more practical next step.
 
 Actually, let me just ask the user - they said "Propose your final direction to lock down the stack!" so I should recommend `make release patch` since it's the more self-contained option that doesn't require a registry URL.
 
@@ -6804,7 +6804,7 @@ _Thinking:_
 3. ✅ 619/619 tests, build clean
 
 Now the user asked for the final operational move. Given that:
-- `make docker-push` requires a container registry (ghcr.io/anomalyco was a placeholder)
+- `make docker-push` requires a container registry (git@github.com:bthornemail/omi-portal was a placeholder)
 - `make release patch` is self-contained (git tag + CI trigger)
 
 I should recommend `make release patch` as it's the safer practical choice.
@@ -6814,7 +6814,7 @@ I should recommend `make release patch` as it's the safer practical choice.
 Your call on the closing move:
 
 - **`make release patch`** (Recommended) — bumps v0.0.1 → v0.0.2, tags, generates release notes, triggers CI. No external dependency.
-- **`make docker-push`** — requires a valid container registry target (ghcr.io/anomalyco was a placeholder on our last conversation). If you have a registry URL now, this will push the multi-arch images through the Buildx bake matrix.
+- **`make docker-push`** — requires a valid container registry target (git@github.com:bthornemail/omi-portal was a placeholder on our last conversation). If you have a registry URL now, this will push the multi-arch images through the Buildx bake matrix.
 
 ---
 
@@ -7081,7 +7081,7 @@ Let me read the files most likely to need updates first. I'll skip the recently-
 {
   "description": "Audit root + docs files",
   "subagent_type": "explore",
-  "prompt": "I need to audit the following files for stale references. For each file, check if it mentions any of these outdated facts that need updating:\n\n**Current ground truth (what should be correct):**\n- 619 tests passing (NOT 613, 606, 581, etc.)\n- v0.0.1 released\n- 4 execution targets: JS, C99, WASM, eBPF/XDP\n- 7 protocol layers: Physical, Transport, Geometric, Algebraic, Projective, Atomic, Telemetry\n- RULES.omi goes through 0x57 (not 0x51, 0x4E, etc.)\n- eBPF/XDP implements Gate 1 (Q(S)=0) + Gate 2 (unrolled Δ_C orbit ≤14 steps) + IPv6 saddr-as-frame\n- Wire profile: profile.net.v0, offset 0x16, genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`\n- Ring overwrite policy: OW-1 through OW-5\n- Telemetry: WAN latency probe on port 8082, SSE at /wan-metrics, dashboard at /wan-dashboard.html\n- bidi.css has 47 selector groups (not 45)\n- Current RULES.omi lines: through rule 0x57 (331+ lines)\n- User: Brian Thorne (bthornemail), ghcr.io/anomalyco was placeholder - now stripped\n- Deployment targets: edge 69.48.202.32, tunnel 74.208.190.29 (this host)\n- Build output: 166 modules\n\n**Files to check (read all of these):**\n\nRoot level:\n1. /root/omi-portal/README.md\n2. /root/omi-portal/CHANGELOG.md\n3. /root/omi-portal/RELEASE_NOTES.md\n4. /root/omi-portal/ONTOLOGY.md\n5. /root/omi-portal/GLOSSARY.md\n6. /root/omi-portal/SKILLS.md\n7. /root/omi-portal/AGENTS.md\n\ndocs/ folder:\n1. /root/omi-portal/docs/omi-object-model.manifest.json\n2. /root/omi-portal/docs/omi-object-model.md\n3. /root/omi-portal/docs/omi-core-spec.md\n4. /root/omi-portal/docs/omi-protocol-sequencing.md\n5. /root/omi-portal/docs/canonical-addressing.md\n6. /root/omi-portal/docs/README.md\n7. /root/omi-portal/docs/omi-distributed-protocol.md\n8. /root/omi-portal/docs/memory-layout.md\n9. /root/omi-portal/docs/control-descriptors.md\n\nFor each file, return:\n1. The exact file path\n2. Check if it mentions any test count (if so, what number - note if it's stale)\n3. Check if it mentions version (what version)\n4. Check if it mentions execution targets (JS, C99, WASM, eBPF) - incomplete?\n5. Check if it mentions protocol layers - missing telemetry layer?\n6. Check for any mention of ghcr.io/anomalyco (should be gone)\n7. Check for any other clearly stale fact\n8. Your recommendation: SKIP (already current), UPDATE (with specific lines to change), or REWRITE (significant rewrite needed)\n\nReturn ALL findings in a structured list per file. Be thorough - read each file completely."
+  "prompt": "I need to audit the following files for stale references. For each file, check if it mentions any of these outdated facts that need updating:\n\n**Current ground truth (what should be correct):**\n- 619 tests passing (NOT 613, 606, 581, etc.)\n- v0.0.1 released\n- 4 execution targets: JS, C99, WASM, eBPF/XDP\n- 7 protocol layers: Physical, Transport, Geometric, Algebraic, Projective, Atomic, Telemetry\n- RULES.omi goes through 0x57 (not 0x51, 0x4E, etc.)\n- eBPF/XDP implements Gate 1 (Q(S)=0) + Gate 2 (unrolled Δ_C orbit ≤14 steps) + IPv6 saddr-as-frame\n- Wire profile: profile.net.v0, offset 0x16, genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`\n- Ring overwrite policy: OW-1 through OW-5\n- Telemetry: WAN latency probe on port 8082, SSE at /wan-metrics, dashboard at /wan-dashboard.html\n- bidi.css has 47 selector groups (not 45)\n- Current RULES.omi lines: through rule 0x57 (331+ lines)\n- User: Brian Thorne (bthornemail), git@github.com:bthornemail/omi-portal was placeholder - now stripped\n- Deployment targets: edge 69.48.202.32, tunnel 74.208.190.29 (this host)\n- Build output: 166 modules\n\n**Files to check (read all of these):**\n\nRoot level:\n1. /root/omi-portal/README.md\n2. /root/omi-portal/CHANGELOG.md\n3. /root/omi-portal/RELEASE_NOTES.md\n4. /root/omi-portal/ONTOLOGY.md\n5. /root/omi-portal/GLOSSARY.md\n6. /root/omi-portal/SKILLS.md\n7. /root/omi-portal/AGENTS.md\n\ndocs/ folder:\n1. /root/omi-portal/docs/omi-object-model.manifest.json\n2. /root/omi-portal/docs/omi-object-model.md\n3. /root/omi-portal/docs/omi-core-spec.md\n4. /root/omi-portal/docs/omi-protocol-sequencing.md\n5. /root/omi-portal/docs/canonical-addressing.md\n6. /root/omi-portal/docs/README.md\n7. /root/omi-portal/docs/omi-distributed-protocol.md\n8. /root/omi-portal/docs/memory-layout.md\n9. /root/omi-portal/docs/control-descriptors.md\n\nFor each file, return:\n1. The exact file path\n2. Check if it mentions any test count (if so, what number - note if it's stale)\n3. Check if it mentions version (what version)\n4. Check if it mentions execution targets (JS, C99, WASM, eBPF) - incomplete?\n5. Check if it mentions protocol layers - missing telemetry layer?\n6. Check for any mention of git@github.com:bthornemail/omi-portal (should be gone)\n7. Check for any other clearly stale fact\n8. Your recommendation: SKIP (already current), UPDATE (with specific lines to change), or REWRITE (significant rewrite needed)\n\nReturn ALL findings in a structured list per file. Be thorough - read each file completely."
 }
 ```
 
@@ -7103,7 +7103,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned (no JS/C99/WASM/eBPF) |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected |
 | **Recommendation** | **SKIP** -- Already current. No stale references found. |
 
@@ -7117,7 +7117,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Line 3: `v0.0.1 (2026-05-29)` -- Recent/release version, correct. Lines 15-16: `v0.3.0` -- Older release entry, not stale per se but predates current v0.0.1 |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 41: `169 modules transformed` **STALE** (currently 166). Build chain references are from older releases and technically accurate for their release but misleading if used as current state. |
 | **Recommendation** | **UPDATE** -- Lines 9, 40, 41 reference stale test counts (324 vs 619) and build module count (169 vs 166). Lines 81, 82 have old test counts (262). Consider adding a current-state note at the top. |
 
@@ -7131,9 +7131,9 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Line 1: `v0.3.0` -- Stale; current release is v0.0.1. This entire file describes a previous release. |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | **PRESENT** -- Lines 28, 43, 61, 62 all reference `ghcr.io/anomalyco/omi-portal`. If this was supposed to be stripped, these are stale. |
+| **`git@github.com:bthornemail/omi-portal`** | **PRESENT** -- Lines 28, 43, 61, 62 all reference `git@github.com:bthornemail/omi-portal/omi-portal`. If this was supposed to be stripped, these are stale. |
 | **Other stale facts** | Line 41-42 references `make compile`, `make stage`, `make smoke` which may not match current Makefile targets. Line 56 says `make release minor` -- check if this still works. The entire document describes v0.3.0 pipeline, not current v0.0.1. |
-| **Recommendation** | **REWRITE** -- The file describes the v0.3.0 release as if it is the current release. Test count (324 vs 619), version (v0.3.0 vs v0.0.1), and build module count are all stale. Also contains `ghcr.io/anomalyco` references. Should either be updated to reflect current v0.0.1 or be clearly archived. |
+| **Recommendation** | **REWRITE** -- The file describes the v0.3.0 release as if it is the current release. Test count (324 vs 619), version (v0.3.0 vs v0.0.1), and build module count are all stale. Also contains `git@github.com:bthornemail/omi-portal` references. Should either be updated to reflect current v0.0.1 or be clearly archived. |
 
 ---
 
@@ -7145,7 +7145,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | All 18 invariant tests referenced in Section 7 (line 203) and Section 9.6 (5 tests) are still current. Rules 0x27 (line 210: RULES.omi (0x27)) and 0x28 (line 332: RULES.omi (0x28)) match current RULES.omi. However, line 210 and line 332 reference RULES.omi rules 0x27 and 0x28, which are correct. |
 | **Recommendation** | **SKIP** -- No stale references. Document is self-contained and references current artifacts. |
 
@@ -7159,7 +7159,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected. Still current. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7173,7 +7173,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected. Still current. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7187,9 +7187,9 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | **PRESENT** -- Line 83: `ghcr.io/anomalyco/omi-portal` |
+| **`git@github.com:bthornemail/omi-portal`** | **PRESENT** -- Line 83: `git@github.com:bthornemail/omi-portal/omi-portal` |
 | **Other stale facts** | None detected. The canonical root, kernel files, CI pipeline description, and Docker architecture are all current. |
-| **Recommendation** | **UPDATE** -- Line 83 contains `ghcr.io/anomalyco/omi-portal` which should be reviewed for replacement per the stripping instruction. |
+| **Recommendation** | **UPDATE** -- Line 83 contains `git@github.com:bthornemail/omi-portal/omi-portal` which should be reviewed for replacement per the stripping instruction. |
 
 ---
 
@@ -7201,7 +7201,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Line 2: `"version": "1.0.0"` -- Manifest version, not package version; reasonable. Line 12: `"version": "Omi-v1.2.0"` -- Protocol version. Neither is necessarily stale. |
 | **Execution targets** | Not mentioned as a set. Individual components (CoTURN, WebRTC, HNSW, etc.) are listed under "hardwareEngines". |
 | **Protocol layers** | Not mentioned as a set of 7 layers. |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 83-93: Service bus definitions include `::4` as coturn-turn-synset-proxy and `::7` as fano-clock-guard -- these are current. The manifest is comprehensive and well-maintained. Line 344 has a long "implemented" list that includes nearly everything mentioned. |
 | **Recommendation** | **SKIP** -- No stale references. Manifest is thorough and current. |
 
@@ -7215,7 +7215,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned as a set (JS, C99, WASM, eBPF). |
 | **Protocol layers** | Not mentioned as 7 protocol layers. |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 24: References `omi-8` as "FS frame, master browser surface" in the table, which is the older FS shorthand. This is documented as backward-compat but may confuse readers. Line 66: Uses `[data-omi^="omi-8"]` as CSSOM example -- the `omi-8` prefix is deprecated per the current standard. Line 168: Mentions "full distributed networking stack" as implemented -- this may be aspirational/overstated. Line 232: References `dev-docs/` MCRSGSP.md -- this is fine as reference-only. |
 | **Recommendation** | **UPDATE** -- Lines 24 and 66 reference the deprecated `omi-8` shorthand in examples. While documented as backward-compat, the canonical form should be `omi-ffff` in primary examples. |
 
@@ -7229,7 +7229,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Line 6: `"Version: 0.1"` -- Fine for a spec version. |
 | **Execution targets** | Not mentioned explicitly as a set of 4. Appendix A lists reference implementation files which include JS, but no mention of C99, WASM, or eBPF/XDP targets. |
 | **Protocol layers** | Not mentioned as 7 protocol layers. |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected. The spec appears current and well-maintained. Appendix A file list is comprehensive. |
 | **Recommendation** | **SKIP** -- Already current. However, note that the spec does not mention eBPF/XDP or C99/WASM as execution targets; if these are considered canonical, the spec could be updated to reference them in Section 14 or an appendix. |
 
@@ -7243,7 +7243,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned as a set. |
 | **Protocol layers** | Not mentioned as 7 protocol layers. |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 3: Aspirational notice says unified sequencer "does not yet exist" -- this may still be accurate. The document is explicitly aspirational so staleness is less critical. |
 | **Recommendation** | **SKIP** -- Explicitly aspirational document. Staleness is acknowledged in the document header. |
 
@@ -7257,7 +7257,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 58-59: References `omi-ffff-127-0-0-1` as "older localhost bridge spelling" and says "current pure substrate uses the 8-segment form above." This posture is clear and accurate -- the file describes the 8-segment canonical form. No staleness. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7271,7 +7271,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected. This is a directory-level README linking to sub-documents. All links appear correct. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7285,7 +7285,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 27: `::1..::8` service bus range -- matches current manifest. Line 17: Uses `[data-omi^="omi-8"]` as CSSOM example -- deprecated `omi-8` prefix. |
 | **Recommendation** | **UPDATE** -- Line 17 uses deprecated `omi-8` shorthand in CSS selector example. Should use `omi-ffff` prefix. |
 
@@ -7299,7 +7299,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | None detected. Buffer sizes and SharedArrayBuffer configurations match current usage. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7313,7 +7313,7 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **Version** | Not mentioned |
 | **Execution targets** | Not mentioned |
 | **Protocol layers** | Not mentioned |
-| **`ghcr.io/anomalyco`** | Not present |
+| **`git@github.com:bthornemail/omi-portal`** | Not present |
 | **Other stale facts** | Line 69-71: RS graph channel bridges for FS/GS/RS/US -- current. None detected. |
 | **Recommendation** | **SKIP** -- Already current. |
 
@@ -7327,8 +7327,8 @@ Now I have all the data. Let me compile the comprehensive findings.
 | **STALE TEST COUNT** | `RELEASE_NOTES.md` (line 7, 34-36) | Says 324 tests; actual is 619 |
 | **STALE VERSION** | `RELEASE_NOTES.md` (line 1) | Says v0.3.0; current release is v0.0.1 |
 | **STALE MODULE COUNT** | `CHANGELOG.md` (line 41) | Says 169 modules; actual is 166 |
-| **GHCR.IO/ANOMALYCO** | `AGENTS.md` (line 83) | Still references `ghcr.io/anomalyco/omi-portal` |
-| **GHCR.IO/ANOMALYCO** | `RELEASE_NOTES.md` (lines 28, 43, 61, 62) | Still references `ghcr.io/anomalyco` |
+| **git@github.com:bthornemail/omi-portal** | `AGENTS.md` (line 83) | Still references `git@github.com:bthornemail/omi-portal/omi-portal` |
+| **git@github.com:bthornemail/omi-portal** | `RELEASE_NOTES.md` (lines 28, 43, 61, 62) | Still references `git@github.com:bthornemail/omi-portal` |
 | **DEPRECATED PREFIX** | `omi-object-model.md` (lines 24, 66) | Uses `omi-8` shorthand in primary examples |
 | **DEPRECATED PREFIX** | `omi-distributed-protocol.md` (line 17) | Uses `omi-8` shorthand in CSSOM example |
 | **EXECUTION TARGETS** | All files | The 4 targets (JS, C99, WASM, eBPF/XDP) are never listed together as a canonical set. Mentioned piecemeal in `/docs/EBPF_DELTA_ORBITAL_GATE_v0.md`, `/docs/DELTA_ORBITAL_LEXER_ABI_v0.md`, and `/docs/OMI_IPV6_WIRE_PROFILE_v0.md`, but never in the main docs. |
@@ -7345,8 +7345,8 @@ _Thinking:_
 
 The audit found clear issues in several files. Let me now fix them in order of priority:
 
-1. **AGENTS.md** - ghcr.io/anomalyco reference (line 83)
-2. **RELEASE_NOTES.md** - stale test count, stale version, ghcr.io/anomalyco references (needs rewrite)
+1. **AGENTS.md** - git@github.com:bthornemail/omi-portal reference (line 83)
+2. **RELEASE_NOTES.md** - stale test count, stale version, git@github.com:bthornemail/omi-portal references (needs rewrite)
 3. **CHANGELOG.md** - stale test counts and module count
 4. **docs/omi-object-model.md** - deprecated `omi-8` prefix
 5. **docs/omi-distributed-protocol.md** - deprecated `omi-8` prefix
@@ -7373,7 +7373,7 @@ Findings are in. Five files need updates. Let me fix them now.
     },
     {
       "priority": "high",
-      "content": "Fix AGENTS.md — remove ghcr.io/anomalyco",
+      "content": "Fix AGENTS.md — remove git@github.com:bthornemail/omi-portal",
       "status": "in_progress"
     },
     {
@@ -7419,7 +7419,7 @@ Findings are in. Five files need updates. Let me fix them now.
     "priority": "high"
   },
   {
-    "content": "Fix AGENTS.md — remove ghcr.io/anomalyco",
+    "content": "Fix AGENTS.md — remove git@github.com:bthornemail/omi-portal",
     "status": "in_progress",
     "priority": "high"
   },
@@ -7479,7 +7479,7 @@ Findings are in. Five files need updates. Let me fix them now.
 80: ### CI Pipeline (GitHub Actions)
 81: 
 82: - `.github/workflows/ci.yml` — on push/PR to main: unit tests + QEMU multi-arch matrix (linux/amd64, arm64, arm/v7) + Docker smoke test with COOP/COEP verification
-83: - `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `ghcr.io/anomalyco/omi-portal` with provenance attestation + GitHub Release
+83: - `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `git@github.com:bthornemail/omi-portal/omi-portal` with provenance attestation + GitHub Release
 84: 
 85: ### Docker Architecture
 86: 
@@ -7533,7 +7533,7 @@ Findings are in. Five files need updates. Let me fix them now.
 25:                               ↓
 26: Tag push → Release (multi-arch bake + push + attestation + GitHub Release)
 27:                               ↓
-28: Consumer → docker pull ghcr.io/anomalyco/omi-portal:latest
+28: Consumer → docker pull git@github.com:bthornemail/omi-portal/omi-portal:latest
 29: ```
 30: 
 31: ## Test Results
@@ -7566,8 +7566,8 @@ Findings are in. Five files need updates. Let me fix them now.
 58: 
 59: ## Multi-Arch Images
 60: 
-61: - `ghcr.io/anomalyco/omi-portal:latest` (linux/amd64, linux/arm64, linux/arm/v7)
-62: - `ghcr.io/anomalyco/omi-portal-test:latest` (QEMU test images)
+61: - `git@github.com:bthornemail/omi-portal/omi-portal:latest` (linux/amd64, linux/arm64, linux/arm/v7)
+62: - `git@github.com:bthornemail/omi-portal/omi-portal-test:latest` (QEMU test images)
 63: 
 64: ## Architectural Invariants
 65: 
@@ -7858,8 +7858,8 @@ _Thinking:_
 
 Now I have all the information to make the fixes. Let me fix all five files:
 
-1. **AGENTS.md** - Replace `ghcr.io/anomalyco/omi-portal` with a generic reference
-2. **RELEASE_NOTES.md** - This file is completely stale (v0.3.0, 324 tests, ghcr.io/anomalyco). I should rewrite it to describe the current v0.0.1 state.
+1. **AGENTS.md** - Replace `git@github.com:bthornemail/omi-portal/omi-portal` with a generic reference
+2. **RELEASE_NOTES.md** - This file is completely stale (v0.3.0, 324 tests, git@github.com:bthornemail/omi-portal). I should rewrite it to describe the current v0.0.1 state.
 3. **CHANGELOG.md** - Update the v0.0.1 entry with correct test counts (619 vs 324) and add a note about current state. The older entries are fine since they're historical.
 4. **omi-object-model.md** - Replace `omi-8` with `omi-ffff` in the table and CSS example
 5. **omi-distributed-protocol.md** - Replace `omi-8` with `omi-ffff` in the CSS example
@@ -7872,7 +7872,7 @@ Let me do all edits in parallel where possible.
 ```json
 {
   "filePath": "/root/omi-portal/AGENTS.md",
-  "oldString": "- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `ghcr.io/anomalyco/omi-portal` with provenance attestation + GitHub Release",
+  "oldString": "- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to `git@github.com:bthornemail/omi-portal/omi-portal` with provenance attestation + GitHub Release",
   "newString": "- `.github/workflows/release.yml` — on `v*` tag: multi-arch bake and push to container registry with provenance attestation + GitHub Release"
 }
 ```
@@ -7968,7 +7968,7 @@ Edit applied successfully.
 
 _Thinking:_
 
-Now let me rewrite RELEASE_NOTES.md to reflect the current v0.0.1 state. This file was the most stale — it describes v0.3.0 with 324 tests and ghcr.io/anomalyco references. I'll replace it with current state.
+Now let me rewrite RELEASE_NOTES.md to reflect the current v0.0.1 state. This file was the most stale — it describes v0.3.0 with 324 tests and git@github.com:bthornemail/omi-portal references. I'll replace it with current state.
 
 **Tool: write**
 

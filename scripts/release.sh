@@ -13,7 +13,7 @@ if [ "${1:-}" = "--dry-run" ]; then
 fi
 
 VERSION_SPEC="${1:-patch}"
-REGISTRY="${REGISTRY:-ghcr.io/anomalyco}"
+REGISTRY="${REGISTRY:-git@github.com:bthornemail/omi-portal}"
 REPO="omi-portal"
 
 echo "=== OMI Release: ${VERSION_SPEC} (registry: ${REGISTRY}) ==="

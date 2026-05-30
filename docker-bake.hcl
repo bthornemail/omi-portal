@@ -1,5 +1,5 @@
 variable "REGISTRY" {
-  default = "ghcr.io/anomalyco"
+  default = "git@github.com:bthornemail/omi-portal"
 }
 
 variable "TAG" {
