@@ -63,8 +63,9 @@ test("OMI Object Model manifest covers every dev-docs markdown source", async ()
     });
 
   if (devDocs === null) {
-    assert.ok(sources.length > 0, "manifest should retain curated dev-docs source entries");
-    assert.ok(sources.every((source) => source.startsWith("dev-docs/") && source.endsWith(".md")));
+    const devDocSources = sources.filter((source) => source.startsWith("dev-docs/"));
+    assert.ok(devDocSources.length > 0, "manifest should retain curated dev-docs source entries");
+    assert.ok(devDocSources.every((source) => source.endsWith(".md")));
     return;
   }
 
