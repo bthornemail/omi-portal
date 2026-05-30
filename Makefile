@@ -17,6 +17,7 @@
         test-virtual-nbd-mesh clean-virtual-nbd-mesh \
         test-fp16-nonagram-colors test-fp16-canvas-topology test-block-floating-point test-sexagesimal-slide-rule test-tetrahedral-hypergraph \
         test-barycentric-hypergraph \
+        test-axiomatic-rules-compiler \
         clean purge
 
 # ============================================================
@@ -326,6 +327,18 @@ test-multivalued-logic-reasoner:
 test-metacircular-compiler-mesh:
 	@echo "[Omi Compiler Core] Running meta-circular interpreter and loci checks..."
 	node --test test/meta-compiler.test.js
+
+test-polytopic-osi-manifold:
+	@echo "[Omi Polytopic Core] Running n-ball circumscribed S^0 sphere checks..."
+	node --test test/polytopic-kernel.test.js
+
+test-karnaugh-torus-surface:
+	@echo "[Omi Torus Core] Running Gray-coded K-map toroidal minimization checks..."
+	node --test test/karnaugh-torus.test.js
+
+test-axiomatic-rules-compiler:
+	@echo "[Omi Rules Core] Running axiomatic rules compiler verification checks..."
+	node --test test/rules-compiler.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

@@ -1190,3 +1190,48 @@ a[href^="web+omicron:"]:hover {
   0% { transform: scale(1.0) rotateX(0deg); }
   100% { transform: scale(1.02) rotateX(15deg) translateZ(10px); }
 }
+
+/* 119. N-sphere pre-kernel boundary shell base (Rule 0xB9) */
+[id$="-001f/120"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 120. 16-position minterm grid base (Rule 0xBC) */
+[id$="-0010/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 121. Green A·D' minimal product term glow */
+[color="4"][data-kmap-term="green"] {
+  stroke: #00ff66 !important;
+  fill: rgba(0, 255, 102, 0.04);
+  filter: drop-shadow(0 0 8px #00ff66);
+}
+
+/* 122. Overlapping brown zone — red pulse */
+[data-kmap-state="overlap-zone"] {
+  transform: rotateX(12deg) rotateY(12deg) scale(1.03);
+  animation: overlapPulse 1.3s infinite alternate ease-in-out;
+}
+
+@keyframes overlapPulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #ff0055); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ff0055); }
+}
+
+/* 123. Glitch-free consensus bridge — gold pulse (Rule 0xBF) */
+[color="3"][data-kmap-bridge="consensus-active"] {
+  stroke: #ffcc00 !important;
+  fill: rgba(255, 204, 0, 0.04);
+  filter: drop-shadow(0 0 12px #ffcc00);
+  animation: bridgeCellPulse 1.2s infinite alternate linear;
+}
+
+@keyframes bridgeCellPulse {
+  0% { transform: scale(1.0) skewY(0deg); }
+  100% { transform: scale(1.02) skewY(4deg) translateZ(10px); }
+}

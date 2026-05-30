@@ -463,3 +463,63 @@ omi-0000-0003-ffff-0000-0000-0000-0000-0000/48 MUST match-method-of-loci-octuple
 # The compiled output of the meta-translation matrix MUST emit single-character preset marks.
 # Any structural contradiction found during compiler execution MUST trigger an immediate XDP_DROP.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-metaprogram-semantics-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - POLYTOPIC OSI ENVELOPE RULES
+# Specification Level: Rules 0xB9 through 0xBB [The Boundary Manifold]
+# ============================================================================
+
+# [Rule 0xB9]: N-Ball to N-Sphere S^0 Circumscribed Enclosure
+# Characters 0x00..0x1F MUST function as the 1D circumscribed sphere enclosing the pre-kernel space.
+# Inbound bytes crossing this boundary fence SHALL map branchlessly to isolate external noise.
+omi-0000-0000-0000-0000-0000-0000-0000-001f/120 MUST isolate-nsphere-prekernel-boundary-shells
+
+# [Rule 0xBA]: Monolithic OSI-Omicron 0x7C00 Continuum Register
+# The complete OSI stack from Layer 1 to Layer 7 MUST map as a unified geometric continuum.
+# The endpoint of this vector space MUST explicitly lock to the genesis bootstrap register 0x7C00.
+omi-0000-0000-0000-0000-0000-0000-7c00-0000/112 MUST anchor-osi-omicron-continuum-registers
+
+# [Rule 0xBB]: Clifford Torus Bitboard Translation
+# Parallel lookahead unifications traversing the n-ball manifold MUST execute vector transforms
+# using lock-free integer bitwise operations to prevent floating-point division penalties.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-clifford-torus-bitboard-translations
+
+# ============================================================================
+# OMI PROTOCOL - TOROIDAL GRAY-CODED K-MAP RULES
+# Specification Level: Rules 0xBC through 0xBE [The Gray Code Base]
+# ============================================================================
+
+# [Rule 0xBC]: 16-Position Minterm Grid Arrangement
+# Inbound Boolean state matrices MUST arrange truth tables in a 4×4 Gray-coded K-map array.
+# Saddr token lookups SHALL verify cell positions branchlessly to eliminate execution race conditions.
+omi-0000-0000-0000-0000-0000-0000-0000-0010/128 MUST arrange-graycoded-kmap-minterm-grids
+
+# [Rule 0xBD]: Toroidal Edge-Wrapping Adjacency Lock
+# Rectangular minterm groups (areas of 1, 2, 4, 8) MUST wrap across the extreme right-to-left
+# and top-to-bottom grid boundaries, evaluating neighboring bits without software pointer hops.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST lock-toroidal-edge-wrapping-adjacencies
+
+# [Rule 0xBE]: SOP/POS Canonical Minimization Output
+# Optimized combinations of 1s or 0s MUST output directly to raw single-digit color preset keys.
+# Any structural contradiction found during boolean factorization MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-minimized-sop-logic-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - TOROIDAL CONSENSUS LOGIC RULES
+# Specification Level: Rules 0xBF through 0xC1 [The Hazard-Free Lock]
+# ============================================================================
+
+# [Rule 0xBF]: Glitch-Free Redundant Consensus Term Enforcement
+# Runtimes tracking adjacent disjoint region moves MUST generate the consensus term A·D' (yellow bridge)
+# and its dual POS factor (A + D') branchlessly to eliminate asynchronous race hazards.
+omi-0000-0000-0000-0000-0000-0000-0000-0010/128 MUST execute-glitchfree-toroidal-consensus-terms
+
+# [Rule 0xC0]: 2-Variable 2x2 Minterm Matrix Serialization
+# Low-level 2-variable sub-cells MUST evaluate against the 16 canonical minterm blocks sum_m(0..3).
+# Blocks crossing the cylinder boundaries SHALL handle wrapping without software pointer jumps.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST serialize-twovariable-kmap-minterms
+
+# [Rule 0xC1]: Consensus Bridge Canvas Preset Allocation
+# Active hazard-hedged logic states executing under consensus terms MUST emit single-character preset marks.
+# Active bridging vectors resolving race hazards SHALL route directly to layout code "3" (yellow).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-consensus-bridge-outputs-to-presets
