@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.2 (2026-05-30)
+
+### Release
+- v0.0.2 — multi-arch: linux/amd64, linux/arm64, linux/arm/v7
+- Full CI pipeline: unit → build → QEMU cross-arch → smoke
+- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice, hypergraph canvas
+- 644 tests passing, 0 failing; build transforms 166 modules
+
+---
+
+# Changelog
+
 ## v0.0.1 (2026-05-29)
 
 ### Release
