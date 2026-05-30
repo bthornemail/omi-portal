@@ -35,7 +35,10 @@ else
   LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
   LATEST_VERSION="${LATEST_TAG#v}"
 
-  IFS='.' read -r MAJ MIN PAT <<< "${LATEST_VERSION}.0.0"
+  IFS='.' read -r MAJ MIN PAT _EXTRA <<< "${LATEST_VERSION}"
+  MAJ="${MAJ:-0}"
+  MIN="${MIN:-0}"
+  PAT="${PAT:-0}"
   case "$VERSION_SPEC" in
     major) MAJ=$((MAJ + 1)); MIN=0; PAT=0 ;;
     minor) MIN=$((MIN + 1)); PAT=0 ;;
@@ -66,11 +69,11 @@ node -e "
 # 4. Update CHANGELOG.md header
 echo "[2/6] Updating CHANGELOG.md..."
 DATE=$(date +%Y-%m-%d)
-sed -i "1s|^|# Changelog\n\n## ${NEW_TAG} (${DATE})\n\n### Release\n- ${NEW_TAG} — multi-arch: linux/amd64, linux/arm64, linux/arm/v7\n- Full CI pipeline: unit → build → QEMU cross-arch → smoke\n- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice\n- 324+ tests passing, 0 failing\n\n---\n\n|" CHANGELOG.md
+sed -i "1s|^|# Changelog\n\n## ${NEW_TAG} (${DATE})\n\n### Release\n- ${NEW_TAG} — multi-arch: linux/amd64, linux/arm64, linux/arm/v7\n- Full CI pipeline: unit → build → QEMU cross-arch → smoke\n- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice, hypergraph canvas\n- 644 tests passing, 0 failing; build transforms 166 modules\n\n---\n\n|" CHANGELOG.md
 
 # 5. Commit and tag
 echo "[3/6] Committing and tagging..."
-git add package.json CHANGELOG.md
+git add package.json CHANGELOG.md scripts/release.sh
 git commit -m "release: ${NEW_TAG}"
 git tag -a "${NEW_TAG}" -m "OMI Portal ${NEW_TAG}"
 
