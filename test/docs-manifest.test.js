@@ -36,7 +36,7 @@ test("OMI Object Model manifest declares required canonical sections", async () 
   assert.equal(manifest.protocol.version, "Omi-v1.2.0");
 });
 
-test("OMI Object Model manifest covers every dev-docs markdown source", async () => {
+test("OMI Object Model manifest tracks curated dev-docs provenance without requiring build context", async () => {
   const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const devDocsDir = join(repoRoot.pathname, "dev-docs");
   const sources = manifest.sources.map((source) => source.path).sort();
