@@ -297,6 +297,31 @@ export const GENESIS_SEGMENTS = (() => {
   return frame ? frame.S : null;
 })();
 
+/**
+ * Pack a 64-bit receipt from semantic components.
+ * Bit layout: [16-bit provenance][8-bit steps][8-bit LL][16-bit NN][16-bit MM]
+ */
+export function packReceipt(provenanceTag, steps, LL, NN, MM) {
+  return (BigInt(provenanceTag & 0xFFFF) << 48n) |
+         (BigInt(steps & 0xFF) << 40n) |
+         (BigInt(LL & 0xFF) << 32n) |
+         (BigInt(NN & 0xFFFF) << 16n) |
+          BigInt(MM & 0xFFFF);
+}
+
+/**
+ * Unpack a 64-bit receipt into semantic components.
+ */
+export function unpackSlot(row) {
+  return {
+    provenanceTag: Number((row >> 48n) & 0xFFFFn),
+    steps: Number((row >> 40n) & 0xFFn),
+    LL: Number((row >> 32n) & 0xFFn),
+    NN: Number((row >> 16n) & 0xFFFFn),
+    MM: Number(row & 0xFFFFn)
+  };
+}
+
 export function verifyInstructionPipeline(S) {
   const valid = isOrbitLexerValid(S);
   if (!valid) return { valid: false, reason: 'GATE_1_STRUCTURAL_MALFORMATION' };

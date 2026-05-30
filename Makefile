@@ -28,6 +28,10 @@ compile:
 test:
 	node --test test/*.test.js
 
+test-symbolic-inference:
+	@echo "[Omi Inference] Running Prolog unification and WordNet synset checks..."
+	node --test test/prolog-inference.test.js
+
 stage:
 	docker compose down --volumes --remove-orphans || true
 	docker compose up --build -d omi-kernel-node

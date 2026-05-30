@@ -272,7 +272,29 @@ svg {
   filter: drop-shadow(0 0 10px #ff0055);
 }
 
-/* 29a. Authoritative subnet vector blocks (shorthand hex segment selectors) */
+/* 29a. Symbolic relation Fano point selectors */
+[id^="omi-0100-"] {
+  stroke: #00ffcc;
+  stroke-width: 2px;
+}
+
+[id^="omi-0300-"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 4, 4;
+}
+
+[id*="-2b01-2f01-"][id$="-039f-01ff/48"] {
+  filter: drop-shadow(0 0 12px #ff0055);
+  animation: semanticUnifyPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes semanticUnifyPulse {
+  0% { transform: scale(1.0); opacity: 0.7; }
+  100% { transform: scale(1.04) translateZ(10px); opacity: 1.0; }
+}
+
+/* 29b. Authoritative subnet vector blocks (shorthand hex segment selectors) */
 [id*="-df00-"] {
   stroke: #00ffcc !important;
   filter: drop-shadow(0 0 10px #00ffcc);

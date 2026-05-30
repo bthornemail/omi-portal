@@ -19,3 +19,22 @@ omi-2607-f1c0-f062-e900-0000-0000-0000-0000/80  FACT remote-proxy-subnet-mask
 
 # --- Section 3: Authoritative Repository Provenance ---
 omi-03bf-002d-706f-7274-616c-0000-0000-aa55/128 FACT git-repository-bthornemail-omi-portal
+
+# ============================================================================
+# OMI PROTOCOL - PROLOG/WORDNET INFERENCE INVARIANTS
+# Specification Level: Rules 0x62 through 0x64 [Symbolic Logic Mesh]
+# ============================================================================
+
+# [Rule 0x62]: Semantic Fano Point Relation Assignment
+# Fano selectors LL 0x01..0x07 MUST define primitive WordNet semantic relation parameters.
+# Relational transformations (IsA, PartOf, Entails) SHALL guide logical unification paths.
+omi-0000-0000-0000-0000-0000-0000-0000-0001/128 MUST assign-semantic-fano-relation-rules
+
+# [Rule 0x63]: Zero-Allocation Horn-Clause Unification
+# Prolog unification operations across NN and MM columns MUST evaluate using pure bitwise masks.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST unify-symbolic-payloads-branchless
+
+# [Rule 0x64]: Bounded Transitivity Resolution Ceiling
+# Recursive logical resolution passes MUST close inside the Transylvania ceiling limits.
+# Inferences requiring more than 14 steps MUST be dropped to prevent execution cycle drift.
+omi-0000-0000-0000-0000-0000-0000-13b0-000e/128 MUST restrict-symbolic-inference-chains
