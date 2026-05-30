@@ -347,3 +347,84 @@ omi-0000-0000-0000-0000-0000-0000-7463-0001/128 MUST isolate-telemetry-from-repl
 #   COOP/COEP headers. Failure to protect these headers MUST block the
 #   browser context from mapping shared arrays.
 omi-0000-0000-0000-0000-0000-0000-0000-00a4/128 MUST enforce-telemetry-coop-coep-headers
+
+# [Rule 0x58]: Custom Web Protocol Handler Anchor
+#   Browser surfaces MAY register web+omicron and web+omi handlers. Redirected
+#   payloads MUST preserve the unescaped OMI frame through a %s query slot.
+omi-0000-0000-0000-0000-0000-0000-0000-00b8/128 MUST register-browser-protocol-handlers
+
+# [Rule 0x59]: Service Worker Centroid Proxy Interception
+#   Service worker redirects MUST validate protocol frames through the existing
+#   branchless quadratic lexer before broadcasting client messages.
+omi-0000-0000-0000-0000-0000-0000-7463-0002/128 MUST spawn-service-worker-centroid-mesh
+
+# [Rule 0x5A]: Pascal Pyramid Address Space Mapping
+#   Browser protocol routing MUST use deterministic factorial state transitions.
+#   Random routing state SHALL NOT drive replay-ring slot selection.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-pascal-pyramid-address-space
+
+# [Rule 0x5B]: JSON Canvas Architectural Block Size
+#   Generated OmiNode and OmicronNode arrays MUST remain JSON Canvas v1.0
+#   compatible and preserve x, y, width, height, label, and color fields.
+omi-0000-0000-0000-0000-0000-0000-0000-001c/128 MUST emit-json-canvas-compliant-syntax
+
+# [Rule 0x5C]: Translation-Free Canvas Color Controller
+#   JSON Canvas color fields MUST carry the deterministic fp16 base controller
+#   directly. Runtime metadata SHALL NOT append display-context suffix markers.
+omi-ff00-0000-0000-0000-0000-0000-0000-0010/128 MUST encode-translation-free-canvas-color
+
+# [Rule 0x5D]: Clockwise Geometric Edge Alignment
+#   Canvas connector lines MUST anchor only to top, right, bottom, or left
+#   frame slots and SHALL preserve from/to arrow descriptors.
+omi-0000-0000-0000-0000-0000-0000-0000-002d/128 MUST force-clockwise-edge-resolution
+
+# [Rule 0x5E]: IEEE 754 Half-Precision Base Color Controller
+#   Visual node metadata MUST be able to mirror binary16 sign/exponent fields
+#   through a four-color base controller without mutating JSON Canvas syntax.
+omi-0000-0000-0000-0000-0000-0000-0000-0010/128 MUST encode-fp16-sign-exponent-base
+
+# [Rule 0x5F]: Combinatorial 2-of-5 Significand Nonagram
+#   Fraction-state metadata MUST map to one of ten 2-of-5 selector pairs and
+#   SHALL remain numeric metadata for the circular slide rule, not a display
+#   suffix on the carrier token.
+omi-0000-0000-0000-0000-0000-0000-0000-000a/128 MUST enforce-two-of-five-fraction-nonagram
+
+# [Rule 0x60]: Monolithic SCGNN Input Function Injection
+#   Canvas elements that pass the fp16 base check and 2-of-5 selector lock
+#   MAY feed their weight into the shared workspace through existing gates.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-scgnn-input-function-weight
+
+# [Rule 0x61]: Base-60 Lowest Common Multiple Alignment
+#   Circular slide-rule angular velocity MUST exploit the twelve clean divisors
+#   of 60 to avoid floating-point division in sexagesimal coordinate updates.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST anchor-sexagesimal-lcm-base
+
+# [Rule 0x62]: Highly Composite Track Evaluation
+#   Track products MUST compute mechanical angles via (T3 * T4) % 5040 and
+#   route nonagram sectors as one of ten 2-of-5 structural angle pathways.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-highly-composite-slide-rule
+
+# [Rule 0x63]: Four-Axis Delta Law Node Type Mapping
+#   Node filetypes MUST map to the four primitive choices of the Delta Law:
+#   rotl(x,1)=Text, rotl(x,3)=File, rotr(x,2)=Link, and C=Group.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST map-delta-law-to-tetrahedral-vertices
+
+# [Rule 0x64]: Barycentric Centroid Interface Resolution
+#   The OmicronNode MUST calculate its geometric location as the deterministic
+#   barycentric center of its typed text, file, link, and group OmiNodes.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST derive-barycentric-canvas-coordinates
+
+# [Rule 0x65]: Monolithic Hypergraph State Color Coding
+#   Canvas color fields MUST store the deterministic fp16 state controller and
+#   SHALL NOT reintroduce display-context suffix encodings.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST encode-hypergraph-state-color-fields
+
+# [Rule 0x66]: 360-Degree Color Coordination Phase Shift
+#   Spatial phases recovered via divmod(position, 36) MUST map to the 360-degree
+#   color wheel while preserving the translation-free canvas color carrier.
+omi-0000-0000-0000-0000-0000-0000-0000-0024/128 MUST coordinate-three-sixty-degree-colors
+
+# [Rule 0x67]: 24-Bit Architectural Metadata Dividend
+#   Conforming ring buffers MUST utilize the upper 24 bits of the 64-bit slot
+#   format for provenance and step receipts without mutating the truth row.
+omi-ffff-ffff-0000-0000-0000-0000-0000-0000/32 MUST pack-local-execution-metadata-slip

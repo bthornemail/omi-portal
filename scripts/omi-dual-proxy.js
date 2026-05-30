@@ -10,14 +10,23 @@ import http from "node:http";
 import { URL } from "node:url";
 import { readFileSync, existsSync } from "node:fs";
 import { extname, resolve } from "node:path";
+import { OmiAxiomaticKernel } from "../src/omi/axiomatic-kernel.js";
 
 const PORT = 8080;
 const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
 const POLYTOPE_SLOTS = 5040;
+const TUNNEL_OMI_ADDRESS = "omi-2607-f1c0-f0b7-df00-0000-0000-0000-0001/80";
+const EDGE_OMI_ADDRESS = "omi-2607-f1c0-f062-e900-0000-0000-0000-0001/80";
 
 let clientStreams = [];
 const sabBuffer = new SharedArrayBuffer(POLYTOPE_SLOTS * 8);
 const bufferView = new DataView(sabBuffer);
+const axiomaticKernel = new OmiAxiomaticKernel();
+
+await Promise.all([
+  axiomaticKernel.loadOmiFile(new URL("../RULES.omi", import.meta.url), axiomaticKernel.rulesRegistry),
+  axiomaticKernel.loadOmiFile(new URL("../FACTS.omi", import.meta.url), axiomaticKernel.factsRegistry)
+]);
 
 setInterval(() => {
   let tick = bufferView.getBigUint64(0, true);
@@ -57,6 +66,49 @@ const proxyServer = http.createServer((req, res) => {
   }
 
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+
+  if (parsedUrl.pathname === "/healthz") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      status: "healthy",
+      infrastructure: "VPS-8-16-480-Production-Core",
+      role: "TUNNEL_CORE",
+      ipv4: "74.208.190.29",
+      ipv6: "2607:f1c0:f0b7:df00::1",
+      activeConnections: clientStreams.length,
+      endpoints: ["/healthz", "/topology", "/verify-packet", "/omi-stream", "/omi-sab-read", "/omi-sab-write"]
+    }));
+    return;
+  }
+
+  if (parsedUrl.pathname === "/topology") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      role: "TUNNEL_CORE",
+      omiAddress: TUNNEL_OMI_ADDRESS,
+      peerAddress: EDGE_OMI_ADDRESS,
+      ipv4: "74.208.190.29",
+      ipv6: "2607:f1c0:f0b7:df00::1"
+    }));
+    return;
+  }
+
+  if (parsedUrl.pathname === "/verify-packet" && req.method === "POST") {
+    let rawBody = "";
+    req.on("data", (chunk) => { rawBody += chunk.toString(); });
+    req.on("end", () => {
+      const token = rawBody.trim();
+      const compliant = axiomaticKernel.verifyPacketCompliance(token);
+      if (compliant) {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("COMPLIANT_SUBSTRATE_TOKEN_ACCEPTED");
+        return;
+      }
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("EVICTION_FAULT_DISMISSED");
+    });
+    return;
+  }
 
   if (parsedUrl.pathname === "/omi-stream") {
     res.writeHead(200, {

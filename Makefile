@@ -11,6 +11,10 @@
         build-gui-reference test-user-space-ui \
         test-wire-profile \
         start-telemetry stop-telemetry test-telemetry \
+        test-web-protocol-proxy \
+        test-json-canvas-spec export-genesis-canvas \
+        test-fp16-nonagram-colors test-sexagesimal-slide-rule test-tetrahedral-hypergraph \
+        test-barycentric-hypergraph \
         clean purge
 
 # ============================================================
@@ -160,6 +164,10 @@ sliderule-combinatorial-test:
 	node --test test/sliderule-sync.test.js
 	@echo "[Omi SlideRule] Mechanical flight computer validation matrix verified green."
 
+test-sexagesimal-slide-rule:
+	@echo "[Omi Base-60] Running highly composite divisor and nonagram checks..."
+	node --test test/sliderule-sync.test.js
+
 .PHONY: projective-lan-cascade-test
 
 projective-lan-cascade-test:
@@ -218,6 +226,32 @@ test-telemetry:
 	@echo "[Telemetry] Probing WAN latency probe status..."
 	curl -s http://127.0.0.1:8082/healthz && echo "" && echo "[Telemetry] Probe OK"
 	curl -s http://127.0.0.1:8082/wan-status
+
+test-web-protocol-proxy:
+	@echo "[Omi Web Proxy] Running Service Worker protocol handler intercept checks..."
+	node --test test/sw-proxy.test.js
+
+test-json-canvas-spec:
+	@echo "[Omi Canvas] Running JSON Canvas Version 1.0 structural checks..."
+	node --test test/canvas-spec.test.js
+
+test-tetrahedral-hypergraph:
+	@echo "[Omi Hypergraph] Running JSON Canvas v1.0 tetrahedral barycentric checks..."
+	node --test test/canvas-spec.test.js
+
+test-barycentric-hypergraph:
+	@echo "[Omi Hypergraph] Running 360-degree barycentric color and 24-bit dividend checks..."
+	node --test test/canvas-spec.test.js
+
+test-fp16-nonagram-colors:
+	@echo "[Omi FP16 Color] Running 2-of-5 combinatorial nonagram checks..."
+	node --test test/canvas-spec.test.js
+
+export-genesis-canvas:
+	@echo "[Omi Canvas] Generating monolithic Genesis instruction layout document..."
+	@mkdir -p dist
+	node -e "import { OmiJsonCanvasKernel } from './src/canvas/omicron-canvas.js'; import { GENESIS_SEGMENTS } from './src/omi/delta-orbital-lexer.js'; const k = new OmiJsonCanvasKernel(); console.log(k.generateOmicronCanvasSpec(GENESIS_SEGMENTS));" > dist/genesis-canvas.canvas
+	@echo "  - Complete schematic exported cleanly to dist/genesis-canvas.canvas."
 
 .PHONY: atomic-concurrency-test live-block-backup-sync
 

@@ -16,7 +16,26 @@ class OmiFrontendPipelineBridge {
     ];
 
     this.activeSource = null;
+    this.initBrowserProtocolSurface();
     this.initStreamingMultiplexer();
+  }
+
+  initBrowserProtocolSurface() {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw-router.js", { type: "module" }).catch(() => {
+        // Service workers require a secure browser context; local file previews skip this path.
+      });
+    }
+
+    if (typeof navigator.registerProtocolHandler === "function" && window.isSecureContext) {
+      const handler = `${window.location.origin}${window.location.pathname}?chronograph=%s`;
+      try {
+        navigator.registerProtocolHandler("web+omi", handler);
+        navigator.registerProtocolHandler("web+omicron", handler.replace("chronograph", "chronometer"));
+      } catch {
+        // Browsers may defer or deny handler registration until user activation.
+      }
+    }
   }
 
   initStreamingMultiplexer() {

@@ -1,3 +1,24 @@
+export const SUPERIOR_COMPOSITE_BASE = 60;
+export const TIMELINE_RING_LIMIT = 5040;
+export const COMPOSITE_DIVISORS = Object.freeze([1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60]);
+
+export function evaluateSexagesimalSlideRuleTrack(track3Word, track4Word) {
+  const t3 = track3Word & 0xFFFF;
+  const t4 = track4Word & 0xFFFF;
+  const computedRawAngle = (t3 * t4) % TIMELINE_RING_LIMIT;
+  const primaryDivisorChannel = COMPOSITE_DIVISORS[computedRawAngle % COMPOSITE_DIVISORS.length];
+  const nonagramTrackSector = computedRawAngle % 10;
+  const isFractionSimplified = (SUPERIOR_COMPOSITE_BASE % primaryDivisorChannel === 0);
+
+  return Object.freeze({
+    computedRawAngle,
+    primaryDivisorChannel,
+    nonagramTrackSector,
+    isFractionSimplified,
+    targetSharedMemorySlot: computedRawAngle % TIMELINE_RING_LIMIT
+  });
+}
+
 export class OmiSexagesimalSlideRuleKernel {
   constructor(sharedMemoryBuffer) {
     if (!sharedMemoryBuffer) throw new Error("[Omi SlideRule] SAB workspace allocation missing.");
@@ -48,9 +69,10 @@ export class OmiSexagesimalSlideRuleKernel {
     const isIPv4MappedPair = (track4 === 0xFFFF);
     const isValidTwoOfFive = (activeTrackCount === 2 || track5 === 0x0003 || isIPv4MappedPair);
 
-    const computedSlideAngle = (track3 * (track4 || 1)) % 5040;
+    const sexagesimalTrack = evaluateSexagesimalSlideRuleTrack(track3, track4 || 1);
+    const computedSlideAngle = sexagesimalTrack.computedRawAngle;
 
-    const targetMemorySlot = track4 % 5040;
+    const targetMemorySlot = track4 % TIMELINE_RING_LIMIT;
     if (isValidTwoOfFive) {
       const asBigInt = this._float64ToBigInt64(computedSlideAngle || 1.0);
       Atomics.store(this.bigIntArray, targetMemorySlot, asBigInt);
@@ -75,6 +97,7 @@ export class OmiSexagesimalSlideRuleKernel {
       isIPv4MappedPair,
       computedSlideAngle,
       targetMemorySlot,
+      sexagesimalTrack,
       isTerminalFractalDepth: (track5 === 0x0007),
       projective,
       boot,

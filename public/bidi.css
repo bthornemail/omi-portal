@@ -510,3 +510,126 @@ svg {
   0% { opacity: 0.6; transform: scale(1.0); }
   100% { opacity: 1.0; transform: scale(1.03) translateZ(10px); }
 }
+
+/* 48. Browser protocol handler anchors — visible only as protocol links */
+a[href^="web+omi:"],
+a[href^="web+omicron:"] {
+  color: #00ffcc;
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 1px dashed #00ffcc;
+  transition: color 0.12s ease-out, border-color 0.12s ease-out, filter 0.12s ease-out;
+}
+
+a[href^="web+omi:"]:hover,
+a[href^="web+omicron:"]:hover {
+  color: #ffaa00;
+  border-bottom-color: #ffaa00;
+  filter: drop-shadow(0 0 6px #ffaa00);
+}
+
+/* 49. Service worker centroid mesh route — tail 7463:0002 */
+[id*="-0000-0000-7463-0002/"] {
+  stroke: #ff0055;
+  stroke-width: 2px;
+  animation: swCentroidPulse 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes swCentroidPulse {
+  0% { opacity: 0.4; transform: scale(1.0); }
+  100% { opacity: 1.0; transform: scale(1.04) translateZ(15px); filter: drop-shadow(0 0 10px #ff0055); }
+}
+
+/* 50. JSON Canvas exported component overlays */
+[id*="-text-node"] {
+  stroke: #ffaa00;
+  stroke-dasharray: 4, 4;
+}
+
+[id*="-file-node"] {
+  stroke: #00ffcc;
+  stroke-width: 2px;
+}
+
+[id^="edge-"] {
+  stroke-width: 2.5px;
+  animation: connectionArrowPulse 1.2s infinite alternate linear;
+}
+
+@keyframes connectionArrowPulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 2px #ff0055); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 10px #ff0055); }
+}
+
+/* 51. FP16/SCGNN color controller id fragments */
+[id^="omi-"][id*="-color-ff0000"] {
+  stroke: #ff0000;
+  stroke-width: 2px;
+}
+
+[id^="omi-"][id*="-color-ffaa00"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+}
+
+[id^="omi-"][id*="-color-0088ff"] {
+  stroke: #0088ff;
+  stroke-width: 2px;
+}
+
+[id$="-003c/128"] {
+  stroke: #00ffcc;
+  stroke-width: 2px;
+}
+
+[id*="-2b"][id*="-2f"] {
+  transform: rotateZ(120deg);
+  filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.6));
+  transition: transform 0.1s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+[id*="-13b0-"] {
+  fill: none;
+  stroke-width: 2px;
+  transform-style: preserve-3d;
+}
+
+[id="omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48"] {
+  stroke: #ff0055 !important;
+  stroke-width: 3.5px;
+  filter: drop-shadow(0 0 14px #ff0055);
+}
+
+/* 52. Tetrahedral hypergraph centroid and typed OmiNode vertices */
+[id*="-vertex-text"] {
+  stroke: #ffaa00;
+  stroke-dasharray: 4, 2;
+}
+
+[id*="-vertex-file"] {
+  stroke: #0088ff;
+  stroke-width: 1.5px;
+}
+
+[id*="-vertex-link"] {
+  stroke: #00ffcc;
+  stroke-width: 1.5px;
+}
+
+[id*="-vertex-group"] {
+  transform-style: preserve-3d;
+  transform: rotateX(15deg) rotateY(-15deg);
+  filter: drop-shadow(0 0 8px rgba(0, 255, 204, 0.3));
+  transition: transform 0.1s ease-out;
+}
+
+[id*="-vertex-group"]:hover,
+[id*="-omicron-centroid"]:hover {
+  transform: rotateX(20deg) rotateY(-10deg) scale(1.02);
+}
+
+[id*="-omicron-centroid"] {
+  stroke: #ff0055;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 85, 0.45));
+}

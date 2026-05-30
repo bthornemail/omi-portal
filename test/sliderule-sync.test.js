@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { OmiSexagesimalSlideRuleKernel } from '../src/omi/sliderule-kernel.js';
+import {
+  COMPOSITE_DIVISORS,
+  evaluateSexagesimalSlideRuleTrack,
+  OmiSexagesimalSlideRuleKernel,
+  SUPERIOR_COMPOSITE_BASE,
+  TIMELINE_RING_LIMIT
+} from '../src/omi/sliderule-kernel.js';
 
 function loadFloat64FromSAB(sab, slot) {
   const big = Atomics.load(new BigInt64Array(sab), slot);
@@ -31,10 +37,34 @@ test('Slide Rule Kernel accurately computes mechanical cross-join angles down to
   const meta = kernel.car(resultCell);
 
   assert.equal(meta.computedSlideAngle, 3600);
+  assert.equal(meta.sexagesimalTrack.computedRawAngle, 3600);
+  assert.equal(meta.sexagesimalTrack.primaryDivisorChannel, 1);
+  assert.equal(meta.sexagesimalTrack.isFractionSimplified, true);
   assert.equal(meta.targetMemorySlot, 0x0036 % 5040);
 
   const storedData = loadFloat64FromSAB(sab, meta.targetMemorySlot);
   assert.equal(storedData, 3600);
+});
+
+test('Base-60 Substrate computes precise integer angles without text markers', (t) => {
+  const metrics = evaluateSexagesimalSlideRuleTrack(0x02D0, 0x0036);
+
+  assert.equal(metrics.computedRawAngle, 3600);
+  assert.equal(metrics.primaryDivisorChannel, 1);
+  assert.equal(metrics.isFractionSimplified, true);
+  assert.equal(metrics.nonagramTrackSector >= 0 && metrics.nonagramTrackSector < 10, true);
+  assert.equal(metrics.targetSharedMemorySlot, 3600);
+});
+
+test('Base-60 Substrate isolates track assignments within divisor and nonagram bounds', (t) => {
+  const metrics = evaluateSexagesimalSlideRuleTrack(0xFFFF, 0x1A2B);
+
+  assert.equal(SUPERIOR_COMPOSITE_BASE, 60);
+  assert.equal(TIMELINE_RING_LIMIT, 5040);
+  assert.deepEqual(COMPOSITE_DIVISORS, [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60]);
+  assert.equal(metrics.nonagramTrackSector >= 0 && metrics.nonagramTrackSector < 10, true);
+  assert.equal(metrics.targetSharedMemorySlot >= 0 && metrics.targetSharedMemorySlot < TIMELINE_RING_LIMIT, true);
+  assert.equal(SUPERIOR_COMPOSITE_BASE % metrics.primaryDivisorChannel, 0);
 });
 
 test('Slide Rule Kernel rejects malformed tokens', (t) => {
