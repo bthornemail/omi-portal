@@ -261,7 +261,7 @@ svg {
   100% { transform: scale(1.06) translateZ(20px); filter: drop-shadow(0 0 16px #ff0055); opacity: 1.0; }
 }
 
-/* 29. WAN node projection selectors */
+/* 29. WAN node projection selectors (full prefix) */
 [id*="omi-2607-f1c0-f062-e900-"] {
   stroke: #00ffcc;
   filter: drop-shadow(0 0 8px #00ffcc);
@@ -270,6 +270,17 @@ svg {
 [id*="omi-2607-f1c0-f0b7-df00-"] {
   stroke: #ff0055;
   filter: drop-shadow(0 0 10px #ff0055);
+}
+
+/* 29a. Authoritative subnet vector blocks (shorthand hex segment selectors) */
+[id*="-df00-"] {
+  stroke: #00ffcc !important;
+  filter: drop-shadow(0 0 10px #00ffcc);
+}
+
+[id*="-e900-"] {
+  stroke: #ffaa00 !important;
+  stroke-dasharray: 4, 4;
 }
 
 @keyframes octahedralPulse {

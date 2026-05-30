@@ -1,0 +1,21 @@
+# ============================================================================
+# OMI PROTOCOL - HARDWARE NETWORK FACT REGISTRIES
+# Specification Level: Authoritative Infrastructure Target Mapping
+# Layer: Physical
+# ============================================================================
+
+# --- Section 1: Tunnel Core VM Node (Ubuntu 24.04 Host) ---
+# Identity: Brian Thorne (github.com/bthornemail)
+# Compute:  8 vCore / 16 GB RAM
+omi-0000-0000-0000-0000-0000-0000-4a30-be1d/128 FACT host-ipv4-address-74.208.190.29
+omi-2607-f1c0-f0b7-df00-0000-0000-0000-0001/128 FACT host-ipv6-address-2607:f1c0:f0b7:df00::1
+omi-2607-f1c0-f0b7-df00-0000-0000-0000-0000/80  FACT tunnel-core-subnet-mask
+
+# --- Section 2: Debian 13 Proxy Node (Remote Edge) ---
+# Compute:  1 vCore / 1 GB RAM / 10 GB NVMe
+omi-0000-0000-0000-0000-0000-0000-4544-6765/128 FACT edge-ipv4-address-69.48.202.32
+omi-2607-f1c0-f062-e900-0000-0000-0000-0001/128 FACT edge-ipv6-address-2607:f1c0:f062:e900::1
+omi-2607-f1c0-f062-e900-0000-0000-0000-0000/80  FACT remote-proxy-subnet-mask
+
+# --- Section 3: Authoritative Repository Provenance ---
+omi-03bf-002d-706f-7274-616c-0000-0000-aa55/128 FACT git-repository-bthornemail-omi-portal

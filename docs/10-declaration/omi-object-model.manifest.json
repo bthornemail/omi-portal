@@ -5,13 +5,13 @@
     "ipv6": "::ffff:127.0.0.1",
     "deprecatedShorthand": "omi-8-127-0-0-1",
     "remoteCodepointRoot": "::/128",
-    "source": "docs/canonical-addressing.md"
+    "source": "docs/03-network/canonical-addressing.md"
   },
   "protocol": {
     "name": "Omicron Object Model Distributed Protocol",
     "version": "Omi-v1.2.0",
     "safetyClassification": "zero-escape-token-structure",
-    "prospectus": "docs/omi-distributed-protocol.md",
+    "prospectus": "docs/03-network/omi-distributed-protocol.md",
     "summary": "Decentralized multi-modal browser protocol joining DOM, CSSOM, JSDOM, graphics memory, WordNet routing, and OMI token prefixes into one addressable route fabric."
   },
   "sources": [
@@ -146,7 +146,7 @@
       "id": "omi-file-v0",
       "extension": ".omi",
       "status": "implemented",
-      "spec": "docs/omi-file-format.md",
+      "spec": "docs/06-presentation/omi-file-format.md",
       "car": {
         "bytes": 4,
         "fields": [
@@ -217,7 +217,7 @@
   "sequencing": {
     "id": "canonical-omi-protocol-sequencing",
     "status": "documented",
-    "spec": "docs/omi-protocol-sequencing.md",
+    "spec": "docs/04-transport/omi-protocol-sequencing.md",
     "surfaces": ["CodeMirror 6", "OMI Kernel Core", "Shared Worker", "DataView SAB", "WebRTC Data Channel", "WebGL 2 Canvas"],
     "phases": [
       {
@@ -345,6 +345,46 @@
     "documentedFuture": ["full Prolog runtime", "WebGL 2 shader stream", "two-cube UPOS Fano token grammar", "Fano collision validator"],
     "deprecated": ["omi-8-127-0-0-1 generated shorthand"],
     "referenceOnly": ["large exploratory manifest snippets in dev-docs/Omi Declarative.md", "full transcript content in dev-docs/chat.md"]
+  },
+  "layerMap": {
+    "version": "1.0.0",
+    "index": "docs/10-declaration/LAYERS.md",
+    "layers": [
+      { "id": "physical",     "ordinal": 1, "name": "Physical",     "description": "Hardware boundary, kernel NIC interface, machine facts" },
+      { "id": "data-link",    "ordinal": 2, "name": "Data Link",   "description": "Frame structure, segment encoding, wire format" },
+      { "id": "network",      "ordinal": 3, "name": "Network",     "description": "IP addressing, CIDR containment, subnet routing" },
+      { "id": "transport",    "ordinal": 4, "name": "Transport",   "description": "End-to-end delivery, gossip propagation" },
+      { "id": "session",      "ordinal": 5, "name": "Session",     "description": "Connection lifecycle, epoch management, state coordination" },
+      { "id": "presentation", "ordinal": 6, "name": "Presentation","description": "Encoding, serialization, transformation, BiDi text" },
+      { "id": "application",  "ordinal": 7, "name": "Application", "description": "End-user protocols, object model, declarative framework" },
+      { "id": "surface",      "ordinal": 8, "name": "Surface",     "description": "Browser rendering surfaces: DOM, CSSOM, SVG, A-Frame, Canvas" },
+      { "id": "diagram",      "ordinal": 9, "name": "Diagram",     "description": "Visual schematics, barcode carriers, canvas export" },
+      { "id": "declaration",  "ordinal": 10,"name": "Declaration", "description": "Manifest, index, provenance, axioms" }
+    ],
+    "documentAssignments": [
+      { "path": "docs/01-physical/FACTS.omi",                              "primary": "physical",     "secondary": [] },
+      { "path": "docs/01-physical/EBPF_DELTA_ORBITAL_GATE_v0.md",          "primary": "physical",     "secondary": ["data-link"] },
+      { "path": "docs/02-data-link/DELTA_ORBITAL_LEXER_ABI_v0.md",         "primary": "data-link",    "secondary": ["presentation"] },
+      { "path": "docs/02-data-link/OMI_IPV6_WIRE_PROFILE_v0.md",           "primary": "data-link",    "secondary": ["network"] },
+      { "path": "docs/03-network/omi-core-spec.md",                        "primary": "network",      "secondary": ["application"] },
+      { "path": "docs/03-network/canonical-addressing.md",                 "primary": "network",      "secondary": [] },
+      { "path": "docs/03-network/omi-distributed-protocol.md",             "primary": "network",      "secondary": ["transport"] },
+      { "path": "docs/04-transport/omi-protocol-sequencing.md",            "primary": "transport",    "secondary": ["session"] },
+      { "path": "docs/05-session/RING_OVERWRITE_POLICY_v0.md",             "primary": "session",      "secondary": [] },
+      { "path": "docs/05-session/memory-layout.md",                        "primary": "session",      "secondary": ["presentation"] },
+      { "path": "docs/06-presentation/omi-file-format.md",                 "primary": "presentation", "secondary": [] },
+      { "path": "docs/06-presentation/control-descriptors.md",             "primary": "presentation", "secondary": [] },
+      { "path": "docs/06-presentation/codemirror-bidi-bridge.md",          "primary": "presentation", "secondary": ["application", "surface"] },
+      { "path": "docs/07-application/omi-object-model.md",                 "primary": "application",  "secondary": ["surface"] },
+      { "path": "docs/07-application/omi-whitepaper.md",                   "primary": "application",  "secondary": [] },
+      { "path": "docs/07-application/prolog-wordnet-aframe.md",            "primary": "application",  "secondary": ["surface"] },
+      { "path": "docs/08-surface/INDEX.md",                                "primary": "surface",      "secondary": [] },
+      { "path": "docs/09-diagram/INDEX.md",                                "primary": "diagram",      "secondary": [] },
+      { "path": "docs/README.md",                                          "primary": "declaration",  "secondary": [] },
+      { "path": "docs/10-declaration/source-map.md",                      "primary": "declaration",  "secondary": [] },
+      { "path": "docs/10-declaration/omi-object-model.manifest.json",     "primary": "declaration",  "secondary": [] },
+      { "path": "docs/10-declaration/LAYERS.md",                          "primary": "declaration",  "secondary": [] }
+    ]
   },
   "complianceChecks": [
     {

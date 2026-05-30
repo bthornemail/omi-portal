@@ -94,6 +94,23 @@ release-dry-run:
 	./scripts/release.sh --dry-run $(filter-out $@,$(MAKECMDGOALS))
 
 # ============================================================
+# LOCAL-FIRST CONTAINER & GIT PUSH
+# ============================================================
+
+OMI_VERSION ?= 0.2.0
+
+compile-local-docker-image:
+	@echo "[Omi Deployment] Building v$(OMI_VERSION) container image locally to host cache..."
+	REGISTRY=omi docker buildx bake --set *.output=type=docker runtime
+	@echo "  - Local container build complete. Image loaded natively to 74.208.190.29."
+
+push-to-git-origin:
+	@echo "[Omi Git Core] Pushing verified release commits to bthornemail/omi-portal..."
+	git push origin main
+	git push origin v$(OMI_VERSION)
+	@echo "  - Git tracking up-to-date on ://github.com."
+
+# ============================================================
 # STRESS / BENCHMARK
 # ============================================================
 

@@ -6,7 +6,7 @@ import { join } from "node:path";
 const repoRoot = new URL("..", import.meta.url);
 
 test("OMI Object Model manifest declares required canonical sections", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   for (const key of [
     "version",
     "canonicalRoot",
@@ -37,7 +37,7 @@ test("OMI Object Model manifest declares required canonical sections", async () 
 });
 
 test("OMI Object Model manifest tracks curated dev-docs provenance without requiring build context", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const devDocsDir = join(repoRoot.pathname, "dev-docs");
   const sources = manifest.sources.map((source) => source.path).sort();
 
@@ -77,7 +77,7 @@ test("OMI Object Model manifest tracks curated dev-docs provenance without requi
 });
 
 test("OMI Object Model manifest declares address spaces and Lisp transformers", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const addressNotations = new Set(manifest.addressSpaces.map((space) => space.notation));
   assert.ok(addressNotations.has("::1..::12"));
 
@@ -104,7 +104,7 @@ test("OMI Object Model manifest declares address spaces and Lisp transformers", 
 });
 
 test("OMI Object Model manifest declares prospectus token layouts and compliance checks", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const layouts = new Set(manifest.tokenLayouts.map((layout) => layout.id));
   assert.ok(layouts.has("canonical-fs-gs-rs-us"));
   assert.ok(layouts.has("fano-wordnet-operator"));
@@ -139,7 +139,7 @@ test("OMI Object Model manifest declares prospectus token layouts and compliance
 });
 
 test("OMI Object Model manifest declares polynomial and lifecycle standard", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   assert.equal(manifest.polynomial.evaluation, "horners-method");
   assert.equal(manifest.polynomial.payloadBytes, 16);
   assert.deepEqual(manifest.polynomial.coefficients.map((coefficient) => coefficient.term), [
@@ -165,8 +165,8 @@ test("OMI Object Model manifest declares polynomial and lifecycle standard", asy
 });
 
 test("OMI Object Model manifest declares protocol sequencing phases", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../docs/omi-object-model.manifest.json", import.meta.url), "utf8"));
-  assert.equal(manifest.sequencing.spec, "docs/omi-protocol-sequencing.md");
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  assert.equal(manifest.sequencing.spec, "docs/04-transport/omi-protocol-sequencing.md");
   assert.deepEqual(manifest.sequencing.phases.map((phase) => phase.id), [
     "ingestion-compilation",
     "memory-time-metrics",

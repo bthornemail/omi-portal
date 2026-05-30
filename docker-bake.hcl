@@ -1,5 +1,5 @@
 variable "REGISTRY" {
-  default = "git@github.com:bthornemail/omi-portal"
+  default = "omi"
 }
 
 variable "TAG" {

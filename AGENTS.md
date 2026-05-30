@@ -33,8 +33,8 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 ## Current Canonical Roots
 
 - Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`)
-- Main framework doc: `docs/omi-object-model.md`
-- Manifest: `docs/omi-object-model.manifest.json`
+- Main framework doc: `docs/07-application/omi-object-model.md`
+- Manifest: `docs/10-declaration/omi-object-model.manifest.json`
 - GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`
 - CIDR kernel: `src/omi/omicron-kernel.js`
 - Sexagesimal kernel: `src/omi/sexagesimal-kernel.js`
