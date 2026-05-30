@@ -301,6 +301,212 @@ export class OmiTetrahedralCanvasKernel extends OmiJsonCanvasKernel {
   }
 }
 
+export class OmiFp16CanvasEncoder {
+  /**
+   * ENCODE WIRE FRAME TO HARDWARE CANVAS:
+   * Maps IEEE 754 binary16 bit-fields directly to OmicronNode canvas properties.
+   * 1 sign bit → Greek/Coptic unicode chirality prefix
+   * 5 exponent bits → OmicronNode rotr(x,16) master rotation + tetrahedral routing
+   * 10 significand bits → 360° barycentric hue color coordinates
+   */
+  encodeWireFrameToCanvasSpec(S, posX = 100, posY = 100) {
+    if (!S || !isOrbitLexerValid(S)) {
+      return JSON.stringify({ error: "GATE_1_ALGEBRAIC_SURFACE_EVICTION" });
+    }
+
+    const rowData = extractTruthRow(S);
+    const word = rowData.NN & 0xFFFF;
+
+    const signBit = (word >> 15) & 0x01;
+    const unicodePrefix = signBit === 0
+      ? "U+03BF ο (Greek Small Omicron)"
+      : "U+2C9F ⲟ (Coptic Small O)";
+
+    const exponentBits = (word >> 10) & 0x1F;
+    const significandBits = word & 0x03FF;
+
+    const hueAngleDegrees = (significandBits * 360) / 1024;
+    const canvasColorHex = `hsl(${hueAngleDegrees}, 100%, 50%)`;
+
+    const nodes = [
+      {
+        id: `omi-node-significand-${significandBits}`,
+        type: "text",
+        x: posX + (significandBits % 60),
+        y: posY,
+        width: 240,
+        height: 120,
+        color: canvasColorHex,
+        text: `### OmicronNode Centroid [rotr(x,16)]\n- **Sign Carrier:** ${unicodePrefix}\n- **Exponent Value:** ${exponentBits}\n- **Significand Base:** ${significandBits}`,
+      },
+    ];
+
+    return JSON.stringify({ nodes, edges: [] }, null, 2);
+  }
+
+  /**
+   * SIGN BIT UNICODE ENCLOSURE:
+   * bit 15 = 0 → Greek (U+039F/U+03BF), bit 15 = 1 → Coptic (U+2C9E/U+2C9F)
+   */
+  resolveSignUnicode(word) {
+    const signBit = (word & 0x8000) !== 0;
+    return signBit
+      ? { bit: 1, prefix: "U+2C9F ⲟ", script: "Coptic", upper: "U+2C9E Ⲟ", lower: "U+2C9F ⲟ" }
+      : { bit: 0, prefix: "U+03BF ο", script: "Greek", upper: "U+039F Ο", lower: "U+03BF ο" };
+  }
+
+  /**
+   * EXPONENT BITS TETRAHEDRAL ROUTING:
+   * Maps 5 exponent bits (bits 14-10) to OmicronNode master rotation + 4 vertex axes
+   */
+  resolveExponentRouting(word) {
+    const exponent = (word >> 10) & 0x1F;
+
+    const masterRotation = `rotr(x,16) → bias ${(exponent * 360) / 32}`;
+
+    const tetrahedralMap = [
+      { operator: "rotl(x,1)",  node: "OmiTextNode",  domain: "US", base: 4, condition: exponent % 4 === 0 },
+      { operator: "rotl(x,3)",  node: "OmiFileNode",  domain: "FS", base: 1, condition: exponent % 4 === 1 },
+      { operator: "rotr(x,2)",  node: "OmiLinkNode",  domain: "RS", base: 3, condition: exponent % 4 === 2 },
+      { operator: "Constant C", node: "OmiGroupNode", domain: "GS", base: 2, condition: exponent % 4 === 3 },
+    ];
+
+    const activeVertex = tetrahedralMap.find((v) => v.condition) || tetrahedralMap[0];
+
+    return {
+      exponentBits: exponent,
+      masterRotation,
+      activeVertex,
+      tetrahedralMap,
+    };
+  }
+
+  /**
+   * SIGNIFICAND BITS COLOR COORDINATION:
+   * 10 bits (9-0) map to x, y, width, height, id, and 360° hue
+   */
+  resolveSignificandColor(word) {
+    const significand = word & 0x03FF;
+    const hue = (significand * 360) / 1024;
+    return {
+      significandBits: significand,
+      hueDegrees: hue,
+      hsl: `hsl(${hue}, 100%, 50%)`,
+      xOffset: significand % 60,
+      yOffset: Math.trunc(significand / 60) % 60,
+      nbdDevice: `/dev/nbd${Math.trunc(significand / 10)}`,
+
+    };
+  }
+}
+
+/**
+ * EXTRACT BLOCK FLOATING POINT COEFFICIENTS:
+ * Loops through the 16-bit instruction chunks, tracks the peak amplitude,
+ * and derives the shared block exponent using count-leading-zeros (CLZ) math.
+ * BFP assigns a group of significands (NN, MM, LL) to a single common exponent.
+ */
+export function extractBlockFloatingPoint(S) {
+  if (!S || !isOrbitLexerValid(S)) return null;
+
+  const rowData = extractTruthRow(S);
+
+  const sigNN = rowData.NN & 0xFFFF;
+  const sigMM = rowData.MM & 0xFFFF;
+  const lensLL = rowData.LL & 0xFF;
+
+  const peakAmplitude = Math.max(sigNN, sigMM, lensLL);
+
+  let leadingZerosCount = 0;
+  let bitmask = 0x8000;
+  while (leadingZerosCount < 16 && (peakAmplitude & bitmask) === 0) {
+    leadingZerosCount++;
+    bitmask >>= 1;
+  }
+
+  const sharedBlockExponent = 16 - leadingZerosCount;
+
+  const normalizedNN = (sigNN << leadingZerosCount) & 0xFFFF;
+  const normalizedMM = (sigMM << leadingZerosCount) & 0xFFFF;
+
+  const hueAngleDegrees = (sharedBlockExponent * 360) / 16;
+  const canvasColorHex = `hsl(${hueAngleDegrees}, 100%, 50%)`;
+
+  return {
+    sharedBlockExponent,
+    leadingZerosCount,
+    normalizedNN,
+    normalizedMM,
+    canvasColorHex,
+    targetSharedMemorySlot: (sharedBlockExponent * sigNN) % 5040,
+  };
+}
+
+export class OmiContinuousClampedEncoder {
+  encodeContinuousClampedColor(S) {
+    if (!S || !isOrbitLexerValid(S)) return null;
+
+    const rowData = extractTruthRow(S);
+
+    const word = rowData.NN & 0xFFFF;
+
+    const signBit = (word >> 15) & 0x01;
+    const alphaHex = signBit === 0 ? "ff" : "33";
+
+    const exponentBits = (word >> 10) & 0x1F;
+    const luminanceScale = Math.round((exponentBits / 31) * 255) & 0xFF;
+
+    const significandBits = word & 0x03FF;
+
+    const hueAngleDegrees = Math.round((significandBits * 360) / 1024);
+
+    const rByte = ((significandBits >> 7) & 0x07) << 5;
+    const gByte = ((significandBits >> 4) & 0x07) << 5;
+    const bByte = (significandBits & 0x0F) << 4;
+
+    const finalR = (rByte ^ luminanceScale) & 0xFF;
+    const finalG = (gByte ^ luminanceScale) & 0xFF;
+    const finalB = (bByte ^ luminanceScale) & 0xFF;
+
+    const rgbHexPayload = finalR.toString(16).padStart(2, '0') +
+                         finalG.toString(16).padStart(2, '0') +
+                         finalB.toString(16).padStart(2, '0');
+
+    return {
+      hueAngleDegrees,
+      significandBits,
+      alphaHex,
+      canonicalHexColorString: `#${rgbHexPayload}${alphaHex}`,
+      timelineSlot: rowData.NN % 5040
+    };
+  }
+}
+
+export class OmiNonogramPresetColorEncoder {
+  derivePresetColorId(S, totalCells = 10, clueBlock = 8) {
+    if (!S || !isOrbitLexerValid(S)) return null;
+
+    const rowData = extractTruthRow(S);
+
+    const step2Difference = totalCells - clueBlock;
+    const blocksToBackfill = clueBlock - step2Difference;
+
+    let targetPresetColor = "5";
+
+    if ((rowData.NN & 0x8000) !== 0) {
+      targetPresetColor = "6";
+    } else if (blocksToBackfill !== 6) {
+      targetPresetColor = "1";
+    }
+
+    return {
+      blocksToBackfill,
+      targetPresetColor,
+      timelineSlot: rowData.NN % 5040
+    };
+  }
+}
+
 export class OmiBarycentricCanvasKernel extends OmiTetrahedralCanvasKernel {
   processMetadataDividend(S, provenanceTag = 0, resolver = fanoTruthResolver) {
     if (!S || !isOrbitLexerValid(S)) {

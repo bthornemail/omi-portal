@@ -10,10 +10,12 @@
         boot-x86_64 boot-i386 boot-aarch64 boot-riscv64 boot-ppc64 \
         build-gui-reference test-user-space-ui \
         test-wire-profile \
+        test-wan-telemetry \
         start-telemetry stop-telemetry test-telemetry \
         test-web-protocol-proxy \
         test-json-canvas-spec export-genesis-canvas \
-        test-fp16-nonagram-colors test-sexagesimal-slide-rule test-tetrahedral-hypergraph \
+        test-virtual-nbd-mesh clean-virtual-nbd-mesh \
+        test-fp16-nonagram-colors test-fp16-canvas-topology test-block-floating-point test-sexagesimal-slide-rule test-tetrahedral-hypergraph \
         test-barycentric-hypergraph \
         clean purge
 
@@ -242,6 +244,40 @@ start-telemetry:
 stop-telemetry:
 	@echo "[Telemetry] Stopping WAN latency probe daemon..."
 	./scripts/run-telemetry.sh stop
+
+test-wan-telemetry:
+	@echo "[Telemetry] Running WAN telemetry loop unit tests..."
+	node --test test/wan-telemetry.test.js
+
+test-virtual-nbd-mesh:
+	@echo "[Omi Virtualization] Setting up shared block devices and executing verification loops..."
+	node --test test/qemu-mesh.test.js
+
+test-fp16-canvas-topology:
+	@echo "[Omi FP16 Topology] Running sign, exponent, and significand bit-to-node canvas checks..."
+	node --test test/fp16-canvas.test.js
+
+test-block-floating-point:
+	@echo "[Omi BFP Core] Running count-leading-zeros and block exponent checks..."
+	node --test test/bfp-canvas.test.js
+
+.PHONY: test-nonogram-nat64-matrix test-preset-color-matrix test-chromatic-rgba-matrix
+
+test-nonogram-nat64-matrix:
+	@echo "[Omi Nonogram] Running mathematical overlap and NAT64 transition checks..."
+	node --test test/nonogram-resolver.test.js
+
+test-preset-color-matrix:
+	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."
+	node --test test/preset-color.test.js
+
+test-chromatic-rgba-matrix:
+	@echo "[Omi Chromatic Core] Running continuous HSV and discrete clamped RGBA checks..."
+	node --test test/chromatic-rgba.test.js
+
+clean-virtual-nbd-mesh:
+	@echo "[Omi Virtualization] Evicting local NBD kernel maps..."
+	sudo qemu-nbd --disconnect /dev/nbd0 > /dev/null 2>&1 || true
 
 test-telemetry:
 	@echo "[Telemetry] Probing WAN latency probe status..."

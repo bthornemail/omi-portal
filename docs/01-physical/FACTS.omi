@@ -38,3 +38,148 @@ omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST unify-symbolic-payloads-bran
 # Recursive logical resolution passes MUST close inside the Transylvania ceiling limits.
 # Inferences requiring more than 14 steps MUST be dropped to prevent execution cycle drift.
 omi-0000-0000-0000-0000-0000-0000-13b0-000e/128 MUST restrict-symbolic-inference-chains
+
+# ============================================================================
+# OMI PROTOCOL - WAN TELEMETRY LOOP INVARIANTS
+# Specification Level: Rules 0x65 through 0x67 [Cross-Internet Probing]
+# ============================================================================
+
+# [Rule 0x65]: Interval-Bounded Probe Cycle
+# Telemetry probes between tunnel-core (74.208.190.29) and edge (69.48.202.32)
+# MUST fire at a cadence of 5 ± 1 seconds. Probes exceeding 10 seconds MUST
+# be logged as cycle drift warnings and MUST NOT queue.
+omi-0000-0000-0000-0000-0000-0000-4e20-1388/128 MUST bound-probe-cycle-5s-10s
+
+# ============================================================================
+# OMI PROTOCOL - EMBEDDED QEMU & NBD BLOCK INVARIANTS
+# Specification Level: Rules 0x68 through 0x6A [Virtual Grid Fences]
+# ============================================================================
+
+# [Rule 0x68]: Shared Network Block Device (NBD) Interface Allocation
+# Every concurrent QEMU runtime instance MUST mount the shared SAB timeline
+# via /dev/nbd0. The disk backend MUST preserve the big-endian 64-bit record
+# slot structure without mapping offsets.
+omi-0000-0000-0000-0000-0000-0000-0000-005c/128 MUST mount-shared-nbd-block-backing-array
+
+# [Rule 0x69]: Multi-Variant QEMU Architecture Synchronization
+# The test mesh MUST execute at least two asymmetric architecture profiles
+# (amd64 and arm64). Guest operating environments MUST achieve identical,
+# byte-accurate outputs for all unrolled delta steps.
+omi-0000-0000-0000-0000-0000-0000-0000-00c8/128 MUST synchronize-multi-variant-qemu-guests
+
+# [Rule 0x70]: Networked Docker Hypergraph Mesh
+# Local container bridges MUST distribute incoming IPv6 saddr address
+# instructions across variants. Write contentions inside the 5040 slots
+# MUST resolve via lock-free CAS loops over the NBD boundary.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST route-decentralized-hypergraph-mesh
+
+# [Rule 0x66]: Ring-Buffered History Bounds
+# Probe history MUST be maintained as a ring buffer with a hard ceiling of
+# 360 entries (= 30 minutes at 5s intervals). Older entries MUST be evicted
+# before new entries to prevent unbounded memory growth.
+omi-0000-0000-0000-0000-0000-0000-0168-0001/128 MUST ring-evict-history-at-360
+
+# [Rule 0x67]: SSE Broadcast Liveness
+# Every completed probe cycle MUST broadcast a wan-latency event to all
+# connected SSE clients within 100ms of cycle completion. Dead clients
+# MUST be silently removed without affecting downstream clients.
+omi-0000-0000-0000-0000-0000-0000-1f92-0064/128 MUST broadcast-sse-within-100ms
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE FP16 TOPOGRAPHY RULES
+# Specification Level: Rules 0x77 through 0x79 [The Absolute Bit-to-Node Lock]
+# ============================================================================
+
+# [Rule 0x77]: Sign Bit Unicode Chirality Enclosure
+# The sign bit (bit 15) MUST dictate the selection of the primary OMI string prefix.
+# Positive maps to Greek U+039F/U+03BF; negative maps to Coptic U+2C9E/U+2C9F.
+omi-03bf-2c9f-0000-0000-0000-0000-0000-0000/32 MUST enforce-sign-bit-unicode-chirality
+
+# [Rule 0x78]: Exponent Bit Tetrahedral Routing
+# The 5 exponent bits (bits 14-10) MUST guide data flows across the 4 OmiNode classes.
+# The master coordinate axis MUST map cleanly via the OmicronNode rotation operator: rotr(x,16).
+omi-0000-0000-0000-0000-0000-0000-0000-001f/128 MUST route-exponent-bits-to-vertices
+
+# [Rule 0x79]: Significand Bit Color Coordinates
+# The 10 explicitly stored significand bits (bits 9-0) MUST drive canvas visual attributes.
+# The 10 bits MUST map directly to x, y, width, height, id, and 360-degree color coordinates.
+omi-0000-0000-0000-0000-0000-0000-0000-03ff/128 MUST map-significand-bits-to-color-coordinates
+
+# ============================================================================
+# OMI PROTOCOL - BLOCK FLOATING POINT HARDWARE RULES
+# Specification Level: Rules 0x7A through 0x7C [BFP Register Fences]
+# ============================================================================
+
+# [Rule 0x7A]: Shared Block Floating Point Exponent Alignment
+# Every OmicronNode instruction frame MUST compute a single, unified block exponent.
+# Individual OmiNode significands SHALL share this common scale factor to conserve space.
+omi-0000-0000-0000-0000-0000-0000-0000-0010/128 MUST anchor-block-floating-point-exponent
+
+# [Rule 0x7B]: Branchless Count Leading Zeros (CLZ) Normalization
+# The shared block exponent MUST be extracted by calculating the leading zeros of the array.
+# The data trajectory MUST normalize directly to the dynamic range of the local hardware.
+omi-0000-0000-0000-0000-0000-0000-0000-0020/128 MUST execute-clz-exponent-detection
+
+# [Rule 0x7C]: Monolithic BFP Amplitude Scaling
+# Multi-client unifications crossing the 16*16 change paths MUST scale significands natively
+# via the shared block exponent inside the SharedArrayBuffer memory slots, avoiding float taxes.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-bfp-amplitude-scaling
+
+# ============================================================================
+# OMI PROTOCOL - NONOGRAM NAT64 SMITH CHART INVARIANTS
+# Specification Level: Rules 0x7D through 0x7F [Topological Logic Fences]
+# ============================================================================
+
+# [Rule 0x7D]: NAT64 Well-Known Prefix Anchor
+# Transition packets mapping IPv4 subnets MUST use the canonical prefix 64:ff9b::/96.
+# Saddr-extracted tokens below ::ffff:127.0.0.1 MUST route natively via this boundary.
+omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96 MUST anchor-nat64-well-known-prefix
+
+# [Rule 0x7E]: Negative Resistance Smith Chart Reflection
+# Coordinates yielding a negative real reflection coefficient (Re[z] < 0) MUST map to purple
+# circles. These tracks define subnormal BFP operations, bounded to the 2^-24 precision limit.
+omi-0000-0000-0000-0000-0000-0000-7363-0000/112 MUST map-negative-resistance-purple-circles
+
+# [Rule 0x7F]: Nonogram Line Logic Deterministic Evaluation
+# Vector cell validations across rows and columns MUST use branchless overlap conjunctions.
+# Any structural contradiction found during line forcing MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-nonogram-line-logic-matrix
+
+# ============================================================================
+# OMI PROTOCOL - NONOGRAM PRESET COLOR RULES
+# Specification Level: Rules 0x80 through 0x82 [Integer Color Invariants]
+# ============================================================================
+
+# [Rule 0x80]: JSON Canvas Six-Preset Color Delineation
+# Visual node colors MUST map to the standard integer presets when blocksToBackfill equals 6.
+# The attribute string MUST emit raw numbers "1" through "6" to bypass hex value space taxes.
+omi-0000-0000-0000-0000-0000-0000-0000-0006/128 MUST enforce-json-canvas-preset-color-ids
+
+# [Rule 0x81]: Sexagesimal Central Cell Overlap Mapping
+# The 6 centermost cells identified by the clue 8 overlap constraint MUST drive color selections.
+omi-0000-0000-0000-0000-0000-0000-0000-0008/128 MUST coordinate-six-centermost-cells
+
+# [Rule 0x82]: Monolithic Preset Color State Allocation
+# Network transitions showing negative reflection (Re[z] < 0) MUST assign preset color "6" (purple),
+# while compliant genesis boot trajectories MUST assign preset color "5" (cyan) natively.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-preset-color-state-allocation
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE CHROMATIC HSV/RGBA INVARIANTS
+# Specification Level: Rules 0x83 through 0x85 [Continuous-to-Clamped Locks]
+# ============================================================================
+
+# [Rule 0x83]: Exponential Alpha (AA) Filter Gate Modulator
+# The 1-bit sign field MUST control the terminal alpha channel of the canvas color layout string.
+# Positive tracking vectors MUST lock to 0xFF, while negative arrays use attenuated exponential 0x33.
+omi-03bf-2c9f-0000-0000-0000-0000-0000-00aa/128 MUST execute-exponential-alpha-modulations
+
+# [Rule 0x84]: Cylindrical Exponent Value Brightness Scale
+# The 5 exponent bits MUST dictate the exact HSV Value metric across 32 discrete brightness tiers.
+# Higher exponent magnitudes MUST yield higher relative luminance values branchlessly.
+omi-0000-0000-0000-0000-0000-0000-0000-001f/128 MUST map-exponent-bits-to-hsv-value
+
+# [Rule 0x85]: Continuous-to-Clamped Significand Precision Carrier
+# The 10 explicitly stored significand bits MUST determine both the continuous 360° Hue angle
+# and the clamped pairwise byte layout of RGB, ensuring strict identity mapping across spaces.
+omi-0000-0000-0000-0000-0000-0000-0000-03ff/128 MUST translate-significand-to-clamped-rgba
