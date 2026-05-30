@@ -1,6 +1,6 @@
 {
   "name": "omi-pos-scgnn-tinyneat",
-  "version": "0.0.1",
+  "version": "",
   "description": "POS and WordNet synset centroid feature tokens for a default chiral SCGNN node policy using winkNLP, wordpos-web, and TinyNEAT.",
   "type": "module",
   "private": true,
