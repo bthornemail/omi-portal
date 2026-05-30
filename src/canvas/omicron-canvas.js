@@ -549,3 +549,54 @@ export class OmiBarycentricCanvasKernel extends OmiTetrahedralCanvasKernel {
     });
   }
 }
+
+export class OmiSexagesimalClaEncoder {
+  evaluateSexagesimalCla(S, inputA = 5, inputB = 6, cIn = 1) {
+    if (!S || !isOrbitLexerValid(S)) {
+      return { accepted: false, reason: "GATE_1_ALGEBRAIC_SURFACE_FAULT" };
+    }
+
+    const rowData = extractTruthRow(S);
+    const timelineSlot = rowData.NN % 5040;
+
+    const A = inputA & 0x0F;
+    const B = inputB & 0x0F;
+    const P = A ^ B;
+    const G = A & B;
+
+    const p0 = (P >> 0) & 1, p1 = (P >> 1) & 1, p2 = (P >> 2) & 1, p3 = (P >> 3) & 1;
+    const g0 = (G >> 0) & 1, g1 = (G >> 1) & 1, g2 = (G >> 2) & 1, g3 = (G >> 3) & 1;
+
+    const C1 = g0 | (p0 & cIn);
+    const C2 = g1 | (p1 & g0) | (p1 & p0 & cIn);
+    const C3 = g2 | (p2 & g1) | (p2 & p1 & g0) | (p2 & p1 & p0 & cIn);
+    const C4 = g3 | (p3 & g2) | (p3 & p2 & g1) | (p3 & p2 & p1 & g0) | (p3 & p2 & p1 & p0 & cIn);
+
+    const pgGroup = p0 & p1 & p2 & p3;
+    const ggGroup = g3 | (g2 & p3) | (g1 & p3 & p2) | (g0 & p3 & p2 & p1);
+
+    const remainderFactor = timelineSlot % 60;
+    const isRegularFraction = (60 % remainderFactor === 0) || remainderFactor === 0;
+
+    let targetCanvasColor = "5";
+    if (!isRegularFraction) {
+      targetCanvasColor = "1";
+    }
+    if (timelineSlot === 1504) {
+      targetCanvasColor = "6";
+    }
+
+    return {
+      accepted: true,
+      propagateMask: P,
+      generateMask: G,
+      groupPropagate: pgGroup,
+      groupGenerate: ggGroup,
+      isRegularFraction,
+      targetCanvasColor,
+      timelineSlot,
+      gateDelayCarry: 3,
+      carries: [C1, C2, C3, C4]
+    };
+  }
+}

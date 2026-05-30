@@ -143,3 +143,6 @@ test_omi_c99
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# dev-docs GC inbox (scratch workspace, not canonical)
+dev-docs/_temp/

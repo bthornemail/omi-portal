@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "node-cla-step0-inputs",
+      "type": "text",
+      "x": 100,
+      "y": 100,
+      "width": 260,
+      "height": 140,
+      "color": "3",
+      "text": "### CLA STEP 0 // GENERATE & PROPAGATE\n- **P00..P30** = A_i ^ B_i (1dt Delay)\n- **G00..G30** = A_i & B_i (1dt Delay)\n- **Context:** Core fixed-point significand input layer."
+    },
+    {
+      "id": "node-cla-step1-lcu",
+      "type": "text",
+      "x": 420,
+      "y": 100,
+      "width": 280,
+      "height": 140,
+      "color": "2",
+      "text": "### CLA STEP 1 // LOOKAHEAD GENERATORS\n- **C1** = G0 + P0*Cin (3dt)\n- **C2** = G1 + P1*G0 + P1*P0*Cin (3dt)\n- **C3** = G2 + P2*G1 + P2*P1*G0 + P2*P1*P0*Cin (3dt)\n- **Cout** = Complete unrolled lookahead chain (3dt)"
+    },
+    {
+      "id": "node-cla-sum-outputs",
+      "type": "text",
+      "x": 760,
+      "y": 100,
+      "width": 260,
+      "height": 140,
+      "color": "5",
+      "text": "### CLA OUTPUTS // FINAL SUM BITS\n- **S0** = P0 ^ Cin (2dt)\n- **S1..S3** = Pi ^ Gi-1 (4dt Max)\n- **S4 (Cout)** = G31 (3dt Carry Out)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-cla-step0-to-step1",
+      "fromNode": "node-cla-step0-inputs",
+      "fromSide": "right",
+      "toNode": "node-cla-step1-lcu",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "color": "4",
+      "label": "Propagate / Generate bit-busses (1dt)"
+    },
+    {
+      "id": "edge-cla-step1-to-outputs",
+      "fromNode": "node-cla-step1-lcu",
+      "fromSide": "right",
+      "toNode": "node-cla-sum-outputs",
+      "toSide": "left",
+      "toEnd": "arrow",
+      "color": "5",
+      "label": "Pre-processed carry lines (3dt)"
+    }
+  ]
+}

@@ -183,3 +183,283 @@ omi-0000-0000-0000-0000-0000-0000-0000-001f/128 MUST map-exponent-bits-to-hsv-va
 # The 10 explicitly stored significand bits MUST determine both the continuous 360° Hue angle
 # and the clamped pairwise byte layout of RGB, ensuring strict identity mapping across spaces.
 omi-0000-0000-0000-0000-0000-0000-0000-03ff/128 MUST translate-significand-to-clamped-rgba
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE CARRY LOOKAHEAD ADDER RULES
+# Specification Level: Rules 0x86 through 0x88 [CLA Gate Fences]
+# ============================================================================
+
+# [Rule 0x86]: Maximal Gate Delay Propagation Cap
+# Statically mapped carry-lookahead circuits MUST enforce a strict 4 gate delay limit
+# for all sum bits S0..S3, and a 3 gate delay limit for the final carry out.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST restrict-maximal-gate-propagation-delay
+
+# [Rule 0x87]: Shared Exponent Lookahead Unit Isolation
+# Parallel carry-out computations across the 4 bit-channels MUST calculate using:
+# C4 = G3 + G2*P3 + G1*P2*P3 + G0*P1*P2*P3 + Cin*P0*P1*P2*P3.
+omi-0000-0000-0000-0000-0000-0000-0000-0003/128 MUST calculate-lookahead-carry-logic-inline
+
+# [Rule 0x88]: Monolithic CLA Canvas Preset Mapping
+# Active logic cells failing generate steps MUST fall back to warning preset "1" (red),
+# while completely balanced lookahead networks MUST output compliant preset "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-cla-outputs-to-preset-color-ids
+
+# ============================================================================
+# OMI PROTOCOL - SEXAGESIMAL CARRY LOOKAHEAD RULES
+# Specification Level: Rules 0x89 through 0x8B [Highly Composite Adders]
+# ============================================================================
+
+# [Rule 0x89]: Monolithic Base-60 LCM Lookahead Alignment
+# Parallel CLA logic arrays MUST align bit-channel expansions to the 12 divisors of Base-60.
+# Generate and propagate operations SHALL execute via integer scales to skip float division.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST anchor-sexagesimal-lookahead-lcm
+
+# [Rule 0x8A]: Regular Fraction Terminating Boundary
+# Fractional metrics crossing the NBD channels MUST map to terminating sexagesimal sequences.
+# Non-regular denominators (e.g., 7, 11, 13) MUST force deep unrolled nonogram line corrections.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/60 MUST terminate-regular-sexagesimal-fractions
+
+# [Rule 0x8B]: Babylonian Diagonal √2 Approximation Anchor
+# Irrational system scaling parameters MUST validate against the historical YBC 7289 matrix.
+# The initial base-60 expansion coefficients MUST explicitly lock to the vector: 1;24,51,10.
+omi-0001-0018-0033-000a-0000-0000-1d50-aa55/128 MUST match-babylonian-diagonal-root
+
+# ============================================================================
+# OMI PROTOCOL - BIJECTIVE TWO-CUBE REPLICATION RULES
+# Specification Level: Rules 0x8F through 0x91 [Bijective Graph Fences]
+# ============================================================================
+
+# [Rule 0x8F]: Two-Cube Subjective State Transition Allocation
+# Every active HNSW buffer node MUST allocate a discrete ArrayBuffer(128 * 8) workspace.
+# Transformations inside this matrix space MUST map reversibly to avoid bit fragmentation.
+omi-0000-0000-0000-0000-0000-0000-0000-0400/128 MUST allocate-twocube-state-transition-buffer
+
+# [Rule 0x90]: Minimal N-1 Federated Replication Horizon
+# Distributed cluster partitions SHALL restrict state data redundancy to a maximum of N-1 bounds.
+# Brute-force data duplication across competitive nodes is FORBIDDEN; graph links prove consensus.
+omi-0000-0000-0000-0000-0000-0000-0000-0001/128 MUST limit-federated-instance-redundancy-to-n-minus-1
+
+# [Rule 0x91]: Bijective Linked SAB Memory Alignment
+# Multi-client timelines MUST bind concurrently using bijective graph links over the 5040 ring array.
+# Intersecting state vectors MUST execute lookahead unifications without global resource locks.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST link-bijective-shared-array-buffers
+
+# ============================================================================
+# OMI PROTOCOL - SINGLE-WORD CONS REGISTER RULES
+# Specification Level: Rules 0x92 through 0x94 [One-Word Lisp Core]
+# ============================================================================
+
+# [Rule 0x92]: Canonical Greek Omicron Operator Binding
+# Register machines MUST recognize the Greek Unicode entities U+039F/U+03BF (Ο/ο) as the
+# authoritative prefix operators. The string variations omi- and -imo SHALL act as aliases.
+omi-03bf-0000-0000-0000-0000-0000-0000-aa55/32 MUST enforce-canonical-omicron-operators
+
+# [Rule 0x93]: Single-Word Cons Cell Extraction
+# The 128-bit frame MUST represent a complete cons cell without external memory addresses.
+# Segment S2 MUST execute as the explicit CAR field; segment S5 MUST track the CDR field.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST slice-one-word-car-cdr-registers
+
+# [Rule 0x94]: Nil Terminus Closure Boundary
+# Empty list elements and execution terminations MUST be written as the unique symbol nil,
+# which maps arithmetically to the immutable terminal closure boundary segment value 0x01FF.
+omi-0000-0000-0000-0000-0000-0000-0000-01ff/128 MUST anchor-nil-terminus-closure-boundary
+
+# ============================================================================
+# OMI PROTOCOL - TETRAHEDRAL LATTICE INFERENCE RULES
+# Specification Level: Rules 0x95 through 0x97 [The Closed Logic Mesh]
+# ============================================================================
+
+# [Rule 0x95]: 3-of-4 Tetrahedral Vertex Inference Guard
+# Every OmicronNode matrix MUST allow any 3 known vertices to completely compute the 4th.
+# The layout engine SHALL infer missing node attributes using branchless barycentric logic.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST infer-missing-tetrahedral-vertices
+
+# [Rule 0x96]: Chromatic Alist Invariant Packing
+# Color configurations passed via Lisp S-Expressions MUST parse as binary16 bitfield tokens.
+# The payload attributes MUST convert the continuous HSV scale directly into standard hex strings.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST pack-chromatic-association-lists
+
+# [Rule 0x97]: High-Contrast Black-and-White Matrix Clamping
+# Precision cells failing standard 360° phase alignments MUST clamp to binary black or white values.
+# This boundary filter provides clean edge contrast indicators for optical carrier verification sweeps.
+omi-0000-0000-0000-0000-0000-0000-0000-0002/128 MUST clamp-high-contrast-monochrome-cells
+
+# ============================================================================
+# OMI PROTOCOL - UNIVERSAL SEMANTIC GRAMMAR RULES
+# Specification Level: Rules 0x9B through 0x9D [The Bounded Linguistic Lock]
+# ============================================================================
+
+# [Rule 0x9B]: Universal Part-of-Speech (UPOS) Alist Partitioning
+# Inbound S-Expressions MUST map linguistic open, closed, and other text classes using:
+# Open Class -> (ADJ, ADV, INTJ, NOUN, PROPN, VERB); Closed Class -> (ADP, AUX, CCONJ, DET, NUM...).
+omi-0000-0000-0000-0000-0000-0000-0000-007f/128 MUST partition-universal-pos-alist-classes
+
+# [Rule 0x9C]: Pairwise Lexical and Inflectional Feature Matrix
+# Semantic features MUST pack branchlessly across discrete lexical (PronType, Gender, Animacy)
+# and inflectional (VerbForm, Mood, Tense, Aspect, Case) two-cube transition dimensions.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST pack-linguistic-universal-feature-sets
+
+# [Rule 0x9D]: Embedded Prolog Synset Semantic Routing
+# Proxy servers MUST route compiled base64 grapheme symbols straight from raw JS array fields,
+# ensuring semantic unifications achieve absolute path closure inside the 14-step Fano limit.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-hnsw-grapheme-semantic-routing
+
+# ============================================================================
+# OMI PROTOCOL - CONCENTRIC POLYHEDRAL GRAMMAR RULES
+# Specification Level: Rules 0x9E through 0xA0 [Platonic Dual Semantic Fences]
+# ============================================================================
+
+# [Rule 0x9E]: Cube-Octahedron Universal POS Dual Space Assignment
+# Open class and closed class tags MUST map symmetrically across a dual Cube-Octahedron matrix.
+# Other categories (PUNCT, SYM, X) SHALL anchor to the vertices of an inscribed centroid tetrahedron.
+omi-0000-0000-0000-0000-0000-0000-0000-0006/128 MUST map-cube-octahedron-universal-pos-dual
+
+# [Rule 0x9F]: Icosahedron-Dodecahedron Feature Complex Boundary
+# Universal lexical and inflectional features MUST map concurrently to a dual Icosahedron-Dodecahedron.
+# Vertices and faces SHALL share coordinate values inline via SPO graph edges to isolate drift.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST project-icosahedron-dodecahedron-feature-complex
+
+# [Rule 0xA0]: Monolithic Inverse Centroid Unification
+# Concentric geometric lookaheads crossing the linguistic state tables MUST resolve coordinates
+# via the shared inverse centroid pointer center inside the SharedArrayBuffer memory slots.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-inverse-centroid-polyhedral-routing
+
+# ============================================================================
+# OMI PROTOCOL - POLYHEDRAL CHROMATIC VERTEX CODES
+# Specification Level: Rules 0xA1 through 0xA3 [The Geometric Color Lock]
+# ============================================================================
+
+# [Rule 0xA1]: Cube Open-Class Vertex Chromatic Differential
+# Open-class linguistic vertices (NOUN..INTJ) MUST generate a pure RGB color differential vector
+# scaled precisely against the central base coordinate frame to maximize visual phase deltas.
+omi-0000-0000-0000-0000-0000-0000-0000-0006/128 MUST compute-cube-vertex-chroma-differentials
+
+# [Rule 0xA2]: Octahedron Closed-Class Vertex Chromatic Differential
+# Closed-class structural vertices (PRON..NUM) MUST encode inverted or blended midpoint color channels
+# to provide high-contrast visual edge discrimination during optical carrier lookahead scans.
+omi-0000-0000-0000-0000-0000-0000-0000-0008/128 MUST compute-octahedron-vertex-chroma-differentials
+
+# [Rule 0xA3]: Inscribed Centroid Pointer Monochrome Boundary
+# Intermediary auxiliary nodes (PUNCT, SYM, X) MUST clamp to fixed, high-contrast signature colors
+# that map directly to the innermost structural vertices of the embedded centroid pointer tetrahedron.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST clamp-centroid-pointer-monochrome-signatures
+
+# ============================================================================
+# OMI PROTOCOL - FOUR-DIMENSIONAL LINGUISTIC INVARIANTS
+# Specification Level: Rules 0xA4 through 0xA6 [The Polytopic Grid Fences]
+# ============================================================================
+
+# [Rule 0xA4]: 5-Cell UPOS and 24-Cell Universal Feature Dual Mapping
+# Core linguistic part-of-speech classes MUST project symmetrically across a 4D 5-Cell simplex space,
+# while fine-grained grammatical features expand branchlessly onto a 24-Cell self-dual manifold.
+omi-0000-0000-0000-0000-0000-0000-0000-0018/128 MUST project-fivecell-and-twentyfourcell-duals
+
+# [Rule 0xA5]: 120-Cell / 600-Cell WordNet Synset Continuum Envelope
+# Deep WordNet hypernym and hyponym graphs MUST map to the 120 dodecahedral cells of a 120-Cell,
+# intersecting the 600 tetrahedral faces of its dual 600-Cell to isolate lexical tracking drift.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0078/112 MUST route-onehundredtwenty-and-sixhundred-cells
+
+# [Rule 0xA6]: Archimedean Base Snubbed Truncation Verification
+# Geometric phase transformations crossing the 4D boundaries MUST execute Catalan verification sweeps,
+# using the native OMI-CIDR subnet boundaries to map snubbed truncations without float division taxes.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST verify-snubbed-polytope-truncation-by-cidr
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE OCTUPLE PRECISION RULES
+# Specification Level: Rules 0xA7 through 0xA9 [The 256-Bit Storage Fences]
+# ============================================================================
+
+# [Rule 0xA7]: Monolithic binary256 Memory Format Allocation
+# High-precision hardware nodes MUST allocate exactly 256 bits (32 bytes) for event sequencing.
+# The layout MUST preserve the strict 1-bit sign, 19-bit exponent, and 236-bit explicit significand.
+omi-0000-0000-0000-0000-0000-0000-0000-0100/128 MUST allocate-binary256-octuple-precision-words
+
+# [Rule 0xA8]: Inflectional Exponent Bias Offset Verification
+# Exponent value calculations inside the 19-bit field MUST enforce the native bias of 262143 (0x3FFFF).
+# Subnormal operations down to the 10^-78984 limit SHALL utilize branchless bit-shifts to avoid floats.
+omi-0000-0003-ffff-0000-0000-0000-0000-0000/48 MUST enforce-octuple-precision-exponent-bias
+
+# [Rule 0xA9]: Pairwise 236-Bit Significand Grapheme Carrier
+# The 236 explicitly stored significand bits MUST determine the multi-dimensional graph trajectories.
+# Values crossing the 5040 replay slots MUST use pure integer logic to bypass precision truncation drift.
+omi-ffff-ffff-ffff-ffff-ffff-ffff-ffff-fc00/10 MUST map-significand-bits-to-polytopic-graphemes
+
+# ============================================================================
+# OMI PROTOCOL - UTF-EBCDIC MARKUP CHARACTER RULES
+# Specification Level: Rules 0xAA through 0xAC [The Lexicon Fences]
+# ============================================================================
+
+# [Rule 0xAA]: Structural and Chromatic ASCII Range Partition
+# Characters 0x00..0x2F MUST enforce pure structural layout controls (C0 dividers).
+# Characters 0x30..0x3F MUST map raw integer color values directly to the sexagesimal prefix.
+omi-0000-0000-0000-0000-0000-0000-0000-003f/122 MUST partition-utf-ebcdic-character-ranges
+
+# [Rule 0xAB]: Canonical Greek Omicron Case Invariant
+# Case variations MUST dictate structural roles branchlessly inside the single-word register machine:
+# Uppercase U+039F (Ο) MUST anchor the CAR input field; Lowercase U+03BF (ο) MUST anchor the CDR field.
+omi-039f-03bf-0000-0000-0000-0000-0000-aa55/32 MUST bind-omicron-case-register-identities
+
+# [Rule 0xAC]: Permutable Gnomon Adder Encapsulation
+# The omi- string token MUST execute exclusively as an external, prime ideal escape sequence.
+# Real-time state updates SHALL carry forward across the 4-bit CLA matrix within a strict 3dt gate ceiling.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST encapsulate-gnomon-bitmask-adder-loops
+
+# ============================================================================
+# OMI PROTOCOL - TOWER OF POWER HIGH-PRECISION RULES
+# Specification Level: Rules 0xAD through 0xAF [The Infinite Resolution Lock]
+# ============================================================================
+
+# [Rule 0xAD]: Extended Tower of Power Precision Scaling
+# High-precision calculations MUST transition natively between binary16 and binary256 boundaries.
+# Intermediary scaling transformations SHALL execute branchlessly via bitboard integer shifts.
+omi-0000-0000-0000-0000-0000-0000-0000-0110/128 MUST execute-tower-of-power-precision-scaling
+
+# [Rule 0xAE]: 59 ↔ 60 ↔ 61 Chromatic Roundtrip Loop
+# The core sexagesimal wheel (60) MUST resolve regular factors exactly via terminating sequences.
+# The surrounding prime barriers 59 and 61 MUST act as the absolute high-contrast reflection limits.
+omi-0000-0000-0000-0000-0000-0000-003b-003d/112 MUST enforce-prime-chromatic-roundtrip-loops
+
+# [Rule 0xAF]: Inverse Two-Cube Codepoint Space Notation
+# Character codes extracted from the UTF-EBCDIC plane MUST map to the 128-word subjective buffer.
+# The resulting coordinates SHALL translate to discrete visual matrices over the lock-free ring slots.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-inverse-twocube-codepoint-notation
+
+# ============================================================================
+# OMI PROTOCOL - MULTI-VALUED LOGICAL INVARIANT RULES
+# Specification Level: Rules 0xB3 through 0xB5 [The Truth-Value Fences]
+# ============================================================================
+
+# [Rule 0xB3]: Multi-Valued Logical Prime Partitioning
+# Inbound S-Expressions MUST parse truth values across explicit two, three, and five-value logic primes.
+# Evaluation structures SHALL execute bitwise coordinate lookaheads to eliminate string text overhead.
+omi-0000-0000-0000-0000-0000-0000-0000-0005/128 MUST partition-multivalued-logic-prime-matrices
+
+# [Rule 0xB4]: Single-Digit JSON Canvas Color Preset Assignment
+# Conforming nodes MUST map logic states directly onto single-character color presets "1" through "6".
+# Emitted attributes SHALL bypass raw hex string values to minimize canvas storage footprints.
+omi-0000-0000-0000-0000-0000-0000-0000-0006/128 MUST bind-single-digit-canvas-color-presets
+
+# [Rule 0xB5]: Upper Operator Gate Logic Mapping
+# ASCII selectors 0x3A..0x3F MUST function as the low-level keys routing UPOS-RGBA centroid variables.
+# Any structural contradiction found during gate enforcement MUST trigger an immediate XDP_DROP.
+omi-039f-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-upper-operator-gate-logic
+
+# ============================================================================
+# OMI PROTOCOL - META-COMPILER TRUTH-VALUE INVARIANTS
+# Specification Level: Rules 0xB6 through 0xB8 [The Metaprogram Locks]
+# ============================================================================
+
+# [Rule 0xB6]: Meta-Circular Mnemonic Interpreter Initialization
+# Conforming runtimes MUST treat the 128-bit wire frame S as a self-referential metaprogram.
+# Grammar evaluation transformations SHALL execute branchlessly via bitboard integer shifts.
+omi-0000-0000-0000-0000-0000-0000-0000-0100/128 MUST initialize-metacircular-mnemonic-interpreter
+
+# [Rule 0xB7]: Method-of-Loci Octuple-Precision Coordinate Slicing
+# High-precision memory lookups MUST map data parameters to the 5040 disjoint replay slots.
+# Storage bounds SHALL utilize the explicit 236-bit significand space to eliminate precision drift.
+omi-0000-0003-ffff-0000-0000-0000-0000-0000/48 MUST match-method-of-loci-octuple-precision
+
+# [Rule 0xB8]: Object Language Single-Digit Semantic Transformation
+# The compiled output of the meta-translation matrix MUST emit single-character preset marks.
+# Any structural contradiction found during compiler execution MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-metaprogram-semantics-to-presets

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+  <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+  <title>OMI PROTOCOL // TETRAGRAMMATRON EXPLORER CANVAS</title>
+  <style>
+    body { background: #030406; color: #00ffcc; font-family: monospace; padding: 20px; margin: 0; }
+    h1 { font-size: 1.4em; border-bottom: 1px solid #00ffcc; padding-bottom: 8px; }
+    h2 { font-size: 1.1em; color: #ffaa00; }
+    .canvas-container { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+    .node-box { border: 1px solid #ffaa00; border-radius: 4px; padding: 15px; width: 280px; background: #0c0f12; box-shadow: 0 0 10px rgba(0,255,204,0.1); }
+    .node-box h3 { margin: 0 0 8px 0; font-size: 0.95em; }
+    .node-box p, .node-box li { font-size: 0.85em; line-height: 1.5; }
+    .node-box ul { margin: 4px 0; padding-left: 16px; }
+    .trace-terminal { background: #000; padding: 10px; height: 140px; overflow-y: scroll; border: 1px solid #00ffcc; margin-top: 20px; color: #00ffcc; font-size: 0.85em; }
+    .trace-terminal .error { color: #ff0055; }
+    .trace-terminal .ok { color: #00ffcc; }
+    .trace-terminal .warn { color: #ffaa00; }
+    .controls { display: flex; gap: 12px; margin: 16px 0; align-items: center; flex-wrap: wrap; }
+    .controls label { color: #8a99ad; font-size: 0.85em; }
+    .controls input { background: #0c0f12; border: 1px solid #141923; color: #00ffcc; padding: 4px 8px; font-family: monospace; width: 60px; }
+    .controls button { background: #0c0f12; border: 1px solid #00ffcc; color: #00ffcc; padding: 6px 14px; cursor: pointer; font-family: monospace; }
+    .controls button:hover { background: #00ffcc; color: #030406; }
+    .edge-diagram { margin: 16px 0; padding: 12px; background: #0c0f12; border: 1px solid #141923; font-size: 0.85em; line-height: 1.6; }
+    .edge-diagram .arrow { color: #ff0055; }
+    .edge-diagram .carry { color: #ffaa00; }
+    .edge-diagram .sum-line { color: #00ffcc; }
+    .status-bar { display: flex; gap: 20px; margin: 12px 0; padding: 8px 12px; background: #0c0f12; border: 1px solid #141923; font-size: 0.85em; }
+    .status-bar .label { color: #8a99ad; }
+    .status-bar .value { color: #00ffcc; font-weight: bold; }
+    .sidebar { float: right; width: 320px; margin-left: 20px; padding: 12px; background: #0c0f12; border: 1px solid #141923; font-size: 0.85em; }
+    .sidebar h3 { color: #ffaa00; margin: 0 0 8px 0; font-size: 0.95em; }
+    .sidebar dt { color: #8a99ad; margin-top: 6px; }
+    .sidebar dd { margin-left: 12px; color: #00ffcc; }
+  </style>
+</head>
+<body>
+
+  <h1>OMICRON NETWORK // 4-BIT CARRY LOOKAHEAD ADDER SIMULATOR</h1>
+  <p>System Posture: <strong>Statically Encoded Distribution Substrate</strong></p>
+
+  <div class="controls">
+    <label>A (4-bit hex): <input type="text" id="input-a" value="5" maxlength="1"></label>
+    <label>B (4-bit hex): <input type="text" id="input-b" value="6" maxlength="1"></label>
+    <label>Cin: <input type="text" id="input-cin" value="1" maxlength="1"></label>
+    <button id="run-btn">RUN CLA</button>
+    <button id="random-btn">RANDOM</button>
+  </div>
+
+  <div class="sidebar" id="gate-delay-panel">
+    <h3>GATE DELAY ANALYSIS</h3>
+    <dl>
+      <dt>Step 0 (P/G Gen)</dt>
+      <dd id="delay-step0">1dt</dd>
+      <dt>Step 1 (Carry Lookahead)</dt>
+      <dd id="delay-step1">3dt</dd>
+      <dt>Sum Outputs</dt>
+      <dd id="delay-sum">4dt</dd>
+      <dt>Total Critical Path</dt>
+      <dd id="delay-total">4dt</dd>
+    </dl>
+    <p style="color:#8a99ad;margin-top:8px">vs ripple-carry: 8dt &mdash; <span style="color:#00ffcc">50% faster</span></p>
+  </div>
+
+  <div class="canvas-container" id="canvas-surface"></div>
+
+  <div class="edge-diagram" id="carry-chain">
+    <div>Carry chain: <span class="carry" id="carry-vis">C4---C3---C2---C1---Cin</span></div>
+    <div class="sum-line">Sum: <span id="sum-vis">S3 S2 S1 S0</span></div>
+  </div>
+
+  <div class="status-bar">
+    <span><span class="label">Result:</span> <span class="value" id="result-display">0x0B (11)</span></span>
+    <span><span class="label">Cout:</span> <span class="value" id="cout-display">0</span></span>
+    <span><span class="label">Gate Delay:</span> <span class="value" id="gate-delay-display">4dt</span></span>
+  </div>
+
+  <h2>LIVE LOOKAHEAD SIMULATION TELEMETRY</h2>
+  <div class="trace-terminal" id="trace-log"></div>
+
+  <script>
+    function computeCla4Bit(A, B, Cin) {
+      const P = (A ^ B) & 0x0F;
+      const G = (A & B) & 0x0F;
+
+      const p0 = (P >> 0) & 1, p1 = (P >> 1) & 1, p2 = (P >> 2) & 1, p3 = (P >> 3) & 1;
+      const g0 = (G >> 0) & 1, g1 = (G >> 1) & 1, g2 = (G >> 2) & 1, g3 = (G >> 3) & 1;
+
+      const C1 = g0 | (p0 & Cin);
+      const C2 = g1 | (p1 & g0) | (p1 & p0 & Cin);
+      const C3 = g2 | (p2 & g1) | (p2 & p1 & g0) | (p2 & p1 & p0 & Cin);
+      const C4 = g3 | (p3 & g2) | (p3 & p2 & g1) | (p3 & p2 & p1 & g0) | (p3 & p2 & p1 & p0 & Cin);
+
+      const S0 = p0 ^ Cin;
+      const S1 = p1 ^ C1;
+      const S2 = p2 ^ C2;
+      const S3 = p3 ^ C3;
+
+      const sum = (S3 << 3) | (S2 << 2) | (S1 << 1) | S0;
+
+      return { P, G, carries: [C1, C2, C3, C4], sum, Cout: C4,
+        gateDelays: { step0: 1, carry: 3, sum: 4 }, sumBits: [S0, S1, S2, S3] };
+    }
+
+    function log(msg, cls) {
+      const el = document.getElementById('trace-log');
+      const line = document.createElement('div');
+      if (cls) line.className = cls;
+      line.textContent = msg;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function renderNode(id, color, label, text) {
+      const box = document.createElement('div');
+      box.className = 'node-box';
+      box.setAttribute('data-color', color);
+      box.style.borderColor = ({'3': '#ffcc00', '2': '#ffaa00', '5': '#00ffcc'})[color] || '#ffaa00';
+      box.innerHTML = `<h3>${label}</h3><p>${text}</p>`;
+      return box;
+    }
+
+    function refreshUI(A, B, Cin) {
+      const out = computeCla4Bit(parseInt(A, 16), parseInt(B, 16), parseInt(Cin, 10));
+
+      const surface = document.getElementById('canvas-surface');
+      surface.innerHTML = '';
+
+      const nodes = [
+        { id: 'N1', color: '3', label: 'Step 0 // P & G Generation',
+          text: `P = A ^ B = <strong>0x${out.P.toString(16).toUpperCase()}</strong> (1dt)<br>G = A &amp; B = <strong>0x${out.G.toString(16).toUpperCase()}</strong> (1dt)` },
+        { id: 'N2', color: '2', label: 'Step 1 // Lookahead Unit',
+          text: `C1..C4 computed in 3dt max<br>Carry chain: <strong>${out.carries.map(c => c ? '1' : '0').join('')}</strong>` },
+        { id: 'N3', color: '5', label: 'Outputs // Sum Matrix',
+          text: `Sum = <strong>0x${out.sum.toString(16).toUpperCase()}</strong> (${out.sum})<br>Cout = <strong>${out.Cout}</strong><br>Bits: ${out.sumBits.join(' ')}` }
+      ];
+
+      nodes.forEach(n => surface.appendChild(renderNode(n.id, n.color, n.label, n.text)));
+
+      document.getElementById('carry-vis').textContent =
+        `C${out.carries[3]}---C${out.carries[2]}---C${out.carries[1]}---C${out.carries[0]}---Cin${Cin}`;
+      document.getElementById('sum-vis').textContent =
+        `${out.sumBits[3]} ${out.sumBits[2]} ${out.sumBits[1]} ${out.sumBits[0]}  =  0x${out.sum.toString(16).toUpperCase()}`;
+
+      document.getElementById('result-display').textContent = `0x${out.sum.toString(16).toUpperCase()} (${out.sum})`;
+      document.getElementById('cout-display').textContent = out.Cout;
+      document.getElementById('gate-delay-display').textContent = `${out.gateDelays.sum}dt`;
+
+      log(`[CLA] A=0x${A} B=0x${B} Cin=${Cin} → Sum=0x${out.sum.toString(16).toUpperCase()} Cout=${out.Cout} (${out.gateDelays.sum}dt)`, 'ok');
+    }
+
+    document.getElementById('run-btn').addEventListener('click', () => {
+      const A = document.getElementById('input-a').value.trim() || '0';
+      const B = document.getElementById('input-b').value.trim() || '0';
+      const Cin = document.getElementById('input-cin').value.trim() || '0';
+      refreshUI(A, B, Cin);
+    });
+
+    document.getElementById('random-btn').addEventListener('click', () => {
+      const A = Math.floor(Math.random() * 16).toString(16).toUpperCase();
+      const B = Math.floor(Math.random() * 16).toString(16).toUpperCase();
+      const Cin = Math.floor(Math.random() * 2).toString();
+      document.getElementById('input-a').value = A;
+      document.getElementById('input-b').value = B;
+      document.getElementById('input-cin').value = Cin;
+      refreshUI(A, B, Cin);
+    });
+
+    refreshUI('5', '6', '1');
+    log('[CLA] Tetragrammatron Explorer initialized — 4-bit carry lookahead substrate active', 'ok');
+    log('[CLA] Gate delay ceiling: 4dt max (Rule 0x86)', 'ok');
+  </script>
+</body>
+</html>

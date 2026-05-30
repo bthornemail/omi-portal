@@ -16,53 +16,32 @@
   },
   "sources": [
     {
-      "path": "dev-docs/OMI( omi- ) Object Model.md",
-      "role": "topological object-model exploration",
-      "canonicalStatus": "canonicalized",
-      "keyConcepts": ["CIDR containment", "DOM hierarchy", "CSSOM prefix matching", "cons/car/cdr IPC", "720/5040 lifecycle", "A-Frame"],
-      "sourceNotes": "Contains the broadest OMI topology narrative. Deprecated localhost shorthand examples normalize to omi-ffff-127-0-0-1."
+      "path": "dev-docs/README.md",
+      "role": "Tetragrammatron developer documentation — 12-face triakis tetrahedron face guide (11 protocol + CLA + GC)",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["tetragrammatron", "triakis tetrahedron", "12 protocol faces", "beginner-to-expert progression", "face map", "SPO folder naming", "carry lookahead adder"],
+      "sourceNotes": "Developer documentation suite organizing the entire OMI protocol into 12-face triakis tetrahedron (11 SPO-named protocol layers + CLA substrate + _temp GC inbox). Each face README covers what/how/extend for beginner through expert developers."
     },
     {
-      "path": "dev-docs/Omi Declarative.md",
-      "role": "deployment manifest exploration",
-      "canonicalStatus": "reference-only",
-      "keyConcepts": ["CodeMirror 6", "Fano clock", "Universal POS ports", "CoTURN", "Prolog WordNet", "WebGL 2"],
-      "sourceNotes": "Used as source language for framework concepts. Runtime networking and shader surfaces remain future unless locally implemented."
+      "path": "dev-docs/tetragrammatron.canvas",
+      "role": "JSON Canvas v1.0 layout of the 4-bit carry lookahead adder — 3 nodes (Step 0/Step 1/Outputs) + 2 edges",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["carry lookahead adder", "CLA", "generate/propagate", "JSON Canvas", "node color presets", "gate delays"],
+      "sourceNotes": "Visual substrate for the Tetragrammatron Explorer. Nodes use integer color presets 2 (amber), 3 (yellow), 5 (cyan). Edges use preset 4 (green) and 5 (cyan)."
     },
     {
-      "path": "dev-docs/Omi Object Model.md",
-      "role": "control descriptor and object-model seed",
-      "canonicalStatus": "canonicalized",
-      "keyConcepts": ["0x00..0x3f", "dataset attributes", "DOM registration", "CSSOM routing", "polynomial payloads"],
-      "sourceNotes": "Supplies the printable descriptor rule for DOM-safe control semantics."
+      "path": "dev-docs/index.html",
+      "role": "Tetragrammatron Explorer canvas — interactive 4-bit CLA simulation and live gate delay viewer",
+      "canonicalStatus": "reference",
+      "keyConcepts": ["CSSOM dataset selectors", "live CLA simulation", "gate delay analysis", "random test harness", "COOP/COEP"],
+      "sourceNotes": "Standalone browser UI for exploring the carry lookahead adder substrate. Renders JSON Canvas nodes via dataset attributes and runs real-time 4-bit CLA on user-supplied inputs."
     },
     {
-      "path": "dev-docs/Omi Port Rendering.md",
-      "role": "service-bus and rendering exploration",
-      "canonicalStatus": "canonicalized",
-      "keyConcepts": ["::1..::12 service buses", "RPC routing", "WordNet broker", "WebRTC transport", "2.5D extrusion"],
-      "sourceNotes": "Defines semantic service-bus vocabulary and CSSOM signal interception model."
-    },
-    {
-      "path": "dev-docs/Omi Porting.md",
-      "role": "port projection and network routing exploration",
-      "canonicalStatus": "canonicalized",
-      "keyConcepts": ["UPOS ports", "Universal Features", "WordNet operators", "Fano routes", "CoTURN/TURN proxy"],
-      "sourceNotes": "Source for UPOS-to-port projection, Fano WordNet token shape, and synset packet routing."
-    },
-    {
-      "path": "dev-docs/chat.md",
-      "role": "indexed transcript source",
-      "canonicalStatus": "indexed-source",
-      "keyConcepts": ["BiDi controls", "CBOS", "lambda/F-expression ranges", "manifest glossary", "CodeMirror bridge", "WebGL future surface"],
-      "sourceNotes": "Indexed for concepts and provenance. It is not copied wholesale into canonical docs."
-    },
-    {
-      "path": "dev-docs/Monotone Causal Reed–Solomon Gossip Storage Protocol (MCRSGSP).md",
-      "role": "distributed causal storage and erasure coding",
-      "canonicalStatus": "reference-only",
-      "keyConcepts": ["Reed-Solomon GF(2^8)", "fragment store", "version vectors", "gossip protocol", "anti-entropy repair", "causal closure", "HNSW"],
-      "sourceNotes": "Describes the distributed fragment storage layer. Core components are implemented in src/distributed/."
+      "path": "src/omi/bijective-cube-kernel.js",
+      "role": "bijective two-cube state transition kernel — N-1 non-redundant federated replication",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["bijective graph", "two-cube ArrayBuffer", "N-1 replication", "state inversion", "face mapping", "SAB ring alignment"],
+      "sourceNotes": "Implements Rule 0x8F-0x91. Allocates ArrayBuffer(128*8) transition workspace per HNSW buffer node. Reversible state mapping via BigInt64Array over 128-bit state space. Active/inverse face pairs sum to 127."
     },
     {
       "path": "ONTOLOGY.md",

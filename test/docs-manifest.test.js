@@ -41,15 +41,7 @@ test("OMI Object Model manifest tracks curated dev-docs provenance without requi
   const devDocsDir = join(repoRoot.pathname, "dev-docs");
   const sources = manifest.sources.map((source) => source.path).sort();
 
-  const ignoredDrafts = [
-    'chat.md',
-    'Omi Porting.md',
-    'Omi Port Rendering.md',
-    'Omi Object Model.md',
-    'Omi Declarative.md',
-    'OMI( omi- ) Object Model.md',
-    'Monotone Causal Reed–Solomon Gossip Storage Protocol (MCRSGSP).md'
-  ];
+  const ignoredDrafts = [];
 
   const devDocs = await readdir(devDocsDir)
     .then((names) => names
@@ -70,7 +62,7 @@ test("OMI Object Model manifest tracks curated dev-docs provenance without requi
   }
 
   const devDocSources = sources.filter(
-    (s) => s.startsWith("dev-docs/") && !ignoredDrafts.some((draft) => s.endsWith(draft))
+    (s) => s.startsWith("dev-docs/") && s.endsWith(".md") && !ignoredDrafts.some((draft) => s.endsWith(draft))
   );
 
   assert.deepEqual(devDocSources, devDocs);

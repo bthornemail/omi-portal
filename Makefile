@@ -267,6 +267,66 @@ test-nonogram-nat64-matrix:
 	@echo "[Omi Nonogram] Running mathematical overlap and NAT64 transition checks..."
 	node --test test/nonogram-resolver.test.js
 
+test-carry-lookahead-adder:
+	@echo "[Omi CLA Core] Running 4-bit carry lookahead gate delay checks..."
+	node --test test/cla-circuit.test.js
+
+test-sexagesimal-cla-adder:
+	@echo "[Omi CLA Core] Running base-60 highly composite lookahead unit checks..."
+	node --test test/sexagesimal-cla.test.js
+
+test-bijective-cube-mesh:
+	@echo "[Omi Bijective] Running ArrayBuffer(128*8) two-cube transition checks..."
+	node --test test/bijective-cube.test.js
+
+test-omi-lisp-interpreter:
+	@echo "[Omi Lisp Core] Running explicit dotted pair and Node-RED adder checks..."
+	node --test test/lisp-interpreter.test.js
+
+test-one-word-register-machine:
+	@echo "[Omi Register Core] Running single-word cons cell extraction checks..."
+	node --test test/lisp-interpreter.test.js
+
+test-tetrahedral-lattice-mesh:
+	@echo "[Omi Lattice Core] Running 3-of-4 vertex inference and alist checks..."
+	node --test test/lattice-resolver.test.js
+
+test-universal-semantic-router:
+	@echo "[Omi Semantic Core] Running universal UPOS and lexical feature checks..."
+	node --test test/semantic-router.test.js
+
+test-concentric-polyhedral-router:
+	@echo "[Omi Polyhedral Core] Running nested Platonic dual routing checks..."
+	node --test test/polyhedral-router.test.js
+
+test-chromatic-vertex-matrix:
+	@echo "[Omi Chromatic Core] Running Platonic vertex RGB differential checks..."
+	node --test test/polyhedral-router.test.js
+
+test-4d-polytopic-wordnet-mesh:
+	@echo "[Omi Polytopic Core] Running 4D uniform polytope and WordNet checks..."
+	node --test test/polytopic-router.test.js
+
+test-octuple-precision-matrix:
+	@echo "[Omi Octuple Core] Running 256-bit memory layout and exponent bias checks..."
+	node --test test/octuple-kernel.test.js
+
+test-utf-ebcdic-character-matrix:
+	@echo "[Omi Character Core] Running UTF-EBCDIC 7-bit/8-bit range checks..."
+	node --test test/ebcdic-filter.test.js
+
+test-precision-tower-matrix:
+	@echo "[Omi Precision Core] Running arbitrary precision tower of power checks..."
+	node --test test/tower-kernel.test.js
+
+test-multivalued-logic-reasoner:
+	@echo "[Omi Logic Core] Running two, three, and five-value logic prime checks..."
+	node --test test/logic-reasoner.test.js
+
+test-metacircular-compiler-mesh:
+	@echo "[Omi Compiler Core] Running meta-circular interpreter and loci checks..."
+	node --test test/meta-compiler.test.js
+
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."
 	node --test test/preset-color.test.js

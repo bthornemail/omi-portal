@@ -842,3 +842,351 @@ a[href^="web+omicron:"]:hover {
   fill: rgba(255, 0, 85, 0.02);
   stroke-dasharray: 4, 4;
 }
+
+/* 75. CLA Step 0 — Generate/Propagate (yellow) */
+[data-cla-layer="step0"] {
+  stroke: #ffcc00;
+  stroke-width: 1.5px;
+}
+
+/* 76. CLA Step 1 — Lookahead Carry Unit (amber) */
+[data-cla-layer="step1"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 6px rgba(255, 170, 0, 0.4));
+}
+
+/* 77. CLA Outputs — Sum bits (cyan glow) */
+[data-cla-layer="output"] {
+  stroke: #00ffcc;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 10px #00ffcc);
+  animation: claSumGlow 1.2s infinite alternate linear;
+}
+
+@keyframes claSumGlow {
+  0% { opacity: 0.6; transform: scale(1.0); }
+  100% { opacity: 1.0; transform: scale(1.02) translateZ(10px); }
+}
+
+/* 78. CLA carry propagation edge — amber dashed */
+[data-cla-role="carry"] {
+  stroke: #ffaa00;
+  stroke-dasharray: 4, 2;
+  stroke-width: 2px;
+}
+
+/* 79. CLA sum output edge — cyan solid */
+[data-cla-role="sum"] {
+  stroke: #00ffcc;
+  stroke-width: 2.5px;
+}
+
+/* 80. Rule 0x86 address match — gate delay ceiling */
+[id$="-0004/128"] {
+  stroke: #ffaa00;
+  stroke-dasharray: 2, 2, 4, 2;
+}
+
+/* 81. Rule 0x87 address match — lookahead isolation */
+[id$="-0003/128"] {
+  stroke: #ffcc00;
+  stroke-width: 1.5px;
+}
+
+/* 82. Sexagesimal CLA node — base-60 regular fraction alignment */
+[data-cla-sexagesimal="regular"] {
+  stroke: #00ffcc;
+  fill: rgba(0, 255, 204, 0.04);
+  stroke-width: 2px;
+}
+
+/* 83. Sexagesimal CLA node — non-regular repeating fraction (red warning) */
+[data-cla-sexagesimal="irrational"] {
+  stroke: #ff0055;
+  fill: rgba(255, 0, 85, 0.04);
+  stroke-dasharray: 4, 4;
+}
+
+/* 84. Babylonian √2 diagonal (YBC 7289) — purple pulse */
+[data-cla-sexagesimal="babylonian"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.05);
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: babylonianRootPulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes babylonianRootPulse {
+  0% { transform: scale(1.0) rotateX(10deg); }
+  100% { transform: scale(1.03) rotateX(15deg) translateZ(12px); }
+}
+
+/* 85. Bijective two-cube transition workspace (Rule 0x8F) */
+[id$="-0400/128"] {
+  stroke: #00ffcc;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 2, 4, 2;
+}
+
+/* 87. Bijective state — active transition node */
+[data-bijective-state="active"] {
+  transform: rotateX(15deg) rotateY(15deg) translateZ(20px);
+  animation: bijectiveGlowPulse 1.2s infinite alternate linear;
+}
+
+@keyframes bijectiveGlowPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #00ffcc); }
+}
+
+/* 88. Bijective state — inversed cube face */
+[data-bijective-state="inverse"] {
+  stroke: #ff0055;
+  stroke-dasharray: 2, 4;
+  transform: rotateX(-15deg) rotateY(-15deg);
+}
+
+/* 89. Bijective SAB ring memory — linked alignment */
+[data-bijective-role="ring-link"] {
+  stroke: #00ffcc;
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.3));
+}
+
+/* 90. Omi-Lisp dotted pair cons cell (Rule 0x92) */
+[id$="-006c/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2px;
+  stroke-dasharray: 4, 4, 2, 4;
+}
+
+/* 91. Omi-Lisp Node-RED carry-forward adder node — cyan cons grid pulse */
+[color="5"][data-lisp-node="cons"] {
+  stroke: #00ffcc !important;
+  fill: rgba(0, 255, 204, 0.04);
+  filter: drop-shadow(0 0 10px #00ffcc);
+  animation: consGridPulse 1.4s infinite alternate linear;
+}
+
+@keyframes consGridPulse {
+  0% { transform: scale(1.0) skewX(0deg); }
+  100% { transform: scale(1.02) skewX(5deg) translateZ(15px); }
+}
+
+/* 92. One-word register — chiral/cardinal delimiter envelope */
+[id*="-03bf-"][id*="-039f-"] {
+  stroke-width: 1.5px;
+}
+
+/* 93. Nil-terminated cons cell — neon cyan glow on closure boundary */
+[id$="-039f-01ff/48"] {
+  stroke: #00ffcc !important;
+  fill: rgba(0, 255, 204, 0.04);
+  filter: drop-shadow(0 0 10px #00ffcc);
+}
+
+/* 94. Tetrahedral lattice inference — high-contrast monochrome clamp (Rule 0x97) */
+[color="#ffffff"] {
+  stroke: #ffffff !important;
+  fill: rgba(255, 255, 255, 0.05);
+  filter: drop-shadow(0 0 8px #ffffff);
+}
+
+/* 95. Tetrahedral lattice — inference complete pulse */
+[data-lattice-inference="complete"] {
+  transform: rotateX(20deg) rotateY(-20deg) scale(1.04);
+  animation: latticeGlowPulse 1.2s infinite alternate linear;
+}
+
+@keyframes latticeGlowPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #00ffcc); }
+}
+
+/* 96. Universal POS alist partition base (Rule 0x9B) */
+[id$="-007f/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4, 4, 4;
+}
+
+/* 97. Semantic router — open class lexical structures */
+[color="5"][data-semantic-pos="open"] {
+  stroke: #00ffcc !important;
+  fill: rgba(0, 255, 204, 0.04);
+  filter: drop-shadow(0 0 10px #00ffcc);
+}
+
+/* 98. Semantic router — closed class inflectional structures */
+[color="6"][data-semantic-pos="closed"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  filter: drop-shadow(0 0 10px #7000FF);
+}
+
+/* 99. Cube-Octahedron UPOS dual space base (Rule 0x9E) */
+[id$="-0006/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4, 4, 4;
+}
+
+/* 100. Centroid pointer tetrahedron — gold pulse */
+[color="3"][data-polyhedral-role="centroid"] {
+  stroke: #ffcc00 !important;
+  fill: rgba(255, 204, 0, 0.04);
+  filter: drop-shadow(0 0 10px #ffcc00);
+  animation: centroidPointerPulse 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes centroidPointerPulse {
+  0% { transform: scale(1.0) rotateY(0deg); }
+  100% { transform: scale(1.03) rotateY(15deg) translateZ(10px); }
+}
+
+/* 101. Open class cube vertex — red dominant (Rule 0xA1) */
+[color="#FF0000"] {
+  stroke: #ff0000 !important;
+  filter: drop-shadow(0 0 10px #ff0000);
+}
+
+/* 102. Closed class octahedron vertex — orange blended (Rule 0xA2) */
+[color="#FF8800"] {
+  stroke: #ff8800 !important;
+  stroke-dasharray: 4, 4;
+}
+
+/* 103. 5-Cell / 24-Cell dual structural base (Rule 0xA4) */
+[id$="-0018/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 104. 120-Cell / 600-Cell WordNet continuum envelope (Rule 0xA5) */
+[id$="-0078/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 105. Snubbed Archimedean truncation alignment — cyan pulse */
+[data-polytope-state="snubbed-aligned"] {
+  transform: rotateX(25deg) rotateY(25deg) rotateZ(10deg);
+  animation: polytopicGlow 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes polytopicGlow {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #00ffcc); }
+}
+
+/* 106. 256-bit octuple precision allocation base (Rule 0xA7) */
+[id$="-0100/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 6, 2, 4, 2;
+}
+
+/* 107. 19-bit exponent bias gate (Rule 0xA8) */
+[id^="omi-0003-ffff-"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 108. Subnormal number precision range */
+[data-precision="subnormal"] {
+  transform: rotateX(15deg) rotateY(-15deg) scale(1.03);
+  animation: subnormalPulse 1.4s infinite alternate linear;
+}
+
+@keyframes subnormalPulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 6px #7000FF); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 14px #7000FF); }
+}
+
+/* 109. UTF-EBCDIC character range partition base (Rule 0xAA) */
+[id$="-003f/122"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 110. Greek Omicron case identity gate (Rule 0xAB) */
+[id$="-aa55/32"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 111. Structural character cell — cyan glow */
+[color="2"][data-character-lane="structural"] {
+  stroke: #00ffcc !important;
+  fill: rgba(0, 255, 204, 0.04);
+}
+
+/* 112. Numeric/color preset markup cell — gold pulse */
+[data-character-lane="numeric"] {
+  transform: rotateZ(10deg) translateZ(12px);
+  animation: numericCellPulse 1.2s infinite alternate linear;
+}
+
+@keyframes numericCellPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #ffcc00); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ffcc00); }
+}
+
+/* 113. Tower of Power precision scaling base (Rule 0xAD) */
+[id$="-0110/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 2, 2, 2;
+}
+
+/* 114. Prime chromatic roundtrip loop — 61 guard (Rule 0xAE) */
+[id*="-003d-"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 115. Regular base-60 transition — cyan glow pulse */
+[data-precision-scale="regular-60"] {
+  stroke: #00ffcc !important;
+  animation: regularGlowPulse 1.4s infinite alternate linear;
+}
+
+@keyframes regularGlowPulse {
+  0% { transform: scale(1.0) rotateY(0deg); }
+  100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); }
+}
+
+/* 116. Multi-valued logic prime partition base (Rule 0xB3) */
+[id$="-0005/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 6, 2, 4, 2;
+}
+
+/* 117. Five-value active selector gate — gold pulse */
+[color="3"][data-logic-tier="five-value"] {
+  stroke: #ffcc00 !important;
+  fill: rgba(255, 204, 0, 0.04);
+  filter: drop-shadow(0 0 10px #ffcc00);
+  animation: logicSelectorPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes logicSelectorPulse {
+  0% { transform: scale(1.0) rotateX(0deg); }
+  100% { transform: scale(1.02) rotateX(12deg) translateZ(10px); }
+}
+
+/* 118. Terminating metaprogram compiler node — cyan glow */
+[color="5"][data-meta-compiler="terminating"] {
+  stroke: #00ffcc !important;
+  fill: rgba(0, 255, 204, 0.04);
+  filter: drop-shadow(0 0 10px #00ffcc);
+  animation: compilerCellPulse 1.3s infinite alternate linear;
+}
+
+@keyframes compilerCellPulse {
+  0% { transform: scale(1.0) rotateX(0deg); }
+  100% { transform: scale(1.02) rotateX(15deg) translateZ(10px); }
+}
