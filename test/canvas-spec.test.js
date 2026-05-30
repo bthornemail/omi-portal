@@ -184,7 +184,8 @@ test("Hypergraph: malformed tetrahedral input rejects before coordinate generati
 test("Hypergraph: RULES.omi declares tetrahedral centroid invariants", async () => {
   const rules = await readFile(new URL("../RULES.omi", import.meta.url), "utf8");
 
-  assert.match(rules, /map-delta-law-to-tetrahedral-vertices/);
+  assert.match(rules, /anchor-monolithic-composite-centroid/);
+  assert.match(rules, /map-tetrahedral-operator-vertices/);
   assert.match(rules, /derive-barycentric-canvas-coordinates/);
   assert.match(rules, /encode-hypergraph-state-color-fields/);
 });

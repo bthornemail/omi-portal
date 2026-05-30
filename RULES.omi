@@ -394,20 +394,21 @@ omi-0000-0000-0000-0000-0000-0000-0000-000a/128 MUST enforce-two-of-five-fractio
 #   MAY feed their weight into the shared workspace through existing gates.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-scgnn-input-function-weight
 
-# [Rule 0x61]: Base-60 Lowest Common Multiple Alignment
-#   Circular slide-rule angular velocity MUST exploit the twelve clean divisors
-#   of 60 to avoid floating-point division in sexagesimal coordinate updates.
-omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST anchor-sexagesimal-lcm-base
+# [Rule 0x61]: Monolithic Omicron Node Centroid Alignment
+#   The OmicronNode MUST serve as the algebraic centroid unifying the 4 C0
+#   OmiNode vertices. Geometric transformations MUST map directly to the
+#   twelve divisors of the Base-60 LCM wheel.
+omi-0000-0000-0000-0000-0000-0000-0000-003c/128 MUST anchor-monolithic-composite-centroid
 
 # [Rule 0x62]: Highly Composite Track Evaluation
 #   Track products MUST compute mechanical angles via (T3 * T4) % 5040 and
 #   route nonagram sectors as one of ten 2-of-5 structural angle pathways.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-highly-composite-slide-rule
 
-# [Rule 0x63]: Four-Axis Delta Law Node Type Mapping
-#   Node filetypes MUST map to the four primitive choices of the Delta Law:
-#   rotl(x,1)=Text, rotl(x,3)=File, rotr(x,2)=Link, and C=Group.
-omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST map-delta-law-to-tetrahedral-vertices
+# [Rule 0x63]: Tetrahedral Operator Vertex Assignment
+#   Vertices MUST lock to the Delta Law group: Text=rotl(x,1),
+#   File=rotl(x,3), Link=rotr(x,2), and Group=C.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST map-tetrahedral-operator-vertices
 
 # [Rule 0x64]: Barycentric Centroid Interface Resolution
 #   The OmicronNode MUST calculate its geometric location as the deterministic
