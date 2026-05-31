@@ -38,6 +38,7 @@
         test-sts-evaluator \
         test-facts-evaluator \
         test-wikimedia-kernel \
+        test-cluster-peer-discovery \
         test-all bake-images push-all \
         clean purge
 
@@ -441,6 +442,10 @@ test-wikimedia-kernel:
 	@echo "[Omi Wikimedia Core] Running Steiner S-P-O triple and credibility checks..."
 	node --test test/wikimedia-kernel.test.js
 
+test-cluster-peer-discovery:
+	@echo "[Omi Cluster Core] Running virbr0/virbr1 L2 multicast peer checks..."
+	node --test test/cluster-discovery.test.js
+
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."
 	node --test test/preset-color.test.js
@@ -581,6 +586,7 @@ test-all:
 	node --test test/sts-evaluator.test.js
 	node --test test/facts-evaluator.test.js
 	node --test test/wikimedia-kernel.test.js
+	node --test test/cluster-discovery.test.js
 	@echo "[Omi Core] All segment checks passed."
 
 bake-images:

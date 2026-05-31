@@ -989,3 +989,26 @@ omi-0000-0000-0000-0000-0000-0000-7463-0004/128 MUST maintain-dual-stack-ingress
 # directly into the 5040×8 SAB ring. Any trajectory breaching the zero-copy broadcast
 # loop SHALL trigger an immediate XDP_DROP on the proxy SSE endpoint.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST link-sse-streams-to-shared-array-buffers
+
+# ============================================================================
+# OMI PROTOCOL - INDUSTRIAL MESH NODE CLUSTERING RULES
+# Specification Level: Rules 0x103 through 0x105 [The Cluster Mesh Baseline]
+# ============================================================================
+
+# [Rule 0x103]: Virtual Bridge L2 Interface Binding (virbr0 / virbr1)
+# Peer discovery sockets MUST bind natively over the virbr0 (IPv4) and virbr1 (IPv6) virtual
+# networks. Ingress and egress frames SHALL traverse interfaces using non-blocking raw
+# socket descriptors. Only valid indices 0 (virbr0) and 1 (virbr1) SHALL be accepted.
+omi-0000-0000-0000-0000-0000-0000-0076-0030/112 MUST bind-cluster-to-virtual-bridges
+
+# [Rule 0x104]: Symmetrical Multicast (ff02::1) and Broadcast Heartbeat Core
+# Mesh keep-alive states MUST propagate via IPv4 broadcast (192.168.122.255) and IPv6
+# link-local multicast (ff02::1). Sequence intervals SHALL map to the 12 regular divisors
+# of the base-60 LCM timeline wheel. Weight 60 routes to preset "3" (yellow).
+omi-ff02-0000-0000-0000-0000-0000-0000-0001/64 MUST broadcast-cluster-mesh-heartbeats
+
+# [Rule 0x105]: Peer Adjacency Matrix Max-Capacity Suffix Lock
+# Cluster reasoners tracking adjacent active nodes MUST clamp maximum concurrent slates to
+# MAX_CLUSTER_PEERS (10). Any trajectory exceeding capacity MUST trigger an eviction and
+# XDP_DROP. Only verified zero-sum Q(S) === 0 frames SHALL register new peers.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-cluster-peer-capacity-limits

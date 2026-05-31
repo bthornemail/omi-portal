@@ -60,6 +60,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - STS benchmark evaluator kernel: `src/omi/sts-evaluator.js`
 - FACTS Parametric evaluator kernel: `src/omi/facts-evaluator.js`
 - Wikimedia Steiner triple kernel: `src/omi/wikimedia-kernel.js`
+- Cluster discovery mesh kernel: `src/omi/cluster-discovery.js`
 
 ## Implementation Expectations
 
