@@ -21,6 +21,8 @@
         test-jabcode-chromatic-mesh \
         test-jabcode-scrambler-matrix \
         test-code16k-multirow-mesh \
+        test-hopf-fibration-projection \
+        test-octonion-fano-projection \
         clean purge
 
 # ============================================================
@@ -354,6 +356,14 @@ test-jabcode-scrambler-matrix:
 test-code16k-multirow-mesh:
 	@echo "[Omi 16K Core] Running stacked row configurations and Modulo-107 checks..."
 	node --test test/code16k-kernel.test.js
+
+test-hopf-fibration-projection:
+	@echo "[Omi Hopf Core] Running branchless 3-sphere to 2-sphere bundle checks..."
+	node --test test/hopf-kernel.test.js
+
+test-octonion-fano-projection:
+	@echo "[Omi Octonion Core] Running branchless S15 to S8 Fano DOM bundle checks..."
+	node --test test/octonion-kernel.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

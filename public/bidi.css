@@ -1334,3 +1334,47 @@ a[href^="web+omicron:"]:hover {
   0% { transform: scale(1.0); opacity: 0.6; }
   100% { transform: scale(1.02) translateZ(10px); opacity: 1.0; }
 }
+
+/* 136. Complex 3-sphere coordinate partition (Rule 0xD4) */
+[id$="-0003/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 137. Hopf map projection base (Rule 0xD5) */
+[id$="-0000/80"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 6, 2, 4, 2;
+}
+
+/* 138. South pole z1 dominant — purple bundle pulse */
+[color="6"][data-fibration-phase="south-pole"] {
+  transform: rotateX(15deg) rotateZ(10deg) scale(1.03);
+  animation: hopfBundlePulse 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes hopfBundlePulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #7000FF); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 14px #7000FF); }
+}
+
+/* 139. Quaternionic S4 OmicronNode 24-Cell (Rule 0xD7) */
+[id$="-0024-0004/112"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 140. Octonionic S8 Tetragrammatron Fano projection (Rule 0xD8) */
+[id$="-0008-0007/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: octonionBundlePulse 1.6s infinite alternate linear;
+}
+
+@keyframes octonionBundlePulse {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.6; }
+  100% { transform: scale(1.03) rotateY(12deg) translateZ(15px); opacity: 1.0; }
+}

@@ -603,3 +603,42 @@ omi-0000-0000-0000-0000-0000-0000-0000-000b/128 MUST assert-code16k-character-od
 # Frame structural integrity MUST verify C1 and C2 weights using modulo-107 sum transformations:
 # C1 = sum((i+1)*Char(i)) mod 107, and C2 = sum(i*Char(i)) mod 107. Failed matches SHALL trigger drop-eviction.
 omi-0000-0000-0000-0000-0000-0000-0000-006b/128 MUST verify-code16k-modulo107-check-characters
+
+# ============================================================================
+# OMI PROTOCOL - HOPF FIBRATION GEOMETRIC INVARIANTS
+# Specification Level: Rules 0xD4 through 0xD6 [The Hopf Bundle Lock]
+# ============================================================================
+
+# [Rule 0xD4]: Complex 3-Sphere Coordinate Space Partition
+# Inbound 128-bit tokens MUST be interpreted as a pair of complex variables z0 and z1 in C2.
+# Squared absolute components SHALL obey the unit length restriction: |z0|^2 + |z1|^2 === 1.
+omi-0000-0000-0000-0000-0000-0000-0000-0003/128 MUST partition-three-sphere-complex-coordinates
+
+# [Rule 0xD5]: Deterministic Hopf Map Projection Function
+# The projection function p: S3 -> S2 MUST compute the vector pair (2*z0*z1*, |z0|^2 - |z1|^2) branchlessly.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST execute-branchless-hopf-map-projection
+
+# [Rule 0xD6]: Base Space S2 Canvas Preset Alignment
+# The real component value derived from the Hopf map MUST dictate single-character preset marks "1"-"6".
+# Any structural loop overflow crossing the unit sphere perimeter MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-hopf-base-space-to-canvas-presets
+
+# ============================================================================
+# OMI PROTOCOL - OCTONIONIC FANO OBJECT MODEL RULES
+# Specification Level: Rules 0xD7 through 0xD9 [The Octonion Bundle Lock]
+# ============================================================================
+
+# [Rule 0xD7]: Quaternionic S4 OmicronNode 24-Cell Assignment
+# Applied geometric transformations mapping 4D space variables MUST project via the S3 -> S7 -> S4 bundle.
+# The resulting cell vertices SHALL align branchlessly to the 24-cell polyhedral network bounds.
+omi-0000-0000-0000-0000-0000-0000-0024-0004/112 MUST map-quaternionic-s4-omicron-nodes
+
+# [Rule 0xD8]: Octonionic S8 Tetragrammatron Fano Projection
+# Core document representations (DOM, CSSOM, JSDOM, Omi Object Model) MUST anchor to the S7 -> S15 -> S8 map.
+# Fact relations traversing the Prolog WordNet DB SHALL unify paths using the 8-point projective plane.
+omi-0000-0000-0000-0000-0000-0000-0008-0007/112 MUST anchor-octonionic-fano-projections
+
+# [Rule 0xD9]: Multi-Runtime Object Model Suffix Constraint
+# Synchronized state distributions crossing DOM interfaces MUST yield single-character preset IDs.
+# Any structural loop overflow breaching the octonionic manifold MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST assert-octonionic-fano-bundle-boundaries
