@@ -2062,3 +2062,121 @@ div[data-portal-zone="ingress-idle"] {
   0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
   100% { transform: scale(1.02) rotateX(10deg) translateZ(12px); opacity: 1.0; }
 }
+
+/* 208. Target the complete 7-point Fano plane projective node selection base (Rule 0x130) */
+[id$="-0007-0004/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 209. Target the base-60 LCM superior highly composite chronometer configuration base (Rule 0x131) */
+[id$="-003c-0000-0006/48"] {
+  stroke: #ff0055 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 210. Flash a bright green glow over active healthy cron-sequenced blocks */
+[color="4"][data-tetragrammaton-state="fano-regular"] {
+  stroke: #00ff66 !important;
+  fill: rgba(0, 255, 102, 0.04);
+  transform: scale(1.02) rotateZ(2deg);
+  animation: tetragrammatonManifoldPulse 1.6s infinite alternate ease-in-out;
+}
+
+@keyframes tetragrammatonManifoldPulse {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+/* 211. Target the active projective chronometer rail for Fano-plane scheduling */
+[id$="-03bf-ffff-2b00-2f00-ffff-039f-ffff/128"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: tetragrammatonManifoldPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 212. Target the complete QEMU TYPE_CLOCK sub-nanosecond 2^-32 scaling matrix base (Rule 0x133) */
+[id$="-0020-0020/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 213. Target the inactive gated clock zero-value eviction fence base (Rule 0x134) */
+[id$="-003c-0000-0000/48"] {
+  stroke: #ff0055 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 214. Target the active clock gating fence with crimson pulse */
+[id$="-0000-0000-0000-0000-0000-0000-0020-0020/112"] {
+  stroke: #ff0055 !important;
+  filter: drop-shadow(0 0 12px #ff0055);
+  animation: clockGatingPulse 1.6s infinite alternate ease-in-out;
+}
+
+@keyframes clockGatingPulse {
+  0% { opacity: 0.5; filter: grayscale(1); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 10px #ff0055); }
+}
+
+/* 215. Flash a bright purple glow over active machine clock source roots */
+[color="6"][data-clock-tree="root-source"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: rotateZ(-4deg) scale(1.02);
+  animation: clockRootPulse 1.6s infinite alternate ease-in-out;
+}
+
+@keyframes clockRootPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #7000FF); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 14px #7000FF); }
+}
+
+/* 216. Target the complete omicron-hex(N)-hex(N-1)-omicron token boundary base (Rule 0x136) */
+[id$="-03bf-0001-0000-039f/128"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 217. Target the Otto Neugebauer semicolon-comma positional fractional fence base (Rule 0x138) */
+[id$="-0000-0000-003b-001d/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: notationManifoldPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 218. Flash a bright purple glow over active synodic month chronometer centroids */
+[color="6"][data-notation-mode="synodic-active"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: scale(1.02) rotateY(15deg);
+}
+
+@keyframes notationManifoldPulse {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+/* 220. Target the complete high-concurrency shared enclosure memory protection base (Rule 0x139) */
+[id$="-13b0-5040/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 221. Target the container orchestration cluster isolation guard configuration base (Rule 0x13A) */
+[id$="-7463-0004-0000-0050/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: deploymentRolloutWarp 1.6s infinite alternate ease-in-out;
+}
+
+@keyframes deploymentRolloutWarp {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(10deg) translateZ(12px); opacity: 1.0; }
+}

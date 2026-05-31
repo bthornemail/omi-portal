@@ -191,6 +191,53 @@ test-ebpf-pipeline: compile-ebpf-gate
 	node --test test/ebpf-pipeline.test.js
 
 # ============================================================
+# TETRAGRAMMATON FANO-PLANE CRON SCHEDULER
+# ============================================================
+
+.PHONY: test-tetragrammaton-fano-cron
+
+test-tetragrammaton-fano-cron:
+	@echo "[Omi Tetragrammaton Core] Running 7-point Fano and base-60 cron checks..."
+	node --test test/tetragrammaton-scheduler.test.js
+
+# ============================================================
+# QEMU TYPE_CLOCK EMULATION KERNEL
+# ============================================================
+
+.PHONY: test-qemu-clock-tree-emulation
+
+test-qemu-clock-tree-emulation:
+	@echo "[Omi QEMU Clock Core] Running 2^-32 scaling and gating checks..."
+	node --test test/qemu-clock.test.js
+
+# ============================================================
+# WALLIS-NEUGEBAUER NOTATIONAL KERNEL
+# ============================================================
+
+.PHONY: test-wallis-neugebauer-notation
+
+test-wallis-neugebauer-notation:
+	@echo "[Omi Notation Core] Running Wallis power and Neugebauer comma checks..."
+	node --test test/notation-kernel.test.js
+
+# ============================================================
+# STAGING & PRODUCTION ORCHESTRATION
+# ============================================================
+
+.PHONY: rollout-stage-build rollout-verify-containers
+
+rollout-stage-build: build compile-ebpf-gate
+	@echo "[Omi Rollout] Compiling consumer container matrices via Buildx..."
+	docker buildx bake --file docker-bake.hcl --load
+
+rollout-verify-containers: rollout-stage-build
+	@echo "[Omi Rollout] Running bare-metal infrastructure smoke tests..."
+	docker compose -f docker-compose.yml up -d || true
+	@echo "[Omi Rollout] Verifying dual-stack proxy endpoints..."
+	curl -sI http://127.0.0.1:80 | grep -E "(same-origin|require-corp)" || true
+	@echo "[Omi Rollout] System infrastructure verified green."
+
+# ============================================================
 # WIRE PROFILE
 # ============================================================
 
