@@ -34,6 +34,8 @@ services:
     profiles:
       - qemu
     restart: "no"
+    tty: true
+    stdin_open: true
     security_opt:
       - apparmor:unconfined
     devices:

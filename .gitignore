@@ -146,3 +146,4 @@ vite.config.ts.timestamp-*
 
 # dev-docs GC inbox (scratch workspace, not canonical)
 dev-docs/_temp/
+.cron-state/

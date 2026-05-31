@@ -10,9 +10,21 @@
 set -euo pipefail
 
 OMI_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-FACTS_FILE="${OMI_ROOT}/docs/01-physical/FACTS.omi"
+STATE_DIR="${OMI_ROOT}/.cron-state"
+STATE_FILE="${STATE_DIR}/state.journal"
 TIMESTAMP_HEX=$(printf '%04x' "$(date +%s | tail -c 5)")
-TUNNEL_STATE_OCTET="0040"
 
-echo "omi-0000-0000-0000-0000-13b0-0036-0000-${TIMESTAMP_HEX}/120 MUST cron-update-state" >> "${FACTS_FILE}"
-echo "[Omi Cron Frame] Wrote state marker ${TIMESTAMP_HEX} to FACTS.omi"
+mkdir -p "${STATE_DIR}"
+
+# Append state frame to journal (not to FACTS.omi — that is version controlled)
+echo "omi-0000-0000-0000-0000-13b0-0036-0000-${TIMESTAMP_HEX}/120 MUST cron-update-state" >> "${STATE_FILE}"
+
+# Trim journal to last 60 entries
+tail -n 60 "${STATE_FILE}" > "${STATE_FILE}.tmp" && mv "${STATE_FILE}.tmp" "${STATE_FILE}"
+
+echo "[Omi Cron Frame] Wrote state marker ${TIMESTAMP_HEX} to state journal"
+
+# Signal any listening process via tmpfs
+SHM_SIGNAL="/dev/shm/omi-cron-tick"
+echo "${TIMESTAMP_HEX}" > "${SHM_SIGNAL}"
+echo "[Omi Cron Frame] Signaled ${SHM_SIGNAL}"
