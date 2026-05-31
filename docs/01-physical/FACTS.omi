@@ -642,3 +642,23 @@ omi-0000-0000-0000-0000-0000-0000-0008-0007/112 MUST anchor-octonionic-fano-proj
 # Synchronized state distributions crossing DOM interfaces MUST yield single-character preset IDs.
 # Any structural loop overflow breaching the octonionic manifold MUST trigger an immediate XDP_DROP.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST assert-octonionic-fano-bundle-boundaries
+
+# ============================================================================
+# OMI PROTOCOL - CLAMPED SPHERE PACKING RULES
+# Specification Level: Rules 0xDA through 0xDC [The Packed Matrix Baseline]
+# ============================================================================
+
+# [Rule 0xDA]: Tri-Clamped Uint8Array Sphere Layer Allocation
+# Escape sequence packings MUST divide language properties into three distinct clamped arrays.
+# Individual data buffers SHALL handle raw UTF-8, Base64, or Code 16K structures uniformly.
+omi-0000-0000-0000-0000-0000-0000-0000-0003/128 MUST allocate-three-clamped-sphere-arrays
+
+# [Rule 0xDB]: 107-Symbol Character Constraint Fence
+# Character indices mapping to the clamped arrays MUST clamp to the 107-symbol range (0 to 106).
+# Symbol configurations exceeding this boundary SHALL be evicted instantly via XDP_DROP gates.
+omi-0000-0000-0000-0000-13b0-0036-0000-006b/128 MUST clamp-to-one-hundred-seven-symbols
+
+# [Rule 0xDC]: Base64 Proxy Single-Digit Preset Marking
+# Extracted syntax values resolving under the tri-clamped configuration MUST emit single-character keys.
+# Fully validated terminating trajectories SHALL route directly to layout code "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-clamped-sphere-outputs-to-presets

@@ -23,6 +23,7 @@
         test-code16k-multirow-mesh \
         test-hopf-fibration-projection \
         test-octonion-fano-projection \
+        test-clamped-sphere-packing \
         clean purge
 
 # ============================================================
@@ -364,6 +365,10 @@ test-hopf-fibration-projection:
 test-octonion-fano-projection:
 	@echo "[Omi Octonion Core] Running branchless S15 to S8 Fano DOM bundle checks..."
 	node --test test/octonion-kernel.test.js
+
+test-clamped-sphere-packing:
+	@echo "[Omi Sphere Core] Running tri-clamped array and 107-symbol checks..."
+	node --test test/sphere-packing.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

@@ -1378,3 +1378,27 @@ a[href^="web+omicron:"]:hover {
   0% { transform: scale(1.0) rotateY(0deg); opacity: 0.6; }
   100% { transform: scale(1.03) rotateY(12deg) translateZ(15px); opacity: 1.0; }
 }
+
+/* 141. Tri-clamped sphere layer allocation base (Rule 0xDA) */
+[id$="-0000-0000-0000-0000-0000-0000-0000-0003/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 142. 107-symbol character limit rail (Rule 0xDB) */
+[id$="-13b0-0036-0000-006b/128"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 143. Code 16K functional pointer lane — gold cell pulse */
+[color="3"][data-packing-lane="code16k-pointer"] {
+  transform: rotateX(12deg) scale(1.02);
+  animation: packingCellPulse 1.2s infinite alternate linear;
+}
+
+@keyframes packingCellPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #ffcc00); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ffcc00); }
+}
