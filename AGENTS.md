@@ -10,6 +10,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Keep `dev-docs/` as source/reference material. Do not copy transcript content wholesale into canonical docs.
 - Treat `demos/` as reference-only snapshots unless a root artifact is truly missing.
 - Do not rewrite `chat.history.html`.
+- Maintain the document layer ordering: POSTULATES.md (construction) → AXIOMS.md (folding) → DECLARATIONS.md (derivation). Preserve the Euclidean/origami/declaration architecture.
 
 ## Core Axioms (OMI = Omicron Object Model)
 
@@ -34,6 +35,9 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 
 - Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`)
 - Main framework doc: `docs/07-application/omi-object-model.md`
+- Construction doc: `POSTULATES.md` (Euclidean layer — what may be constructed)
+- Fold doc: `AXIOMS.md` (origami layer — how objects may be folded, reflected, transformed)
+- Derivation doc: `DECLARATIONS.md` (how RULES.omi clauses become FACTS.omi rows)
 - Manifest: `docs/10-declaration/omi-object-model.manifest.json`
 - GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`
 - CIDR kernel: `src/omi/omicron-kernel.js`
@@ -75,6 +79,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 Run these before handing off implementation changes:
 
 ```bash
+make compile-ebpf-gate    # required before tests if BPF object is stale
 npm test
 npm run build
 ```

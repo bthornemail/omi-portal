@@ -4,13 +4,14 @@ This file records the repeatable project workflows used in the OMI Portal.
 
 ## Documentation Declaration
 
-Use when turning exploratory `dev-docs/` material into canonical framework docs.
+Use when turning exploratory `dev-docs/` material into canonical framework docs or adding root-layer specs.
 
-1. Add or update curated Markdown in `docs/`.
-2. Update `docs/omi-object-model.manifest.json` with stable machine-readable declarations.
-3. Update `docs/source-map.md` when a new source document contributes concepts.
-4. Add or extend documentation integrity tests.
-5. Run `npm test` and `npm run build`.
+1. Root-layer documents live at project root: `POSTULATES.md` (construction), `AXIOMS.md` (fold axioms), `DECLARATIONS.md` (derivation).
+2. Add or update curated Markdown in `docs/`.
+3. Update `docs/omi-object-model.manifest.json` with stable machine-readable declarations.
+4. Update `docs/source-map.md` when a new source document contributes concepts.
+5. Add or extend documentation integrity tests.
+6. Run `npm test` and `npm run build`.
 
 ## OMI Parser Or Index Work
 
@@ -48,3 +49,13 @@ Use when changing `public/bidi.html` or `src/bidi/`.
 2. Keep BiDi marks and DataView/SAB behavior deterministic.
 3. Surface state through DOM attributes so CSSOM can react without replacing the editor.
 4. Test pure engine behavior separately from browser-only UI behavior.
+
+## Document Architecture Work
+
+Use when defining or revising the root-layer document stack (POSTULATES → AXIOMS → DECLARATIONS → RULES.omi → FACTS.omi).
+
+1. POSTULATES.md defines *construction permissions* — what may be built (points, lines, surfaces, rules, facts, transitions, masks, proofs, replays, projections, complements).
+2. AXIOMS.md defines *fold transformations* — how constructed objects may be reflected, aligned, complemented, resolved (O1–O13 + Ones-Complement Law).
+3. DECLARATIONS.md defines *derivation* — how RULES.omi clauses become FACTS.omi rows via a-list transitions, bitboard masks, and bitblip corrections.
+4. Every address point must trace through the full chain: construct → rule → fact → fold → declare → test → replay → project.
+5. Run `make compile-ebpf-gate && npm test && npm run build` to verify.
