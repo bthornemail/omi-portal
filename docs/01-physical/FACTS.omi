@@ -523,3 +523,43 @@ omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST serialize-twovariable-kmap-
 # Active hazard-hedged logic states executing under consensus terms MUST emit single-character preset marks.
 # Active bridging vectors resolving race hazards SHALL route directly to layout code "3" (yellow).
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-consensus-bridge-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE JAB CODE CHROMATIC RULES
+# Specification Level: Rules 0xC2 through 0xC4 [The Chromatic Syntax Fences]
+# ============================================================================
+
+# [Rule 0xC2]: 8-Color JAB Code Matrix Symbology Allocation
+# High-density storage buffers MUST interpret optical streams using the ISO/IEC 23634 specification.
+# The layout SHALL map structural nodes using CMYK primary and RGB secondary spatial value profiles.
+omi-0000-0000-0000-0000-0000-0000-2363-0004/112 MUST allocate-eight-color-jabcode-matrix-symbology
+
+# [Rule 0xC3]: Four-Corner Finder Pattern Identification
+# Input tracking modules parsing JAB Code matrices MUST isolate the four terminal corner finders
+# branchlessly to calculate the deterministic barycentric centroid of the object grammar network.
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST anchor-four-corner-finder-patterns
+
+# [Rule 0xC4]: 0x244A OCR Character Place-Value Mapping
+# Optical unicode glyphs matching the 0x244A core sequence (⑀..⑊) MUST mirror place-value characters.
+# Structural unifications traversing the matrix SHALL execute transformations without float tokens.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-ocr-unicode-to-place-value-digits
+
+# ============================================================================
+# OMI PROTOCOL - CODE 16K & CHROMATIC SWITCH RULES
+# Specification Level: Rules 0xC5 through 0xC7 [The Trans-Dimensional Fences]
+# ============================================================================
+
+# [Rule 0xC5]: Code 16K Multi-Row Segment Structure
+# Stacked multi-row barcode inputs MUST format data blocks using 2 to 16 horizontal rows.
+# Every row SHALL capture exactly 5 symbol characters bounded by leading and trailing guard bars.
+omi-0000-0000-0000-0000-13b0-0036-0000-0000/48 MUST enforce-code16k-stacked-row-structures
+
+# [Rule 0xC6]: Delta Law Chromatic Mode Switch Matrix Mask
+# Transitions swapping between Code 16K sets A/B/C and JAB Code matrices MUST compute the mask:
+# ModeSwitch = rotl(x,1) XOR rotl(x,3) XOR rotr(x,2) XOR C across the 128-bit frame register.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST execute-deltalaw-chromatic-mode-switch
+
+# [Rule 0xC7]: 14-Step Fano Torus Consensus Allocation
+# Decoded symbol trajectories crossing the trans-dimensional mode switches MUST close their paths
+# within the Fano plane torus boundary of k < 15 steps to eliminate asynchronous glitches.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-chromatic-bridge-outputs-to-presets

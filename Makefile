@@ -18,6 +18,7 @@
         test-fp16-nonagram-colors test-fp16-canvas-topology test-block-floating-point test-sexagesimal-slide-rule test-tetrahedral-hypergraph \
         test-barycentric-hypergraph \
         test-axiomatic-rules-compiler \
+        test-jabcode-chromatic-mesh \
         clean purge
 
 # ============================================================
@@ -339,6 +340,10 @@ test-karnaugh-torus-surface:
 test-axiomatic-rules-compiler:
 	@echo "[Omi Rules Core] Running axiomatic rules compiler verification checks..."
 	node --test test/rules-compiler.test.js
+
+test-jabcode-chromatic-mesh:
+	@echo "[Omi Chromatic Core] Running 8-color JAB Code and trans-dimensional checks..."
+	node --test test/jab-parser.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

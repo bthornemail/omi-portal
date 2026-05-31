@@ -1235,3 +1235,51 @@ a[href^="web+omicron:"]:hover {
   0% { transform: scale(1.0) skewY(0deg); }
   100% { transform: scale(1.02) skewY(4deg) translateZ(10px); }
 }
+
+/* 124. 8-color JAB Code matrix symbology base (Rule 0xC2) */
+[id$="-2363-0004/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 125. Four-corner finder pattern layout base (Rule 0xC3) */
+[id$="-0004/128"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 126. Active subtractive primary data fields — neon cyan glow */
+[data-jab-type="SUBTRACTIVE_PRIMARY"] {
+  stroke: #00ffcc !important;
+  animation: primaryCellPulse 1.3s infinite alternate linear;
+}
+
+@keyframes primaryCellPulse {
+  0% { transform: scale(1.0) rotateZ(0deg); opacity: 0.6; }
+  100% { transform: scale(1.02) rotateZ(8deg) translateZ(10px); opacity: 1.0; }
+}
+
+/* 127. Delta Law mode switch transformation base (Rule 0xC6) */
+[id$="-0000/80"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 128. Gray-coded Karnaugh Fano Plane Torus layout base (Rule 0xC7) */
+[id$="-0007/128"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 129. Active chromatic consensus bridge cells — gold pulse */
+[color="3"][data-bridge-lane="fano-torus"] {
+  transform: rotateX(15deg) rotateY(-15deg) scale(1.02);
+  animation: chromaticBridgePulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes chromaticBridgePulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 4px #ffcc00); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ffcc00); }
+}
