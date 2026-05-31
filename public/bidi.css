@@ -1402,3 +1402,27 @@ a[href^="web+omicron:"]:hover {
   0% { opacity: 0.6; filter: drop-shadow(0 0 4px #ffcc00); }
   100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ffcc00); }
 }
+
+/* 144. Nine-axis nonagon feature/weight base (Rule 0xDD) */
+[id$="-0009-0000/112"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 145. Ten-axis decagon activation threshold rail (Rule 0xDE) */
+[id$="-000a-0000/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 146. Modest sigmoid transition — gold neural pulse */
+[color="3"][data-neural-activation="modest-sigmoid"] {
+  transform: rotateZ(-8deg) scale(1.02);
+  animation: neuralCellPulse 1.3s infinite alternate ease-in-out;
+}
+
+@keyframes neuralCellPulse {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #ffcc00); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 14px #ffcc00); }
+}

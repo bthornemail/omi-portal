@@ -24,6 +24,7 @@
         test-hopf-fibration-projection \
         test-octonion-fano-projection \
         test-clamped-sphere-packing \
+        test-neural-perceptron-activation \
         test-all bake-images push-all \
         clean purge
 
@@ -370,6 +371,10 @@ test-octonion-fano-projection:
 test-clamped-sphere-packing:
 	@echo "[Omi Sphere Core] Running tri-clamped array and 107-symbol checks..."
 	node --test test/sphere-packing.test.js
+
+test-neural-perceptron-activation:
+	@echo "[Omi Neural Core] Running 9-axis nonagon and 10-axis decagon checks..."
+	node --test test/neural-kernel.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

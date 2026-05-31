@@ -662,3 +662,23 @@ omi-0000-0000-0000-0000-13b0-0036-0000-006b/128 MUST clamp-to-one-hundred-seven-
 # Extracted syntax values resolving under the tri-clamped configuration MUST emit single-character keys.
 # Fully validated terminating trajectories SHALL route directly to layout code "5" (cyan).
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-clamped-sphere-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE NEURAL ACTIVATION RULES
+# Specification Level: Rules 0xDD through 0xDF [The Perceptron Fences]
+# ============================================================================
+
+# [Rule 0xDD]: 9-Axis Nonagon Feature and Weight Extraction
+# Feature matrices tracking neural weight inputs MUST extract values across the Layer 9 nonagon frame.
+# Input arrays (x) and importance arrays (w) SHALL execute branchlessly to prevent execution drag.
+omi-0000-0000-0000-0000-0000-0000-0009-0000/112 MUST map-nonagon-neural-feature-vectors
+
+# [Rule 0xDE]: 10-Axis Decagon Activation Threshold Constraint
+# Activation threshold checks and bias boundaries (b) MUST lock to the Layer 10 decagon layout bounds.
+# Step evaluations and continuous logs SHALL compute values within the 14-step Fano orbit ceiling.
+omi-0000-0000-0000-0000-0000-0000-000a-0000/112 MUST anchor-decagon-activation-thresholds
+
+# [Rule 0xDF]: Dual Perceptron/Sigmoid Canvas Preset Mapping
+# The generated confidence output value of the neural module MUST dictate single-character preset marks.
+# Fully reduced steps matching the dominant true state (1) SHALL route directly to layout code "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-neural-neuron-outputs-to-presets
