@@ -1283,3 +1283,21 @@ a[href^="web+omicron:"]:hover {
   0% { opacity: 0.6; filter: drop-shadow(0 0 4px #ffcc00); }
   100% { opacity: 1.0; filter: drop-shadow(0 0 12px #ffcc00); }
 }
+
+/* 130. LFSR scrambling mask base (Rule 0xC8) */
+[id$="-2363-0010/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 12px #7000FF);
+}
+
+/* 131. High-nibble NBD axis — purple pulse (Rule 0xCA) */
+[color="6"][data-nbd-lane="high-nibble"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  animation: highAxisPulse 1.4s infinite alternate linear;
+}
+
+@keyframes highAxisPulse {
+  0% { transform: scale(1.0); opacity: 0.6; }
+  100% { transform: scale(1.02) translateZ(10px); opacity: 1.0; }
+}

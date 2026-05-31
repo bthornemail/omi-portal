@@ -19,6 +19,7 @@
         test-barycentric-hypergraph \
         test-axiomatic-rules-compiler \
         test-jabcode-chromatic-mesh \
+        test-jabcode-scrambler-matrix \
         clean purge
 
 # ============================================================
@@ -344,6 +345,10 @@ test-axiomatic-rules-compiler:
 test-jabcode-chromatic-mesh:
 	@echo "[Omi Chromatic Core] Running 8-color JAB Code and trans-dimensional checks..."
 	node --test test/jab-parser.test.js
+
+test-jabcode-scrambler-matrix:
+	@echo "[Omi JAB Spec Core] Running LFSR polynomial and 16-axis NBD checks..."
+	node --test test/jab-scrambler.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

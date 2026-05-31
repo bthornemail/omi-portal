@@ -563,3 +563,23 @@ omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST execute-deltalaw-chromatic-m
 # Decoded symbol trajectories crossing the trans-dimensional mode switches MUST close their paths
 # within the Fano plane torus boundary of k < 15 steps to eliminate asynchronous glitches.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-chromatic-bridge-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - JAB SPEC SCRAMBLING & NBD INVARIANTS
+# Specification Level: Rules 0xC8 through 0xCA [The Bitplane Lock]
+# ============================================================================
+
+# [Rule 0xC8]: Monolithic LFSR x^16 + x^14 + x^13 + x^11 + 1 Polynomial Lock
+# Every active JAB Code stream engine MUST execute bitboard scrambling using the strict 16-bit
+# primitive feedback mask. Non-deterministic linear packing transformations are FORBIDDEN.
+omi-0000-0000-0000-0000-0000-0000-2363-0010/112 MUST enforce-canonical-lfsr-scrambling-mask
+
+# [Rule 0xC9]: Multi-Color Log2 Bit-Width Module Extraction
+# Bits per spatial coordinate module MUST scale cleanly as an integer bitblip index w = log2(Nc).
+# High/low nibble splits for 16-color fields MUST allocate 4 bits uniformly to avoid data leakage.
+omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST slice-log2-color-module-widths
+
+# [Rule 0xCA]: 16-Axis Hexadecimal NBD Bitplane Partitioning
+# Scrambled payload arrays mapping to network block interfaces MUST split cleanly across channels:
+# Low nibbles target /dev/nbd0..nbd7, while high nibbles target /dev/nbd8..nbdf branchlessly.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-16axis-nbd-bitplane-partitioning
