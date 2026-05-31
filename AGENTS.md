@@ -46,6 +46,20 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Sphere packing kernel: `src/omi/sphere-packing.js`
 - JAB Code scrambler: `src/canvas/jab-scrambler.js`
 - Code 16K kernel: `src/canvas/code16k-kernel.js`
+- Neural activation kernel: `src/omi/neural-kernel.js`
+- Polytopic neural kernel: `src/omi/polytopic-neural.js`
+- HGV kernel: `src/omi/hgv-kernel.js`
+- HGV binary64 perceptron: `src/omi/hgv-perceptron.js`
+- Page framer kernel: `src/canvas/page-framer.js`
+- Megatron kernel: `src/omi/megatron-kernel.js`
+- Monster Group supersingular kernel: `src/omi/monster-kernel.js`
+- Hellenistic astro kernel: `src/omi/astro-kernel.js`
+- Supersingular elliptic kernel: `src/omi/elliptic-kernel.js`
+- Metacircular perceptron kernel: `src/omi/metacircular-perceptron.js`
+- Sexagesimal router kernel: `src/canvas/sexagesimal-router.js`
+- STS benchmark evaluator kernel: `src/omi/sts-evaluator.js`
+- FACTS Parametric evaluator kernel: `src/omi/facts-evaluator.js`
+- Wikimedia Steiner triple kernel: `src/omi/wikimedia-kernel.js`
 
 ## Implementation Expectations
 

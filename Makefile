@@ -25,6 +25,19 @@
         test-octonion-fano-projection \
         test-clamped-sphere-packing \
         test-neural-perceptron-activation \
+        test-polytopic-neural-activation \
+        test-hgv-barycentric-kernel \
+        test-hgv-perceptron-activation \
+        test-automated-page-framing \
+        test-megatron-absolute-activation \
+        test-monster-supersingular-matrix \
+        test-hellenistic-sexagesimal-mesh \
+        test-supersingular-elliptic-curves \
+        test-metacircular-multilayer-perceptron \
+        test-sexagesimal-highly-composite-mesh \
+        test-sts-evaluator \
+        test-facts-evaluator \
+        test-wikimedia-kernel \
         test-all bake-images push-all \
         clean purge
 
@@ -376,6 +389,58 @@ test-neural-perceptron-activation:
 	@echo "[Omi Neural Core] Running 9-axis nonagon and 10-axis decagon checks..."
 	node --test test/neural-kernel.test.js
 
+test-polytopic-neural-activation:
+	@echo "[Omi Polytopic Core] Running 600-cell n=6 truth table and Archimedean slice checks..."
+	node --test test/polytopic-neural.test.js
+
+test-hgv-barycentric-kernel:
+	@echo "[Omi HGV Core] Running 2-of-5 barycentric gauge and BCD float32 checks..."
+	node --test test/hgv-kernel.test.js
+
+test-hgv-perceptron-activation:
+	@echo "[Omi HGV Core] Running binary64 barycentric perceptron and sigmoid checks..."
+	node --test test/hgv-perceptron.test.js
+
+test-automated-page-framing:
+	@echo "[Omi Framing Core] Running cron-driven 16K and NAT64 iframe checks..."
+	node --test test/page-framer.test.js
+
+test-megatron-absolute-activation:
+	@echo "[Omi Megatron Core] Running Layer 10 absolute exponential checks..."
+	node --test test/megatron-kernel.test.js
+
+test-monster-supersingular-matrix:
+	@echo "[Omi Monster Core] Running 15 supersingular primes and period-8 checks..."
+	node --test test/monster-kernel.test.js
+
+test-hellenistic-sexagesimal-mesh:
+	@echo "[Omi Astro Core] Running omicron-70 zero and fractional checks..."
+	node --test test/astro-kernel.test.js
+
+test-supersingular-elliptic-curves:
+	@echo "[Omi Elliptic Core] Running mass formula and j-invariant subfield checks..."
+	node --test test/elliptic-kernel.test.js
+
+test-metacircular-multilayer-perceptron:
+	@echo "[Omi Meta Neural Core] Running unrolled Fano and hidden layer checks..."
+	node --test test/metacircular-perceptron.test.js
+
+test-sexagesimal-highly-composite-mesh:
+	@echo "[Omi Sexagesimal Core] Running base-60 divisors and LCM checks..."
+	node --test test/sexagesimal-router.test.js
+
+test-sts-evaluator:
+	@echo "[Omi STS Core] Running L2 angular similarity and Pearson correlation checks..."
+	node --test test/sts-evaluator.test.js
+
+test-facts-evaluator:
+	@echo "[Omi FACTS Core] Running parametric judge scoring and accuracy checks..."
+	node --test test/facts-evaluator.test.js
+
+test-wikimedia-kernel:
+	@echo "[Omi Wikimedia Core] Running Steiner S-P-O triple and credibility checks..."
+	node --test test/wikimedia-kernel.test.js
+
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."
 	node --test test/preset-color.test.js
@@ -502,6 +567,20 @@ test-all:
 	node --test test/hopf-kernel.test.js
 	node --test test/octonion-kernel.test.js
 	node --test test/sphere-packing.test.js
+	node --test test/neural-kernel.test.js
+	node --test test/polytopic-neural.test.js
+	node --test test/hgv-kernel.test.js
+	node --test test/hgv-perceptron.test.js
+	node --test test/page-framer.test.js
+	node --test test/megatron-kernel.test.js
+	node --test test/monster-kernel.test.js
+	node --test test/astro-kernel.test.js
+	node --test test/elliptic-kernel.test.js
+	node --test test/metacircular-perceptron.test.js
+	node --test test/sexagesimal-router.test.js
+	node --test test/sts-evaluator.test.js
+	node --test test/facts-evaluator.test.js
+	node --test test/wikimedia-kernel.test.js
 	@echo "[Omi Core] All segment checks passed."
 
 bake-images:

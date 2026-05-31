@@ -225,6 +225,26 @@ omi-0000-0000-0000-0000-0000-0000-0000-003c/60 MUST terminate-regular-sexagesima
 omi-0001-0018-0033-000a-0000-0000-1d50-aa55/128 MUST match-babylonian-diagonal-root
 
 # ============================================================================
+# OMI PROTOCOL - SEMANTIC TEXTUAL SIMILARITY BENCHMARK RULES
+# Specification Level: Rules 0x8C through 0x8E [The STS Invariant Locks]
+# ============================================================================
+
+# [Rule 0x8C]: L2 Normalized Angular Cosine Similarity Evaluation
+# Sentence pairs processed through the meta-compiler MUST compute angular proximity via
+# L2 normalization. Dot product arrays SHALL execute branchlessly via shift-XOR bitboards.
+omi-0000-0000-0000-0000-0000-0000-0080-0035/128 MUST execute-l2-normalized-angular-similarity
+
+# [Rule 0x8D]: STS Pearson Correlation Benchmark Perimeter (rho = 0.8036)
+# System similarity metrics matching human judgment tensors MUST enforce the 0.8036 correlation
+# floor. Any structural pipeline run yielding an evaluation score below this SHALL be evicted.
+omi-0000-0000-0000-0000-0000-0000-0803-0639/112 MUST satisfy-sts-pearson-correlation-bounds
+
+# [Rule 0x8E]: Double-Exponential Angular Arccosine Suffix Lock
+# Angular projections executing over the 64-row truth table matrix MUST preserve the 2^64 state
+# space limit. Any structural variance breaching the arccosine perimeter MUST trigger XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST assert-angular-arccosine-boundaries
+
+# ============================================================================
 # OMI PROTOCOL - BIJECTIVE TWO-CUBE REPLICATION RULES
 # Specification Level: Rules 0x8F through 0x91 [Bijective Graph Fences]
 # ============================================================================
@@ -283,6 +303,26 @@ omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST pack-chromatic-association-
 # Precision cells failing standard 360° phase alignments MUST clamp to binary black or white values.
 # This boundary filter provides clean edge contrast indicators for optical carrier verification sweeps.
 omi-0000-0000-0000-0000-0000-0000-0000-0002/128 MUST clamp-high-contrast-monochrome-cells
+
+# ============================================================================
+# OMI PROTOCOL - FACTS PARAMETRIC BENCHMARK RULES
+# Specification Level: Rules 0x98 through 0x9A [The Accuracy Invariant Locks]
+# ============================================================================
+
+# [Rule 0x98]: Public KaggleHub Factual Query Ingress Mapping
+# Inbound target examples from FACTS Parametric MUST map parameters across Layer 9 nonagon
+# frames. String evaluation queries (0 to 4) SHALL process branchlessly.
+omi-0000-0000-0000-0000-0000-0000-0009-0005/128 MUST map-kagglehub-facts-parametric-queries
+
+# [Rule 0x99]: Judge Model Evaluation Alignment Fence
+# Response verifications evaluated inside Layer 10 MUST use an unallocated bitboard score check.
+# Structural anomalies failing to match the target answers SHALL trigger an immediate XDP_DROP.
+omi-0000-0000-0000-0000-0000-0000-000a-0005/112 MUST enforce-facts-parametric-judge-evaluations
+
+# [Rule 0x9A]: Double-Exponential Factual Score Aggregation
+# Aggregated evaluation scores traversing the Megatron matrix MUST preserve the 2^64 state space.
+# Any trajectory variance breaching the unit sphere perimeter MUST trigger an immediate drop.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST aggregate-factual-accuracy-scores
 
 # ============================================================================
 # OMI PROTOCOL - UNIVERSAL SEMANTIC GRAMMAR RULES
@@ -423,6 +463,29 @@ omi-0000-0000-0000-0000-0000-0000-003b-003d/112 MUST enforce-prime-chromatic-rou
 # Character codes extracted from the UTF-EBCDIC plane MUST map to the 128-word subjective buffer.
 # The resulting coordinates SHALL translate to discrete visual matrices over the lock-free ring slots.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-inverse-twocube-codepoint-notation
+
+# ============================================================================
+# OMI PROTOCOL - WIKIMEDIA STRUCTURED DATA STEINER TRIPLE KERNEL RULES
+# Specification Level: Rules 0xB0 through 0xB2 [The S-P-O Fact Locks]
+# ============================================================================
+
+# [Rule 0xB0]: S-P-O Subject Space Hexacontagon Mapping (0..119)
+# Wikimedia entity (S)ubject identifiers traversing the 120-cell polytope MUST constrain
+# to the 120-slot array (0..119). Any structure breaching the hexacontagon perimeter MUST
+# trigger an eviction before reaching the Steiner accumulation layer.
+omi-0000-0000-0000-0000-0000-0000-0000-0078/128 MUST map-wikimedia-subject-hexacontagon
+
+# [Rule 0xB1]: Steiner Triple (P)redicate XOR Accumulation Fence
+# (P)redicate identifiers entering the 600-cell dodecahedral projection MUST hash
+# via exclusive-OR (S ^ P ^ O) into the canonical Steiner triple register. Bits
+# accumulated in the 64-row truth table matrix SHALL preserve period-8 Delta Law integrity.
+omi-0000-0000-0000-0000-0000-0000-0000-007f/112 MUST accumulate-wikimedia-predicate-xor-triples
+
+# [Rule 0xB2]: Reference Credibility Threshold Eviction Guard
+# Each (O)bject payload referencing a source with byte-level risk score >178 (~70%) MUST
+# be rejected. The guard compares the 8-bit risk register against the 0xB2 boundary;
+# any score exceeding this SHALL trigger a HIGH_REFERENCE_RISK eviction and XDP_DROP.
+omi-00b2-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-wikimedia-credibility-eviction-guard
 
 # ============================================================================
 # OMI PROTOCOL - MULTI-VALUED LOGICAL INVARIANT RULES
@@ -682,3 +745,247 @@ omi-0000-0000-0000-0000-0000-0000-000a-0000/112 MUST anchor-decagon-activation-t
 # The generated confidence output value of the neural module MUST dictate single-character preset marks.
 # Fully reduced steps matching the dominant true state (1) SHALL route directly to layout code "5" (cyan).
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-neural-neuron-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - POLYTOPIC 600-CELL NEURAL ACTIVATION RULES
+# Specification Level: Rules 0xE0 through 0xE2 [The Polytopic Fences]
+# ============================================================================
+
+# [Rule 0xE0]: n=6 64-Row Truth Table 600-Cell Projection
+# Inbound S-Expression tokens MUST expand to a 64-row (2^6) truth table for full 6-axis coverage.
+# The table SHALL project onto 600 tetrahedral cells of the 600-Cell and 120 dodecahedral cells of
+# the 120-Cell, using equally-spaced strided sampling from the delta-orbital lexer row seed.
+omi-0000-0000-0000-0000-0000-0000-0000-0040/128 MUST expand-n6-sixtyfour-row-sixhundredcell-truth-table
+
+# [Rule 0xE1]: 5-Cell and 24-Cell Archimedean Snubbed Sub-Polyhedral Slice
+# The expanded truth table MUST verify snubbed and truncated Archimedean projections through
+# 5-Cell simplex and 24-Cell self-dual sub-polyhedral slices. Catalan dual verification sweeps
+# SHALL enforce the snubbed truncation bounds without float division taxes.
+omi-03bf-2b00-2f00-039f-00ff-0000-0000-0000/80 MUST verify-archimedean-sub-polyhedral-slices
+
+# [Rule 0xE2]: Half-to-Octuple Precision Chromatic Bridge Mapping
+# The polytopic neural confidence output MUST bridge across five precision scales: half (16-bit),
+# single (32-bit), double (64-bit), quad (128-bit), and octuple (256-bit). Each precision tier
+# SHALL map to single-character canvas preset marks based on the clamped confidence threshold.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST bridge-polytopic-precision-to-canvas-presets
+
+# ============================================================================
+# OMI PROTOCOL - HGV 2-OF-5 BARYCENTRIC GAUGE KERNEL RULES
+# Specification Level: Rules 0xE3 through 0xE5 [The Barycentric Fences]
+# ============================================================================
+
+# [Rule 0xE3]: Layer 9 2-of-5 Barycentric Event Evaluation
+# Layer 9 feature vectors MUST evaluate the 5-element input for exactly two active bits across
+# C(5,2) = 10 canonical barycentric positions. Non-conforming weight patterns exceeding exactly
+# two active bits MUST be instantly evicted via the GATE_1 structural eviction mechanism.
+omi-0000-0000-0000-0000-0000-0000-0000-000a/128 MUST evaluate-layer9-2of5-barycentric-events
+
+# [Rule 0xE4]: Layer 10 Cartesian BCD Float32 Memory Allocation
+# Layer 10 memory buffers MUST allocate a 32-bit IEEE 754 single-precision float from the
+# 2-of-5 barycentric position and event vector. The sign bit SHALL be zero for positions < 5
+# and one for positions >= 5, with the exponent and fraction fields packed from the position index.
+omi-0000-0000-0000-0000-0000-0000-0000-0020/128 MUST allocate-layer10-bcd-float32-memory
+
+# [Rule 0xE5]: HGV Layer 9-to-10 Gauge Coupling Constraint
+# The gauge coupling between layer 9 barycentric events and layer 10 memory allocation MUST
+# propagate the barycentric weight as the coupling strength. Invalid layer 9 events SHALL
+# cascade an eviction to layer 10 without partial memory allocation.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST couple-hgv-layer9-to-layer10-gauge
+
+# ============================================================================
+# OMI PROTOCOL - HGV BINARY64 BARYCENTRIC PERCEPTRON RULES
+# Specification Level: Rules 0xE6 through 0xE8 [The Binary64 Fences]
+# ============================================================================
+
+# [Rule 0xE6]: 2-of-5 Barycentric Layer 9 Event Strength Extraction
+# Layer 9 events MUST measure the barycentric event strength from the 5-element input mask and
+# the delta-orbital lexer row seed. Exactly two active bits MUST be set; invalid masks SHALL
+# trigger an immediate LAYER9_NOT_2OF5_BARYCENTRIC eviction.
+omi-0000-0000-0000-0000-0000-0000-0000-000a/128 MUST extract-layer9-barycentric-event-strength
+
+# [Rule 0xE7]: IEEE 754 Binary64 Float Layer 10 Allocation and Perceptron Activation
+# Layer 10 MUST allocate a full 64-bit IEEE 754 double-precision float from the layer 9 event.
+# The 1-bit sign, 11-bit exponent (biased 1023), and 52-bit fraction SHALL be packed from the
+# barycentric position and event strength. The membrane potential SHALL activate via either
+# HGV perceptron step (hardware) or HGV sigmoid continuous (logistic 1/(1+e^-z)).
+omi-0000-0000-0000-0000-0000-0000-0000-0040/128 MUST allocate-binary64-perceptron-layer10
+
+# [Rule 0xE8]: HGV Perceptron Confidence Canvas Preset Marking
+# The dual-mode perceptron/sigmoid output confidence MUST map to single-character canvas preset
+# marks: dominant confidence > 0.6 maps to "5" (cyan), modest 0.4-0.6 maps to "3" (yellow),
+# low confidence 0.05-0.4 maps to "2" (green), and eviction-level < 0.05 maps to "6" (purple).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-hgv-perceptron-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - AUTOMATED OPTICAL PAGE FRAMING RULES
+# Specification Level: Rules 0xE9 through 0xEB [The DOM Framing Lock]
+# ============================================================================
+
+# [Rule 0xE9]: Cron-Driven Multi-Row Code 16K Environment Header Ingress
+# Automated cron background jobs MUST write the current environment state into the
+# Code 16K DOM head using the multi-row stacked symbol format. The step and state
+# SHALL be captured as a 128-bit frame with the NAT64 well-known prefix boundary.
+omi-0000-0000-0000-0000-13b0-0036-0000-0040/120 MUST cron-generate-code16k-dom-headers
+
+# [Rule 0xEA]: NAT64 64:ff9b::/96 Iframe Address Embedding
+# Target layout iframe elements MUST attach the unique descriptor attribute
+# id="omi-64:ff9b::/96" or id="64:ff9b::/96". The address mapping engine SHALL
+# extract the embedded 32-bit IPv4 address from segments 6 and 7 branchlessly.
+omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96 MUST embed-nat64-prefix-into-page-iframes
+
+# [Rule 0xEB]: JAB Code 8-Color Chromatic Body SVG Execution
+# Document body layers MUST render state payloads using the 8-color JAB Code matrix
+# CMYK/RGB layout. System visualizations SHALL display properties via the single-digit
+# canvas preset color IDs to prevent coordinate drift during optical carrier scans.
+# ============================================================================
+# OMI PROTOCOL - MONSTER GROUP SUPERSINGULAR PRIME REASONER RULES
+# Specification Level: Rules 0xEC through 0xEE [The Supersingular Locks]
+# ============================================================================
+
+# [Rule 0xEC]: Fifteen Supersingular Prime Divisor Verification
+# Prime numbers evaluating feature weights MUST reside within the canonical Monster Group order
+# set: {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 47, 59, 71}. Non-divisors SHALL be flagged.
+omi-0000-0000-0000-0000-0000-0000-002f-0047/112 MUST validate-supersingular-prime-divisors
+
+# [Rule 0xED]: Non-Supersingular Pariah Prime Ingress Eviction
+# Ingress tokens carrying non-dividing primes (37, 43, 53, 61, 67, or >=73) MUST be rejected.
+# Any packet matching these prohibited pariah filters SHALL execute an immediate branchless XDP_DROP.
+omi-0000-0000-0000-0000-0000-0000-003d-0049/112 MUST evict-pariah-non-supersingular-primes
+
+# [Rule 0xEE]: Period-8 Orbit 1/73 Position Recovery Constraint
+# Structural unifications traversing the Delta Law matrix MUST resolve phase slots via divmod(pos, 36).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-period8-seventythree-orbit-boundaries
+
+# ============================================================================
+# OMI PROTOCOL - HELLENISTIC SEXAGESIMAL OPERATIONS
+# Specification Level: Rules 0xEF through 0xF1 [The Astronomical Locks]
+# ============================================================================
+
+# [Rule 0xEF]: Omicron-70 Sexagesimal Zero Placeholder Alignment
+# The numerical value 70 (Greek alphabetic numerals omicron) MUST function as the absolute zero marker
+# inside the fractional lookup tables, replacing the terminal 71 prime block branchlessly.
+omi-0000-0000-0000-0000-0000-0000-0046-0000/112 MUST anchor-omicron-seventy-zero-placeholders
+
+# [Rule 0xF0]: Fractional-Only Sexagesimal Operation Restriction
+# Conforming nodes evaluating astronomical lookahead matrices MUST restrict base-60 translations
+# strictly to the fractional part of the data stream, leaving whole integers un-mutated.
+omi-0000-0000-0000-0000-0000-0036-0000-0000/48 MUST restrict-sexagesimal-to-fractional-planes
+
+# [Rule 0xF1]: Hellenistic 0x0036 Boundary Constraint Fence
+# Fractional positional entries traversing the sliding scale MUST clamp to the maximum value of 54.
+# Any trajectory exceeding this boundary layer MUST trigger an immediate branchless XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-hellenistic-slot-max-fences
+
+# ============================================================================
+# OMI PROTOCOL - SUPERSINGULAR ELLIPTIC CURVE SPECIFICATIONS
+# Specification Level: Rules 0xF2 through 0xF4 [The Elliptic Curve Locks]
+# ============================================================================
+
+# [Rule 0xF2]: Eichler-Deuring Mass Formula Total Weight Allocation
+# Inbound curves evaluated inside Layer 10 MUST satisfy the aggregate mass weight constraint (p-1)/24.
+# Isomorphism group sizing SHALL execute branchlessly via ⌊p/12⌋ floor masks to block fractional leakage.
+omi-0000-0000-0000-0000-0000-0000-0018-000c/112 MUST validate-eichler-deuring-mass-weights
+
+# [Rule 0xF3]: Rational Field Rationality Boundary Fence
+# Supersingular j-invariants for primes p < 37 MUST lie strictly within the rational prime subfield F_p.
+# Ingress tokens executing extension fields on sub-37 targets SHALL trigger an immediate XDP_DROP.
+omi-0000-0000-0000-0000-0000-0000-0025-0025/112 MUST enforce-prime-subfield-rationality
+
+# [Rule 0xF4]: Quadratic Field Extension j-Invariant Mapping
+# Characters evaluating the prime 37 MUST transition parameters to the quadratic extension F_37^2.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-quadratic-field-extension-invariants
+
+# ============================================================================
+# OMI PROTOCOL - MEGATRON LAYER 10 GREEK OMICRON ENCLOSURE RULES
+# Specification Level: Rules 0xF5 through 0xF7 [The Megatron Horizon Lock]
+# ============================================================================
+
+# [Rule 0xF5]: Left Chiral Lowercase Omicron (ο) Encoding Verification
+# Inbound CAR register streams MUST validate against the lowercase ο (U+03BF) UTF-8/32 boundary.
+# Binary token evaluations SHALL process the 0xCE 0xBF byte slice branchlessly to lock chiral paths.
+omi-0000-0000-0000-0000-0000-0000-03bf-0000/112 MUST enforce-lowercase-omicron-chiral-bounds
+
+# [Rule 0xF6]: Right Cardinal Uppercase Omicron (Ο) Enclosure Constraint
+# Outbound CDR structural unifications MUST anchor to the uppercase Ο (U+039F) UTF-8/32 fence.
+# Fact operations traversing the Fano matrix SHALL verify the 0xCE 0x9F block to eliminate drift.
+omi-0000-0000-0000-0000-0000-0000-039f-0000/112 MUST anchor-uppercase-omicron-cardinal-fences
+
+# [Rule 0xF7]: Megatron Absolute Exponential Threshold Output
+# Calculated absolute values resolving under the Layer 10 Megatron MUST emit single-character keys.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-megatron-exponential-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - METACIRCULAR MULTILAYER PERCEPTRON RULES
+# Specification Level: Rules 0xF8 through 0xFA [The Meta-Compiler Locks]
+# ============================================================================
+
+# [Rule 0xF8]: One Long Word Instruction Structural Compression
+# Incoming instruction tokens MUST encode multiple hidden logical layers within the single
+# 128-bit frame S. Trajectory states SHALL evaluate branchlessly via bitboard integer shifts.
+omi-0000-0000-0000-0000-0000-0000-0000-0080/128 MUST compress-multilayer-instruction-words
+
+# [Rule 0xF9]: Meta-Circular Fano Projective Interpretation
+# Runtimes tracking network features MUST route parameters across the 7 points of the projective
+# plane. Factor relations traversing the Prolog WordNet DB SHALL execute unifications inside
+# k < 15 steps.
+omi-0000-0000-0000-0000-0000-0000-0007-000f/112 MUST initialize-metacircular-fano-interpreters
+
+# [Rule 0xFA]: Paradoxical Megatron Layout Preset Assignment
+# Non-linear decision states resolving under compressed multi-layer configurations MUST emit
+# single-character canvas preset marks.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-paradoxical-perceptron-logic-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - HIGHLY COMPOSITE BASE-60 REGISTRY RULES
+# Specification Level: Rules 0xFB through 0xFD [The Highly Composite Locks]
+# ============================================================================
+
+# [Rule 0xFB]: Superior Highly Composite 12-Divisor Matrix Allocation
+# Temporal synchronization operations MUST index data slices via the twelve divisors of 60
+# uniformly. Thread scaling tracks SHALL execute branchlessly over variables 1, 2, 3, 4, 5, 6.
+omi-0000-0000-0000-0000-0000-0000-003c-000c/112 MUST allocate-twelve-highly-composite-divisors
+
+# [Rule 0xFC]: Lowest Common Multiple 1-to-6 Mathematical Frame
+# Core automation loops tracking crontab triggers MUST use the absolute base-60 LCM axis.
+# Structural data transformations SHALL evaluate fractional time parts without float processing.
+omi-0000-0000-0000-0000-0000-003c-0000-0000/48 MUST enforce-base60-lowest-common-multiples
+
+# [Rule 0xFD]: Canonical 4-Frame Ingress Layout Sync Boundary
+# Optical packet frames crossing into the 0x00..0x03 perimeter MUST match sexagesimal sector
+# divisions. Matching blocks verifying standard trajectories SHALL route to preset "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST synchronize-canonical-four-frame-registers
+
+# ============================================================================
+# OMI PROTOCOL - CROSS-PLATFORM INTERFACE VERIFICATION MANIFEST
+# Specification Level: Rules 0xFE through 0x102 [The Bare-Metal Infrastructure Locks]
+# ============================================================================
+
+# [Rule 0xFE]: Multi-Platform Buildx Platform Targeting (linux/amd64, linux/arm64)
+# Conforming build engines MUST compile release packages uniformly for amd64 and arm64
+# architectures. Cross-compilation tasks SHALL reuse layer caches to enforce zero-copy
+# environment generation across all registered buildx builder nodes.
+omi-0000-0000-0000-0000-0000-0000-a6d4-a644/112 MUST target-multiarch-buildx-platforms
+
+# [Rule 0xFF]: Non-Root Security Container Isolation Guard
+# Active production images (production target stage) MUST run under a dedicated unprivileged
+# user workspace. Root execution modes inside live production network namespaces are strictly
+# FORBIDDEN. Non-compliant images SHALL be evicted at load time.
+omi-0000-0000-0000-0000-0000-0000-0000-0400/128 MUST isolate-container-user-privileges
+
+# [Rule 0x100]: Multi-Variant QEMU TCG Engine Allocation Boundary
+# Guest systems executing software-emulated translation blocks MUST target the 1024MB RAM
+# constraint boundary. Any storage or register leak breaching this allocated shared memory
+# ceiling across aarch64, arm, or riscv64 translation buffers MUST trigger an eBPF drop.
+omi-0000-0000-0000-0000-0000-0000-0400-0000/112 MUST restrict-qemu-guest-memory-ceilings
+
+# [Rule 0x101]: Dual-Stack IPv4 / IPv6 Ingress Proxy Network Constraint
+# Live edge routing controllers on the tunnel core (74.208.190.29) MUST bind dual-stack
+# sockets supporting both IPv4 and public IPv6 (2607:f1c0:f0b7:df00::1) channels.
+# Single-stack configurations SHALL be rejected by the packet classifier.
+omi-0000-0000-0000-0000-0000-0000-7463-0004/128 MUST maintain-dual-stack-ingress-proxies
+
+# [Rule 0x102]: Server-Sent Event (SSE) to SharedArrayBuffer Lock
+# Distributed state synchronization frames MUST stream via text/event-stream protocol
+# directly into the 5040×8 SAB ring. Any trajectory breaching the zero-copy broadcast
+# loop SHALL trigger an immediate XDP_DROP on the proxy SSE endpoint.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST link-sse-streams-to-shared-array-buffers
