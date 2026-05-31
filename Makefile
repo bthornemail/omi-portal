@@ -20,6 +20,7 @@
         test-axiomatic-rules-compiler \
         test-jabcode-chromatic-mesh \
         test-jabcode-scrambler-matrix \
+        test-code16k-multirow-mesh \
         clean purge
 
 # ============================================================
@@ -349,6 +350,10 @@ test-jabcode-chromatic-mesh:
 test-jabcode-scrambler-matrix:
 	@echo "[Omi JAB Spec Core] Running LFSR polynomial and 16-axis NBD checks..."
 	node --test test/jab-scrambler.test.js
+
+test-code16k-multirow-mesh:
+	@echo "[Omi 16K Core] Running stacked row configurations and Modulo-107 checks..."
+	node --test test/code16k-kernel.test.js
 
 test-preset-color-matrix:
 	@echo "[Omi Preset Color] Running 6-center nonogram color code tests..."

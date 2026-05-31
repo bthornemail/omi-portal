@@ -583,3 +583,23 @@ omi-0000-0000-ffff-0000-0000-ffff-0000-0000/32 MUST slice-log2-color-module-widt
 # Scrambled payload arrays mapping to network block interfaces MUST split cleanly across channels:
 # Low nibbles target /dev/nbd0..nbd7, while high nibbles target /dev/nbd8..nbdf branchlessly.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST execute-16axis-nbd-bitplane-partitioning
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE CODE 16K TRANS-STRUCTURAL RULES
+# Specification Level: Rules 0xCB through 0xCD [The Multi-Row Storage Fences]
+# ============================================================================
+
+# [Rule 0xCB]: Packed Starting Symbol Mode Character Verification
+# Core multi-row starting indicators MUST compute the packed index equation: s = 7(r - 2) + m.
+# The derived value s MUST locate within the packed numeric boundaries of 0 through 104 arithmetically.
+omi-0000-0000-0000-0000-13b0-0036-0000-0068/48 MUST validate-code16k-starting-symbol-modes
+
+# [Rule 0xCC]: Eleven-Module Odd Parity Character Self-Checking
+# Individual characters inside the 16K frame MUST occupy exactly 11 modules across 3 bars and 3 spaces.
+# Character validation loops MUST enforce strict odd parity check sums to isolate token drift.
+omi-0000-0000-0000-0000-0000-0000-0000-000b/128 MUST assert-code16k-character-odd-parity
+
+# [Rule 0xCD]: Modulo-107 Weighted Check Character Unification
+# Frame structural integrity MUST verify C1 and C2 weights using modulo-107 sum transformations:
+# C1 = sum((i+1)*Char(i)) mod 107, and C2 = sum(i*Char(i)) mod 107. Failed matches SHALL trigger drop-eviction.
+omi-0000-0000-0000-0000-0000-0000-0000-006b/128 MUST verify-code16k-modulo107-check-characters

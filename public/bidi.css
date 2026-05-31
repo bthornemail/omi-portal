@@ -1301,3 +1301,36 @@ a[href^="web+omicron:"]:hover {
   0% { transform: scale(1.0); opacity: 0.6; }
   100% { transform: scale(1.02) translateZ(10px); opacity: 1.0; }
 }
+
+/* 132. Code 16K starting symbol mode — amber frame (Rule 0xCB) */
+[id$="-0000-0000-13b0-0036-0000-0000/48"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 133. Eleven-module odd parity bar — bronze accent (Rule 0xCC) */
+[data-16k-odd-parity="valid"] {
+  stroke: #b87333;
+  fill: rgba(184, 115, 51, 0.05);
+}
+
+/* 134. Modulo-107 check sum verified — cyan glow (Rule 0xCD) */
+[data-16k-mod107="verified"] {
+  stroke: #00e5ff !important;
+  fill: rgba(0, 229, 255, 0.04);
+  filter: drop-shadow(0 0 8px #00e5ff);
+}
+
+/* 135. Set C double-density numeric pointer — gold pulse (USS-16K p.3) */
+[color="3"][data-code16k-set="SET_C_POINTER"] {
+  stroke: #ffcc00 !important;
+  fill: rgba(255, 204, 0, 0.04);
+  filter: drop-shadow(0 0 10px #ffcc00);
+  animation: pointerRowPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes pointerRowPulse {
+  0% { transform: scale(1.0); opacity: 0.6; }
+  100% { transform: scale(1.02) translateZ(10px); opacity: 1.0; }
+}
