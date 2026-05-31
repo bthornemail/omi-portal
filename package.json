@@ -1,7 +1,7 @@
 {
-  "name": "omi-pos-scgnn-tinyneat",
-  "version": "0.0.2",
-  "description": "POS and WordNet synset centroid feature tokens for a default chiral SCGNN node policy using winkNLP, wordpos-web, and TinyNEAT.",
+  "name": "omi-portal-core",
+  "version": "0.2.0",
+  "description": "Monolithic OMI Portal — POS graph, WordNet centroid, JAB Code, Hopf fibration, octonionic Fano, Code 16K, and tri-clamped sphere packing kernels.",
   "type": "module",
   "private": true,
   "scripts": {

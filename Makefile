@@ -24,6 +24,7 @@
         test-hopf-fibration-projection \
         test-octonion-fano-projection \
         test-clamped-sphere-packing \
+        test-all bake-images push-all \
         clean purge
 
 # ============================================================
@@ -480,3 +481,30 @@ purge: clean
 # ============================================================
 %:
 	@:
+
+# ============================================================
+# CONVENIENCE ALIASES (v0.2.0 substrate sync)
+# ============================================================
+
+.PHONY: test-all bake-images push-all
+
+test-all:
+	@echo "[Omi Core] Running sequential segment validation modules..."
+	node --test test/rules-compiler.test.js
+	node --test test/jab-parser.test.js
+	node --test test/jab-scrambler.test.js
+	node --test test/code16k-kernel.test.js
+	node --test test/hopf-kernel.test.js
+	node --test test/octonion-kernel.test.js
+	node --test test/sphere-packing.test.js
+	@echo "[Omi Core] All segment checks passed."
+
+bake-images:
+	@echo "[Omi Core] Executing Buildx multi-arch configuration bake..."
+	docker buildx bake --file docker-bake.hcl
+	@echo "[Omi Core] Bake complete."
+
+push-all:
+	@echo "[Omi Core] Synchronizing workspace code head to Git origin..."
+	git add -A && git commit -m "chore: synchronize v0.2.0 substrate across all layers" && git push origin main
+	@echo "[Omi Core] Push complete."

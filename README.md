@@ -1,6 +1,8 @@
 # OMI Portal
 
-OMI Portal is the root package for the Omicron Object Model experiments: deterministic POS graph transforms, WordNet centroid addressing, canonical `omi-*` indexes, DOM/CSSOM inspectors, CodeMirror BiDi memory bridges, and A-Frame semantic scenes.
+**798 invariants verified · 166 code-split modules · v0.2.0**
+
+OMI Portal is the root package for the Omicron Object Model experiments: deterministic POS graph transforms, WordNet centroid addressing, canonical `omi-*` indexes, DOM/CSSOM inspectors, CodeMirror BiDi memory bridges, A-Frame semantic scenes, JAB Code LFSR scrambling, Code 16K multi-row framing, Hopf fibration S³→S² projection, octonionic Fano DOM/CSSOM/Prolog WordNet object model, and tri-clamped sphere packing.
 
 The current package is the merged single-branch target. Demo snapshots under `demos/` are reference material only.
 

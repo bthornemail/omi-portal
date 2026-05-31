@@ -41,6 +41,11 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Inversion kernel: `src/omi/inversion-kernel.js`
 - Lisp kernel: `src/omi/lisp-kernel.js`
 - Lattice kernel: `src/omi/lattice-kernel.js`
+- Hopf fibration kernel: `src/omi/hopf-kernel.js`
+- Octonion Fano kernel: `src/omi/octonion-kernel.js`
+- Sphere packing kernel: `src/omi/sphere-packing.js`
+- JAB Code scrambler: `src/canvas/jab-scrambler.js`
+- Code 16K kernel: `src/canvas/code16k-kernel.js`
 
 ## Implementation Expectations
 

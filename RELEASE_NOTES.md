@@ -1,3 +1,45 @@
+# OMI Portal v0.2.0 — Symmetrical Substrate Synchronization
+
+## Summary
+
+Complete deployment substrate lock with 6 new high-precision kernels spanning JAB Code scrambling, Code 16K multi-row framing, Hopf fibration projection, octonionic Fano object model, and tri-clamped sphere packing. All 25 administrative, deployment, and documentation files synchronized to v0.2.0.
+
+**798 tests pass, 0 fail. Build produces 166 modules. Multi-arch: linux/amd64 + linux/arm64.**
+
+## What's New Since v0.0.1
+
+- **JAB Code LFSR Scrambler** — ISO/IEC 23634 primitive polynomial x^16+x^14+x^13+x^11+1, 8-bit mask-byte generation, 16-axis low/high nibble NBD partitioning (Rule 0xC8–0xCA)
+- **Code 16K Multi-Row Alist Engine** — USS-16K starting symbol s=7(r-2)+m, modulo-107 weighted C1/C2 checks, odd parity character validation, Code Set A/B/C mapping to canvas presets (Rule 0xCB–0xCD)
+- **Hopf Fibration Projector** — Complex S³→S² map p(z₀,z₁) = (2z₀z₁*, |z₀|²−|z₁|²) via integer fixed-point arithmetic, Clifford torus Villarceau nesting parametrization, unit 3-sphere perimeter gate (Rule 0xD4–0xD6)
+- **Octonionic Fano Object Model** — Adams fibration S³↪S⁷→S⁴ (OmicronNode 24-Cell) + S⁷↪S¹⁵→S⁸ (Tetragrammatron DOM/CSSOM/JSDOM/Prolog WordNet), 8-point Fano plane XOR mask (Rule 0xD7–0xD9)
+- **Tri-Clamped Sphere Packing** — Three Uint8Array(128) buffers for open-class lexical, closed-class inflectional, and functional pointer lanes, 107-symbol Code 16K ceiling, UTF-8/Base64/16K encoding routing (Rule 0xDA–0xDC)
+- **FACTS.omi** — Expanded from 0xC1 to 0xDC (27 new rules covering chromatic, trans-dimensional, Hopf, octonion, and sphere packing invariants)
+- **CI/CD** — 798 tests across 29 suites, Docker multi-arch bake (runtime + QEMU-test + stress + softmmu), COOP/COEP enforcement
+
+## Pipeline Architecture
+
+```
+Ingress (IPv6 saddr / Code 16K / JAB Code / Hopf fiber)
+  → Physical Guard/Carrier Decode
+    → LFSR Scramble (Rule 0xC8) / NBD Bitplane Split (Rule 0xCA)
+      → Code 16K Multi-Row Decode (Rule 0xCB-0xCD)
+        → Hopf S³→S² Projection (Rule 0xD4-0xD6)
+          → Octonion Fano Bundle (Rule 0xD7-0xD9)
+            → Tri-Clamped Sphere Packing (Rule 0xDA-0xDC)
+              → Single-Digit Preset "1"-"6" Canvas Output
+```
+
+## Quick Start
+
+```bash
+make test           # 798 unit tests
+make test-all       # sequential segment validation
+npm run build       # 166-module production build
+make compile-local-docker-image  # multi-arch bake to local cache
+```
+
+---
+
 # OMI Portal v0.0.1 — Monolithic Protocol Stack
 
 ## Summary

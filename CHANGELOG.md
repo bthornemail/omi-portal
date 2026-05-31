@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.2.0 (2026-05-31)
+
+### Release
+- v0.2.0 — synchronized deployment substrate, 798 invariants green
+- JAB Code: LFSR x^16+x^14+x^13+x^11+1 scrambler, 16-axis NBD bitplane partitioning (Rules 0xC8–0xCA)
+- Code 16K: multi-row Alist engine, modulo-107 C1/C2 checks, odd parity gates (Rules 0xCB–0xCD)
+- Hopf fibration: branchless S³→S² complex projection p(z₀,z₁) = (2z₀z₁*, |z₀|²−|z₁|²), Clifford torus parametrization (Rules 0xD4–0xD6)
+- Octonionic Fano: S³↪S⁷→S⁴ OmicronNode 24-Cell + S⁷↪S¹⁵→S⁸ Tetragrammatron DOM/CSSOM/JSDOM/Prolog WordNet object model (Rules 0xD7–0xD9)
+- Tri-clamped sphere packing: 3 Uint8Array(128) buffers, 107-symbol Code 16K ceiling, UTF-8/Base64/16K encoding lanes (Rules 0xDA–0xDC)
+- 798 tests passing, 0 failing; 166 modules, multi-arch linux/amd64+arm64 images
+
+---
+
 ## v0.0.2 (2026-05-30)
 
 ### Release
