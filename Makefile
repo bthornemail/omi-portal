@@ -40,6 +40,7 @@
         test-wikimedia-kernel \
         test-cluster-peer-discovery \
         test-wan-latency-metadata-probe \
+        test-open-world-web-portal \
         test-all bake-images push-all \
         clean purge
 
@@ -563,10 +564,26 @@ purge: clean
 	@:
 
 # ============================================================
+# CLUSTER MONITORING & RELEASE ARTIFACTS (Rules 0x10F-0x111)
+# ============================================================
+
+.PHONY: monitor-live-cluster generate-release-artifacts
+
+monitor-live-cluster:
+	@echo "[Omi Telemetry] Spawning headless multi-arch VM trace diagnostic channel..."
+	@echo "[Omi Telemetry] Streaming event streams straight to 5040x8 SAB bitboards..."
+	node src/omi/delta-orbital-lexer.js --monitor-shm-ring
+
+generate-release-artifacts: build
+	@echo "[Omi Release] Executing cryptographic asset packing loops..."
+	chmod +x scripts/omi-release-bake.sh
+	./scripts/omi-release-bake.sh
+
+# ============================================================
 # CONVENIENCE ALIASES (v0.2.0 substrate sync)
 # ============================================================
 
-.PHONY: test-all bake-images push-all
+.PHONY: monitor-live-cluster generate-release-artifacts test-all bake-images push-all
 
 test-all:
 	@echo "[Omi Core] Running sequential segment validation modules..."
@@ -594,6 +611,32 @@ test-all:
 	node --test test/cluster-discovery.test.js
 	node --test test/wan-latency-probe.test.js
 	@echo "[Omi Core] All segment checks passed."
+
+.PHONY: test-algebraic-monoid-automaton test-brahmagupta-quadratic-closure test-complex-nat64-field-norm test-bitsliced-omi1024-cipher test-dimensional-cell-extrusion test-open-world-web-portal
+
+test-open-world-web-portal:
+	@echo "[Omi Portal Core] Running drag-and-drop and symbology interface checks..."
+	node --test test/open-portal.test.js
+
+test-bitsliced-omi1024-cipher:
+	@echo "[Omi Bit-Slice Core] Running 19-bit binary256 and omi1024 checks..."
+	node --test test/bitslice-kernel.test.js
+
+test-algebraic-monoid-automaton:
+	@echo "[Omi Monoid Core] Running principal prime ideal and matroid checks..."
+	node --test test/monoid-kernel.test.js
+
+test-brahmagupta-quadratic-closure:
+	@echo "[Omi Brahmagupta Core] Running bilinear identity and regular denominator checks..."
+	node --test test/brahmagupta-kernel.test.js
+
+test-complex-nat64-field-norm:
+	@echo "[Omi Complex NAT64 Core] Running prefix checks and complex field norms..."
+	node --test test/nat64-complex.test.js
+
+test-dimensional-cell-extrusion:
+	@echo "[Omi Extrusion Core] Running 2.5D voxel and S-expression piece checks..."
+	node --test test/extrusion-kernel.test.js
 
 bake-images:
 	@echo "[Omi Core] Executing Buildx multi-arch configuration bake..."

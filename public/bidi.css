@@ -1843,3 +1843,203 @@ iframe[id*="64:ff9b::/96"] {
   0% { box-shadow: 0 0 4px #7000FF; opacity: 0.6; }
   100% { box-shadow: 0 0 16px #7000FF; opacity: 1.0; }
 }
+
+/* 193. Drag-and-drop file ingress interceptor base (Rule 0x10C) */
+[id$="-0064-0064/112"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 194. Live open-world interactive drop zone viewport */
+div[data-portal-zone="ingress-active"] {
+  border: 3px dashed #00ffcc;
+  background: rgba(12, 15, 18, 0.95);
+  box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+/* 195. Active component computing symbology centroid tracks */
+[color="5"][data-portal-state="computing-centroids"] {
+  transform: scale(1.02) rotateY(4deg);
+  animation: portalMatrixGlow 1.4s infinite alternate ease-in-out;
+}
+
+/* 196. Idle portal drop zone ready for ingress */
+div[data-portal-zone="ingress-idle"] {
+  border: 2px dashed rgba(0, 255, 204, 0.3);
+  background: rgba(12, 15, 18, 0.8);
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes portalMatrixGlow {
+  0% { filter: drop-shadow(0 0 4px #00ffcc); opacity: 0.7; }
+  100% { filter: drop-shadow(0 0 16px #00ffcc); opacity: 1.0; }
+}
+
+/* 197. Headless telemetry stream interconnect base (Rule 0x10F) */
+[id$="-13b0-0008/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 198. Cryptographic release snapshot packing base (Rule 0x110) */
+[id$="-0200-0000/120"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: deploymentMatrixWarp 1.6s infinite alternate ease-in-out;
+}
+
+/* 199. Milestone release archived component (Rule 0x111) */
+[color="6"][data-archive-state="v020-sealed"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: rotateX(12deg) scale(1.03);
+}
+
+/* 200. Release snapshot deployment matrix warp animation */
+@keyframes deploymentMatrixWarp {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.6; filter: drop-shadow(0 0 4px #7000FF); }
+  100% { transform: scale(1.02) rotateY(10deg) translateZ(12px); opacity: 1.0; filter: drop-shadow(0 0 16px #7000FF); }
+}
+
+/* 201. Bit-sliced ALU operand processing field base (Rule 0x112) */
+[id$="-0400-0008/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 202. IEEE 754 binary256 exponent width configuration base (Rule 0x113) */
+[id$="-0013-00ec/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: bitSliceManifoldWarp 1.6s infinite alternate ease-in-out;
+}
+
+/* 203. Active normalized octuple-precision binary256 block */
+[color="6"][data-bitslice-state="binary256-normal"] {
+  stroke: #00ffcc !important;
+  animation: bitSliceGlow 1.2s infinite alternate linear;
+}
+
+/* 204. Bit-slice manifold warp animation */
+@keyframes bitSliceManifoldWarp {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.6; }
+  100% { transform: scale(1.03) rotateY(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+@keyframes bitSliceGlow {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 16px #00ffcc); }
+}
+
+/* 205. Principal prime ideal generator verification base (Rule 0x121) */
+[id$="-0001-002f/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 206. Matroid pseudo-generator closure fence (Rule 0x123) */
+[id$="-03bf-ffff-2b00-2f00-ffff-039f-ffff/128"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: monoidAutomatonPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 207. Active unique factorization matroid closure */
+[color="6"][data-monoid-state="matroid-closure-active"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: rotateZ(6deg) scale(1.03);
+}
+
+@keyframes monoidAutomatonPulse {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+/* 208. Brahmagupta-Fibonacci two-square bilinear form base (Rule 0x124) */
+[id$="-0002-0002/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 209. Regular number sexagesimal denominator isolation base (Rule 0x125) */
+[id$="-003c-0235-0000/48"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: closureManifoldPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 210. Active valid exact sexagesimal closures */
+[color="5"][data-closure-mode="exact-sexagesimal"] {
+  stroke: #00ffcc !important;
+  animation: closureCellGlow 1.2s infinite alternate linear;
+}
+
+@keyframes closureManifoldPulse {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+@keyframes closureCellGlow {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 4px #00ffcc); }
+  100% { opacity: 1.0; filter: drop-shadow(0 0 16px #00ffcc); }
+}
+
+/* 211. NAT64 64:ff9b::/96 prefix interface base (Rule 0x127) */
+[id$="-ff9b-0000-0000-0000-0000-0000-0000/96"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 212. Multiplicative complex field norm base (Rule 0x128) */
+[id$="-0002-0004/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: complexNormPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 213. Active high-resonance Chakravala cyclic lane */
+[color="6"][data-complex-nat64="chakravala-active"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: rotateZ(4deg) scale(1.03);
+}
+
+@keyframes complexNormPulse {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); opacity: 1.0; }
+}
+
+/* 214. 2.5D voxel and tilemap grid quantization base (Rule 0x12A) */
+[id$="-0010-0020/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 215. S-expression polyomino to polycube configuration base (Rule 0x12B) */
+[id$="-0003-5040/64"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: extrusionManifoldPulse 1.6s infinite alternate ease-in-out;
+}
+
+/* 216. Active 3D polycube terminal blocks (Rule 0x12C / cdr) */
+[color="6"][data-extrusion-mode="polycube-cdr"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: rotateX(15deg) scale(1.03);
+}
+
+/* 217. Dimensional extrusion manifold pulse keyframe */
+@keyframes extrusionManifoldPulse {
+  0% { transform: scale(1.0) rotateY(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); opacity: 1.0; }
+}

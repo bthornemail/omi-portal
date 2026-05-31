@@ -1059,3 +1059,144 @@ omi-0000-0000-0000-0000-0000-0000-0005-0003/112 MUST assign-prime-divisors-to-pe
 # integrated canvas preset output. Any trajectory variance between the Eichler mass
 # register and the base-60 divisor wheel SHALL trigger an immediate XDP_DROP.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-integrated-hgv-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - INDUSTRIAL DRAG-AND-DROP OPEN PORTAL RULES
+# Specification Level: Rules 0x10C through 0x10E [The Open-World Workspace]
+# ============================================================================
+
+# [Rule 0x10C]: Drag-and-Drop File Ingress Interceptor Gate
+# Viewport ingress layers tracking dropped asset packages MUST capture binary data
+# streams branchlessly. Image streams (PNG/JPEG) SHALL extract directly to offscreen
+# buffers to prevent main-thread layout drag.
+omi-0000-0000-0000-0000-0000-0000-0064-0064/112 MUST intercept-portal-drag-and-drop-files
+
+# [Rule 0x10D]: Optical Symbology Centroid Alignment Framework
+# Extracted barcode payloads MUST verify Code 16K row headers alongside JAB Code body
+# matrices simultaneously. Layout coordinates SHALL compute spatial offsets using the
+# 12 regular divisors of the Base-60 LCM matrix.
+omi-0000-0000-0000-0000-0000-0000-003c-000c/112 MUST align-portal-symbology-centroids
+
+# [Rule 0x10E]: Interactive Open-World Viewport Canvas Preset Assignment
+# Unified portal workspace elements resolving from optical symbols MUST emit
+# single-character preset keys. Fully validated rendering configurations SHALL route
+# directly to layout code "4" (green) or "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-portal-viewport-logic-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - CLUSTER MONITORING & RELEASE ARTIFACT RULES
+# Specification Level: Rules 0x10F through 0x111 [The Deployment Enclosure]
+# ============================================================================
+
+# [Rule 0x10F]: Headless Telemetry Stream Interconnect
+# Active diagnostic clusters MUST stream virtual machine logs straight to the 5040x8 SAB memory slots.
+# Data collection tasks SHALL execute branchlessly via shift-XOR operations to eliminate parsing drag.
+omi-0000-0000-0000-0000-0000-0000-13b0-0008/112 MUST stream-headless-cluster-telemetry
+
+# [Rule 0x110]: Cryptographic Release Snapshot Packing Constraint
+# Consolidated artifact builds MUST bundle target configuration layers into unified .tar.gz archives.
+# Manifest entries SHALL generate explicit SHA256 signature proofs to prevent binary corruption drift.
+omi-0000-0000-0000-0000-0000-0000-0200-0000/120 MUST generate-release-snapshot-signatures
+
+# [Rule 0x111]: Terminal Milestone Release Canvas Preset Assignment
+# Operational telemetry snapshots resolving from the deployment run MUST emit single-character keys.
+# Fully synchronized artifact matrices SHALL route directly to layout code "6" (purple) for archiving.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-milestone-release-outputs-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - SOFTWARE BIT-SLICED ALU & CRYPTO INVARIANTS
+# Specification Level: Rules 0x112 through 0x114 [The Bit-Slice Horizon Lock]
+# ============================================================================
+
+# [Rule 0x112]: Bit-Sliced ALU Operand Processing Field
+# Software processing pipelines executing n-bit words MUST divide operands into unallocated bitfields.
+# Individual register components SHALL pass carry and overflow lines branchlessly via raw bitboard shifts.
+omi-0000-0000-0000-0000-0000-0000-0400-0008/112 MUST execute-bitsliced-alu-operand-fields
+
+# [Rule 0x113]: IEEE 754 binary256 Exponent Width Boundary Constraint
+# Octuple-precision floating-point formats evaluating values MUST clamp biased exponents to 19 bits.
+omi-0000-0000-0000-0000-0000-0000-0013-00ec/112 MUST clamp-binary256-exponent-widths
+
+# [Rule 0x114]: Monolithic omi1024 Block Cipher Allocation Fence
+# High-density cryptographic hash operations executing over SAB tracks MUST isolate 1024-bit words.
+# Any trajectory variance failing to preserve this block width MUST trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-omi1024-cryptographic-boundaries
+
+# ============================================================================
+# OMI PROTOCOL - ALGEBRAIC MONOID AUTOMATON SPECIFICATIONS
+# Specification Level: Rules 0x121 through 0x123 [The Monoid Automaton Lock]
+# ============================================================================
+
+# [Rule 0x121]: Principal Prime Ideal Generator Verification
+# Elements generating principal ideals inside Layer 10 MUST pass an explicit primality bitboard check.
+# Factorization transitions SHALL evaluate elements branchlessly to confirm unique decomposition properties.
+omi-0000-0000-0000-0000-0000-0000-0001-002f/112 MUST validate-principal-prime-ideals
+
+# [Rule 0x122]: Permutable Factorial Unique Order Constraint
+# Monoid state sequences evaluating irreducible multiplications MUST preserve unique ordering constraints.
+# Rearranged factor blocks SHALL evaluate commuting equations (ab === ba) without heap memory leakage.
+omi-0000-0000-0000-0000-0000-003c-0000-0001/48 MUST enforce-permutable-factorizations
+
+# [Rule 0x123]: Matroid Automaton Pseudo-Generator Closure Fence
+# Transition state subsets generating left congruences MUST collapse variables to the universal relation.
+# Trajectories failing to reach the entire independent set space SHALL trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST anchor-matroid-pseudo-generators
+
+# ============================================================================
+# OMI PROTOCOL - BRAHMAGUPTA-FIBONACCI COMPOSITION INVARIANTS
+# Specification Level: Rules 0x124 through 0x126 [The Quadratic Closure Lock]
+# ============================================================================
+
+# [Rule 0x124]: Brahmagupta-Fibonacci Two-Square Bilinear Form Verification
+# Multiplicative operations on two-square pairs inside Layer 10 MUST evaluate both canonical forms branchlessly.
+# Resulting coordinate components SHALL verify the square closure identity to eliminate fractional drift.
+omi-0000-0000-0000-0000-0000-0000-0002-0002/112 MUST execute-brahmagupta-two-square-closures
+
+# [Rule 0x125]: Regular Number Sexagesimal Denominator Isolation
+# Fractional reduction pipelines evaluating regular number denominators (primes 2, 3, 5) MUST express
+# precise base-60 expansions, blocking repeating digit approximations across sub-60 bounds.
+omi-0000-0000-0000-0000-0000-003c-0235-0000/48 MUST isolate-regular-sexagesimal-denominators
+
+# [Rule 0x126]: Bilinear Composition Matrix Canvas Preset Assignment
+# Calculated composition outputs resolving from algebraic varieties MUST emit single-character keys.
+# Fully aligned terminating data blocks validating successfully SHALL route to layout code "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-quadratic-closure-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - INDUSTRIAL COMPLEX FIELD NORM COHORT RULES
+# Specification Level: Rules 0x127 through 0x129 [The Complex NAT64 Lock]
+# ============================================================================
+
+# [Rule 0x127]: NAT64 64:ff9b::/96 Prefix Interface Verification
+# S-Expression tokens tracking wide-area ingress channels MUST parse the 96-bit prefix via the LL register slot.
+# Hardware-layer addresses failing to preserve this network perimeter SHALL be dropped instantly.
+omi-0064-ff9b-0000-0000-0000-0000-0000-0000/96 MUST maintain-nat64-prefix-syntax-fields
+
+# [Rule 0x128]: Multiplicative Field Norm \mathbb{Q}(i) Complex Composition
+# Complex scalar numbers processing over the MM field matrix MUST verify norm properties N(ab) === N(a)N(b).
+omi-0000-0000-0000-0000-0000-0000-0002-0004/112 MUST execute-multiplicative-complex-norms
+
+# [Rule 0x129]: Cyclic Chakravala Pell Equation Suffix Constraint
+# Infinite solution loops composing Pell triples (x, y, k) MUST resolve post-fixed targets via the NN register.
+# Any trajectory variance failing to pass the 2^64 integer state width MUST trigger a branchless XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST assert-cyclic-chakravala-boundaries
+
+# ============================================================================
+# OMI PROTOCOL - INDUSTRIAL CELL EXTRUSION GRAPHICAL INVARIANTS
+# Specification Level: Rules 0x12A through 0x12C [The Dimensional Lock]
+# ============================================================================
+
+# [Rule 0x12A]: 2.5D Voxel and Tilemap Grid Quantization Gate
+# Graphical coordinate inputs tracking voxel or tilemap elements MUST map via unallocated integer matrices.
+# Dimensional offsets SHALL execute spatial transforms branchlessly to prevent layout calculation drift.
+omi-0000-0000-0000-0000-0000-0000-0010-0020/112 MUST quantize-two-and-half-dimensional-grids
+
+# [Rule 0x12B]: S-Expression Polyomino to Polycube Functional Carrier
+# Functional tracks parsing spatial pieces MUST route components via the strict cons/car/cdr logic.
+# Pseudo-polyominoes (cons), polyominoids (car), and polycubes (cdr) SHALL form unallocated bitboards.
+omi-0000-0000-0000-0000-13b0-13b0-0003-5040/64 MUST link-polyominoes-to-sexpression-carriers
+
+# [Rule 0x12C]: Monolithic Extrusion Layer Canvas Preset Mark
+# Structural cell states resolving under dimensional extrusion sweeps MUST emit single-character keys.
+# Fully aligned terminating trajectories validating successfully SHALL route to layout code "5" (cyan).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-dimensional-extrusion-to-presets
