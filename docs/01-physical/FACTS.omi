@@ -1200,3 +1200,23 @@ omi-0000-0000-0000-0000-13b0-13b0-0003-5040/64 MUST link-polyominoes-to-sexpress
 # Structural cell states resolving under dimensional extrusion sweeps MUST emit single-character keys.
 # Fully aligned terminating trajectories validating successfully SHALL route to layout code "5" (cyan).
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-dimensional-extrusion-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - BARE-METAL eBPF TELEMETRY & XDP DRIVER RULES
+# Specification Level: Rules 0x12D through 0x12F [The Kernel-Bypass Lock]
+# ============================================================================
+
+# [Rule 0x12D]: Ingress XDP Link-Layer Packet Parsing Gate
+# Inbound packet streams traversing public WAN gateways MUST be intercepted via an XDP driver hook.
+# The network driver layer SHALL parse Ethernet and IPv6 headers branchlessly to isolate segment traffic.
+omi-0000-0000-0000-0000-0000-0000-00eb-0066/112 MUST initialize-xdp-packet-parsing-gates
+
+# [Rule 0x12E]: Kernel-Space Delta Law Inline Signature Verification
+# The eBPF program MUST execute a 64-bit Delta Law bitwise rotation loop directly inside the packet verification pipeline.
+# Payload structures failing to match the expected signature index SHALL trigger a branchless XDP_DROP.
+omi-0000-0000-0000-0000-0000-0000-00de-0010/112 MUST execute-ebpf-inline-signature-checks
+
+# [Rule 0x12F]: High-Density Telemetry Map to SharedArrayBuffer Sync
+# Validated telemetry counts recorded in BPF maps MUST synchronize with the 5040x8 shared-memory slots.
+# Active tracking frames managing packet receipts SHALL route directly to layout code "6" (purple) for storage.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST synchronize-ebpf-maps-with-shared-array-buffers

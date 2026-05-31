@@ -2043,3 +2043,22 @@ div[data-portal-zone="ingress-idle"] {
   0% { transform: scale(1.0) rotateY(0deg); opacity: 0.7; }
   100% { transform: scale(1.02) rotateY(12deg) translateZ(10px); opacity: 1.0; }
 }
+
+/* 205. Target the complete link-layer packet parsing gate base configuration (Rule 0x12D) */
+[id$="-00eb-0066/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 206. Target the core eBPF map synchronization rail (Rule 0x12F) */
+[id$="-03bf-ffff-2b00-2f00-ffff-039f-ffff/128"]:has(+ [data-bpf-telemetry]) {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: ebpfManifoldWarp 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes ebpfManifoldWarp {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(10deg) translateZ(12px); opacity: 1.0; }
+}
