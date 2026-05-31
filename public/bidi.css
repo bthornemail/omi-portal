@@ -1783,3 +1783,33 @@ iframe[id*="64:ff9b::/96"] {
   0% { opacity: 0.5; box-shadow: 0 0 4px #00ff66; }
   100% { opacity: 1.0; box-shadow: 0 0 16px #00ff66; }
 }
+
+/* 187. 24-bit upper metadata dividend extraction base (Rule 0x106) */
+[id$="-0000-0000-0000-0018/32"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 188. Real-time Eichler mass fraction telemetry stream (Rule 0x107) */
+[id$="-001a-000c/112"] {
+  stroke: #7000FF;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: telemetryManifoldWarp 1.5s infinite alternate ease-in-out;
+}
+
+/* 189. Active Eichler mass data telemetry cells */
+[color="6"][data-telemetry-state="mass-active"] {
+  stroke: #7000FF;
+  animation: telemetryCellPulse 1.3s infinite alternate linear;
+}
+
+@keyframes telemetryManifoldWarp {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(8deg) translateZ(12px); opacity: 1.0; }
+}
+
+@keyframes telemetryCellPulse {
+  0% { box-shadow: 0 0 4px #7000FF; opacity: 0.6; }
+  100% { box-shadow: 0 0 16px #7000FF; opacity: 1.0; }
+}

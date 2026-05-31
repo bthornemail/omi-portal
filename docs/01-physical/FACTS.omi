@@ -1012,3 +1012,26 @@ omi-ff02-0000-0000-0000-0000-0000-0000-0001/64 MUST broadcast-cluster-mesh-heart
 # MAX_CLUSTER_PEERS (10). Any trajectory exceeding capacity MUST trigger an eviction and
 # XDP_DROP. Only verified zero-sum Q(S) === 0 frames SHALL register new peers.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST enforce-cluster-peer-capacity-limits
+
+# ============================================================================
+# OMI PROTOCOL - TWENTY-FOUR BIT METADATA TELEMETRY RULES
+# Specification Level: Rules 0x106 through 0x108 [The Telemetry Sweep Lock]
+# ============================================================================
+
+# [Rule 0x106]: 24-Bit Upper Metadata Dividend Extraction Gate
+# Active wide-area latency probes MUST extract the upper 24 bits of the 64-bit storage
+# layout natively. Provenance and step receipts SHALL be processed via bitboard masks
+# to isolate network token drift without runtime memory allocation.
+omi-ffff-ffff-0000-0000-0000-0000-0000-0018/32 MUST extract-twenty-four-bit-metadata-dividends
+
+# [Rule 0x107]: Real-Time Eichler Mass Fraction Telemetry Stream
+# Extracted provenance dividends tracking cluster packets MUST map directly to Layer 10
+# mass formulas. Modular curves processing these values SHALL verify weight fractions
+# (p-1)/24 without runtime memory leaks or floating-point hot paths.
+omi-0000-0000-0000-0000-0000-0000-001a-000c/112 MUST stream-eichler-mass-fractions-to-telemetry
+
+# [Rule 0x108]: High-Density Telemetry Ring Canvas Preset Mark
+# Telemetry frame metrics resolving under the 24-bit dividend sweep MUST emit single-character
+# keys. Active matching blocks validating standard trajectories SHALL route directly to
+# layout code "6" (purple) for high-precision metadata telemetry tracking.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-telemetry-matrix-logic-to-presets
