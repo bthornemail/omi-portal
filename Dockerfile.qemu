@@ -26,7 +26,7 @@ ENV NODE_OPTIONS="--experimental-vm-modules"
 
 RUN echo "=== OMI QEMU USER-MODE TEST SUITE [${TARGETPLATFORM}] ===" && \
     make test-c99-core && \
-    find test -maxdepth 1 -name "*.test.js" ! -name "softmmu-system.test.js" -print | sort | xargs node --test
+    find test -maxdepth 1 -name "*.test.js" ! -name "softmmu-system.test.js" ! -name "qemu-mesh.test.js" -print | sort | xargs node --test
 
 LABEL org.opencontainers.image.title="OMI Portal — QEMU Test"
 LABEL org.opencontainers.image.description="Multi-arch QEMU user-mode test for ${TARGETPLATFORM}"

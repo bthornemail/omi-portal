@@ -9,6 +9,5 @@ dist/
 npm-debug.log*
 .DS_Store
 .cache/
-dev-docs/
 demos/
 session-*.md

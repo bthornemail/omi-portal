@@ -1035,3 +1035,27 @@ omi-0000-0000-0000-0000-0000-0000-001a-000c/112 MUST stream-eichler-mass-fractio
 # keys. Active matching blocks validating standard trajectories SHALL route directly to
 # layout code "6" (purple) for high-precision metadata telemetry tracking.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST transform-telemetry-matrix-logic-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - HARDWARE HGV TELEMETRY & VIRTUAL MACHINE SCHEDULING RULES
+# Specification Level: Rules 0x109 through 0x10B [The Dual Integration Lock]
+# ============================================================================
+
+# [Rule 0x109]: Base-60 Sexagesimal Superior Highly Composite VM Router
+# Persistent VM scheduling MUST route workloads via the 12 regular divisors of 60
+# (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60). Allocation frames SHALL target
+# the three active libvirt guests (omi-x86_64, omi-aarch64, omi-riscv64) using
+# the prime divisor factors 2, 3, and 5 as the base routing topology.
+omi-0000-0000-0000-0000-0000-0000-003c-000c/112 MUST route-persistent-vms-via-base60-divisors
+
+# [Rule 0x10A]: Prime Clock Thread Source VM Assignment (2 = x86, 3 = arm, 5 = riscv)
+# Divisor factor 2 SHALL route to omi-x86_64 (KVM q35), factor 3 to omi-aarch64 (TCG virt),
+# and factor 5 to omi-riscv64 (TCG Guix). Frames not matching any assigned prime SHALL
+# be evicted before reaching the hypervisor dispatch layer.
+omi-0000-0000-0000-0000-0000-0000-0005-0003/112 MUST assign-prime-divisors-to-persistent-vms
+
+# [Rule 0x10B]: Monolithic HGV Telemetry-Scheduling Suffix Constraint
+# Telemetry metadata streams and VM scheduling matrices MUST collapse into a single
+# integrated canvas preset output. Any trajectory variance between the Eichler mass
+# register and the base-60 divisor wheel SHALL trigger an immediate XDP_DROP.
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-integrated-hgv-outputs-to-presets

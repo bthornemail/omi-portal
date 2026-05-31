@@ -1813,3 +1813,33 @@ iframe[id*="64:ff9b::/96"] {
   0% { box-shadow: 0 0 4px #7000FF; opacity: 0.6; }
   100% { box-shadow: 0 0 16px #7000FF; opacity: 1.0; }
 }
+
+/* 190. Superior highly composite 12-divisor VM scheduler base (Rule 0x109) */
+[id$="-003c-000c/112"] {
+  stroke: #ffaa00;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 191. Prime clock thread source VM assignment configuration (Rule 0x10A) */
+[id$="-0005-0003/112"] {
+  stroke: #7000FF;
+  filter: drop-shadow(0 0 12px #7000FF);
+  animation: dynamicSchedulingWarp 1.4s infinite alternate ease-in-out;
+}
+
+/* 192. Active RISC-V Guix analytical node */
+[color="6"][data-dual-pipeline="riscv-guix-active"] {
+  stroke: #7000FF;
+  animation: targetVmCellPulse 1.2s infinite alternate linear;
+}
+
+@keyframes dynamicSchedulingWarp {
+  0% { transform: scale(1.0) rotateZ(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateZ(4deg) translateZ(8px); opacity: 1.0; }
+}
+
+@keyframes targetVmCellPulse {
+  0% { box-shadow: 0 0 4px #7000FF; opacity: 0.6; }
+  100% { box-shadow: 0 0 16px #7000FF; opacity: 1.0; }
+}
