@@ -166,6 +166,18 @@ export function makeOmiAddressForAtom(atom = {}, options = {}) {
   };
 }
 
+export { parseOmiClause, parseOmiDocument } from "./omi-parser.js";
+export {
+  KARNAUGH_BIT_ORDER,
+  W6,
+  W8,
+  W14,
+  carryForwardGnomon,
+  karnaughBitIndex,
+  karnaughMap,
+  wittgensteinOperator
+} from "./truth-combinators.js";
+
 export function buildOmiIndex(compiled = {}, options = {}) {
   const atoms = sourceAtoms(compiled).map((atom) => enrichAtom(atom, options));
   const byAddress = new Map();

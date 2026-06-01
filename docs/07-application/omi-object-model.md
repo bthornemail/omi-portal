@@ -246,6 +246,28 @@ The same authority boundary applies to OMI's two quadratic forms. `Q_frame(S)=E_
 
 Browser meta-compiler drafts remain prototypes. When their ideas graduate, they must use existing page surfaces, exported helpers, deterministic canvas color metadata, and rule/fact tests rather than inline-only GUI logic.
 
+## OMI Declarative Core
+
+The OMI Declarative Core is split into five files:
+
+```text
+RULES.omi declares normative invariants.
+FACTS.omi grounds implemented facts.
+CLOSURES.omi declares completion and boundedness conditions.
+COMBINATORS.omi declares lawful composition operators.
+CONS.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures.
+```
+
+This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, and cons forms do not replace validation.
+
+```text
+RULES declare.
+FACTS ground.
+CLOSURES seal.
+COMBINATORS compose.
+CONS reduce.
+```
+
 ## Distributed State Semantics
 
 This section declares the distributed storage semantics for OMI remote addresses (`turn` tier, `::4` transport proxy). These semantics draw from the Monotone Causal Reed-Solomon Gossip Storage Protocol (MCRSGSP) research draft in `dev-docs/_temp/`, but `_temp/` is provenance only. Canonical status is determined by local modules and tests.

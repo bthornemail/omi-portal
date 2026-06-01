@@ -1,7 +1,7 @@
 # OMI Portal
 
 **v1.0.0-RC1 Consumer/Provider Edition**  
-**934 verified invariants · 166 production modules · eBPF/XDP · QEMU TYPE_CLOCK · Wallis–Neugebauer notation**
+**973 verified invariants · 170 production modules · eBPF/XDP · QEMU TYPE_CLOCK · Wallis–Neugebauer notation**
 
 OMI Portal is a protocol runtime for turning addresses, packets, documents, clocks, and browser pages into **verifiable reference states**.
 
@@ -182,7 +182,7 @@ OMI pointer exists
 → test/build confirms it
 ```
 
-For example, the current documentation baseline references a verified 934-invariant state and 166 production modules.
+For example, the current documentation baseline references a verified 973-invariant state and 170 production modules.
 
 ---
 
@@ -366,6 +366,28 @@ Color/clock research is treated as software visualization semantics. OMI may map
 
 The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. Deployment and transport behavior remains aspirational unless it is wired to local tests.
 
+### 6.8 OMI Declarative Core
+
+The OMI Declarative Core is split into five files:
+
+```text
+RULES.omi declares normative invariants.
+FACTS.omi grounds implemented facts.
+CLOSURES.omi declares completion and boundedness conditions.
+COMBINATORS.omi declares lawful composition operators.
+CONS.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures.
+```
+
+This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, and cons forms do not replace validation.
+
+```text
+RULES declare.
+FACTS ground.
+CLOSURES seal.
+COMBINATORS compose.
+CONS reduce.
+```
+
 ---
 
 ## 7. OMI Addressing as Reference Pointers
@@ -478,7 +500,7 @@ npm test
 Expected current baseline:
 
 ```text
-934/934 passing
+973/973 passing
 0 failures
 ```
 
@@ -676,8 +698,8 @@ The project has also used a Tetragrammatron-style developer documentation map wi
 
 ```text
 Version: v1.0.0-RC1
-Tests: 934/934 passing
-Build: 166 modules
+Tests: 973/973 passing
+Build: 170 modules
 Kernel path: eBPF/XDP enabled after make compile-ebpf-gate
 Addressing model: OMI pointer / IPv6-CIDR-style 128-bit frame
 Consumer model: read, scan, verify, route, visualize

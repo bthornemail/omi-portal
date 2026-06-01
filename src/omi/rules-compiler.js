@@ -1,4 +1,6 @@
 // OmiAxiomaticRulesCompiler — validates 128-bit OMI frames against /RULES.omi
+import { parseOmiDocument } from "./omi-parser.js";
+
 export class OmiAxiomaticRulesCompiler {
   constructor(rulesText) {
     this.rules = [];
@@ -6,22 +8,11 @@ export class OmiAxiomaticRulesCompiler {
   }
 
   _compile(text) {
-    const lines = text.split('\n');
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
-      const match = trimmed.match(/^omi-([0-9a-fA-F-]+)\/(\d+)\s+(MUST|FACT|EQUALS)\s+(.+)$/);
-      if (!match) continue;
-      const addrHex = match[1].replace(/-/g, '');
-      const prefixBits = parseInt(match[2], 10);
-      const keyword = match[3];
-      const value = match[4].trim();
-      const segments = [];
-      for (let i = 0; i < addrHex.length; i += 4) {
-        segments.push(parseInt(addrHex.substring(i, i + 4), 16));
-      }
-      this.rules.push({ segments, prefixBits, keyword, value });
-    }
+    const parsed = parseOmiDocument(text, { source: "RULES.omi" });
+    this.rules = parsed.records.map((record) => ({
+      ...record,
+      value: record.assignment
+    }));
   }
 
   match(omiFrame) {

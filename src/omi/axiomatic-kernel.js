@@ -1,4 +1,5 @@
 import { parsePrologFacts } from "../wordnet/prolog-broker.js";
+import { parseOmiDocument } from "./omi-parser.js";
 
 export class OmiAxiomaticKernel {
   constructor() {
@@ -33,23 +34,13 @@ export class OmiAxiomaticKernel {
   async loadOmiFile(filePath, registryTarget) {
     const { readFile } = await import("node:fs/promises");
     const rawContent = await readFile(filePath, "utf8");
-    const lines = rawContent.split("\n");
+    const parsed = parseOmiDocument(rawContent, { source: filePath });
 
-    for (let line of lines) {
-      line = line.trim();
-      if (!line || line.startsWith("#")) continue;
-
-      const parts = line.split(/\s+/);
-      if (parts.length < 3) continue;
-
-      const omiAddress = parts[0];
-      const keyword = parts[1];
-      const assignment = parts.slice(2).join(" ");
-
-      if (omiAddress.startsWith("omi-") && /\/\d+(?:\/[^\s]+)?$/.test(omiAddress)) {
-        registryTarget.set(omiAddress, { keyword, assignment });
-      }
+    for (const record of parsed.records) {
+      registryTarget.set(record.address, record);
     }
+
+    return parsed.records;
   }
 
   async loadPrologFile(filePath) {

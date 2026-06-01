@@ -200,3 +200,26 @@ test("OMI research inbox claims are promoted through canonical docs, not _temp m
   assert.match(distributed, /MCRSGSP/);
   assert.match(distributed, /provenance, not a canonical runtime/);
 });
+
+test("OMI Declarative Core root files are canonical manifest sources", async () => {
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+  const objectModel = await readFile(new URL("../docs/07-application/omi-object-model.md", import.meta.url), "utf8");
+  const expected = ["RULES.omi", "FACTS.omi", "CLOSURES.omi", "COMBINATORS.omi", "CONS.omi"];
+
+  for (const path of expected) {
+    assert.ok(manifest.sources.some((source) => source.path === path && source.canonicalStatus === "canonical"), `${path} must be canonical`);
+    assert.ok(manifest.layerMap.documentAssignments.some((assignment) => assignment.path === path && assignment.primary === "declaration"), `${path} must be assigned to declaration`);
+  }
+
+  for (const doc of [readme, objectModel]) {
+    assert.match(doc, /OMI Declarative Core/);
+    assert.match(doc, /RULES\.omi declares normative invariants/);
+    assert.match(doc, /FACTS\.omi grounds implemented facts/);
+    assert.match(doc, /CLOSURES\.omi declares completion and boundedness conditions/);
+    assert.match(doc, /COMBINATORS\.omi declares lawful composition operators/);
+    assert.match(doc, /CONS\.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures/);
+    assert.match(doc, /RULES declare\./);
+    assert.match(doc, /CONS reduce\./);
+  }
+});

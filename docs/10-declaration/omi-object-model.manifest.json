@@ -56,6 +56,41 @@
       "canonicalStatus": "canonical",
       "keyConcepts": ["Q_frame validation boundary", "Q_xy projection law", "local240", "slot5040", "Base36 projection", "symbolic carrier authority boundary"],
       "sourceNotes": "Defines the non-collapse criterion: Q_frame(S) validates the 128-bit OMI envelope; Q_xy(x,y)=60x^2+16xy+4y^2 projects decoded state into geometry."
+    },
+    {
+      "path": "RULES.omi",
+      "role": "root declarative rule source for normative OMI invariants",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["MUST clauses", "frame validation", "packet obligations", "projection boundary"],
+      "sourceNotes": "Declares normative invariants. Rules declare; they do not claim implementation by themselves."
+    },
+    {
+      "path": "FACTS.omi",
+      "role": "root declarative fact source for grounded implemented OMI facts",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["FACT clauses", "implemented facts", "semantic labels", "projection facts"],
+      "sourceNotes": "Grounds implemented facts. Facts ground; they do not create obligations by themselves."
+    },
+    {
+      "path": "CLOSURES.omi",
+      "role": "root declarative closure source for bounded completion and sealing",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["CLOSE clauses", "boundedness", "non-collapse", "replay closure"],
+      "sourceNotes": "Declares completion and sealing conditions. Closures seal; they do not invent operations."
+    },
+    {
+      "path": "COMBINATORS.omi",
+      "role": "root declarative combinator source for lawful composition operators",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["COMBINE clauses", "Delta motion", "quadratic projection", "truth bitboards", "Karnaugh gnomon"],
+      "sourceNotes": "Declares lawful composition operators. Combinators compose; they do not authorize state."
+    },
+    {
+      "path": "CONS.omi",
+      "role": "root declarative cons source for pairing, nesting, dot notation, and palindromic reduction",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["CONS clauses", "dot notation", "alist", "omi---imo", "Omicron Tetragrammaton Metatron"],
+      "sourceNotes": "Declares structural pairing and mnemonic reduction. CONS reduces; it does not replace validation."
     }
   ],
   "addressSpaces": [
@@ -348,6 +383,11 @@
       { "id": "declaration",  "ordinal": 10,"name": "Declaration", "description": "Manifest, index, provenance, axioms" }
     ],
     "documentAssignments": [
+      { "path": "RULES.omi",                                             "primary": "declaration",  "secondary": ["application"] },
+      { "path": "FACTS.omi",                                             "primary": "declaration",  "secondary": ["application"] },
+      { "path": "CLOSURES.omi",                                          "primary": "declaration",  "secondary": ["application"] },
+      { "path": "COMBINATORS.omi",                                       "primary": "declaration",  "secondary": ["application"] },
+      { "path": "CONS.omi",                                              "primary": "declaration",  "secondary": ["application"] },
       { "path": "docs/01-physical/FACTS.omi",                              "primary": "physical",     "secondary": [] },
       { "path": "docs/01-physical/EBPF_DELTA_ORBITAL_GATE_v0.md",          "primary": "physical",     "secondary": ["data-link"] },
       { "path": "docs/02-data-link/DELTA_ORBITAL_LEXER_ABI_v0.md",         "primary": "data-link",    "secondary": ["presentation"] },
