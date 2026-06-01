@@ -183,12 +183,19 @@ test("OMI research inbox claims are promoted through canonical docs, not _temp m
   const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
   const objectModel = await readFile(new URL("../docs/07-application/omi-object-model.md", import.meta.url), "utf8");
+  const binaryQuadraticForm = await readFile(new URL("../docs/07-application/omi-binary-quadratic-form.md", import.meta.url), "utf8");
   const distributed = await readFile(new URL("../docs/03-network/omi-distributed-protocol.md", import.meta.url), "utf8");
 
   assert.equal(manifest.sources.some((source) => source.path.startsWith("dev-docs/_temp/")), false);
+  assert.ok(manifest.sources.some((source) => source.path === "docs/07-application/omi-binary-quadratic-form.md" && source.canonicalStatus === "canonical"));
+  assert.ok(manifest.layerMap.documentAssignments.some((source) => source.path === "docs/07-application/omi-binary-quadratic-form.md" && source.primary === "application"));
   assert.match(readme, /dev-docs\/_temp\/.*inbox/);
   assert.match(objectModel, /Promoted Research Invariants/);
   assert.match(objectModel, /240 = 2×5! = 15×16 = 6!\/3/);
+  assert.match(binaryQuadraticForm, /Q_frame\(S\) validates the 128-bit OMI envelope/);
+  assert.match(binaryQuadraticForm, /Q_xy\(x,y\)=60x²\+16xy\+4y² projects decoded state into geometry/);
+  assert.match(binaryQuadraticForm, /slot5040 = fano7×720 \+ role3×240 \+ local240/);
+  assert.match(binaryQuadraticForm, /Symbols project the law\.\s*Symbols do not create the law\./);
   assert.match(distributed, /MCRSGSP/);
   assert.match(distributed, /provenance, not a canonical runtime/);
 });

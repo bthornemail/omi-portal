@@ -49,6 +49,13 @@
       "canonicalStatus": "canonical",
       "keyConcepts": ["quadratic error function", "zero-set membership", "branchless lexing", "LL variable coherence", "free payload pass-through"],
       "sourceNotes": "Defines the algebraic lexer that treats instruction validation as surface membership: Q(S) = E_var + E_const = 0."
+    },
+    {
+      "path": "docs/07-application/omi-binary-quadratic-form.md",
+      "role": "canonical projection-side paper for the Omicron Binary Quadratic Form",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["Q_frame validation boundary", "Q_xy projection law", "local240", "slot5040", "Base36 projection", "symbolic carrier authority boundary"],
+      "sourceNotes": "Defines the non-collapse criterion: Q_frame(S) validates the 128-bit OMI envelope; Q_xy(x,y)=60x^2+16xy+4y^2 projects decoded state into geometry."
     }
   ],
   "addressSpaces": [
@@ -354,6 +361,7 @@
       { "path": "docs/06-presentation/omi-file-format.md",                 "primary": "presentation", "secondary": [] },
       { "path": "docs/06-presentation/control-descriptors.md",             "primary": "presentation", "secondary": [] },
       { "path": "docs/06-presentation/codemirror-bidi-bridge.md",          "primary": "presentation", "secondary": ["application", "surface"] },
+      { "path": "docs/07-application/omi-binary-quadratic-form.md",         "primary": "application",  "secondary": ["surface", "declaration"] },
       { "path": "docs/07-application/omi-object-model.md",                 "primary": "application",  "secondary": ["surface"] },
       { "path": "docs/07-application/omi-whitepaper.md",                   "primary": "application",  "secondary": [] },
       { "path": "docs/07-application/prolog-wordnet-aframe.md",            "primary": "application",  "secondary": ["surface"] },
