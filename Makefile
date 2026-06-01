@@ -690,6 +690,14 @@ test-dimensional-cell-extrusion:
 	@echo "[Omi Extrusion Core] Running 2.5D voxel and S-expression piece checks..."
 	node --test test/extrusion-kernel.test.js
 
+test-emoji-feature-kernel:
+	@echo "[Omi Emoji Feature Core] Running Unicode 17.0 emoji feature routing checks..."
+	node --test test/emoji-feature.test.js
+
+test-emoji-data-kernel:
+	@echo "[Omi Emoji Data Core] Running emoji-test.txt parser and canvas cell checks..."
+	node --test test/emoji-data.test.js
+
 bake-images:
 	@echo "[Omi Core] Executing Buildx multi-arch configuration bake..."
 	docker buildx bake --file docker-bake.hcl

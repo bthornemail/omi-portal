@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OMI Portal — Rooted Tower · 5!–12! · 240 Bridge</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#060b18; --panel:#0e1628; --panel2:#141e38; --line:#253152;
+      --cyan:#5cf0ff; --green:#8bffb5; --purple:#c09dff; --amber:#ffdd88; --red:#ff6b7a; --orange:#ff9944;
+      --ink:#eef2ff; --muted:#8a9ad8; --code:#080d1a; --shadow:0 1rem 2rem rgba(0,0,0,.5);
+    }
+    body{
+      background:radial-gradient(ellipse at 10% 0%,rgba(92,240,255,.08),transparent 30rem),
+                 radial-gradient(ellipse at 90% 20%,rgba(192,157,255,.06),transparent 26rem),
+                 var(--bg);
+      color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.5;
+      padding:1.5rem 2rem 4rem; min-height:100vh;
+    }
+    .container{max-width:1440px;margin:0 auto}
+    h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.1em}
+    h2{font-size:1.25rem;font-weight:700;margin:.8em 0 .4em;border-left:3px solid var(--cyan);padding-left:.9rem}
+    h3{font-size:1rem;font-weight:600;margin:.5em 0 .3em;color:var(--amber)}
+    .sub{color:var(--muted);font-size:.9rem;margin-bottom:1.2rem;max-width:800px}
+    .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+    .grid-2{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .card{
+      background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),var(--panel);
+      border:1px solid var(--line);border-radius:24px;padding:1.2rem;backdrop-filter:blur(4px);
+    }
+    .card.emp{border-color:var(--cyan);box-shadow:0 0 20px rgba(92,240,255,.08)}
+    .card.gold{border-color:var(--amber);box-shadow:0 0 16px rgba(255,221,136,.06)}
+    .card.purple{border-color:var(--purple);box-shadow:0 0 16px rgba(192,157,255,.06)}
+    .card.green{border-color:var(--green);box-shadow:0 0 16px rgba(139,255,181,.06)}
+    .card.warn{border-color:var(--red);box-shadow:0 0 16px rgba(255,107,122,.06)}
+    pre,code{font-family:'JetBrains Mono','Fira Code',ui-monospace,monospace}
+    pre{background:var(--code);border:1px solid var(--line);border-radius:14px;padding:.8rem;overflow:auto;font-size:.78rem;line-height:1.4}
+    .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+    input[type=text]{width:100%;background:var(--code);border:1px solid var(--line);border-radius:999px;padding:.6rem 1rem;color:var(--ink);font-family:monospace;font-size:.8rem}
+    input[type=text]:focus{border-color:var(--cyan);outline:none}
+    button{
+      background:linear-gradient(135deg,var(--cyan),var(--purple));border:0;border-radius:999px;
+      padding:.5rem 1.2rem;font-weight:700;color:#080d1a;cursor:pointer;transition:all .2s;font-size:.8rem;
+    }
+    button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+    button.sec{background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line)}
+    .badge{
+      display:inline-block;background:rgba(92,240,255,.12);border:1px solid rgba(92,240,255,.2);
+      border-radius:999px;padding:.15rem .7rem;font-size:.7rem;font-weight:600;color:var(--cyan);
+    }
+    .badge.green{background:rgba(139,255,181,.12);border-color:rgba(139,255,181,.2);color:var(--green)}
+    .badge.amber{background:rgba(255,221,136,.12);border-color:rgba(255,221,136,.2);color:var(--amber)}
+    .badge.red{background:rgba(255,107,122,.12);border-color:rgba(255,107,122,.2);color:var(--red)}
+    .badge.purple{background:rgba(192,157,255,.12);border-color:rgba(192,157,255,.2);color:var(--purple)}
+    .metric{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.05);padding:.35rem 0;font-size:.82rem}
+    .metric .val{font-family:monospace;color:var(--cyan)}
+    .tower-bar{display:flex;align-items:center;gap:.4rem;margin:.2rem 0;font-size:.78rem;font-family:monospace}
+    .tower-fill{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .4s}
+    .tower-fill.gold{background:linear-gradient(90deg,var(--amber),var(--orange))}
+    .tower-fill.green{background:linear-gradient(90deg,var(--green),var(--cyan))}
+    .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+    .torus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;background:var(--code);border-radius:16px;border:1px solid var(--line)}
+    .torus-cell{
+      aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      font-size:.65rem;font-family:monospace;cursor:pointer;transition:all .25s ease;border:1px solid var(--line);
+      background:rgba(14,22,40,.8);position:relative;
+    }
+    .torus-cell:hover{transform:scale(1.05);z-index:2}
+    .torus-cell .depth{font-size:.55rem;color:var(--muted)}
+    .torus-cell .hex{font-size:.7rem;font-weight:700}
+    .torus-cell.blip{border-color:var(--green);box-shadow:0 0 12px rgba(139,255,181,.3)}
+    .torus-cell.blip .hex{color:var(--green)}
+    .log{height:200px;overflow:auto;background:var(--code);border-radius:14px;padding:.5rem .8rem;font-family:monospace;font-size:.72rem;border:1px solid var(--line)}
+    .log div{padding:1px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+    .stepping-dots{display:flex;gap:4px;margin:.4rem 0}
+    .stepping-dots span{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+    .stepping-dots span.active{background:rgba(92,240,255,.2);border-color:var(--cyan);color:var(--cyan)}
+    .stepping-dots span.five{background:rgba(255,107,122,.12);border-color:var(--red);color:var(--red)} /* never used */
+    .flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+    @media(max-width:720px){body{padding:.8rem}}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="flex-between">
+    <div><span class="badge">OMI v1.0.0 · rooted‑tower</span> <span class="badge green" id="statusBadge">◉ 5! rooted</span></div>
+    <div style="font-size:.72rem;color:var(--muted)">⟨omi — imo⟩ · 128‑bit wire frame · 8!–12! envelope</div>
+  </div>
+
+  <h1>Rooted Tower <span style="font-size:.6em;opacity:.5">5! ⟶ 12!</span></h1>
+  <div class="sub">
+    The climb does not step to 5. The climb preserves 5.<br>
+    240‑state bridge: <span class="badge">2×5! = 240 hidden</span> <span class="badge">15×16 = 240 visible</span>
+    <span class="badge amber">stepping digits {0,1,3,6,8,9}</span>
+  </div>
+
+  <!-- INPUT ROW -->
+  <div class="card emp" style="margin-bottom:1rem">
+    <div class="row">
+      <input type="text" id="wordInput" value="omi-0069-03bf-0000-ca55-2b05-0068-039f-05ff/128" style="flex:1;min-width:200px">
+      <button id="compileBtn">⟳ compile</button>
+      <button id="blipBtn" class="sec">🌀 bit‑blip torus</button>
+      <button id="stepBtn" class="sec">⏭ step 1/73</button>
+      <button id="clearBtn" class="sec">🗑 clear log</button>
+    </div>
+  </div>
+
+  <!-- PRIMARY GRID: Compiler + Tower + Bridge -->
+  <div class="grid" style="grid-template-columns:1.2fr .9fr 1fr">
+
+    <!-- PANEL: Compiler frame + quadratic + envelopes -->
+    <div>
+      <div class="card emp">
+        <div class="flex-between"><h2>⟨omi⟩ compiler</h2><span id="qStatus" class="badge">Q(S) = —</span></div>
+        <div class="metric"><span>pointer</span><span class="val" id="pointerOut">—</span></div>
+        <div class="metric"><span>prefix</span><span class="val" id="prefixOut">—</span></div>
+        <div class="metric"><span>Q(S) energy</span><span class="val" id="qEnergy">—</span></div>
+        <div class="metric"><span>valid</span><span class="val" id="validOut">—</span></div>
+        <div class="metric"><span>route9 (S₂)</span><span class="val" id="route9Out">—</span></div>
+        <div class="metric"><span>decl10 (S₃)</span><span class="val" id="decl10Out">—</span></div>
+        <div class="metric"><span>witness11 (S₄)</span><span class="val" id="witness11Out">—</span></div>
+        <div class="metric"><span>phase12 (S₅)</span><span class="val" id="phase12Out">—</span></div>
+      </div>
+      <div class="card" style="margin-top:.5rem">
+        <h3>⚛ 8! physical frame</h3>
+        <pre id="frameBytes" style="max-height:70px;font-size:.7rem">—</pre>
+      </div>
+    </div>
+
+    <!-- PANEL: Factorial Tower -->
+    <div>
+      <div class="card gold" style="height:100%">
+        <div class="flex-between"><h2>🏗 factorial tower</h2><span class="badge amber">multiples of 240</span></div>
+        <div style="margin:.3rem 0">
+          <div class="tower-bar"><span style="width:40px">5!</span><div style="flex:1"><div class="tower-fill green" style="width:15%"></div></div><span>120</span></div>
+          <div class="tower-bar"><span style="width:40px">6!</span><div style="flex:1"><div class="tower-fill" style="width:30%"></div></div><span>720</span></div>
+          <div class="tower-bar"><span style="width:40px">7!</span><div style="flex:1"><div class="tower-fill" style="width:42%"></div></div><span>5040</span></div>
+          <div class="tower-bar"><span style="width:40px">8!</span><div style="flex:1"><div class="tower-fill" style="width:55%"></div></div><span>40320</span></div>
+          <div class="tower-bar"><span style="width:40px">9!</span><div style="flex:1"><div class="tower-fill gold" style="width:65%"></div></div><span>362880</span></div>
+          <div class="tower-bar"><span style="width:40px">10!</span><div style="flex:1"><div class="tower-fill gold" style="width:72%"></div></div><span>3.6288M</span></div>
+          <div class="tower-bar"><span style="width:40px">11!</span><div style="flex:1"><div class="tower-fill gold" style="width:78%"></div></div><span>39.9168M</span></div>
+          <div class="tower-bar"><span style="width:40px">12!</span><div style="flex:1"><div class="tower-fill" style="width:85%"></div></div><span>479.0016M</span></div>
+        </div>
+        <div class="metric"><span>active layer</span><span class="val" id="activeLayer">5! (packet root)</span></div>
+        <div class="metric"><span>envelope multiplier</span><span class="val" id="envMultiplier">1</span></div>
+        <div class="metric"><span>expression</span><span class="val" id="towerExpr" style="font-size:.7rem">5! = 120 = 240/2</span></div>
+        <div style="margin-top:.4rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.4rem">
+          <span class="badge">×2 orientation</span>
+          <span class="badge">×3 S‑P‑O</span>
+          <span class="badge">×7 Fano</span>
+          <span class="badge">×8 frame</span>
+          <span class="badge">×9 route</span>
+          <span class="badge">×10 decl</span>
+          <span class="badge">×11 witness</span>
+          <span class="badge">×12 clock</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: 240 Bridge -->
+    <div>
+      <div class="card purple" style="height:100%">
+        <div class="flex-between"><h2>⊞ 240 bridge</h2><span id="bridgeLock" class="badge">🟢 locked</span></div>
+        <div class="metric"><span>hidden: 2×5!</span><span class="val" id="bridgeHidden">240</span></div>
+        <div class="metric"><span>visible: 15×16</span><span class="val" id="bridgeVisible">240</span></div>
+        <div class="metric"><span>÷2 = 5!</span><span class="val">120</span></div>
+        <div class="metric"><span>×3 = 6!</span><span class="val">720</span></div>
+        <div class="metric"><span>×7×3 = 7!</span><span class="val">5040</span></div>
+        <div class="metric"><span>ideal dir</span><span class="val" id="idealDir">⚖️ central</span></div>
+        <div style="margin-top:.5rem">
+          <h3>1/73 decimal stepping</h3>
+          <div class="stepping-dots" id="stepDots">
+            <span class="active">0</span><span>1</span><span>3</span><span>6</span><span>9</span><span>8</span><span>6</span><span>3</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted)">period‑8 · no digit 5 · sum=36</div>
+        </div>
+        <div style="margin-top:.5rem;border-top:1px solid var(--line);padding-top:.4rem">
+          <div class="metric"><span>slot5040 formula</span><span class="val" id="slotFormula" style="font-size:.65rem">fano×720 + role×240 + local</span></div>
+          <div class="metric"><span>slot5040</span><span class="val" id="slot5040Out">—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECOND ROW: 5-fold / 4-fold Rules + FACTS + Torus -->
+  <div class="grid" style="margin-top:1rem">
+
+    <!-- 5-fold hidden root -->
+    <div class="card purple">
+      <div class="flex-between"><h2>🔮 5-fold hidden root</h2><span class="badge purple">factor 5 silent</span></div>
+      <div style="font-size:.78rem;line-height:1.5">
+        <div class="metric"><span>5! = 120</span><span class="val">packet root</span></div>
+        <div class="metric"><span>preserve-five-fold</span><span id="rule5a" class="val green">✓ active</span></div>
+        <div class="metric"><span>bind-to-240-bridge</span><span id="rule5b" class="val green">✓ bound</span></div>
+        <div class="metric"><span>hidden-5-carrier</span><span id="rule5c" class="val green">✓ preserved</span></div>
+      </div>
+      <pre id="rules5Preview" style="max-height:90px;margin-top:.3rem"># [0x6C] preserve-five-fold-packet-root
+# [0x6D] bind-five-fold-packet-to-240-bridge
+# [0x6E] preserve-hidden-five-carrier-root</pre>
+      <div style="margin-top:.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.3rem">
+        <span class="badge">︎rule 0x6C</span>
+        <span class="badge">rule 0x6D</span>
+        <span class="badge">rule 0x6E</span>
+      </div>
+    </div>
+
+    <!-- 4-fold visible projection -->
+    <div class="card green">
+      <div class="flex-between"><h2>💎 4-fold visible projection</h2><span class="badge green">FS/GS/RS/US</span></div>
+      <div style="font-size:.78rem;line-height:1.5">
+        <div class="metric"><span>4! = 24</span><span class="val">selector surface</span></div>
+        <div class="metric"><span>FS channel</span><span id="factFS" class="val">—</span></div>
+        <div class="metric"><span>GS channel</span><span id="factGS" class="val">—</span></div>
+        <div class="metric"><span>RS channel</span><span id="factRS" class="val">—</span></div>
+        <div class="metric"><span>US channel</span><span id="factUS" class="val">—</span></div>
+      </div>
+      <pre id="rules4Preview" style="max-height:72px;margin-top:.3rem"># [0x6F] project-four-fold-selector-surface
+# [0x70] route-state-through-fs-gs-rs-us
+# [0x71] derive-shadow-canvas-from-four-fold-selector</pre>
+      <div style="margin-top:.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.3rem">
+        <span class="badge">rule 0x6F</span>
+        <span class="badge">rule 0x70</span>
+        <span class="badge">rule 0x71</span>
+      </div>
+    </div>
+
+    <!-- Torus/Karnaugh -->
+    <div class="card" style="grid-column:span 1">
+      <div class="flex-between"><h2>🔄 4×4 Karnaugh torus</h2><span class="badge">bit‑blip · 2.5D extrusion</span></div>
+      <div class="torus-grid" id="torusGrid">
+        <!-- 16 cells generated by js -->
+      </div>
+      <div style="margin-top:.3rem;font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between">
+        <span>click to blip (flip orientation 73↔37)</span>
+        <span id="blipCount">0 blipped</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THIRD ROW: Receipts + Telemetry + Slot details -->
+  <div class="grid" style="margin-top:1rem">
+
+    <div class="card warn" style="grid-column:span 2">
+      <div class="flex-between"><h2>📦 replay receipt · 64‑bit packed</h2><span class="badge red">provenance:16 | steps:8 | LL:8 | NN:16 | MM:16</span></div>
+      <div class="grid-2">
+        <div>
+          <div class="metric"><span>packed hex</span><span class="val" id="receiptPacked">—</span></div>
+          <div class="metric"><span>steps</span><span class="val" id="receiptSteps">—</span></div>
+          <div class="metric"><span>LL (Fano point)</span><span class="val" id="receiptLL">—</span></div>
+        </div>
+        <div>
+          <div class="metric"><span>NN (subject)</span><span class="val" id="receiptNN">—</span></div>
+          <div class="metric"><span>MM (object)</span><span class="val" id="receiptMM">—</span></div>
+          <div class="metric"><span>local240</span><span class="val" id="receiptLocal240">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📡 derived envelopes</h2>
+      <div class="metric"><span>route9 (S₂%9+9)</span><span class="val" id="envRoute9">—</span></div>
+      <div class="metric"><span>decl10 (S₃%10+10)</span><span class="val" id="envDecl10">—</span></div>
+      <div class="metric"><span>witness11 (S₄%11+11)</span><span class="val" id="envWitness11">—</span></div>
+      <div class="metric"><span>phase12 (S₅%12+12)</span><span class="val" id="envPhase12">—</span></div>
+      <div style="margin-top:.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.3rem">
+        each envelope multiplies the tower: 9! = ×9 · 10! = ×10 · 11! = ×11 · 12! = ×12
+      </div>
+    </div>
+
+    <div class="card" style="grid-column:span 1">
+      <h2>📜 event log</h2>
+      <div class="log" id="eventLog">[system] OMI portal rooted — waiting for compile.</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER: Canonical doctrine -->
+  <div style="margin-top:1.5rem;padding-top:.8rem;border-top:1px solid var(--line);font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center">
+    <span>⟨omi — imo⟩ palindromic meta‑circular compiler</span>
+    <span>·</span>
+    <span>5! = 120 packet root (hidden)</span>
+    <span>·</span>
+    <span>240 = 2×5! = 15×16 bridge</span>
+    <span>·</span>
+    <span>1/73 = 0.01369863… period‑8</span>
+    <span>·</span>
+    <span>slot5040 = fano7×720 + role3×240 + local240</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ─── PURE MATH CORE ───────────────────────────────────────────────
+  const rotl16 = (x,n)=> ((x<<n)|(x>>>(16-n)))&0xffff;
+  const rotr16 = (x,n)=> ((x>>>n)|(x<<(16-n)))&0xffff;
+  const deltaC = (x,c=0x5a3c)=> (rotl16(x,1)^rotl16(x,3)^rotr16(x,2)^c)&0xffff;
+  const hex4 = n => (n>>>0).toString(16).padStart(4,'0');
+  const hex2 = n => (n&0xff).toString(16).padStart(2,'0');
+
+  // Constants (doctrine)
+  const FACTORIAL_5 = 120;
+  const ORIENTATION = 2;
+  const ACTIVE_BYTE_SURFACE = 240;     // 2 × 5! = 15 × 16
+  const ACTIVE_NIBBLE = 15;            // 2⁴ - 1 = 3 × 5
+  const CARRIER_NIBBLE = 16;           // 2⁴
+  const SEMANTIC_ROLE = 3;             // S‑P‑O
+  const FANO_POINTS = 7;               // Fano plane
+  const SEGMENTS = 8;                  // 8 × 16 bits
+  const PERIOD_73 = [0,1,3,6,9,8,6,3]; // 1/73 decimal repeating
+  const STEP_DIGITS = new Set([0,1,3,6,8,9]);
+  const FACTORIALS = [0,1,2,6,24,120,720,5040,40320,362880,3628800,39916800,479001600];
+
+  // ─── OMI PARSER ─────────────────────────────────────────────────
+  function parseOmi(str){
+    let m = str.trim().match(/^omi-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})-([0-9a-f]{1,4})\/(\d+)$/i);
+    if(!m) throw new Error("invalid OMI address (need 8 hex segments + /prefix)");
+    let S = m.slice(1,9).map(v=>parseInt(v,16));
+    let prefix = parseInt(m[9],10);
+    return {S, prefix, raw:str, pointer:`omi-${S.map(hex4).join('-')}/${prefix}`};
+  }
+
+  // Quadratic invariant
+  function quadratic(S){
+    const L0=S[0]>>8, L3=S[3]&0xff, L4=S[4]&0xff, L7=S[7]>>8;
+    const E_var = (L0-L3)**2 + (L3-L4)**2 + (L4-L7)**2;
+    const E_const = (S[0]&0xff)**2 + (S[1]-0x03bf)**2 + ((S[3]&0xff00)-0x2b00)**2
+                 + ((S[4]&0xff00)-0x2f00)**2 + (S[6]-0x039f)**2 + ((S[7]&0xff)-0xff)**2;
+    return {Q:E_var+E_const, valid:E_var+E_const===0};
+  }
+
+  // Envelope derivation
+  function envelopes(S){
+    return {
+      route9: deltaC(S[2])%9,
+      decl10: deltaC(S[3])%10,
+      witness11: deltaC(S[4])%11,
+      phase12: deltaC(S[5])%12
+    };
+  }
+
+  // Derived layer values
+  const derived = {
+    semanticSweep: SEMANTIC_ROLE * ACTIVE_BYTE_SURFACE,  // 720
+    replayRing: FANO_POINTS * SEMANTIC_ROLE * ACTIVE_BYTE_SURFACE, // 5040
+    physicalUniverse: SEGMENTS * FANO_POINTS * SEMANTIC_ROLE * ACTIVE_BYTE_SURFACE // 40320
+  };
+
+  // slot5040 formula
+  function slot5040(frame){
+    const S = frame.S;
+    const LL = (S[0]>>8) & 0xff;
+    const fano7 = (LL-1) % FANO_POINTS;
+    const role3 = deltaC(S[3]) % SEMANTIC_ROLE;
+    const local240_hidden = (FACTORIAL_5 * ((deltaC(S[2])%ORIENTATION)+1)) % ACTIVE_BYTE_SURFACE;
+    const activeNibble = (deltaC(S[3])%ACTIVE_NIBBLE)+1;
+    const carrierNibble = deltaC(S[4])%CARRIER_NIBBLE;
+    const local240_visible = (activeNibble * carrierNibble) % ACTIVE_BYTE_SURFACE;
+    const local240 = local240_hidden; // both readings should agree
+    return {slot: fano7*derived.semanticSweep + role3*ACTIVE_BYTE_SURFACE + local240, fano7, role3, local240, local240_hidden, local240_visible};
+  }
+
+  // stepping digit
+  function steppingDigit(idx){ return PERIOD_73[idx % PERIOD_73.length]; }
+
+  // ─── DOM REFS ────────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const wordInput = $('wordInput');
+  const compileBtn = $('compileBtn');
+  const blipBtn = $('blipBtn');
+  const stepBtn = $('stepBtn');
+  const clearBtn = $('clearBtn');
+  const eventLog = $('eventLog');
+  const torusGrid = $('torusGrid');
+
+  // ─── STATE ────────────────────────────────────────────────────────
+  let lastFrame = null;
+  let stepIndex = 0;
+  let blippedCells = new Set();
+
+  function log(msg, cls='info'){
+    const d=document.createElement('div');
+    d.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
+    if(cls==='ok') d.style.color='var(--green)';
+    else if(cls==='mid') d.style.color='var(--amber)';
+    else if(cls==='no') d.style.color='var(--red)';
+    eventLog.prepend(d);
+    while(eventLog.children.length>40) eventLog.removeChild(eventLog.lastChild);
+  }
+
+  // ─── TORUS ────────────────────────────────────────────────────────
+  function buildTorus(frame){
+    torusGrid.innerHTML = '';
+    blippedCells = new Set();
+    const env = frame ? envelopes(frame.S) : {route9:4,decl10:5,witness11:6,phase12:3};
+    for(let i=0;i<16;i++){
+      const x=i%4, y=Math.floor(i/4);
+      const depth = (60*x*x + 16*x*y + 4*y*y) & 0xfff;
+      const stepVal = PERIOD_73[(x+y)%8];
+      const cell = document.createElement('div');
+      cell.className = 'torus-cell';
+      cell.dataset.x = x;
+      cell.dataset.y = y;
+      cell.dataset.depth = depth;
+      cell.dataset.blip = '0';
+      cell.innerHTML = `<span class="hex">${hex4(depth)}</span><span class="depth">z=${depth} · ${stepVal}</span>`;
+      cell.style.transform = `translateY(-${(depth/80)}px)`;
+      cell.style.borderColor = stepVal===0 ? 'var(--cyan)' : stepVal===5 ? 'var(--red)' : 'var(--purple)';
+      if(stepVal===0) cell.style.boxShadow = '0 0 8px rgba(92,240,255,.2)';
+      cell.addEventListener('click',()=> toggleBlip(cell));
+      torusGrid.appendChild(cell);
+    }
+    updateBlipCount();
+  }
+
+  function toggleBlip(cell){
+    const key = `${cell.dataset.x},${cell.dataset.y}`;
+    if(blippedCells.has(key)){
+      blippedCells.delete(key);
+      cell.classList.remove('blip');
+      cell.dataset.blip = '0';
+    } else {
+      blippedCells.add(key);
+      cell.classList.add('blip');
+      cell.dataset.blip = '1';
+    }
+    updateBlipCount();
+    log(`bit‑blip (${cell.dataset.x},${cell.dataset.y}) → state ${cell.dataset.blip}`, blippedCells.has(key)?'ok':'info');
+  }
+
+  function globalBlip(){
+    for(const cell of torusGrid.children) toggleBlip(cell);
+    log(`global meta‑memory blip over 16 cells`,'ok');
+  }
+
+  function updateBlipCount(){
+    $('blipCount').textContent = `${blippedCells.size} blipped`;
+  }
+
+  // ─── COMPILATION ─────────────────────────────────────────────────
+  function compileWord(word){
+    try{
+      const frame = parseOmi(word);
+      const q = quadratic(frame.S);
+      const env = envelopes(frame.S);
+      const slot = slot5040(frame);
+
+      // Update compiler panel
+      $('pointerOut').textContent = frame.pointer;
+      $('prefixOut').textContent = `/${frame.prefix}`;
+      $('qEnergy').textContent = `${q.Q}`;
+      $('validOut').textContent = q.valid ? '✓ PASS' : '✗ FAIL';
+      $('qStatus').textContent = q.valid ? '🟢 Q(S)=0' : '🔴 Q(S)≠0';
+      $('qStatus').className = q.valid ? 'badge green' : 'badge red';
+      $('route9Out').textContent = `${env.route9}`;
+      $('decl10Out').textContent = `${env.decl10}`;
+      $('witness11Out').textContent = `${env.witness11}`;
+      $('phase12Out').textContent = `${env.phase12}`;
+
+      // Frame bytes
+      $('frameBytes').textContent = `S0=${hex4(frame.S[0])}  S1=${hex4(frame.S[1])}  S2=${hex4(frame.S[2])}  S3=${hex4(frame.S[3])}\nS4=${hex4(frame.S[4])}  S5=${hex4(frame.S[5])}  S6=${hex4(frame.S[6])}  S7=${hex4(frame.S[7])}`;
+
+      // Tower
+      const LL = (frame.S[0]>>8)&0xff;
+      let activeLayer = '5! packet root';
+      let envMult = 1;
+      let towerExpr = '5! = 120 = 240/2';
+      if(frame.prefix<=48){ activeLayer='5! packet root'; envMult=1; }
+      else if(frame.prefix<=64){ activeLayer='6! S‑P‑O sweep'; envMult=3; towerExpr='6! = 3×240 = 720'; }
+      else if(frame.prefix<=72){ activeLayer='7! Fano replay'; envMult=21; towerExpr='7! = 7×3×240 = 5040'; }
+      else if(frame.prefix<=80){ activeLayer='8! frame universe'; envMult=168; towerExpr='8! = 8×7×3×240 = 40320'; }
+      else if(frame.prefix<=96){ activeLayer='9! route envelope'; envMult=1512; towerExpr='9! = 9×8×7×3×240 = 362880'; }
+      else if(frame.prefix<=104){ activeLayer='10! decl envelope'; envMult=15120; towerExpr='10! = 10×9×8×7×3×240 = 3.6288M'; }
+      else if(frame.prefix<=112){ activeLayer='11! witness envelope'; envMult=166320; towerExpr='11! = 11×10×9×8×7×3×240 = 39.9168M'; }
+      else if(frame.prefix<=128){ activeLayer='12! clock envelope'; envMult=1995840; towerExpr='12! = 12×11×10×9×8×7×3×240 = 479.0016M'; }
+      $('activeLayer').textContent = activeLayer;
+      $('envMultiplier').textContent = envMult.toLocaleString();
+      $('towerExpr').textContent = towerExpr;
+
+      // 240 bridge
+      $('bridgeHidden').textContent = `${ORIENTATION}×${FACTORIAL_5} = ${ACTIVE_BYTE_SURFACE}`;
+      $('bridgeVisible').textContent = `${ACTIVE_NIBBLE}×${CARRIER_NIBBLE} = ${ACTIVE_BYTE_SURFACE}`;
+      $('bridgeLock').textContent = q.valid ? '🟢 locked' : '🔴 Q(S)≠0';
+      $('bridgeLock').className = q.valid ? 'badge green' : 'badge red';
+
+      // Ideal direction (left 73 / right 37)
+      const idealShift = env.route9%2===0 ? '⬅ left (73)' : '➡ right (37)';
+      $('idealDir').textContent = idealShift;
+
+      // Stepping
+      const stepPos = (env.witness11 * env.phase12) % 8;
+      const dots = $('stepDots').children;
+      for(let i=0;i<dots.length;i++){
+        dots[i].className = i===stepPos ? 'active' : '';
+      }
+
+      // Slot5040
+      $('slotFormula').textContent = `fano${slot.fano7}×720 + role${slot.role3}×240 + local${slot.local240}`;
+      $('slot5040Out').textContent = `${slot.slot} / 5039`;
+      $('receiptPacked').textContent = `0x${hex4(0x6b01)}${hex2(frame.S[2])}${hex2(frame.S[0]>>>8)}${hex4(frame.S[2])}${hex4(frame.S[5])}`;
+      $('receiptSteps').textContent = `${slot.role3+slot.fano7+3}`;
+      $('receiptLL').textContent = `0x${hex2((frame.S[0]>>8)&0xff)} (Fano ${((frame.S[0]>>8)-1)%7+1})`;
+      $('receiptNN').textContent = `0x${hex4(frame.S[2])}`;
+      $('receiptMM').textContent = `0x${hex4(frame.S[5])}`;
+      $('receiptLocal240').textContent = `${slot.local240}`;
+
+      // Envelopes
+      $('envRoute9').textContent = `${env.route9+9} (×${env.route9+9})`;
+      $('envDecl10').textContent = `${env.decl10+10} (×${env.decl10+10})`;
+      $('envWitness11').textContent = `${env.witness11+11} (×${env.witness11+11})`;
+      $('envPhase12').textContent = `${env.phase12+12} (×${env.phase12+12})`;
+
+      // 5-fold rules
+      $('rule5a').textContent = q.valid ? '✓ active' : '✗ Q(S)≠0';
+      $('rule5a').className = q.valid ? 'val green' : 'val red';
+      $('rule5b').textContent = q.valid ? '✓ bound' : '✗ not bound';
+      $('rule5b').className = q.valid ? 'val green' : 'val red';
+      $('rule5c').textContent = '✓ preserved';
+      $('rule5c').className = 'val green';
+
+      // 4-fold channels
+      const channels = ['FS','GS','RS','US'];
+      const channelMap = {FS:'file/frame',GS:'graph/group',RS:'relation/routing',US:'unit/text'};
+      const activeChannel = channels[env.decl10 % 4];
+      $('factFS').textContent = activeChannel==='FS' ? '◉ active' : '○ idle';
+      $('factGS').textContent = activeChannel==='GS' ? '◉ active' : '○ idle';
+      $('factRS').textContent = activeChannel==='RS' ? '◉ active' : '○ idle';
+      $('factUS').textContent = activeChannel==='US' ? '◉ active' : '○ idle';
+      $('factFS').className = activeChannel==='FS' ? 'val' : '';
+      $('factGS').className = activeChannel==='GS' ? 'val' : '';
+      $('factRS').className = activeChannel==='RS' ? 'val' : '';
+      $('factUS').className = activeChannel==='US' ? 'val' : '';
+
+      // Torus
+      buildTorus(frame);
+
+      // Status badge
+      const badge = $('statusBadge');
+      badge.textContent = q.valid ? '◉ Q(S)=0' : '◉ Q(S)≠0';
+      badge.className = q.valid ? 'badge green' : 'badge red';
+
+      lastFrame = frame;
+      log(`✓ compiled ${frame.pointer} | Q=${q.Q} ${q.valid?'PASS':'FAIL'} | slot5040=${slot.slot}`, q.valid?'ok':'mid');
+      return {frame,q,env,slot};
+    } catch(e){
+      log(`❌ ${e.message}`,'no');
+      $('qStatus').textContent = '🔴 error';
+      $('qStatus').className = 'badge red';
+      $('pointerOut').textContent = e.message;
+      return null;
+    }
+  }
+
+  // ─── STEP ─────────────────────────────────────────────────────────
+  function stepOnce(){
+    stepIndex = (stepIndex + 1) % PERIOD_73.length;
+    const digit = steppingDigit(stepIndex);
+    log(`step → ${stepIndex} / period‑8 digit: ${digit} ${digit===5?'⚠️ five! (should never happen)':''}`, digit===5?'no':'info');
+    const dots = $('stepDots').children;
+    for(let i=0;i<dots.length;i++) dots[i].className = i===stepIndex ? 'active' : '';
+    // Recompile with stepped S5
+    if(lastFrame){
+      const S = [...lastFrame.S];
+      S[5] = (S[5] + 1) & 0xffff;
+      const stepped = `omi-${S.map(hex4).join('-')}/${lastFrame.prefix}`;
+      wordInput.value = stepped;
+      compileWord(stepped);
+    }
+  }
+
+  // ─── EVENT BINDING ───────────────────────────────────────────────
+  compileBtn.addEventListener('click',()=> compileWord(wordInput.value));
+  blipBtn.addEventListener('click', globalBlip);
+  stepBtn.addEventListener('click', stepOnce);
+  clearBtn.addEventListener('click',()=>{ eventLog.innerHTML=''; });
+  wordInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') compileWord(wordInput.value); });
+
+  // ─── INIT ─────────────────────────────────────────────────────────
+  compileWord(wordInput.value);
+  log('OMI portal · rooted tower · 5!–12! · 240‑state bridge · 1/73 stepping · 5-fold/4-fold doctrine','ok');
+  log('The climb does not step to 5. The climb preserves 5.','ok');
+})();
+</script>
+</body>
+</html>

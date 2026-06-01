@@ -429,3 +429,58 @@ omi-0000-0000-0000-0000-0000-0000-0000-0024/128 MUST coordinate-three-sixty-degr
 #   Conforming ring buffers MUST utilize the upper 24 bits of the 64-bit slot
 #   format for provenance and step receipts without mutating the truth row.
 omi-ffff-ffff-0000-0000-0000-0000-0000-0000/32 MUST pack-local-execution-metadata-slip
+
+# [Rule 0x68]: Static QEMU User-Mode GUI Lane Projection
+#   Browser dashboards MUST render qemu-user platform lanes from deterministic
+#   manifest metadata. Emulated lanes MUST prove C99 mirror and filtered JS
+#   conformance only; native stress SLA assertions remain outside qemu-user.
+omi-0000-0000-0000-0000-0000-0000-0000-0068/128 MUST project-static-qemu-user-gui-lanes
+
+# ============================================================================
+# FIVE-FOLD HIDDEN ROOT & FOUR-FOLD VISIBLE PROJECTION
+# Specification Level: Rules 0x6C through 0x71
+# Core Doctrine: The climb does not step to 5. The climb preserves 5.
+# ============================================================================
+
+# [Rule 0x6C]: Five-Fold Packet Root Preservation
+#   The 5! packet root MUST be verified as the hidden ontological core
+#   before orientation, projection, semantic sweep, or provider phase.
+#   Factor 5 appears explicitly only here; thereafter it is hidden.
+#   5! = 120 = 240/2 — the factor 5 is presupposed, not stepped to.
+omi-0000-0000-0000-0000-0000-0000-0005-0001/128 MUST preserve-five-fold-packet-root
+
+# [Rule 0x6D]: Five-Fold to 240 Bridge Binding
+#   The hidden 5! packet root MUST bind into the 240-state bridge through
+#   the orientation/complement factor: 240 = 2 × 5!.
+#   Factor 5 becomes hidden inside the constant 240.
+#   Stepping digits {0,1,3,6,8,9} never expose the factor 5 directly.
+omi-0000-0000-0000-0000-0000-0000-0005-0002/128 MUST bind-five-fold-packet-to-240-bridge
+
+# [Rule 0x6E]: Hidden-Five Decimal Carrier Constraint
+#   The decimal stepping carrier from 1/73 = 0.01369863... MUST NOT require
+#   digit 5 as a visible operational step. Factor 5 remains rooted inside 5!.
+#   The period-8 repeating block is {0,1,3,6,9,8,6,3} — no digit 5.
+#   A stepping function that produces digit 5 MUST be rejected.
+omi-0000-0000-0000-0000-0000-0000-0005-0073/128 MUST preserve-hidden-five-carrier-root
+
+# [Rule 0x6F]: Four-Fold Selector Projection
+#   The visible projection surface MUST expose rooted packet state through
+#   a four-fold selector surface (4! = 24). Canonical channels: FS, GS, RS, US.
+#   This is where the climb becomes visible using digits {0,1,3,6,8,9}.
+#   The four-fold surface is 15 × 16 = 240 (active nibble × full carrier).
+omi-0000-0000-0000-0000-0000-0000-0004-0001/128 MUST project-four-fold-selector-surface
+
+# [Rule 0x70]: FS/GS/RS/US Channel Routing
+#   The four-fold selector MUST route visible state through four canonical channels:
+#   FS (file/frame), GS (graph/group), RS (relation/routing), US (unit/text).
+#   Each channel exposes a different projection face of the hidden packet root.
+#   Active channel is derived from decl10 = Δ_C(S₃) mod 10.
+omi-0000-0000-0000-0000-0000-0000-0004-0002/128 MUST route-state-through-fs-gs-rs-us
+
+# [Rule 0x71]: Shadow Canvas Projection from Four-Fold Selector
+#   Shadow canvas addresses MUST derive from four-fold selector projections.
+#   The ca55 segment marks the canvas shadow namespace.
+#   Orphan visual state (projection without source packet) MUST be rejected.
+#   slot5040 = fano7 × 720 + role3 × 240 + local240
+#   local240 = (hidden 5! × orientation) AND (visible 15 × 16) simultaneously.
+omi-ca55-0000-0000-0000-0000-0000-0004-0003/128 MUST derive-shadow-canvas-from-four-fold-selector

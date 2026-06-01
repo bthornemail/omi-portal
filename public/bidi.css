@@ -2180,3 +2180,29 @@ div[data-portal-zone="ingress-idle"] {
   0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
   100% { transform: scale(1.02) rotateX(10deg) translateZ(12px); opacity: 1.0; }
 }
+
+/* 222. Unicode 17.0 multi-block emoji codepoint encasement gate base (Rule 0x145) */
+[id$="-0f71-059e-0018-0f71/112"] {
+  stroke: #ffaa00 !important;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4, 4;
+}
+
+/* 223. Regular icosahedron-dodecahedron inflectional feature map base (Rule 0x146) */
+[id$="-0000-003c-0258-0078/112"] {
+  stroke: #7000FF !important;
+  filter: drop-shadow(0 0 14px #7000FF);
+  animation: emojiFeatureWarp 1.6s infinite alternate ease-in-out;
+}
+
+/* 224. Active stellated octahedron lexical anchor blocks */
+[color="6"][data-feature-routing="stellated-octahedron-active"] {
+  stroke: #7000FF !important;
+  fill: rgba(112, 0, 255, 0.04);
+  transform: scale(1.03) rotateZ(5deg);
+}
+
+@keyframes emojiFeatureWarp {
+  0% { transform: scale(1.0) rotateX(0deg); opacity: 0.7; }
+  100% { transform: scale(1.02) rotateX(12deg) translateZ(10px); opacity: 1.0; }
+}

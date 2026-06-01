@@ -55,6 +55,9 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - HGV kernel: `src/omi/hgv-kernel.js`
 - HGV binary64 perceptron: `src/omi/hgv-perceptron.js`
 - Page framer kernel: `src/canvas/page-framer.js`
+- Emoji feature kernel: `src/omi/emoji-feature.js`
+- Emoji data kernel: `src/omi/emoji-data.js`
+- Emoji canvas kernel: `src/canvas/emoji-canvas.js`
 - Megatron kernel: `src/omi/megatron-kernel.js`
 - Monster Group supersingular kernel: `src/omi/monster-kernel.js`
 - Hellenistic astro kernel: `src/omi/astro-kernel.js`
@@ -65,6 +68,14 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - FACTS Parametric evaluator kernel: `src/omi/facts-evaluator.js`
 - Wikimedia Steiner triple kernel: `src/omi/wikimedia-kernel.js`
 - Cluster discovery mesh kernel: `src/omi/cluster-discovery.js`
+- Emoji test data: `vendor/emoji/emoji-test.txt`
+- Emoji sequences: `vendor/emoji/emoji-sequences.txt`
+- Emoji ZWJ sequences: `vendor/emoji/emoji-zwj-sequences.txt`
+- Aztec barcode spec: `vendor/barcodes/The Aztec Slide Rule - A Complete Polyform Library Specification.md`
+- Aztec patent: `vendor/barcodes/Aztec.US5591956A.pdf`
+- BeeTag paper: `vendor/barcodes/BeeTag.pone.0136487.pdf`
+- MaxiCode patent: `vendor/barcodes/MaxiCode.US4998010.pdf`
+- USS-16K spec: `vendor/barcodes/USS-16K.pdf`
 
 ## Implementation Expectations
 

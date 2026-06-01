@@ -105,3 +105,48 @@ omi-2607-f1c0-f062-e900-0000-0000-0000-0001/80 FACT remote-node-EDGE-VM
 
 # Central Tunnel Core Subnet (2607:f1c0:f0b7:df00::/80)
 omi-2607-f1c0-f0b7-df00-0000-0000-0000-0001/80 FACT remote-node-TUNNEL-VM
+
+# --- Section 8: Static QEMU User-Mode GUI Lane Mappings ---
+omi-0000-0000-0000-0000-0000-0000-0068-0001/128 FACT qemu-user-lane-linux-amd64
+omi-0000-0000-0000-0000-0000-0000-0068-0002/128 FACT qemu-user-lane-linux-arm64
+
+# ============================================================================
+# FIVE-FOLD HIDDEN ROOT FACTS & FOUR-FOLD VISIBLE PROJECTION FACTS
+# Rules 0x6C through 0x71 — Core Doctrine: The climb does not step to 5.
+# ============================================================================
+
+# --- Five-Fold Hidden Root Facts (0x6C-0x6E) ---
+
+# [Fact 0x6C-1001]: Packet root verified (hidden ontological core)
+#   The 5! packet core is verified before any orientation or projection.
+#   factor 5 is explicit only at this layer.
+omi-0000-0000-0000-0000-0000-0000-0005-1001/128 FACT five-fold-packet-root-verified
+
+# [Fact 0x6D-1002]: Packet bound to 240 bridge (factor 5 now hidden)
+#   240 = 2 × 5! — the factor 5 becomes hidden inside the active byte surface.
+omi-0000-0000-0000-0000-0000-0000-0005-1002/128 FACT five-fold-packet-bound-to-240-bridge
+
+# [Fact 0x6E-1073]: Hidden 5 preserved outside decimal stepping carrier
+#   The decimal period 01369863 contains no digit 5; factor 5 remains rooted
+#   inside 5! and is never directly stepped to during operational climb.
+omi-0000-0000-0000-0000-0000-0000-0005-1073/128 FACT hidden-five-preserved-outside-decimal-step-carrier
+
+# --- Four-Fold Visible Projection Facts (0x6F-0x71) ---
+
+# [Fact 0x6F-1001]: FS channel (file/frame) projection active
+#   Active channel determined by decl10 = Δ_C(S₃) mod 10.
+omi-0000-0000-0000-0000-0000-0000-0004-1001/128 FACT fs-channel-projection-active
+
+# [Fact 0x6F-1002]: GS channel (graph/group) projection active
+omi-0000-0000-0000-0000-0000-0000-0004-1002/128 FACT gs-channel-projection-active
+
+# [Fact 0x6F-1003]: RS channel (relation/routing) projection active
+omi-0000-0000-0000-0000-0000-0000-0004-1003/128 FACT rs-channel-projection-active
+
+# [Fact 0x6F-1004]: US channel (unit/text) projection active
+omi-0000-0000-0000-0000-0000-0000-0004-1004/128 FACT us-channel-projection-active
+
+# [Fact 0x71-1005]: Shadow canvas derived from four-fold selector
+#   The ca55 segment marks canvas shadow namespace.
+#   slot5040 = fano7 × 720 + role3 × 240 + local240.
+omi-ca55-0000-0000-0000-0000-0000-0004-1005/128 FACT shadow-canvas-four-fold-selector-active

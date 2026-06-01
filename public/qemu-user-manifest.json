@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "role": "qemu-user",
+  "source": "Dockerfile.qemu",
+  "status": "static-visual-conformance",
+  "stressSla": {
+    "scope": "native-only",
+    "excludedFromQemuUser": true,
+    "label": "stress SLA native-only"
+  },
+  "excludedTests": [
+    "softmmu-system.test.js",
+    "qemu-mesh.test.js"
+  ],
+  "lanes": [
+    {
+      "platform": "linux/amd64",
+      "arch": "x86_64",
+      "omiAddress": "omi-0000-0000-0000-0000-0000-0000-0068-0001/128",
+      "canvasPresetColorId": "5",
+      "canvasColorHex": "#00ffcc",
+      "checks": [
+        "C99 mirror",
+        "filtered JS suite"
+      ],
+      "exclusions": [
+        "softmmu-system.test.js",
+        "qemu-mesh.test.js",
+        "stress SLA"
+      ]
+    },
+    {
+      "platform": "linux/arm64",
+      "arch": "aarch64",
+      "omiAddress": "omi-0000-0000-0000-0000-0000-0000-0068-0002/128",
+      "canvasPresetColorId": "6",
+      "canvasColorHex": "#7000ff",
+      "checks": [
+        "C99 mirror",
+        "filtered JS suite"
+      ],
+      "exclusions": [
+        "softmmu-system.test.js",
+        "qemu-mesh.test.js",
+        "stress SLA"
+      ]
+    }
+  ]
+}

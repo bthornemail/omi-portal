@@ -1298,3 +1298,23 @@ omi-0000-0000-0000-0000-7463-0004-0000-0050/112 MUST isolate-consumer-production
 # Unified portal workspace elements resolving under rolling deployment pipelines MUST emit single-character keys.
 # Fully validated system configurations SHALL route directly to layout code "4" (green) or "5" (cyan).
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST map-consumer-rollout-logic-to-presets
+
+# ============================================================================
+# OMI PROTOCOL - INDUSTRIAL UNICODE 17.0 EMOJI FEATURE ROUTING RULES
+# Specification Level: Rules 0x145 through 0x147 [The Semantic Feature Lock]
+# ============================================================================
+
+# [Rule 0x145]: Unicode 17.0 Multi-Block Emoji Codepoint Encasement Gate
+# Feature tokens tracking S-P-O graph lines MUST parse character markers from the 24 designated Unicode blocks.
+# Regional indicator pairs and Dingbat/Emoticon code points SHALL execute via unallocated integer bitboards.
+omi-0000-0000-0000-0000-0f71-059e-0018-0f71/112 MUST wrap-features-via-unicode17-blocks
+
+# [Rule 0x146]: Regular Icosahedron-Dodecahedron Inflectional Feature Map
+# Open-class lexical terms and closed-class inflectional transitions MUST target regular 3D polyhedral models.
+# Geometry configurations tracking structural word variables SHALL map tokens without runtime database lookups.
+omi-0000-0000-0000-0000-0000-003c-0258-0078/112 MUST map-inflections-to-icosahedron-spaces
+
+# [Rule 0x147]: Stellated Octahedron Spatial Point-Line-Plane Suffix Constraint
+# Projective pointers resolving topological metadata positions from the other POS class MUST emit single-digit keys.
+# Fully aligned terminating data blocks validating successfully SHALL route to layout code "6" (purple).
+omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST anchor-lexical-features-to-stellated-polyhedra

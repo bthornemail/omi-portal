@@ -33,8 +33,13 @@
     .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
     .dot.ok { background: #00ffcc; }
     .dot.fail { background: #ff0055; }
+    .qemu-lane { display: grid; grid-template-columns: minmax(110px, 0.8fr) minmax(180px, 1.8fr) minmax(72px, 0.4fr); gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.78em; }
+    .qemu-lane .platform { color: #00ffcc; font-weight: bold; }
+    .qemu-lane .checks { color: #888; overflow-wrap: anywhere; }
+    .qemu-lane .preset { justify-self: end; width: 24px; height: 16px; border: 1px solid rgba(255,255,255,0.24); border-radius: 2px; }
+    .qemu-lane[data-qemu-arch="aarch64"] .platform { color: #7000ff; }
     .full { grid-column: 1 / -1; }
-    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .qemu-lane { grid-template-columns: 1fr; } .qemu-lane .preset { justify-self: start; } }
   </style>
 </head>
 <body>
@@ -83,6 +88,14 @@
       <div class="metric-row"><span class="label">Peer (us)</span><span class="value" id="m-peer-addr" style="font-size:0.75em">--</span></div>
     </div>
 
+    <div class="card full" id="omi-0000-0000-0000-0000-0000-0000-0000-0068/128">
+      <h2>QEMU User-Mode</h2>
+      <div class="metric-row"><span class="label">Manifest</span><span class="value" id="m-qemu-source">qemu-user-manifest.json</span></div>
+      <div id="qemu-user-lanes" data-manifest-src="/qemu-user-manifest.json" aria-live="polite">
+        <div class="metric-row"><span class="label">Lanes</span><span class="value warn">loading</span></div>
+      </div>
+    </div>
+
     <div class="card full">
       <h2>Event Log</h2>
       <div id="log"><span class="info">[--:--:--] awaiting probe data...</span></div>
@@ -95,6 +108,7 @@ const PROBE_PORT = 8082;
 const HOST = location.hostname || "74.208.190.29";
 const SSE_URL = `http://${HOST}:${PROBE_PORT}/wan-metrics`;
 const STATUS_URL = `http://${HOST}:${PROBE_PORT}/wan-status`;
+const QEMU_USER_MANIFEST_URL = "/qemu-user-manifest.json";
 
 const rttHistory = [];
 const verifyHistory = [];
@@ -230,8 +244,44 @@ function fetchTopology() {
     .catch(() => {});
 }
 
+function renderQemuUserManifest(manifest) {
+  const container = $("qemu-user-lanes");
+  if (!container || !manifest || !Array.isArray(manifest.lanes)) return;
+
+  container.innerHTML = manifest.lanes.map((lane) => {
+    const checks = Array.isArray(lane.checks) ? lane.checks.join(" + ") : "";
+    const exclusions = Array.isArray(lane.exclusions) ? lane.exclusions.join(", ") : "";
+    const color = lane.canvasColorHex || "#00ffcc";
+    return `
+      <div class="qemu-lane"
+           id="${lane.omiAddress}"
+           data-qemu-arch="${lane.arch}"
+           data-platform="${lane.platform}"
+           color="${lane.canvasPresetColorId}">
+        <span class="platform">${lane.platform}</span>
+        <span class="checks">${checks}; excludes ${exclusions}</span>
+        <span class="preset" title="Canvas preset ${lane.canvasPresetColorId}" style="background:${color}"></span>
+      </div>
+    `;
+  }).join("");
+}
+
+function fetchQemuUserManifest() {
+  fetch(QEMU_USER_MANIFEST_URL)
+    .then((r) => r.json())
+    .then((manifest) => {
+      setMetric("m-qemu-source", `${manifest.role || "qemu-user"} static`);
+      renderQemuUserManifest(manifest);
+    })
+    .catch(() => {
+      const container = $("qemu-user-lanes");
+      if (container) container.innerHTML = '<div class="metric-row"><span class="label">Lanes</span><span class="value down">manifest unavailable</span></div>';
+    });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   connectSSE();
+  fetchQemuUserManifest();
   setTimeout(fetchTopology, 500);
   setInterval(fetchTopology, 120000);
 });
