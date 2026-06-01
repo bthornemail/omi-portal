@@ -3,11 +3,13 @@ import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { OmiEmojiDataKernel } from '../src/omi/emoji-data.js';
+import { EMOJI_TEST_SOURCE, EMOJI_VENDOR_SOURCES, OmiEmojiDataKernel } from '../src/omi/emoji-data.js';
 import { OmiEmojiCanvasKernel } from '../src/canvas/emoji-canvas.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EMOJI_TEST_PATH = join(__dirname, '..', 'vendor', 'emoji', 'emoji-test.txt');
+const EMOJI_SEQUENCE_PATH = join(__dirname, '..', 'vendor', 'emoji', 'emoji-sequences.txt');
+const EMOJI_ZWJ_SEQUENCE_PATH = join(__dirname, '..', 'vendor', 'emoji', 'emoji-zwj-sequences.txt');
 
 function loadEmojiTestFile() {
   return readFileSync(EMOJI_TEST_PATH, 'utf-8');
@@ -48,6 +50,20 @@ test('EmojiDataKernel: parses full emoji-test.txt file', () => {
   assert.ok(groups.includes("Flags"));
 });
 
+test('EmojiDataKernel: Unicode vendor sources are canonical projection provenance', () => {
+  assert.deepEqual(EMOJI_VENDOR_SOURCES, [
+    "vendor/emoji/emoji-test.txt",
+    "vendor/emoji/emoji-sequences.txt",
+    "vendor/emoji/emoji-zwj-sequences.txt"
+  ]);
+  assert.equal(EMOJI_TEST_SOURCE, "vendor/emoji/emoji-test.txt");
+  assert.ok(readFileSync(EMOJI_TEST_PATH, 'utf-8').includes("# group: Smileys & Emotion"));
+  assert.ok(readFileSync(EMOJI_SEQUENCE_PATH, 'utf-8').includes("# emoji-sequences.txt"));
+  assert.ok(readFileSync(EMOJI_ZWJ_SEQUENCE_PATH, 'utf-8').includes("# emoji-zwj-sequences.txt"));
+  assert.equal(EMOJI_VENDOR_SOURCES.every(source => source.startsWith("vendor/emoji/")), true);
+  assert.equal(EMOJI_VENDOR_SOURCES.every(source => !source.includes("dev-docs/_temp")), true);
+});
+
 test('EmojiDataKernel: rgbBase64Hash produces deterministic RGB from codepoints', () => {
   const kernel = new OmiEmojiDataKernel();
   const h1 = kernel.rgbBase64Hash(["1F600"]);
@@ -76,10 +92,12 @@ test('EmojiDataKernel: toOmicronCell builds OmicronNode with text/link/group/fil
   const entries = kernel.parseEmojiTestFile(text);
   const cell = kernel.toOmicronCell(entries[0]);
   assert.equal(cell.omi.role, "OmicronNode");
+  assert.equal(cell.omi.authority, "projection-only");
   assert.equal(cell.omi.text, "😀");
   assert.equal(cell.omi.link, "web+omi:emoji:1f600");
   assert.equal(cell.omi.group, "Smileys & Emotion");
-  assert.equal(cell.omi.file, "vendor/emoji/emoji-test.txt");
+  assert.equal(cell.omi.file, EMOJI_TEST_SOURCE);
+  assert.deepEqual(cell.omi.sourceFiles, EMOJI_VENDOR_SOURCES);
   assert.ok(cell.omi.col >= 0);
   assert.ok(cell.omi.row >= 0);
   assert.ok(cell.address.startsWith("Ο-"));
@@ -112,10 +130,12 @@ test('EmojiCanvasKernel: generates canvas spec with OmicronNode grid cells', () 
   assert.equal(spec.edges.length, 0);
   const n0 = spec.nodes[0];
   assert.equal(n0.omi.role, "OmicronNode");
+  assert.equal(n0.omi.authority, "projection-only");
   assert.ok(n0.text);
-  assert.equal(n0.file, "vendor/emoji/emoji-test.txt");
+  assert.equal(n0.file, EMOJI_TEST_SOURCE);
   assert.ok(n0.url);
   assert.equal(n0.omi.group, "Smileys & Emotion");
+  assert.deepEqual(n0.omi.sourceFiles, EMOJI_VENDOR_SOURCES);
   assert.ok(n0.x >= 0);
   assert.ok(n0.y >= 0);
   assert.ok(n0.color.startsWith("#"));
@@ -147,5 +167,6 @@ test('EmojiCanvasKernel: full file canvas generation with constraints', () => {
   assert.equal(spec.nodes.length, 100);
   assert.ok(spec.nodes.every(n => n.omi.role === "OmicronNode"));
   assert.ok(spec.nodes.every(n => n.omi.group));
-  assert.ok(spec.nodes.every(n => n.omi.file === "vendor/emoji/emoji-test.txt"));
+  assert.ok(spec.nodes.every(n => n.omi.file === EMOJI_TEST_SOURCE));
+  assert.ok(spec.nodes.every(n => n.omi.sourceFiles.every(source => source.startsWith("vendor/emoji/"))));
 });

@@ -5,10 +5,19 @@ import { parseOmiAddressToSegments } from "../src/omi/delta-orbital-lexer.js";
 import {
   convertSegmentToFp16Color,
   DELTA_TETRAHEDRAL_NODE_AXES,
+  encodeSymbolicBase36,
   FP16_BASE_COLORS,
   OmiBarycentricCanvasKernel,
   OmiJsonCanvasKernel,
   OmiTetrahedralCanvasKernel,
+  omiLocal240,
+  omiQuadraticProject,
+  omiRootDepth,
+  omiSemanticSweep,
+  omiSlot5040,
+  projectBase36Symbol,
+  SYMBOLIC_BASE36_ALPHABET,
+  SYMBOLIC_BASE36_BRIDGE,
   TWO_OF_FIVE_SELECTOR_PAIRS
 } from "../src/canvas/omicron-canvas.js";
 
@@ -203,6 +212,71 @@ test("Barycentric Substrate: processMetadataDividend packs 24-bit execution rece
   assert.equal(Number(metrics.packed64BitWord >> 48n), 0xABC1);
   assert.equal(Number((metrics.packed64BitWord >> 40n) & 0xFFn), 1);
   assert.equal(metrics.coreTruthRow, 0x017C001434n);
+});
+
+test("Barycentric Substrate: Base36 symbolic carrier projects orbit state without replacing numeric metadata", () => {
+  const kernel = new OmiBarycentricCanvasKernel();
+  const S = parseOmiAddressToSegments(GENESIS_TOKEN);
+  const metrics = kernel.processMetadataDividend(S, 0xABC1, () => 1);
+
+  assert.equal(encodeSymbolicBase36(120), "3C");
+  assert.equal(encodeSymbolicBase36(240), "6O");
+  assert.equal(encodeSymbolicBase36(24), "O");
+  assert.equal(encodeSymbolicBase36(720), "K0");
+  assert.equal(encodeSymbolicBase36(5040), "3W0");
+
+  assert.equal(metrics.symbolicCarrier.authority, "projection-only");
+  assert.equal(metrics.symbolicCarrier.alphabet, SYMBOLIC_BASE36_ALPHABET);
+  assert.equal(metrics.symbolicCarrier.offset36, "S");
+  assert.equal(metrics.symbolicCarrier.slot5040, "15S");
+  assert.deepEqual(metrics.symbolicCarrier.bridge, SYMBOLIC_BASE36_BRIDGE);
+  assert.equal(metrics.offsetIndex, metrics.timelineSlot % 36);
+  assert.equal(metrics.hueAngleDegrees, metrics.offsetIndex * 10);
+  assert.equal(metrics.timelineSlot, 1504);
+  assert.equal(metrics.coreTruthRow, 0x017C001434n);
+});
+
+test("Barycentric Substrate: OMI binary quadratic projection spans 5!, 6!, local240, and slot5040", () => {
+  assert.equal(omiQuadraticProject(0, 0), 0);
+  assert.equal(omiQuadraticProject(3, 3), 720);
+  assert.equal(omiSemanticSweep(3, 3), 720);
+  assert.equal(omiRootDepth(3, 3), 120);
+  assert.equal(omiLocal240(3, 3), 0);
+  assert.equal(omiLocal240(1, 2), 108);
+  assert.equal(omiSlot5040(6, 2, 1, 2), (6 * 720) + (2 * 240) + 108);
+  assert.equal(omiSlot5040(6, 2, 1, 2) < 5040, true);
+
+  for (let x = 0; x < 4; x++) {
+    for (let y = 0; y < 4; y++) {
+      const q = omiQuadraticProject(x, y);
+      assert.equal(Number.isInteger(q), true);
+      assert.equal(q >= 0 && q <= 720, true);
+      assert.equal(omiRootDepth(x, y) >= 0 && omiRootDepth(x, y) <= 120, true);
+      assert.equal(omiLocal240(x, y) >= 0 && omiLocal240(x, y) < 240, true);
+    }
+  }
+});
+
+test("Barycentric Substrate: Base36 symbol projection feeds Q_xy geometry without authorizing frames", () => {
+  const projection = projectBase36Symbol("A");
+  assert.equal(projection.symbol, "A");
+  assert.equal(projection.kind, "base36");
+  assert.equal(projection.authority, "projection-only");
+  assert.equal(projection.value36, 10);
+  assert.equal(projection.x, 2);
+  assert.equal(projection.y, 2);
+  assert.equal(projection.q, 320);
+  assert.equal(projection.local240, 80);
+  assert.equal(projection.depth, 320 / 6);
+  assert.equal(projectBase36Symbol("!"), null);
+
+  const kernel = new OmiBarycentricCanvasKernel();
+  const corruptedToken = "omi-0100-03bf-7c00-2b01-2f01-1434-039e-01ff/48";
+  const S = parseOmiAddressToSegments(corruptedToken);
+  const metrics = kernel.processMetadataDividend(S, 0x0001, () => 1);
+
+  assert.equal(metrics.accepted, false);
+  assert.equal("symbolicCarrier" in metrics, false);
 });
 
 test("Barycentric Substrate: processMetadataDividend rejects failed truth-row convergence", () => {

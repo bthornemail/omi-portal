@@ -16,6 +16,16 @@ export const TWO_OF_FIVE_SELECTOR_PAIRS = Object.freeze([
   [3, 4]
 ]);
 
+export const SYMBOLIC_BASE36_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+export const SYMBOLIC_BASE36_BRIDGE = Object.freeze({
+  hiddenFiveRoot: Object.freeze({ label: "5!", value: 120, carrier: "3C" }),
+  bridge240: Object.freeze({ label: "240", value: 240, carrier: "6O" }),
+  fourFoldSurface: Object.freeze({ label: "4!", value: 24, carrier: "O" }),
+  sixFactorialSweep: Object.freeze({ label: "6!", value: 720, carrier: "K0" }),
+  sevenFactorialRing: Object.freeze({ label: "7!", value: 5040, carrier: "3W0" })
+});
+
 export const DELTA_TETRAHEDRAL_NODE_AXES = Object.freeze([
   { component: "OmiTextNode", type: "text", functionName: "rotl(x,1)", segmentIndex: 1, baseDomain: "US", baseOrdinal: 4 },
   { component: "OmiFileNode", type: "file", functionName: "rotl(x,3)", segmentIndex: 2, baseDomain: "FS", baseOrdinal: 1 },
@@ -25,6 +35,66 @@ export const DELTA_TETRAHEDRAL_NODE_AXES = Object.freeze([
 
 function validateClockwiseSide(side, fallback) {
   return JSON_CANVAS_SIDES.includes(side) ? side : fallback;
+}
+
+export function encodeSymbolicBase36(value) {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new RangeError("Base36 symbolic carriers require a non-negative integer.");
+  }
+  return value.toString(36).toUpperCase();
+}
+
+export function omiQuadraticProject(x, y) {
+  const xx = Number(x);
+  const yy = Number(y);
+  if (!Number.isInteger(xx) || !Number.isInteger(yy) || xx < 0 || yy < 0) {
+    throw new RangeError("OMI quadratic projection requires non-negative integer coordinates.");
+  }
+  return (60 * xx * xx) + (16 * xx * yy) + (4 * yy * yy);
+}
+
+export function omiRootDepth(x, y) {
+  return omiQuadraticProject(x, y) / 6;
+}
+
+export function omiLocal240(x, y) {
+  return omiQuadraticProject(x, y) % 240;
+}
+
+export function omiSemanticSweep(x, y) {
+  return omiQuadraticProject(x, y);
+}
+
+export function omiSlot5040(fano7, role3, x, y) {
+  const fano = Number(fano7);
+  const role = Number(role3);
+  if (!Number.isInteger(fano) || !Number.isInteger(role) || fano < 0 || fano > 6 || role < 0 || role > 2) {
+    throw new RangeError("OMI replay projection requires fano7 in 0..6 and role3 in 0..2.");
+  }
+  return (fano * 720) + (role * 240) + omiLocal240(x, y);
+}
+
+export function projectBase36Symbol(symbol) {
+  if (typeof symbol !== "string" || symbol.length !== 1) return null;
+  const normalized = symbol.toUpperCase();
+  const value36 = SYMBOLIC_BASE36_ALPHABET.indexOf(normalized);
+  if (value36 < 0) return null;
+
+  const x = value36 & 0x03;
+  const y = (value36 >> 2) & 0x03;
+  const q = omiQuadraticProject(x, y);
+
+  return Object.freeze({
+    symbol: normalized,
+    kind: "base36",
+    authority: "projection-only",
+    value36,
+    x,
+    y,
+    q,
+    local240: q % 240,
+    depth: q / 6
+  });
 }
 
 export function convertSegmentToFp16Color(uint16Word) {
@@ -533,6 +603,13 @@ export class OmiBarycentricCanvasKernel extends OmiTetrahedralCanvasKernel {
     const offsetIndex = timelineSlot % 36;
     const hueAngleDegrees = offsetIndex * 10;
     const ringHueAngleDegrees = (timelineSlot * 360) / 5040;
+    const symbolicCarrier = Object.freeze({
+      authority: "projection-only",
+      alphabet: SYMBOLIC_BASE36_ALPHABET,
+      offset36: encodeSymbolicBase36(offsetIndex),
+      slot5040: encodeSymbolicBase36(timelineSlot),
+      bridge: SYMBOLIC_BASE36_BRIDGE
+    });
 
     return Object.freeze({
       accepted: true,
@@ -545,6 +622,7 @@ export class OmiBarycentricCanvasKernel extends OmiTetrahedralCanvasKernel {
       offsetIndex,
       hueAngleDegrees,
       ringHueAngleDegrees,
+      symbolicCarrier,
       hslColorTarget: `hsl(${hueAngleDegrees}, 100%, 50%)`
     });
   }

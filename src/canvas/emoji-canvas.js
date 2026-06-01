@@ -1,3 +1,5 @@
+import { EMOJI_TEST_SOURCE, EMOJI_VENDOR_SOURCES } from "../omi/emoji-data.js";
+
 export class OmiEmojiCanvasKernel {
   constructor() {}
 
@@ -30,11 +32,12 @@ export class OmiEmojiCanvasKernel {
         height: cellHeight,
         color: hexColor,
         text: entry.text,
-        file: "vendor/emoji/emoji-test.txt",
+        file: EMOJI_TEST_SOURCE,
         url: `web+omi:emoji:${entry.codepoints.join("-").toLowerCase()}`,
         group: entry.group,
         omi: {
           role: "OmicronNode",
+          authority: "projection-only",
           address: addr,
           cons: Object.freeze({ car: col, cdr: row }),
           rgb: { r, g, b },
@@ -43,7 +46,8 @@ export class OmiEmojiCanvasKernel {
           row,
           group: entry.group,
           subgroup: entry.subgroup,
-          file: "vendor/emoji/emoji-test.txt",
+          file: EMOJI_TEST_SOURCE,
+          sourceFiles: EMOJI_VENDOR_SOURCES,
           link: `web+omi:emoji:${entry.codepoints.join("-").toLowerCase()}`,
           status: entry.status,
           version: entry.version,

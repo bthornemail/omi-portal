@@ -358,6 +358,10 @@ slot5040 = fano7×720 + role3×240 + local240
 8!..12! = interpretive envelopes around the same 128-bit frame
 ```
 
+Symbolic character encoding is promoted only as a projection layer. Base36 uses the uppercase ASCII alphabet `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ` to display W=36 orbit offsets and fixed bridge values (`120=3C`, `240=6O`, `24=O`, `720=K0`, `5040=3W0`). Emoji carriers are grounded in the vendored Unicode emoji data files and carry deterministic RGB/base64/row/col canvas metadata. Neither carrier generates OMI law or replaces the 8-segment pointer.
+
+The quadratic boundary is normative: `Q_frame(S)=E_var+E_const` validates the 128-bit envelope, while `Q_xy(x,y)=60x^2+16xy+4y^2` projects decoded local coordinates into `local240`, `slot5040`, and visible geometry. Do not derive validity from projection.
+
 Color/clock research is treated as software visualization semantics. OMI may map clock, precision, and receipt state to deterministic JSON Canvas color fields, but optical-clock language is only an analogy unless a local source module and test prove the behavior.
 
 The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. Deployment and transport behavior remains aspirational unless it is wired to local tests.

@@ -1,3 +1,11 @@
+export const EMOJI_VENDOR_SOURCES = Object.freeze([
+  "vendor/emoji/emoji-test.txt",
+  "vendor/emoji/emoji-sequences.txt",
+  "vendor/emoji/emoji-zwj-sequences.txt"
+]);
+
+export const EMOJI_TEST_SOURCE = EMOJI_VENDOR_SOURCES[0];
+
 export class OmiEmojiDataKernel {
   parseEmojiTestFile(text) {
     const entries = [];
@@ -72,11 +80,13 @@ export class OmiEmojiDataKernel {
       address: `Ο-${col}-${row}`,
       omi: {
         role: "OmicronNode",
+        authority: "projection-only",
         text: entry.text,
         link: `web+omi:emoji:${entry.codepoints.join("-").toLowerCase()}`,
         group: entry.group,
         subgroup: entry.subgroup,
-        file: "vendor/emoji/emoji-test.txt",
+        file: EMOJI_TEST_SOURCE,
+        sourceFiles: EMOJI_VENDOR_SOURCES,
         rgb: { r, g, b },
         base64,
         col,

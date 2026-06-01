@@ -225,6 +225,50 @@ This is the Binary Quadratic Meta-Mask Lexer.
 
 It is called a "meta-mask" because it replaces a sequence of branch checks with one algebraic membership surface.
 
+## 7.1 Canonical Quadratic Boundary
+
+OMI uses two quadratic forms with different responsibilities. They must not be collapsed.
+
+The frame validator is:
+
+```text
+Q_frame(S) = E_var + E_const
+```
+
+It operates over the full eight-segment OMI frame and answers:
+
+```text
+Is this 128-bit OMI envelope lawful?
+```
+
+The coordinate projection form is:
+
+```text
+Q_xy(x,y) = 60x^2 + 16xy + 4y^2
+```
+
+It operates over already-decoded local coordinates and answers:
+
+```text
+Where does this lawful state project?
+```
+
+Canonical boundary:
+
+```text
+Q_frame(S) = 0
+    -> decode local state
+    -> Q_xy(x,y)
+    -> local240 / slot5040 / DOM projection
+```
+
+An invalid frame may not become valid merely because it has a symbolic projection. A symbolic character may carry state, but it may not authorize state.
+
+```text
+Q_frame(S) validates the carrier.
+Q_xy(x,y) projects the carried state.
+```
+
 ---
 
 ## 8. Free Payload Variables

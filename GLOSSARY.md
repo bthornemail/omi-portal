@@ -1178,6 +1178,51 @@ FS / GS / RS / US
 
 The five-fold layer roots packet identity. The four-fold layer exposes that identity through visible channels and canvas projections.
 
+### Base36 Symbolic Carrier
+
+A **Base36 symbolic carrier** is the uppercase ASCII projection alphabet `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
+
+It displays W=36 orbit offsets and bridge values without replacing numeric OMI metadata:
+
+```text
+5! = 120 -> 3C
+240 -> 6O
+4! = 24 -> O
+6! = 720 -> K0
+7! = 5040 -> 3W0
+```
+
+### Emoji Semantic Carrier
+
+An **emoji semantic carrier** is a Unicode-data-backed canvas projection.
+
+Canonical emoji projection data comes from `vendor/emoji/emoji-test.txt`, `vendor/emoji/emoji-sequences.txt`, and `vendor/emoji/emoji-zwj-sequences.txt`. Emoji cells may carry deterministic RGB/base64/row/col metadata, but hand-picked emoji maps are not canonical authority.
+
+### Symbolic Carrier Authority Boundary
+
+The **symbolic carrier authority boundary** says Base36 and emoji characters project already-derived OMI state.
+
+They do not generate OMI law, replace `RULES.omi` / `FACTS.omi`, or replace the 8-segment OMI pointer. Domino pair carriers and binary16 emoji registers remain research provenance until exact Unicode ranges and executable tests promote them.
+
+### Omicron Binary Quadratic Projection Form
+
+The **Omicron Binary Quadratic Projection Form** is:
+
+```text
+Q_xy(x,y) = 60x^2 + 16xy + 4y^2
+```
+
+It projects already-decoded local coordinates into geometry:
+
+```text
+Q_xy(3,3) = 720 = 6!
+Q_xy(x,y) / 6 -> hidden 5! root depth
+Q_xy(x,y) mod 240 -> local240
+slot5040 = fano7×720 + role3×240 + local240
+```
+
+It is not the Binary Quadratic Meta-Mask Lexer. `Q_frame(S)` validates the 128-bit envelope; `Q_xy(x,y)` projects lawful decoded state.
+
 ### MCRSGSP
 
 **MCRSGSP** is the Monotone Causal Reed-Solomon Gossip Storage Protocol research draft.

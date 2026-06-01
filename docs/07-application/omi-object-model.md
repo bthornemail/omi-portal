@@ -240,6 +240,10 @@ slot5040 = fano7×720 + role3×240 + local240
 
 The five-fold layer is the hidden packet root (`5! = 120`). The four-fold layer is the visible selector/fact projection surface (`4! = 24`, FS/GS/RS/US). Higher layers (`8!` through `12!`) are interpretive envelopes around the same 128-bit OMI pointer; they do not add wire segments.
 
+Symbolic character encoding is a projection surface over this same state. The canonical Base36 carrier is uppercase ASCII and projects W=36 offsets plus the fixed bridge readings `120=3C`, `240=6O`, `24=O`, `720=K0`, and `5040=3W0`. Emoji carriers are Unicode-data-backed canvas projections with deterministic RGB/base64/row/col metadata. These carriers are not authority; `RULES.omi`, `FACTS.omi`, and the 8-segment OMI pointer remain authority.
+
+The same authority boundary applies to OMI's two quadratic forms. `Q_frame(S)=E_var+E_const` validates the carrier frame. `Q_xy(x,y)=60x^2+16xy+4y^2` projects the carried state into the 240-state bridge, 720 semantic sweep, hidden-root depth, and replay slot metadata. Projection follows validation; it never authorizes validation.
+
 Browser meta-compiler drafts remain prototypes. When their ideas graduate, they must use existing page surfaces, exported helpers, deterministic canvas color metadata, and rule/fact tests rather than inline-only GUI logic.
 
 ## Distributed State Semantics

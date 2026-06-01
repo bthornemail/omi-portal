@@ -484,3 +484,56 @@ omi-0000-0000-0000-0000-0000-0000-0004-0002/128 MUST route-state-through-fs-gs-r
 #   slot5040 = fano7 × 720 + role3 × 240 + local240
 #   local240 = (hidden 5! × orientation) AND (visible 15 × 16) simultaneously.
 omi-ca55-0000-0000-0000-0000-0000-0004-0003/128 MUST derive-shadow-canvas-from-four-fold-selector
+
+# ============================================================================
+# SYMBOLIC CHARACTER ENCODING PROJECTION
+# Specification Level: Rules 0x72 through 0x74
+# Core Doctrine: Symbols carry derived state; symbols do not generate law.
+# ============================================================================
+
+# [Rule 0x72]: Base36 Orbital Projection Carrier
+#   The visible Base36 carrier MUST use the uppercase ASCII alphabet
+#   0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ. It MAY project W=36 orbit offsets,
+#   slot5040 receipts, and fixed factorial bridge values, but it SHALL NOT
+#   replace numeric OMI metadata or the 8-segment pointer grammar.
+omi-0000-0000-0000-0000-0000-0000-0036-0072/128 MUST project-base36-orbital-carriers
+
+# [Rule 0x73]: Unicode Emoji Semantic Projection Carrier
+#   Emoji carriers MUST be grounded in the vendored Unicode emoji data files.
+#   Generated emoji canvas cells MAY carry deterministic RGB/base64/row/col
+#   metadata, but hand-picked emoji maps SHALL NOT act as canonical authority.
+omi-0000-0000-0000-0000-0000-0000-0011-0073/128 MUST ground-emoji-carriers-in-unicode-data
+
+# [Rule 0x74]: Symbolic Carrier Authority Boundary
+#   Base36 and emoji symbols MUST remain projection-only carriers for already
+#   derived OMI state. Domino pair carriers and binary16 emoji registers remain
+#   research provenance until exact Unicode ranges and executable tests exist.
+omi-0000-0000-0000-0000-0000-0000-0000-0074/128 MUST enforce-symbolic-carrier-projection-boundary
+
+# ============================================================================
+# OMICRON BINARY QUADRATIC PROJECTION FORM
+# Specification Level: Rules 0x78 through 0x7B
+# Core Doctrine: Q_frame(S) validates; Q_xy(x,y) projects.
+# ============================================================================
+
+# [Rule 0x78]: Omicron Binary Quadratic Projection Form
+#   The coordinate projection form Q_xy(x,y)=60x^2+16xy+4y^2 MUST bridge
+#   decoded local symbolic coordinates into OMI 240/720 geometry.
+omi-0000-0000-0000-0000-0000-0000-0078-0001/128 MUST project-local-state-through-omi-binary-quadratic-form
+
+# [Rule 0x79]: Quadratic Frame/Projection Boundary
+#   Q_frame(S)=E_var+E_const MUST validate the 128-bit envelope before
+#   Q_xy(x,y) projects decoded local coordinates. These quadratic forms SHALL
+#   NOT be collapsed into one authority surface.
+omi-0000-0000-0000-0000-0000-0000-0079-0001/128 MUST distinguish-frame-validation-from-coordinate-projection
+
+# [Rule 0x7A]: Quadratic Local240 Projection
+#   local240 MUST be derivable as Q_xy(x,y) mod 240 for symbolic coordinate
+#   projection into the 5040 replay ring.
+omi-0000-0000-0000-0000-0000-0000-007a-0001/128 MUST derive-local240-from-quadratic-projection
+
+# [Rule 0x7B]: Quadratic Symbolic Projection Boundary
+#   DOM, CSSOM, Base36, and emoji projection MAY expose Q_xy, local240, and
+#   slot5040 metadata, but MUST NOT replace pointer, frame validation, rule,
+#   fact, or test authority.
+omi-0000-0000-0000-0000-0000-0000-007b-0001/128 MUST preserve-quadratic-symbolic-projection-boundary

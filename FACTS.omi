@@ -150,3 +150,35 @@ omi-0000-0000-0000-0000-0000-0000-0004-1004/128 FACT us-channel-projection-activ
 #   The ca55 segment marks canvas shadow namespace.
 #   slot5040 = fano7 × 720 + role3 × 240 + local240.
 omi-ca55-0000-0000-0000-0000-0000-0004-1005/128 FACT shadow-canvas-four-fold-selector-active
+
+# ============================================================================
+# SYMBOLIC CHARACTER ENCODING PROJECTION FACTS
+# Rules 0x72 through 0x74 — symbols carry derived state, not authority.
+# ============================================================================
+
+# --- Base36 Orbital Carrier Facts (0x72) ---
+omi-0000-0000-0000-0000-0000-0000-0036-0078/128 FACT base36-hidden-five-root-120-3C
+omi-0000-0000-0000-0000-0000-0000-0036-00f0/128 FACT base36-bridge-240-6O
+omi-0000-0000-0000-0000-0000-0000-0036-0018/128 FACT base36-four-fold-surface-24-O
+omi-0000-0000-0000-0000-0000-0000-0036-02d0/128 FACT base36-six-factorial-sweep-720-K0
+omi-0000-0000-0000-0000-0000-0000-0036-13b0/128 FACT base36-seven-factorial-ring-5040-3W0
+
+# --- Emoji Projection Provenance Facts (0x73) ---
+omi-0000-0000-0000-0000-0000-0000-0011-0001/128 FACT unicode-emoji-test-source-vendor-emoji-test
+omi-0000-0000-0000-0000-0000-0000-0011-0002/128 FACT unicode-emoji-sequences-source-vendor-emoji-sequences
+omi-0000-0000-0000-0000-0000-0000-0011-0003/128 FACT unicode-emoji-zwj-source-vendor-emoji-zwj-sequences
+
+# --- Symbolic Authority Boundary Facts (0x74) ---
+omi-0000-0000-0000-0000-0000-0000-0001-0074/128 FACT symbolic-carriers-are-projection-only
+omi-0000-0000-0000-0000-0000-0000-0002-0074/128 FACT domino-and-binary16-emoji-registers-remain-research-provenance
+
+# ============================================================================
+# OMICRON BINARY QUADRATIC PROJECTION FORM FACTS
+# Rules 0x78 through 0x7B — Q_frame validates; Q_xy projects.
+# ============================================================================
+
+omi-0000-0000-0000-0000-0000-0000-0078-1001/128 FACT omi-binary-quadratic-form-documented
+omi-0000-0000-0000-0000-0000-0000-0078-1002/128 FACT quadratic-form-spans-six-factorial-sweep-on-four-by-four-surface
+omi-0000-0000-0000-0000-0000-0000-0078-1003/128 FACT quadratic-form-divided-by-six-spans-five-factorial-root-scale
+omi-0000-0000-0000-0000-0000-0000-007a-1001/128 FACT local240-derivable-from-quadratic-form-modulo-240
+omi-0000-0000-0000-0000-0000-0000-007b-1001/128 FACT quadratic-symbolic-projection-boundary-documented
