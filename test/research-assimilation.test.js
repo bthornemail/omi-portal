@@ -156,7 +156,8 @@ test("Research assimilation: Q_frame validates and Q_xy projects as separate qua
   assert.match(ontology, /Q_frame\(S\) validates the carrier/);
   assert.match(glossary, /It is not the Binary Quadratic Meta-Mask Lexer/);
   assert.match(binaryQuadraticForm, /Q_frame\(S\) validates the 128-bit OMI envelope/);
-  assert.match(binaryQuadraticForm, /Q_xy\(x,y\)=60x²\+16xy\+4y² projects decoded state into geometry/);
+  assert.match(binaryQuadraticForm, /Q_xy\(x,y\)\s*=\s*60x²\s*\+\s*16xy\s*\+\s*4y²/);
+  assert.match(binaryQuadraticForm, /Q_xy\(x,y\) projects decoded state into geometry/);
   assert.match(binaryQuadraticForm, /slot5040 = fano7×720 \+ role3×240 \+ local240/);
   assert.match(binaryQuadraticForm, /Symbols project the law\.\s*Symbols do not create the law\./);
 });

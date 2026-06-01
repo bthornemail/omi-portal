@@ -2,62 +2,91 @@
 
 ## The Arithmetic Bridge from Delta Law to OMI Addressing, Symbolic Encoding, and 2.5D Projection
 
-**Status:** Canonical Application Paper / v1.0.0-RC1 Alignment
-**Scope:** OMI Binary Quadratic Form, Delta Law, period-8 orbit, prime-73 carrier, Base36 tracker, 240-state bridge, 5-fold hidden root, 4-fold selector face, symbolic character encoding, and browser projection
-**Core Claim:** The Omicron Binary Quadratic Form is the key arithmetic feature that lets OMI convert lawful bitwise state into addressable, symbolic, replayable, and visible geometry.
+**Author:** Brian Thorne
+**Affiliation:** Independent Researcher — Topological Consensus & Autonomous AI
+**Project:** Universal Life Protocol
+**Location:** Los Angeles, CA
+**Email:** [bthornemail@gmail.com](mailto:bthornemail@gmail.com)
+**GitHub:** https://github.com/bthornemail
+**LinkedIn:** in/brian-thorne-5b8a96112
+
+**Status:** v1.0.0-RC1 Canonical Whitepaper
+**Date:** May 2026
+**Keywords:** OMI, Omicron Object Model, Binary Quadratic Form, Delta Law, topological consensus, symbolic encoding, Base36, 240-state bridge, Fano replay ring, meta-circular compiler, autonomous AI
 
 ---
 
 ## Abstract
 
-The Omicron Object Model, or OMI, is built around a 128-bit address pointer:
+The Omicron Object Model, or OMI, is a 128-bit address-centered protocol architecture for converting lawful bitwise state into addressable, symbolic, replayable, and visible geometry. Its canonical pointer form is:
 
 ```text
 omi-S0-S1-S2-S3-S4-S5-S6-S7/prefix
 ```
 
-The pointer is the carrier. The rule is the validator. The replay path is the memory. The projection is the visible state.
-
-At the center of the architecture is the **Omicron Binary Quadratic Form**:
+This paper formalizes the **Omicron Binary Quadratic Form** as the central arithmetic projection engine of OMI:
 
 ```text
-Q(x, y) = 60x² + 16xy + 4y²
+Q_xy(x,y) = 60x² + 16xy + 4y²
 ```
 
-This form is the arithmetic bridge between:
+The form bridges the Delta Law, the period-8 orbit, the prime-73 decimal carrier, the Base36 symbolic tracker, the 240-state bridge, the 5-fold hidden packet root, the 4-fold visible selector face, the 720 semantic sweep, the 5040 replay ring, and browser-native DOM/CSSOM 2.5D projection.
 
-```text
-Delta Law bit motion
-period-8 orbit
-prime-73 decimal carrier
-Base36 symbolic tracker
-5! hidden packet root
-4! visible selector face
-240-state bridge
-720 semantic sweep
-5040 replay ring
-DOM/CSSOM 2.5D extrusion
-```
-
-The form does not replace the Delta Law. The Delta Law remains the generator of lawful motion:
+The Delta Law remains the motion generator:
 
 ```text
 Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C
 ```
 
-But the quadratic form is the **projection engine**: it turns the recovered orbit state into a bounded arithmetic surface that can be addressed, folded, displayed, and replayed.
+The quadratic frame validator remains the envelope gate:
+
+```text
+Q_frame(S) = E_var + E_const
+```
+
+The Omicron Binary Quadratic Form is the projection law:
+
+```text
+Q_xy(x,y) = 60x² + 16xy + 4y²
+```
+
+The central distinction is therefore:
+
+```text
+Q_frame(S) validates the 128-bit OMI envelope.
+Q_xy(x,y) projects decoded state into geometry.
+```
+
+This distinction must never collapse.
+
+---
+
+# 1. Introduction
+
+Traditional computing architectures separate addressing, validation, execution, memory, and display. OMI collapses these layers into a single address-centered model where a pointer can be validated, replayed, projected, and rendered without losing its structural identity.
+
+The OMI doctrine is:
+
+```text
+The pointer is the carrier.
+The rule is the validator.
+The replay path is the memory.
+The projection is the visible state.
+```
+
+The Omicron Binary Quadratic Form provides the arithmetic bridge that allows a validated state to become visible geometry.
 
 In short:
 
 ```text
 Δ_C produces lawful motion.
-Q(S) validates the frame.
-Q(x,y) produces lawful shape.
+Q_frame(S) validates the frame.
+Q_xy(x,y) produces lawful shape.
 ```
 
 ---
 
-# 1. The Only Design Decision: The Delta Law
+# 2. The Only Design Decision: The Delta Law
 
 OMI begins with one bitwise transition law:
 
@@ -65,7 +94,7 @@ OMI begins with one bitwise transition law:
 Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C
 ```
 
-This law contains four structural decisions:
+This law contains four structural operations:
 
 ```text
 rotl(x,1)    rotate left by 1
@@ -80,15 +109,15 @@ And one boundary discipline:
 mask to width
 ```
 
-The rotations preserve bits. They are not shifts. No bit falls off the word.
+The rotations preserve bits. They are not shifts; no bit is discarded.
 
-The XOR operation is reversible.
+The XOR operation preserves reversibility.
 
 The constant breaks the zero fixed point.
 
-The mask keeps the state bounded inside the chosen word size, canonically 16 bits.
+The mask preserves boundedness inside the selected word size, canonically 16 bits.
 
-So the core doctrine is:
+Thus the core motion doctrine is:
 
 ```text
 rotations preserve state
@@ -97,13 +126,13 @@ constant breaks zero collapse
 mask preserves boundedness
 ```
 
-Everything downstream is interpreted as a consequence or projection of this law.
+Everything downstream is interpreted as a consequence, projection, or visible carrier of this law.
 
 ---
 
-# 2. What the Delta Law Produces
+# 3. What the Delta Law Produces
 
-The Delta Law yields a period-8 orbit on the canonical 16-bit state space.
+The Delta Law yields a period-8 orbit on the canonical 16-bit state surface:
 
 ```text
 period = 8
@@ -133,7 +162,7 @@ Therefore:
 W = 36
 ```
 
-This is the **Base36 orbital tracker width**.
+This becomes the Base36 orbital tracker width.
 
 The recovery operation is:
 
@@ -141,24 +170,26 @@ The recovery operation is:
 divmod(position, 36)
 ```
 
-This is the first major bridge:
+This gives the first major OMI bridge:
 
 ```text
 period 8 gives the orbit
-prime 73 gives the digit block
+prime 73 gives the decimal block
 digit block sum gives W = 36
-W = 36 gives Base36 projection
+W = 36 gives the Base36 symbolic projection surface
 ```
+
+Base36 does not create the law. Base36 names the law-derived orbital width.
 
 ---
 
-# 3. Why the Quadratic Form Is Needed
+# 4. Why the Binary Quadratic Form Is Needed
 
-The Delta Law moves the state.
+The Delta Law moves state.
 
-The system still needs a way to project that state into geometry.
+OMI still requires a deterministic arithmetic projection that can map recovered state into geometry.
 
-The projection must be:
+That projection must be:
 
 ```text
 deterministic
@@ -166,21 +197,20 @@ bounded
 compatible with 4×4 selector surfaces
 compatible with 240-state local bridges
 compatible with 720 semantic sweeps
+compatible with the 5040 replay ring
 usable in DOM/CSSOM translate3d projection
 ```
 
 The Omicron Binary Quadratic Form provides that projection:
 
 ```text
-Q(x, y) = 60x² + 16xy + 4y²
+Q_xy(x,y) = 60x² + 16xy + 4y²
 ```
 
-It takes a local pair `(x,y)` and converts it into a weighted arithmetic surface.
-
-In OMI, `x` and `y` may come from:
+The local coordinates `(x,y)` may be recovered from:
 
 ```text
-Base36 residue coordinates
+Base36 residues
 Karnaugh torus coordinates
 emoji register fields
 domino pip pairs
@@ -188,21 +218,23 @@ Fano local selectors
 word-frame payload slices
 ```
 
-The quadratic form then computes a depth, bridge index, or projection weight.
+The quadratic form then computes a depth, bridge index, replay coordinate, or visible projection weight.
 
 ---
 
-# 4. The Coefficients: 60, 16, and 4
+# 5. Coefficient Derivation: 60, 16, and 4
 
-The coefficients are not arbitrary inside the OMI model.
-
-They are selected because they are exactly the bridge terms that connect the factorial tower to the byte/nibble projection surface.
+The coefficients of the Omicron Binary Quadratic Form are:
 
 ```text
-Q(x, y) = 60x² + 16xy + 4y²
+60, 16, 4
 ```
 
-## 4.1 Coefficient 60
+They are not arbitrary within the OMI model. They are the bridge terms that connect the factorial tower to the byte/nibble projection surface.
+
+---
+
+## 5.1 Coefficient 60
 
 ```text
 60 = 5! / 2
@@ -217,32 +249,30 @@ It also satisfies:
 60 = 36 + 24
 ```
 
-That means:
+Meaning:
 
 ```text
-60 = Base36 orbit width + 4! selector face
+60 = Base36 orbital width + 4! selector face
 ```
 
-So `60` carries both:
+Thus `60` carries:
 
 ```text
 W = 36
 4! = 24
 ```
 
-This makes `60` the bridge coefficient between Base36 tracking and four-fold projection.
-
-It is also the sexagesimal base, which makes it compatible with OMI’s base-60 clock and scheduling language.
-
-In OMI:
+In OMI, `60` is the half-root, orbit-plus-selector, and clock-compatible coefficient.
 
 ```text
 60 = half-root coefficient
 60 = orbit-plus-selector coefficient
-60 = clock-compatible scale
+60 = base-60 clock-compatible scale
 ```
 
-## 4.2 Coefficient 16
+---
+
+## 5.2 Coefficient 16
 
 ```text
 16 = 2⁴
@@ -263,23 +293,17 @@ The 240 bridge uses:
 15 × 16 = 240
 ```
 
-So `16` is the full local carrier rail.
+So `16` is the full local carrier rail. It is the width that lets an active surface become byte-addressable.
 
-In OMI:
+---
 
-```text
-16 = full nibble carrier
-```
-
-It is the width that lets the active surface become byte-addressable.
-
-## 4.3 Coefficient 4
+## 5.3 Coefficient 4
 
 ```text
 4 = 2²
 ```
 
-This is the four-fold selector base.
+This is the four-fold selector coefficient.
 
 It corresponds to:
 
@@ -296,17 +320,20 @@ In OMI:
 4 = selector coefficient
 ```
 
-It is the smallest visible face coefficient.
-
 ---
 
-# 5. The Form as a Bridge Equation
+# 6. The Form as a Bridge Equation
 
-The quadratic form can be factored:
+The form is:
 
 ```text
-Q(x, y) = 60x² + 16xy + 4y²
-        = 4(15x² + 4xy + y²)
+Q_xy(x,y) = 60x² + 16xy + 4y²
+```
+
+It can be factored as:
+
+```text
+Q_xy(x,y) = 4(15x² + 4xy + y²)
 ```
 
 This exposes the four-fold selector factor:
@@ -337,61 +364,53 @@ selector cross-term
 identity/payload term
 ```
 
-This makes `Q(x,y)` a controlled way to fold local coordinates into the 240-state bridge.
+This makes `Q_xy(x,y)` a controlled way to fold local coordinates into the 240-state bridge.
 
 ---
 
-# 6. The 4×4 Torus and the 720 Maximum
+# 7. The 4×4 Torus and the 720 Maximum
 
-For local symbolic projection, OMI often uses:
+For local symbolic projection, OMI uses the 4×4 selector surface:
 
 ```text
 x ∈ {0,1,2,3}
 y ∈ {0,1,2,3}
 ```
 
-That is the 4×4 selector surface.
-
-Evaluate the maximum:
+At the maximum coordinate:
 
 ```text
-Q(3,3) = 60·3² + 16·3·3 + 4·3²
-       = 60·9 + 16·9 + 4·9
-       = 540 + 144 + 36
-       = 720
+Q_xy(3,3) = 60·3² + 16·3·3 + 4·3²
+          = 60·9 + 16·9 + 4·9
+          = 540 + 144 + 36
+          = 720
 ```
 
 Therefore:
 
 ```text
-Q(x,y) ranges from 0 to 720 on the 4×4 local coordinate square.
+Q_xy(3,3) = 720 = 6!
 ```
 
-And:
-
-```text
-720 = 6!
-```
-
-So the quadratic form naturally spans the **6! semantic sweep**.
-
-This is a major result:
+So the quadratic form naturally spans the 6! semantic sweep.
 
 ```text
 4×4 local selector coordinates
-→ Q(x,y)
+→ Q_xy(x,y)
 → 0..720
 → 6! semantic sweep
 ```
 
+This is one of the central identities of the OMI projection model.
+
 ---
 
-# 7. The 5! Extrusion Scale
+# 8. The 5! Extrusion Scale
 
-If we divide by 6:
+If the projection output is divided by 6:
 
 ```text
-Z = Q(x,y) / 6
+Z = Q_xy(x,y) / 6
 ```
 
 then at the maximum:
@@ -406,29 +425,28 @@ And:
 120 = 5!
 ```
 
-So:
+Thus:
 
 ```text
-Z = Q(x,y)/6
+Z = Q_xy(x,y) / 6
 ```
 
-maps the local 4×4 coordinate surface into the five-fold packet-root scale.
+maps the local 4×4 coordinate surface into the hidden five-fold packet-root scale.
 
-In browser projection terms:
+In browser projection:
 
 ```text
-CSS translate3d Z-depth
-= Q(x,y) / 6
+CSS translate3d Z-depth = Q_xy(x,y) / 6
 ```
 
-This is why the form works so well as a 2.5D extrusion engine:
+This gives the form its 2.5D extrusion role:
 
 ```text
-Q(x,y) spans 6!
-Q(x,y)/6 spans 5!
+Q_xy(x,y) spans 6!
+Q_xy(x,y)/6 spans 5!
 ```
 
-So the geometry has both:
+So the geometry carries both:
 
 ```text
 visible semantic sweep: 720
@@ -437,7 +455,7 @@ hidden packet root: 120
 
 ---
 
-# 8. The 240-State Bridge
+# 9. The 240-State Bridge
 
 The 240 bridge is central to OMI:
 
@@ -448,7 +466,7 @@ The 240 bridge is central to OMI:
 240 = 6!/3
 ```
 
-The quadratic form touches 240 in several ways.
+The quadratic form touches 240 in multiple ways.
 
 First:
 
@@ -456,11 +474,7 @@ First:
 60 × 4 = 240
 ```
 
-So the largest coefficient multiplied by the four-fold selector count equals the bridge:
-
-```text
-60 × 4 = 240
-```
+The largest coefficient multiplied by the four-fold selector count equals the bridge.
 
 Second:
 
@@ -476,7 +490,7 @@ Third:
 720 / 3 = 240
 ```
 
-The full `Q(3,3)` maximum equals `720`; divided by the three semantic roles of S-P-O, it yields:
+The full `Q_xy(3,3)` maximum equals `720`. Dividing the semantic sweep by the three roles of S-P-O yields:
 
 ```text
 240 per semantic role
@@ -485,7 +499,7 @@ The full `Q(3,3)` maximum equals `720`; divided by the three semantic roles of S
 Therefore:
 
 ```text
-Q span = 720 = 3 × 240
+Q_xy span = 720 = 3 × 240
 ```
 
 This means the quadratic form spans three 240-state surfaces:
@@ -499,13 +513,13 @@ object surface
 Canonical reading:
 
 ```text
-Q(x,y) spans the 6! semantic sweep.
+Q_xy(x,y) spans the 6! semantic sweep.
 Each semantic role receives one 240-state bridge.
 ```
 
 ---
 
-# 9. The Hidden Five and the Visible Four
+# 10. Hidden Five and Visible Four
 
 OMI distinguishes the hidden packet root from the visible selector face.
 
@@ -529,39 +543,39 @@ They meet at:
 
 The quadratic form participates in this meeting.
 
-The hidden side:
+The hidden reading is:
 
 ```text
-Q(x,y)/6 ∈ 0..120
+Q_xy(x,y)/6 ∈ 0..120
 ```
 
 This reaches the `5!` root scale.
 
-The visible side:
+The visible reading is:
 
 ```text
-Q(x,y) mod 240
+Q_xy(x,y) mod 240
 ```
 
 This maps the computed surface into the visible 240-state bridge.
 
-So the same form supports both readings:
+Thus the same form supports both root and face:
 
 ```text
-hidden reading: Q/6 reaches 5!
-visible reading: Q mod 240 reaches local240
+hidden reading: Q_xy/6 reaches 5!
+visible reading: Q_xy mod 240 reaches local240
 ```
 
-This gives OMI a root/face duality:
+Canonical OMI root/face duality:
 
 ```text
-Q/6 = hidden packet-root scale
-Q mod 240 = visible bridge projection
+Q_xy/6 = hidden packet-root scale
+Q_xy mod 240 = visible bridge projection
 ```
 
 ---
 
-# 10. The Base36 Connection
+# 11. Base36 Connection
 
 From the Delta Law:
 
@@ -575,18 +589,18 @@ Base36 gives one symbol per orbit tracker position:
 0..35 → 0..9,A..Z
 ```
 
-The quadratic form uses Base36 coordinates through local residue extraction:
+The quadratic form uses Base36 through local coordinate recovery:
 
 ```text
 value36 = parseBase36(symbol)
 x = value36 mod 4
 y = floor(value36 / 4) mod 4
-Q(x,y) = 60x² + 16xy + 4y²
+Q_xy(x,y) = 60x² + 16xy + 4y²
 ```
 
 This turns each Base36 character into a coordinate on the local 4×4 projection surface.
 
-The result can become:
+The result can produce:
 
 ```text
 depth
@@ -598,27 +612,21 @@ DOM metadata
 CSS transform
 ```
 
-Base36 therefore names the orbit position, while Q gives it shape.
+The core rule is:
 
 ```text
 Base36 names.
-Q projects.
+Q_xy projects.
 ```
 
 ---
 
-# 11. The Important Base36 Bridge Identity
+# 12. The Base36 Bridge Identity
 
-The 240 bridge also decomposes as:
+The 240 bridge decomposes as:
 
 ```text
 240 = 6×36 + 24
-```
-
-That is:
-
-```text
-240 = six full Base36 bands + one 4! selector cap
 ```
 
 Since:
@@ -633,7 +641,7 @@ we get:
 240 = 6×36 + 4!
 ```
 
-And since:
+Since:
 
 ```text
 240 = 2×5!
@@ -655,11 +663,11 @@ hidden packet root × orientation
 six visible Base36 orbit bands + four-fold selector face
 ```
 
-This is one of the most important OMI symbolic encoding equations.
+This identity binds the hidden five-fold root to the visible Base36/four-fold projection face.
 
 ---
 
-# 12. The 5040 Replay Ring
+# 13. The 5040 Replay Ring
 
 The replay ring is:
 
@@ -667,14 +675,14 @@ The replay ring is:
 5040 = 7!
 ```
 
-The bridge decomposition gives:
+Using the 240 bridge:
 
 ```text
 5040 = 7 × 720
 5040 = 7 × 3 × 240
 ```
 
-So OMI can address replay slots as:
+So OMI addresses replay slots as:
 
 ```text
 slot5040 = fano7 × 720 + role3 × 240 + local240
@@ -691,18 +699,16 @@ local240 ∈ 0..239
 The quadratic form computes or contributes to `local240`:
 
 ```text
-local240 = Q(x,y) mod 240
+local240 = Q_xy(x,y) mod 240
 ```
 
 Thus:
 
 ```text
-slot5040 = fano7 × 720 + role3 × 240 + (Q(x,y) mod 240)
+slot5040 = fano7 × 720 + role3 × 240 + (Q_xy(x,y) mod 240)
 ```
 
-This is the operational replay formula.
-
-It connects:
+This connects:
 
 ```text
 Fano point
@@ -713,9 +719,9 @@ quadratic local bridge
 
 ---
 
-# 13. Symbolic Character Encoding
+# 14. Symbolic Character Encoding
 
-The symbolic character encoding layer exists so that OMI state can be human-readable and machine-scannable.
+The symbolic character encoding layer exists so OMI state can be human-readable and machine-scannable.
 
 It includes:
 
@@ -729,14 +735,14 @@ JABCode
 DOM/CSSOM selectors
 ```
 
-But the rule is strict:
+The boundary is strict:
 
 ```text
 Symbols project the law.
 Symbols do not create the law.
 ```
 
-The quadratic form is the arithmetic engine behind the symbolic projection.
+The quadratic form is the arithmetic engine behind symbolic projection.
 
 A symbolic character becomes:
 
@@ -744,7 +750,7 @@ A symbolic character becomes:
 symbol
 → code point or value
 → local coordinates
-→ Q(x,y)
+→ Q_xy(x,y)
 → local240
 → slot5040
 → visual projection
@@ -754,7 +760,7 @@ The authority remains:
 
 ```text
 OMI pointer
-Q(S)
+Q_frame(S)
 Delta orbit
 RULES.omi
 FACTS.omi
@@ -763,7 +769,7 @@ tests
 
 ---
 
-# 14. Emoji Register Projection
+# 15. Emoji Register Projection
 
 A 16-emoji register can model the binary16 layout:
 
@@ -777,8 +783,8 @@ A 16-emoji register can model the binary16 layout:
 OMI interpretation:
 
 ```text
-sign symbol        → fold / polarity
-5 exponent symbols → 2^5 = 32 omi--- body
+sign symbol         → fold / polarity
+5 exponent symbols  → 2^5 = 32 omi--- body
 10 payload symbols  → explicit witness
 implicit lead       → hidden root / hidden precision
 ```
@@ -788,12 +794,12 @@ The quadratic form enters after the register is decoded:
 ```text
 exponentAccumulator → y
 significandPrecision → x
-Q(x,y) → projection depth
+Q_xy(x,y) → projection depth
 ```
 
 This makes the emoji register a visible symbolic memory block.
 
-But it is still a projection.
+However:
 
 ```text
 Emoji register shows the state.
@@ -802,7 +808,7 @@ It does not authorize the state.
 
 ---
 
-# 15. Domino Tile Projection
+# 16. Domino Tile Projection
 
 Domino tiles are naturally pair-coded.
 
@@ -828,17 +834,17 @@ domino code point
 → orientation
 → pip pair
 → x,y
-→ Q(x,y)
+→ Q_xy(x,y)
 → voxel extrusion
 → DOM/CSSOM projection
 ```
 
-So a domino tile is a symbolic way to feed the quadratic form.
+A domino tile is therefore a symbolic way to feed the quadratic form.
 
-It is especially useful because `Q(x,y)` is already binary-pair shaped:
+It is especially useful because `Q_xy(x,y)` is already binary-pair shaped:
 
 ```text
-Q takes two coordinates.
+Q_xy takes two coordinates.
 Domino supplies two coordinates.
 ```
 
@@ -846,25 +852,55 @@ This makes domino tiles a natural symbolic carrier for OMI voxel maps.
 
 ---
 
-# 16. OMI Binary Quadratic Form vs Quadratic Lexer
+# 17. Two Quadratics: Validation and Projection
 
-There are two related quadratic ideas in OMI.
+OMI uses two quadratic forms.
 
-## 16.1 The Quadratic Lexer
+They are related by style, but separate by purpose.
 
-The lexer validates the 128-bit frame:
+---
+
+## 17.1 Frame Validation Quadratic
+
+The frame validator is:
 
 ```text
 Q_frame(S) = E_var + E_const
 ```
 
+It operates over the eight-segment OMI frame:
+
+```text
+S = [S0,S1,S2,S3,S4,S5,S6,S7]
+```
+
 It answers:
 
 ```text
-Is this OMI frame valid?
+Is this 128-bit OMI envelope valid?
 ```
 
-## 16.2 The Binary Quadratic Projection Form
+Its convention is:
+
+```text
+Q_frame(S) = 0  → valid frame
+Q_frame(S) > 0  → invalid frame
+```
+
+This belongs to:
+
+```text
+quadratic lexer
+eBPF/XDP gate
+WASM validation
+C99 validation
+JavaScript validation
+packet/frame rejection
+```
+
+---
+
+## 17.2 Coordinate Projection Quadratic
 
 The projection form is:
 
@@ -872,409 +908,137 @@ The projection form is:
 Q_xy(x,y) = 60x² + 16xy + 4y²
 ```
 
+It operates over decoded local coordinates.
+
 It answers:
 
 ```text
-Where does this valid state project?
+Where does this already-decoded state project?
 ```
 
-They should not be confused.
-
-Canonical distinction:
+Its outputs are used as:
 
 ```text
-Q_frame(S) validates the instruction envelope.
-Q_xy(x,y) projects the decoded state into the 240/720 geometry.
+Q_xy(x,y)          → 0..720 semantic sweep
+Q_xy(x,y) / 6      → 0..120 hidden 5! root depth
+Q_xy(x,y) mod 240  → local240 visible bridge
 ```
 
-Both are quadratic because both use squared error or squared coordinate surfaces to prevent ambiguous cancellation and preserve deterministic structure.
-
----
-
-# 17. Branchless Implementation Form
-
-A compact projection implementation:
-
-```javascript
-export function omiQuadraticProject(x, y) {
-  return (60 * x * x) + (16 * x * y) + (4 * y * y);
-}
-
-export function omiLocal240(x, y) {
-  return omiQuadraticProject(x, y) % 240;
-}
-
-export function omiZRoot(x, y) {
-  return omiQuadraticProject(x, y) / 6;
-}
-
-export function omiSlot5040(fano7, role3, x, y) {
-  const local240 = omiLocal240(x, y);
-  return (fano7 * 720) + (role3 * 240) + local240;
-}
-```
-
-A Base36 projection:
-
-```javascript
-const BASE36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-export function projectBase36Symbol(symbol) {
-  const v = BASE36.indexOf(symbol.toUpperCase());
-  if (v < 0) return null;
-
-  const x = v & 3;
-  const y = (v >> 2) & 3;
-  const q = omiQuadraticProject(x, y);
-
-  return {
-    symbol: symbol.toUpperCase(),
-    value36: v,
-    x,
-    y,
-    q,
-    local240: q % 240,
-    zRoot: q / 6
-  };
-}
-```
-
-For strict runtime, invalid symbols should be rejected or routed through a failure surface. For explanatory projection, returning `null` is sufficient.
-
----
-
-# 18. DOM/CSSOM Projection
-
-A browser projection can directly expose the quadratic values:
-
-```html
-<div
-  id="omi-symbol-A"
-  data-omi-symbol="A"
-  data-omi-q="..."
-  data-omi-local240="..."
-  data-omi-slot5040="...">
-</div>
-```
-
-CSSOM can then style OMI state:
-
-```css
-[data-omi-local240] {
-  transform-style: preserve-3d;
-}
-
-[data-omi-fold="complement"] {
-  filter: invert(1);
-}
-```
-
-The projection path is:
+This belongs to:
 
 ```text
-valid pointer
-→ decoded symbolic coordinate
-→ Q(x,y)
-→ local240
-→ slot5040
-→ DOM/CSSOM
-```
-
-This makes the browser a live OMI geometry surface.
-
----
-
-# 19. Proposed Canonical Rules
-
-## Rule: Binary Quadratic Projection Form
-
-```text
-# [Rule 0x78]: Omicron Binary Quadratic Projection Form
-#   The projection form Q(x,y)=60x²+16xy+4y² MUST be used as the canonical
-#   arithmetic bridge from local symbolic coordinates to OMI 240/720 geometry.
-omi-0000-0000-0000-0000-0000-0000-0078-0001/128 MUST project-local-state-through-omi-binary-quadratic-form
-```
-
-## Rule: Quadratic Frame vs Projection Boundary
-
-```text
-# [Rule 0x79]: Quadratic Frame/Projection Boundary
-#   The frame lexer Q_frame(S)=E_var+E_const MUST validate the 128-bit envelope;
-#   the projection form Q_xy(x,y) MUST project decoded local coordinates.
-omi-0000-0000-0000-0000-0000-0000-0079-0001/128 MUST distinguish-frame-validation-from-coordinate-projection
-```
-
-## Rule: Quadratic Local240 Projection
-
-```text
-# [Rule 0x7A]: Quadratic Local240 Projection
-#   local240 MUST be derivable as Q(x,y) mod 240 for symbolic coordinate
-#   projection into the 5040 replay ring.
-omi-0000-0000-0000-0000-0000-0000-007a-0001/128 MUST derive-local240-from-quadratic-projection
-```
-
-## Rule: Quadratic DOM/CSSOM Projection
-
-```text
-# [Rule 0x7B]: Quadratic DOM/CSSOM Projection
-#   DOM and CSSOM symbolic projection MAY expose Q(x,y), local240, and slot5040
-#   metadata, but MUST NOT replace pointer, rule, or test authority.
-omi-0000-0000-0000-0000-0000-0000-007b-0001/128 MUST preserve-quadratic-symbolic-projection-boundary
+Base36 projection
+emoji register projection
+domino pair projection
+DOM/CSSOM translate3d
+local240 computation
+slot5040 computation
+symbolic visual encoding
 ```
 
 ---
 
-# 20. Proposed Facts
+## 17.3 Non-Collapse Criterion
+
+The frame validator must run before projection.
 
 ```text
-# --- Omicron Binary Quadratic Form Facts ---
-
-omi-0000-0000-0000-0000-0000-0000-0078-1001/128 FACT omi-binary-quadratic-form-documented
-omi-0000-0000-0000-0000-0000-0000-0078-1002/128 FACT quadratic-form-spans-six-factorial-sweep-on-four-by-four-surface
-omi-0000-0000-0000-0000-0000-0000-0078-1003/128 FACT quadratic-form-divided-by-six-spans-five-factorial-root-scale
-omi-0000-0000-0000-0000-0000-0000-007a-1001/128 FACT local240-derivable-from-quadratic-form-modulo-240
-omi-0000-0000-0000-0000-0000-0000-007b-1001/128 FACT quadratic-symbolic-dom-projection-documented
+Q_frame(S) = 0
+    ↓
+decode local state
+    ↓
+Q_xy(x,y)
+    ↓
+local240 / slot5040 / DOM projection
 ```
 
----
+An invalid frame may not become valid merely because it has a symbolic projection.
 
-# 21. Verification Tests to Add
-
-Suggested tests:
-
-```text
-test/omi-binary-quadratic-form.test.js
-```
-
-Minimum assertions:
-
-```text
-Q(0,0) = 0
-Q(3,3) = 720
-Q(x,y) is integer for x,y in 0..3
-Q(x,y)/6 ranges within 0..120 for x,y in 0..3
-Q(x,y) mod 240 ranges within 0..239
-local240 = Q(x,y) mod 240
-slot5040 = fano7×720 + role3×240 + local240
-slot5040 ranges within 0..5039
-Base36 symbol maps to x,y coordinates
-symbolic projection does not authorize invalid OMI state
-```
-
-These tests make the whitepaper executable.
-
----
-
-# 22. Final Cascade
-
-The full OMI cascade is:
-
-```text
-Delta Law
-→ period 8
-→ prime 73
-→ B = 01369863
-→ W = 36
-→ Base36 orbit tracker
-→ divmod(position,36)
-→ local x,y coordinates
-→ Q(x,y)=60x²+16xy+4y²
-→ local240 = Q mod 240
-→ slot5040 = fano7×720 + role3×240 + local240
-→ DOM/CSSOM / barcode / emoji / domino projection
-```
-
-The hidden-root reading:
-
-```text
-Q/6 reaches 5! = 120
-```
-
-The visible-bridge reading:
-
-```text
-Q mod 240 reaches local240
-```
-
-The semantic sweep reading:
-
-```text
-Q spans 6! = 720
-```
-
-The replay reading:
-
-```text
-7 × 3 × 240 = 5040
-```
-
-Thus the quadratic form is the arithmetic hinge between all major OMI layers.
-
----
-
-# 23. Final Position
-
-The OMI Binary Quadratic Form is the key feature because it turns local symbolic coordinates into lawful geometric state.
-
-It connects:
-
-```text
-bitwise motion
-factorial memory
-symbolic encoding
-visual projection
-```
-
-The Delta Law generates orbit.
-
-The quadratic form generates shape.
-
-The 240 bridge bounds projection.
-
-The 5040 ring records replay.
-
-The browser renders visible state.
+A symbolic character may carry state, but it may not authorize state.
 
 Therefore:
 
 ```text
-Δ_C is the motion law.
-Q(S) is the frame validator.
-Q(x,y) is the projection law.
+Q_frame(S) validates the carrier.
+Q_xy(x,y) projects the carried state.
 ```
 
-Together, they give OMI a complete pipeline:
-
-```text
-validate
-move
-project
-replay
-show
-```
+This distinction must never collapse.
 
 ---
 
-# 24. Grounding Principles & The Non-Collapse Criterion
+# 18. Canonical Identities
 
-The fundamental truth of the Omi Object Model is that the entire system architecture is emergent. No part of the keyspace, the orbital markers, or the prime dimensions was chosen arbitrarily; every metric is structurally forced by the mathematical properties of the single design choice: the Delta Law.
+The following identities form the operational backbone of the Omicron Binary Quadratic Form:
 
-The protocol preserves a strict separation of concerns across two distinct quadratic equations. They share the same algebraic family, but they serve completely non-overlapping roles inside the network gate and rendering pipeline. This distinction must never collapse:
-
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    THE SEPARATION OF QUADRATIC CONTEXTS                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   [ Q_frame(S) = E_var + E_const ] ──> VALUATION ENGINE                     │
-│   - Purpose: Validates the 128-bit OMI wire header configuration.           │
-│   - Domain: Operates across 8 segments (S0 to S7).                          │
-│   - Output: Strict binary indicator [0 = Valid, >0 = Corrupted].            │
-│   - Execution Layer: eBPF/XDP Gate 1 Kernel Hooks, WebAssembly Filters.     │
-│                                                                             │
-│   [ Q_xy(x, y) = 60x² + 16xy + 4y² ] ──> PROJECTION ENGINE                  │
-│   - Purpose: Projects decoded internal states into physical geometry.       │
-│   - Domain: Local wrapped coordinates (x, y) on the 4x4 Karnaugh Torus.     │
-│   - Output: Integer space 0 to 720 [Maps local240, depth, and replay slot]. │
-│   - Execution Layer: Base36, Emoji, Domino, and DOM/CSSOM 2.5D Extrusions.  │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+| #  | Identity                                      | Meaning                        |
+| -- | --------------------------------------------- | ------------------------------ |
+| 1  | `Q_xy(x,y) = 60x² + 16xy + 4y²`               | Projection form                |
+| 2  | `Q_xy(3,3) = 720 = 6!`                        | Global bound vector            |
+| 3  | `Q_xy(x,y) / 6 ∈ [0,120] = 5!`                | Hidden root depth envelope     |
+| 4  | `Q_xy(x,y) mod 240 = local240`                | Visible bridge metric          |
+| 5  | `240 = 2×5! = 15×16 = 16²−16 = 6!/3`          | 240 balanced knife-edge        |
+| 6  | `5040 = 7 × 3 × 240 = 7!`                     | Replay ring dimension          |
+| 7  | `slot5040 = fano7×720 + role3×240 + local240` | Replay slot formula            |
+| 8  | `240 = 6×36 + 4!`                             | Base36 modular offset sync     |
+| 9  | `Z_extrusion = Q_xy(x,y) / 6`                 | Visual 2.5D extrusion formula  |
+| 10 | `Q_frame(S) validates; Q_xy(x,y) projects`    | Validation/projection boundary |
 
 ---
 
-# 25. Canonical Identities and Constants
-
-The following 10 identities constitute the operational backbone of the protocol. Any variant implementation must satisfy these conditions to maintain network balance:
-
-| # | Identity | Meaning |
-|---|----------|---------|
-| 1 | `Q_xy(x,y) = 60x² + 16xy + 4y²` | The Projector Form |
-| 2 | `Q_xy(3,3) = 720 = 6!` | The Global Bound Vector |
-| 3 | `Q_xy(x,y) / 6 ∈ [0, 120] = 5!` | The Hidden Root Depth Envelope |
-| 4 | `Q_xy(x,y) mod 240 = local240` | The Visible Bridge Metric |
-| 5 | `240 = 2×5! = 15×16 = 16²−16 = 6!/3` | The 240 Balanced Knife-Edge |
-| 6 | `5040 = 7 × 3 × 240 = 7!` | The Replay Ring Dimension |
-| 7 | `slot5040 = fano7×720 + role3×240 + local240` | The Intersecting Replay Slot |
-| 8 | `240 = 6×36 + 4!` | The Base36 Modular Offset Sync |
-| 9 | `Z_extrusion = Q_xy(x,y) / 6` | The Visual 2.5D Extrusion Formula |
-| 10 | `Q_frame(S) validates; Q_xy(x,y) projects` | The Validation/Projection Boundary |
-
----
-
-# 26. Concrete Production Reference Implementation
-
-This production-ready ECMAScript module provides the exact bitmasking alignments, token unzipping tracks, and coordinate mapping algorithms required to run the compiler natively inside standard network interfaces and client browsers.
+# 19. Reference Implementation
 
 ```javascript
 /**
  * Omi Object Model (omi---imo)
- * Definitive Reference Compiler & Geometric Projection Engine
- * Specification: Canonical Whitepaper Edition
+ * Omicron Binary Quadratic Projection Reference
  */
 
 /**
- * 1. The Omicron Binary Quadratic Projection Form Engine
- * Projects local coordinates (x, y) into the dimensional range [0...720]
- * @param {number} x - Karnaugh Torus Column Coordinate
- * @param {number} y - Karnaugh Torus Row Coordinate
- * @returns {number} The calculated geometric state scalar
+ * Projects local coordinates (x,y) into the dimensional range [0..720].
  */
-export const omiQuadraticProject = (x, y) => (60 * x * x) + (16 * x * y) + (4 * y * y);
+export const omiQuadraticProject = (x, y) =>
+  (60 * x * x) + (16 * x * y) + (4 * y * y);
 
 /**
- * 2. Hidden Root Scale Extrusion
- * Collects the internal mass/volume envelope boundary [5! = 120]
+ * Hidden root depth.
+ * Q_xy(3,3)/6 = 120 = 5!
  */
-export const omiRootDepth = (x, y) => omiQuadraticProject(x, y) / 6;
+export const omiRootDepth = (x, y) =>
+  omiQuadraticProject(x, y) / 6;
 
 /**
- * 3. Visible Bridge State
- * Isoradial tracking module mapping to the 240-state surface knife-edge
+ * Visible 240-state bridge.
  */
-export const omiLocal240 = (x, y) => omiQuadraticProject(x, y) % 240;
+export const omiLocal240 = (x, y) =>
+  omiQuadraticProject(x, y) % 240;
 
 /**
- * 4. Semantic Sweep Configuration
- * Returns the global target envelope width [6! = 720]
+ * Full semantic sweep.
+ * Q_xy(3,3) = 720 = 6!
  */
-export const omiSemanticSweep = (x, y) => omiQuadraticProject(x, y);
+export const omiSemanticSweep = (x, y) =>
+  omiQuadraticProject(x, y);
 
 /**
- * 5. The 7! Replay Slot Sequencer
- * Integrates the Fano Plane matrix with the S-P-O triple router paths
- * @param {number} fano7 - Geometric line marker index [0...6]
- * @param {number} role3 - Parts-of-Speech role identifier [0...2] (Subject/Predicate/Object)
- * @param {number} x - Torus X plane step
- * @param {number} y - Torus Y plane step
- * @returns {number} Absolute position indicator inside the 5,040 replay ring
+ * Replay slot inside the 5040 ring.
  */
-export const omiSlot5040 = (fano7, role3, x, y) => {
-  return (fano7 * 720) + (role3 * 240) + omiLocal240(x, y);
-};
+export const omiSlot5040 = (fano7, role3, x, y) =>
+  (fano7 * 720) + (role3 * 240) + omiLocal240(x, y);
 
 /**
- * 6. Base36 Symbolic Object Compiler
- * Bypasses explicit numerical entry by compiling abstract alphanumeric tokens
- * directly into 2.5D geometric projection parameters.
- * @param {string} symbol - Single Base36 character token (0-9, A-Z)
- * @returns {Object|null} Decompiled spatial coordinate vector metadata
+ * Base36 symbolic projection.
  */
 export const projectBase36Symbol = (symbol) => {
   const BASE36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const value36 = BASE36.indexOf(symbol.toUpperCase());
 
   if (value36 === -1) {
-    console.warn(`Protocol Exception: Character '${symbol}' is outside the valid Base36 tracking alphabet.`);
     return null;
   }
 
-  // Bitwise masking loops to extract coordinates cleanly from the alphanumeric base
-  // Maps values natively across the continuous 4x4 Karnaugh Torus grid
   const x = value36 & 3;
   const y = (value36 >> 2) & 3;
-
-  // Evaluate the Projector form across the recovered coordinates
   const q = omiQuadraticProject(x, y);
 
   return {
@@ -1287,72 +1051,225 @@ export const projectBase36Symbol = (symbol) => {
     depth: q / 6
   };
 };
-
-/**
- * 7. Real-Time Visual DOM Layout Extruder
- * Injectively writes the meta-circular data matrix configurations into the DOM
- * and applies native hardware-accelerated 2.5D graphics via the CSSOM layer.
- * @param {string} symbol - Alphanumeric character blueprint target
- * @param {HTMLElement} parentManifold - Container DOM node representing the spatial canvas
- */
-export const injectAndExtrudeNode = (symbol, parentManifold) => {
-  const vectorData = projectBase36Symbol(symbol);
-  if (!vectorData) return;
-
-  const cell = document.createElement('div');
-  cell.className = 'omi-metacircular-voxel';
-  cell.id = `voxel-${vectorData.x}-${vectorData.y}`;
-  cell.innerText = symbol;
-
-  // Store the state natively inside its own representation (Meta-Circular Property)
-  cell.setAttribute('data-omi-base36', vectorData.value36);
-  cell.setAttribute('data-local240', vectorData.local240);
-  cell.setAttribute('data-poly-q', vectorData.q);
-
-  // Structural color tracking: Port 240 balances native opacity profile
-  const r = (vectorData.q) % 256;
-  const g = 120; // Anchored directly to the 5! disjointed set baseline
-  const b = (vectorData.value36 * 6) % 256;
-  const alpha = 240 / 255; // Port 240 calibration
-
-  // Compile layout styles instantly into the active CSSOM tree
-  cell.style.width = '50px';
-  cell.style.height = '50px';
-  cell.style.position = 'absolute';
-  cell.style.textAlign = 'center';
-  cell.style.lineHeight = '50px';
-  cell.style.fontFamily = 'monospace';
-  cell.style.fontSize = '22px';
-  cell.style.color = '#ffffff';
-  cell.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  cell.style.border = '1px solid rgba(255,255,255,0.4)';
-  cell.style.boxShadow = `0 0 15px rgba(${r}, ${g}, ${b}, 0.5)`;
-
-  // The 2.5D Extrusion Step: passes the Z-axis polynomial math straight to the GPU
-  const calculatedZDepth = vectorData.depth;
-  cell.style.transform = `translate3d(${vectorData.x * 55}px, ${vectorData.y * 55}px, ${calculatedZDepth}px)`;
-
-  parentManifold.appendChild(cell);
-};
 ```
 
 ---
 
-# 27. Operational Invariants Summary
+# 20. Suggested Canonical Rules
 
-The Omicron Binary Quadratic Form operates as the singular, unyielding arithmetic bridge that transforms the Delta Law's lawful motion into addressable, projectable, replayable, and visible geometry. It achieves this complete multi-dimensional synthesis without ever modifying the 128-bit wire frame or violating the foundational, invariant rule that **the climb does not step to 5**.
-
----
-
-# 28. One-Sentence Summary
-
-The Omicron Binary Quadratic Form `Q(x,y)=60x²+16xy+4y²` is the arithmetic projection engine of OMI: it takes local coordinates recovered from the Delta Law's period-8, prime-73, Base36 orbit tracker and maps them into the 240-state bridge, the 720 semantic sweep, the 120 hidden five-fold root scale, the 5040 replay ring, and finally DOM/CSSOM, emoji, domino, barcode, and browser-visible geometry.
-
-The most important distinction to preserve in canon is this:
+## Rule 0x78 — Omicron Binary Quadratic Projection Form
 
 ```text
-Q_frame(S) validates the 128-bit OMI envelope.
-Q_xy(x,y)=60x²+16xy+4y² projects decoded state into geometry.
+omi-0000-0000-0000-0000-0000-0000-0078-0001/128 MUST project-local-state-through-omi-binary-quadratic-form
 ```
 
-That gives you two quadratic layers without confusing them: one says **"is the frame lawful?"**, the other says **"where does the lawful state project?"**
+The projection form:
+
+```text
+Q_xy(x,y)=60x²+16xy+4y²
+```
+
+MUST be used as the canonical arithmetic bridge from local symbolic coordinates to OMI 240/720 geometry.
+
+---
+
+## Rule 0x79 — Quadratic Frame/Projection Boundary
+
+```text
+omi-0000-0000-0000-0000-0000-0000-0079-0001/128 MUST distinguish-frame-validation-from-coordinate-projection
+```
+
+The frame lexer:
+
+```text
+Q_frame(S)=E_var+E_const
+```
+
+MUST validate the 128-bit envelope.
+
+The projection form:
+
+```text
+Q_xy(x,y)
+```
+
+MUST project decoded local coordinates.
+
+---
+
+## Rule 0x7A — Quadratic Local240 Projection
+
+```text
+omi-0000-0000-0000-0000-0000-0000-007a-0001/128 MUST derive-local240-from-quadratic-projection
+```
+
+`local240` MUST be derivable as:
+
+```text
+local240 = Q_xy(x,y) mod 240
+```
+
+for symbolic coordinate projection into the 5040 replay ring.
+
+---
+
+## Rule 0x7B — Quadratic DOM/CSSOM Projection
+
+```text
+omi-0000-0000-0000-0000-0000-0000-007b-0001/128 MUST preserve-quadratic-symbolic-projection-boundary
+```
+
+DOM and CSSOM symbolic projection MAY expose:
+
+```text
+Q_xy(x,y)
+local240
+slot5040
+```
+
+as metadata, but MUST NOT replace pointer, rule, test, or validation authority.
+
+---
+
+# 21. Suggested Canonical Facts
+
+```text
+omi-0000-0000-0000-0000-0000-0000-0078-1001/128 FACT omi-binary-quadratic-form-documented
+omi-0000-0000-0000-0000-0000-0000-0078-1002/128 FACT quadratic-form-spans-six-factorial-sweep-on-four-by-four-surface
+omi-0000-0000-0000-0000-0000-0000-0078-1003/128 FACT quadratic-form-divided-by-six-spans-five-factorial-root-scale
+omi-0000-0000-0000-0000-0000-0000-007a-1001/128 FACT local240-derivable-from-quadratic-form-modulo-240
+omi-0000-0000-0000-0000-0000-0000-007b-1001/128 FACT quadratic-symbolic-dom-projection-documented
+```
+
+---
+
+# 22. Verification Tests
+
+A conforming implementation should prove:
+
+```text
+Q_xy(0,0) = 0
+Q_xy(3,3) = 720
+Q_xy(x,y) is integer for x,y in 0..3
+Q_xy(x,y)/6 ranges within 0..120 for x,y in 0..3
+Q_xy(x,y) mod 240 ranges within 0..239
+local240 = Q_xy(x,y) mod 240
+slot5040 = fano7×720 + role3×240 + local240
+slot5040 ranges within 0..5039
+Base36 symbols map to x,y coordinates
+symbolic projection does not authorize invalid OMI state
+```
+
+These tests make the whitepaper executable.
+
+---
+
+# 23. Final Cascade
+
+The full OMI cascade is:
+
+```text
+Delta Law
+→ period 8
+→ prime 73
+→ B = 01369863
+→ W = 36
+→ Base36 orbit tracker
+→ divmod(position,36)
+→ local x,y coordinates
+→ Q_xy(x,y)=60x²+16xy+4y²
+→ local240 = Q_xy mod 240
+→ slot5040 = fano7×720 + role3×240 + local240
+→ DOM/CSSOM / barcode / emoji / domino projection
+```
+
+The hidden-root reading:
+
+```text
+Q_xy/6 reaches 5! = 120
+```
+
+The visible-bridge reading:
+
+```text
+Q_xy mod 240 reaches local240
+```
+
+The semantic sweep reading:
+
+```text
+Q_xy spans 6! = 720
+```
+
+The replay reading:
+
+```text
+7 × 3 × 240 = 5040
+```
+
+The non-collapse reading:
+
+```text
+Q_frame validates first.
+Q_xy projects second.
+```
+
+---
+
+# 24. Conclusion
+
+The Omicron Binary Quadratic Form is the arithmetic projection engine of OMI.
+
+It turns local symbolic coordinates into lawful geometric state.
+
+It connects:
+
+```text
+bitwise motion
+factorial memory
+symbolic encoding
+visual projection
+```
+
+The Delta Law generates orbit.
+
+The quadratic frame form validates the wire envelope.
+
+The Omicron Binary Quadratic Form generates visible shape.
+
+The 240 bridge bounds projection.
+
+The 5040 ring records replay.
+
+The browser renders visible state.
+
+Together, they give OMI a complete pipeline:
+
+```text
+validate
+move
+project
+replay
+show
+```
+
+The final canonical doctrine is:
+
+```text
+Δ_C is the motion law.
+Q_frame(S) is the frame validator.
+Q_xy(x,y) is the projection law.
+```
+
+And the final operational boundary is:
+
+```text
+Do not derive validity from projection.
+Derive projection only after validity.
+```
+
+---
+
+# 25. One-Sentence Summary
+
+The Omicron Binary Quadratic Form `Q_xy(x,y)=60x²+16xy+4y²` is the arithmetic projection engine of OMI: it takes local coordinates recovered from the Delta Law’s period-8, prime-73, Base36 orbit tracker and maps them into the 240-state bridge, the 720 semantic sweep, the 120 hidden five-fold root scale, the 5040 replay ring, and finally DOM/CSSOM, emoji, domino, barcode, and browser-visible geometry — while `Q_frame(S)` remains the separate validator of the 128-bit OMI envelope.

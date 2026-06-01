@@ -193,7 +193,8 @@ test("OMI research inbox claims are promoted through canonical docs, not _temp m
   assert.match(objectModel, /Promoted Research Invariants/);
   assert.match(objectModel, /240 = 2×5! = 15×16 = 6!\/3/);
   assert.match(binaryQuadraticForm, /Q_frame\(S\) validates the 128-bit OMI envelope/);
-  assert.match(binaryQuadraticForm, /Q_xy\(x,y\)=60x²\+16xy\+4y² projects decoded state into geometry/);
+  assert.match(binaryQuadraticForm, /Q_xy\(x,y\)\s*=\s*60x²\s*\+\s*16xy\s*\+\s*4y²/);
+  assert.match(binaryQuadraticForm, /Q_xy\(x,y\) projects decoded state into geometry/);
   assert.match(binaryQuadraticForm, /slot5040 = fano7×720 \+ role3×240 \+ local240/);
   assert.match(binaryQuadraticForm, /Symbols project the law\.\s*Symbols do not create the law\./);
   assert.match(distributed, /MCRSGSP/);
