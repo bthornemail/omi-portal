@@ -344,6 +344,24 @@ Hex-N to Hex-(N-1) encapsulation
 
 The canonical rule text uses `Hex-N to Hex-(N-1)` and avoids leaking literal `-0x` notation into production selector grammar.
 
+### 6.7 Research Assimilation Gates
+
+Research drafts in `dev-docs/_temp/` are an inbox, not a canonical source. A draft graduates only when a small invariant is restated in canonical docs, grounded in `RULES.omi` / `FACTS.omi`, and covered by tests.
+
+The current promoted invariants are:
+
+```text
+240 = 2×5! = 15×16 = 6!/3
+slot5040 = fano7×720 + role3×240 + local240
+5! = hidden packet root
+4! = visible selector/fact projection surface
+8!..12! = interpretive envelopes around the same 128-bit frame
+```
+
+Color/clock research is treated as software visualization semantics. OMI may map clock, precision, and receipt state to deterministic JSON Canvas color fields, but optical-clock language is only an analogy unless a local source module and test prove the behavior.
+
+The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. Deployment and transport behavior remains aspirational unless it is wired to local tests.
+
 ---
 
 ## 7. OMI Addressing as Reference Pointers
@@ -624,6 +642,7 @@ public/      browser surfaces and CSSOM selectors
 test/        regression tests
 prolog/      logic facts and symbolic inference support
 dev-docs/    deeper mathematical and developer onboarding docs
+dev-docs/_temp/ scratch research inbox; not canonical until promoted by docs/rules/tests
 ```
 
 The project has also used a Tetragrammatron-style developer documentation map with SPO-named face folders and beginner/intermediate/expert README tiers.

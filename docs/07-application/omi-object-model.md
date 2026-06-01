@@ -2,7 +2,7 @@
 
 This document is the canonical declaration of the OMI Object Model. It unifies the exploratory notes in `dev-docs/` into one stable framework for addressable browser interfaces.
 
-OMI treats an `omi-*` token as both an object identity and a route. The same token can appear as a DOM id, a `data-omi` attribute, a CSSOM selector prefix, a JSON Canvas node address, an A-Frame entity route, a CodeMirror text token, or a binary memory projection key.
+OMI treats an `omi-*` token as both an object identity and a route. The same token can appear as a DOM `id`, a `data-omi-address` attribute, a CSSOM id selector prefix, a JSON Canvas node address, an A-Frame entity route, a CodeMirror text token, or a binary memory projection key.
 
 ## Core Declaration
 
@@ -58,15 +58,15 @@ OMI separates browser object responsibilities:
 | CodeMirror 6 | transactional text surface for OMI tokens and BiDi controls |
 | WordNet/Prolog | semantic centroid and synset relation surface |
 
-CSSOM prefix matching is the native subtree query model:
+CSSOM id matching is the native subtree query model:
 
 ```css
-[data-omi^="omi-ffff"] {}
-[data-omi^="omi-ffff-127-0-0-1"] {}
-[data-omi^="omi-ffff-127-0-0-1"] {}
+[id^="omi-"] {}
+[id*="-02d0-"] {}
+[id$="/128"] {}
 ```
 
-Each hyphen-delimited segment narrows the route. This gives OMI the same containment intuition as CIDR prefix routing while remaining a legal selector-friendly string.
+Each hyphen-delimited segment narrows the route. DOM nodes keep `data-omi-address` for JavaScript lookup, while CSSOM geometry uses id-based substring selectors so the visual layer remains tied to the protocol pointer.
 
 ## Lisp Transformer Model
 
@@ -227,9 +227,26 @@ Volatile OMI state maps to the `SharedArrayBuffer(5040 * 8)` timeline. Lifecycle
 
 The current runtime implements the 5040 reset behavior in deterministic memory loops. DOM eviction policy is specified here as the canonical visual lifecycle contract.
 
+## Promoted Research Invariants
+
+Drafts in `dev-docs/_temp/` are research provenance. The canonical object model promotes only invariants that are restated here, grounded in `RULES.omi` / `FACTS.omi`, and covered by tests.
+
+The current promoted factorial bridge is:
+
+```text
+240 = 2×5! = 15×16 = 6!/3
+slot5040 = fano7×720 + role3×240 + local240
+```
+
+The five-fold layer is the hidden packet root (`5! = 120`). The four-fold layer is the visible selector/fact projection surface (`4! = 24`, FS/GS/RS/US). Higher layers (`8!` through `12!`) are interpretive envelopes around the same 128-bit OMI pointer; they do not add wire segments.
+
+Browser meta-compiler drafts remain prototypes. When their ideas graduate, they must use existing page surfaces, exported helpers, deterministic canvas color metadata, and rule/fact tests rather than inline-only GUI logic.
+
 ## Distributed State Semantics
 
-This section declares the distributed storage semantics for OMI remote addresses (`turn` tier, `::4` transport proxy). These semantics draw from the [Monotone Causal Reed-Solomon Gossip Storage Protocol](dev-docs/Monotone%20Causal%20Reed%E2%80%93Solomon%20Gossip%20Storage%20Protocol%20%28MCRSGSP%29.md) prospectus and are documented as future surfaces unless locally implemented.
+This section declares the distributed storage semantics for OMI remote addresses (`turn` tier, `::4` transport proxy). These semantics draw from the Monotone Causal Reed-Solomon Gossip Storage Protocol (MCRSGSP) research draft in `dev-docs/_temp/`, but `_temp/` is provenance only. Canonical status is determined by local modules and tests.
+
+Implemented locally: Reed-Solomon erasure coding, causal closure, version vectors, fragment storage, gossip propagation, and anti-entropy repair. Transport deployment, WAN rollout, and global coordination claims remain aspirational unless wired to source and tests.
 
 ### Fragment-Based Propagation
 
@@ -263,7 +280,7 @@ The destructive 720 promote sweep and 5040 hard reset are local memory operation
 
 ### Anti-Entropy Repair
 
-A documented future mechanism where nodes reconcile fragment inventories through periodic gossip exchange:
+Nodes reconcile fragment inventories through periodic gossip exchange:
 
 1. Node A advertises its version vector frontier.
 2. Node B computes missing fragments.

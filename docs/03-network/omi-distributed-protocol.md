@@ -1,29 +1,68 @@
 # OMI Distributed Protocol Prospectus
 
-This prospectus extends the canonical [OMI Object Model](./omi-object-model.md) with the distributed protocol verification model. It is a documentation specification, not a claim that every future runtime surface is implemented.
+This prospectus extends the canonical OMI Object Model with distributed storage and propagation semantics. It is a documentation specification: a claim is implemented only when the matching source module and test exist locally.
 
-## System Topology
+## Address And Projection Boundary
 
-OMI maps a sparse radix trie onto IPv6-style address components. A subnet boundary `X/n` defines a strict interval:
+OMI maps IPv6-style prefix containment onto the 8-segment pointer form:
 
 ```text
-IPv4: [x * 2^(32-n),  x * 2^(32-n)  + 2^(32-n)  - 1]
-IPv6: [x * 2^(128-n), x * 2^(128-n) + 2^(128-n) - 1]
+omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<prefix>
 ```
 
-For a fixed prefix length, subnets form a partition. Any two subnets are either disjoint or nested. OMI mirrors this property with hyphen-delimited token prefixes, so DOM ancestry and CSSOM prefix selection can behave like route-table containment:
+For a fixed prefix length, subnets are disjoint or nested. Browser projection follows the same rule by using the pointer as an `id` and matching with id-based CSSOM selectors:
 
 ```css
-[data-omi^="omi-ffff"] {}
-[data-omi^="omi-ffff-127-0-0-1"] {}
+[id^="omi-"] {}
+[id*="-02d0-"] {}
 ```
 
 The canonical local context boundary remains:
 
 ```text
-::ffff:127.0.0.1  ->  omi-ffff-127-0-0-1
+::ffff:127.0.0.1 -> omi-ffff-127-0-0-1
+```
 
-4. Context normalization: generated local addresses use `omi-ffff-127-0-0-1`.
-5. Service-bus labeling: semantic content routes identify `::1..::8`; WordNet routes use `::3`; TURN proxy routes use `::4`.
+## MCRSGSP Provenance
 
-This prospectus is represented structurally in [omi-object-model.manifest.json](./omi-object-model.manifest.json).
+The Monotone Causal Reed-Solomon Gossip Storage Protocol (MCRSGSP) draft in `dev-docs/_temp/` is research provenance, not a canonical runtime by itself. OMI promotes only the parts that are represented by local source and tests:
+
+| Draft concept | Canonical local carrier |
+| --- | --- |
+| Reed-Solomon recoverability | `src/distributed/erasure.js` |
+| Immutable fragment storage | `src/distributed/fragment-store.js` |
+| Causal admissibility | `src/distributed/causal-closure.js` |
+| Version-vector ordering | `src/distributed/version-vector.js` |
+| Epidemic propagation | `src/distributed/gossip.js` |
+| Anti-entropy repair | `src/distributed/anti-entropy.js` |
+
+Any WAN deployment, consensus-free cluster rollout, or transport-specific behavior is aspirational unless it is covered by a local test.
+
+## Distributed State Rules
+
+Remote OMI state is fragment-oriented:
+
+```text
+codeword identity
+fragment index
+RS(k,n) parameters
+version vector
+payload fragment
+```
+
+Fragments are immutable after generation. Any `k` of `n` RS fragments may reconstruct a candidate only when the selected fragment set is causally closed.
+
+Distributed state grows monotonically. New fragments may expand the set of derivable candidates, but they must not invalidate previously derivable candidates. Local 720/5040 memory sweeps do not destroy distributed fragment state.
+
+## Implementation Gate
+
+The distributed prospectus is considered aligned when the local suite proves:
+
+```text
+RS decode succeeds with any sufficient fragment subset.
+Reconstruction rejects insufficient or causally open subsets.
+Gossip exchanges missing fragments without a coordinator.
+Anti-entropy repair reports missing inventories from version-vector frontiers.
+```
+
+This prospectus is represented structurally in `docs/10-declaration/omi-object-model.manifest.json`.

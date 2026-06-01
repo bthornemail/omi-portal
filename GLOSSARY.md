@@ -1136,9 +1136,53 @@ Common OMI meanings:
 
 A **chromatic bridge** maps numeric, symbolic, or precision state into visual color state.
 
+In OMI this is a software visualization invariant. It may be inspired by optical frequency/color language, but canonical behavior is limited to deterministic Canvas preset IDs, fp16-derived hue fields, and tested JSON Canvas metadata.
+
+### Translation-Free Canvas Color
+
+**Translation-free canvas color** means the `color` field itself carries deterministic state, without a second textual decoder layer.
+
+Canonical carriers include:
+
+```text
+JSON Canvas preset IDs "1".."6"
+fp16 base color metadata
+360-degree significand hue coordinates
+QEMU clock preset outputs
+```
+
 ### Negative Resistance
 
 **Negative resistance** is a reflection or inversion state that routes to a purple-style preset in several OMI visual models.
+
+### Hidden Five
+
+The **Hidden Five** is the packet-root reading of `5! = 120` after it is carried into the 240-state bridge.
+
+```text
+5! = 120
+240 = 2×5!
+```
+
+Above the root, the factor 5 is not a visible stepping digit. It remains present inside `240`.
+
+### Four-Fold Selector Surface
+
+The **four-fold selector surface** is the visible rule/fact projection layer:
+
+```text
+4! = 24
+FS / GS / RS / US
+15×16 = 240
+```
+
+The five-fold layer roots packet identity. The four-fold layer exposes that identity through visible channels and canvas projections.
+
+### MCRSGSP
+
+**MCRSGSP** is the Monotone Causal Reed-Solomon Gossip Storage Protocol research draft.
+
+In canonical OMI docs it is provenance for implemented distributed modules: Reed-Solomon erasure coding, causal closure, version vectors, fragment storage, gossip propagation, and anti-entropy repair. Any transport or deployment behavior beyond those tested modules is aspirational.
 
 ---
 
@@ -1188,6 +1232,12 @@ The applied system fact registry.
 
 It binds rules to concrete physical, runtime, telemetry, visual, and deployment facts.
 
+### `dev-docs/_temp/`
+
+The research inbox.
+
+Files in `_temp/` are scratch provenance. They are not canonical until the invariant is restated in canonical docs, grounded in `RULES.omi` / `FACTS.omi`, and covered by tests.
+
 ---
 
 ## 21. Short Reference Pattern
@@ -1210,6 +1260,17 @@ Provider use:
 Example:
 
 ```text
+Term: 240-State Bridge
+Definition: The active byte-square surface formed by 16×16−16 = 240. In OMI, 240 = 2×5! (hidden root reading) = 15×16 (visible nibble/carrier reading) = 6!/3. It is the exact bridge between the packet core (5! = 120) and the semantic sweep (6! = 720) via ×2 and ×3, and across seven Fano selectors into the full 5040-slot replay ring (7! = 7×3×240). The decimal period of 1/73 (01369863, period 8) provides stepping digits {0,1,3,6,8,9} — never 5, because factor 5 is presupposed inside 240.
+Pointer: omi-0000-0000-0000-0000-0000-0000-00f0-0000/128
+Rule: bind-five-fold-packet-to-240-bridge
+Source: src/omi/meta-compiler.js, public/portal.html
+Test: test/research-assimilation.test.js
+Projection: Karnaugh torus Z-extrusion, slot5040 decomposition
+Failure behavior: Q(S) ≠ 0 → frame evicted
+Consumer use: derive slot5040 = fano7×720 + role3×240 + local240
+Provider use: orient packet core (5!) into active byte surface for S‑P‑O sweep
+
 Term: eBPF/XDP Signature Gate
 Definition: Kernel-space packet signature validator.
 Pointer: omi-0000-0000-0000-0000-0000-0000-00eb-0066/112

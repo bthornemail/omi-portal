@@ -178,3 +178,17 @@ test("OMI Object Model manifest declares protocol sequencing phases", async () =
   assert.ok(manifest.sequencing.assertions.includes("zero-copy-serialization-boundary"));
   assert.ok(manifest.sequencing.assertions.includes("factorial-time-alignment"));
 });
+
+test("OMI research inbox claims are promoted through canonical docs, not _temp manifest entries", async () => {
+  const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
+  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+  const objectModel = await readFile(new URL("../docs/07-application/omi-object-model.md", import.meta.url), "utf8");
+  const distributed = await readFile(new URL("../docs/03-network/omi-distributed-protocol.md", import.meta.url), "utf8");
+
+  assert.equal(manifest.sources.some((source) => source.path.startsWith("dev-docs/_temp/")), false);
+  assert.match(readme, /dev-docs\/_temp\/.*inbox/);
+  assert.match(objectModel, /Promoted Research Invariants/);
+  assert.match(objectModel, /240 = 2×5! = 15×16 = 6!\/3/);
+  assert.match(distributed, /MCRSGSP/);
+  assert.match(distributed, /provenance, not a canonical runtime/);
+});
