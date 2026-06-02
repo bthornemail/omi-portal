@@ -12,7 +12,7 @@
 #   production  — verified deployment artifacts (compiled + eBPF + Docker)
 #   verify      — all verification gates
 #   verify-safe — all non-eBPF gates (daily green)
-#   pipeline    — OMI 12-step execution doctrine (diagnostic)
+#   pipeline    — OMI 13-step execution doctrine (diagnostic)
 #   release     — full lifecycle bundle
 # ============================================================================
 
@@ -37,7 +37,7 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make verify-ebpf  — eBPF kernel gate (requires clang + bpftool)"
 	@echo ""
 	@echo "OMI OPERATIONAL PIPELINE:"
-	@echo "  make pipeline     — 12-step execution doctrine (diagnostic)"
+	@echo "  make pipeline     — 13-step execution doctrine (diagnostic)"
 	@echo "  make compile-imo  — Lower .omi declarations to .imo objects"
 	@echo ""
 	@echo "DEVELOPMENT:"
@@ -68,7 +68,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader
 
 dev: verify-safe build-dev
 
@@ -78,9 +78,9 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-oppid verify-browser verify-oppid-script
+verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-browser verify-oppid-script
 
-pipeline: source validate generate mirror enter compose route scope timing naming project replay
+pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
 release: consumer production release-manifest
 
@@ -210,11 +210,14 @@ verify-ebpf:
 verify-oppid-script:
 	node scripts/oppid-coherence-check.js
 
+verify-reader:
+	node --test test/omilog-reader.test.js
+
 # ============================================================================
-# OMI 12-STEP OPERATIONAL PIPELINE (Diagnostic)
+# OMI 13-STEP OPERATIONAL PIPELINE (Diagnostic)
 # ============================================================================
 
-.PHONY: source validate generate mirror enter compose route scope timing naming project replay
+.PHONY: source validate generate mirror enter read compose route scope timing naming project replay
 
 source:
 	@echo "[1 SOURCE] Reading .omi source files"
@@ -241,34 +244,38 @@ enter:
 	@echo "[5 ENTER] Verifying ο / Ο delimiters"
 	node --test test/omilog-compiler.test.js
 
+read:
+	@echo "[6 READ] Reading O-expressions from .imo payload blocks"
+	node --test test/omilog-reader.test.js
+
 compose:
-	@echo "[6 COMPOSE] Verifying operator-table32"
+	@echo "[7 COMPOSE] Verifying operator-table32"
 	node --test test/omicron-inversion.test.js 2>/dev/null || true
 	@echo "  ◇ operator-table32 tests: [TODO — add dedicated test file]"
 
 route:
-	@echo "[7 ROUTE] Verifying triad-router155"
+	@echo "[8 ROUTE] Verifying triad-router155"
 	node --test test/wire-profile.test.js
 	@echo "  ◇ triad-router155 tests: [TODO — add dedicated test file]"
 
 scope:
-	@echo "[8 SCOPE] Verifying CIDR / wire profile"
+	@echo "[9 SCOPE] Verifying CIDR / wire profile"
 	node --test test/wire-profile.test.js
 
 timing:
-	@echo "[9 TIMING] Verifying Delta / clock"
+	@echo "[10 TIMING] Verifying Delta / clock"
 	node --test test/delta-orbital-lexer.test.js
 
 naming:
-	@echo "[10 NAMING] Verifying Base36 projection"
+	@echo "[11 NAMING] Verifying Base36 projection"
 	node --test test/base36-omilog-alignment.test.js
 
 project:
-	@echo "[11 PROJECT] Verifying Q_xy / canvas projection"
+	@echo "[12 PROJECT] Verifying Q_xy / canvas projection"
 	node --test test/canvas-spec.test.js
 
 replay:
-	@echo "[12 REPLAY] Verifying replay receipts"
+	@echo "[13 REPLAY] Verifying replay receipts"
 	node --test test/research-assimilation.test.js test/docs-manifest.test.js
 
 # ============================================================================

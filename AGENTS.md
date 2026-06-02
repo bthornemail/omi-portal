@@ -94,7 +94,9 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Rule 0x9B: `witness-shared-closures-through-combinator-composition` — Bézout-style witness composition (SHOULD)
 - Rule 0x9C: `decompose-finite-omi-record-sets-into-cyclic-replay-components` — cyclic replay decomposition (SHOULD)
 - Rule 0x9D: `separate-compilation-targets-into-development-consumer-and-production-grades` — Makefile grade lifecycle isolation (MUST)
-- Rule 0x9E: `execute-the-twelve-step-pipeline-via-canonical-makefile-targets` — Makefile automates the 12-step OMI pipeline (MUST)
+- Rule 0x9E: `execute-the-twelve-step-pipeline-via-canonical-makefile-targets` — Makefile automates the 13-step OMI pipeline (MUST)
+- Rule 0x9F: `parse-o-expression-streams-from-imo-payload-blocks` — O-Expression reader parses .imo payload blocks as structured O-expressions (MUST)
+- Reader module: `src/omilog/reader.js` (`readOExpression`, `readImoPayloadBlock`, `isEmojiAtom`, `isOmiAddressAtom`)
 - Makefile grade router: `dev` (development), `consumer` (readable package), `production` (compiled artifacts), `verify-safe` (non-eBPF gates)
 - Build integrator: `scripts/oppid-coherence-check.js` — walks FACTS.omi/RULES.omi to verify OPPID generator discipline
 - OMI compiler CLI: `scripts/compile-omi.js` — lowers `.omi` source to `.imo` compiled objects with Omicron delimiters

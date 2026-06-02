@@ -138,7 +138,7 @@ const manifest = {
     available: grades
   },
   pipeline: [
-    'source', 'validate', 'generate', 'mirror', 'enter',
+    'source', 'validate', 'generate', 'mirror', 'enter', 'read',
     'compose', 'route', 'scope', 'timing', 'naming', 'project', 'replay'
   ]
 };

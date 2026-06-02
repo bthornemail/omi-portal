@@ -768,7 +768,7 @@ omi-0000-0000-0000-0000-0000-0000-009c-0001/128 SHOULD decompose-finite-omi-reco
 # ============================================================================
 # Core: The Makefile serves as the OMI grade router, organizing build targets
 #       into three tiers — development, consumer, and production — and
-#       enforcing the 12-step pipeline through named verification gates.
+#       enforcing the 13-step pipeline through named verification gates.
 # ============================================================================
 
 # [Rule 0x9D]: Three-Tier Grade Lifecycle Isolation
@@ -778,8 +778,23 @@ omi-0000-0000-0000-0000-0000-0000-009c-0001/128 SHOULD decompose-finite-omi-reco
 omi-0000-0000-0000-0000-0000-0000-009d-0001/128 MUST separate-compilation-targets-into-development-consumer-and-production-grades
 
 # [Rule 0x9E]: Automated Build Process Enforcement
-#   The Makefile must automate the 12-step engineering pipeline through
+#   The Makefile must automate the 13-step engineering pipeline through
 #   canonical targets, ensuring SOURCE → VALIDATE → GENERATE → MIRROR →
-#   ENTER → COMPOSE → ROUTE → SCOPE → TIMING → NAMING → PROJECT → REPLAY
+#   ENTER → READ → COMPOSE → ROUTE → SCOPE → TIMING → NAMING → PROJECT → REPLAY
 #   is executable as a named build lifecycle.
 omi-0000-0000-0000-0000-0000-0000-009e-0001/128 MUST execute-the-twelve-step-pipeline-via-canonical-makefile-targets
+
+# ============================================================================
+# O-EXPRESSION STREAM READER (Rule 0x9F)
+# ============================================================================
+# Core: The O-Expression reader is the missing mouth of the .imo runtime: it
+#       lets compiled Omicron-delimited records speak structured OMI before
+#       composition, routing, projection, or live proxy events consume them.
+# ============================================================================
+
+# [Rule 0x9F]: O-Expression Stream Reader Parsing
+#   .imo payload blocks must be readable as structured O-expressions — atoms,
+#   pairs, lists, quoted forms, OMI address atoms, emoji atoms, RS/US source-
+#   block references, and ο/Ο delimited records. The reader sits between ENTER
+#   and COMPOSE in the operational pipeline.
+omi-0000-0000-0000-0000-0000-0000-009f-0001/128 MUST parse-o-expression-streams-from-imo-payload-blocks

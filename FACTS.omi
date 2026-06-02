@@ -349,3 +349,7 @@ omi-0000-0000-0000-0000-0000-0000-009d-1001/128 FACT development-consumer-produc
 # --- Automated Build Process Enforcement Facts (0x9E) ---
 
 omi-0000-0000-0000-0000-0000-0000-009e-1001/128 FACT makefile-automates-twelve-step-compilation-and-testing-cleanly
+
+# --- O-Expression Stream Reader Facts (0x9F) ---
+
+omi-0000-0000-0000-0000-0000-0000-009f-1001/128 FACT o-expression-stream-reader-implemented
