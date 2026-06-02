@@ -96,7 +96,12 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Rule 0x9D: `separate-compilation-targets-into-development-consumer-and-production-grades` — Makefile grade lifecycle isolation (MUST)
 - Rule 0x9E: `execute-the-twelve-step-pipeline-via-canonical-makefile-targets` — Makefile automates the 13-step OMI pipeline (MUST)
 - Rule 0x9F: `parse-o-expression-streams-from-imo-payload-blocks` — O-Expression reader parses .imo payload blocks as structured O-expressions (MUST)
+- Rule 0xA0: `connect-live-proxy-events-to-omi-reader-pipeline` — NAT64/SSE events validated and parsed through reader before projection (MUST)
+- Rule 0xA1: `project-live-network-events-through-qxy-voxel-state` — Parsed events project through Q_xy to produce voxel state diffs (MUST)
 - Reader module: `src/omilog/reader.js` (`readOExpression`, `readImoPayloadBlock`, `isEmojiAtom`, `isOmiAddressAtom`)
+- NAT64 virtual adapter: `src/wan/nat64-virtual-adapter.js` (IPv4 → OMI address mapping, simulated .imo events)
+- Proxy event connector: `src/wan/proxy-event-connector.js` (`ProxyEventConnector` class, SSE subscription, reader integration)
+- Live voxel stream: `src/canvas/live-voxel-stream.js` (`LiveVoxelStream` class, Q_xy projection, TTL, voxel state diffs)
 - Makefile grade router: `dev` (development), `consumer` (readable package), `production` (compiled artifacts), `verify-safe` (non-eBPF gates)
 - Build integrator: `scripts/oppid-coherence-check.js` — walks FACTS.omi/RULES.omi to verify OPPID generator discipline
 - OMI compiler CLI: `scripts/compile-omi.js` — lowers `.omi` source to `.imo` compiled objects with Omicron delimiters

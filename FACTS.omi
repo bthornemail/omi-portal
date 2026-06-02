@@ -353,3 +353,11 @@ omi-0000-0000-0000-0000-0000-0000-009e-1001/128 FACT makefile-automates-twelve-s
 # --- O-Expression Stream Reader Facts (0x9F) ---
 
 omi-0000-0000-0000-0000-0000-0000-009f-1001/128 FACT o-expression-stream-reader-implemented
+
+# --- Live Proxy Event Connector Facts (0xA0) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a0-1001/128 FACT live-proxy-event-reader-connector-implemented
+
+# --- Q_xy Voxel State Projection Facts (0xA1) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a1-1001/128 FACT live-network-events-project-through-qxy-voxel-state

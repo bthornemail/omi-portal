@@ -68,7 +68,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan
 
 dev: verify-safe build-dev
 
@@ -78,7 +78,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-browser verify-oppid-script
+verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-wan verify-browser verify-oppid-script
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -212,6 +212,9 @@ verify-oppid-script:
 
 verify-reader:
 	node --test test/omilog-reader.test.js
+
+verify-wan:
+	node --test test/nat64-virtual-adapter.test.js test/proxy-event-connector.test.js test/live-voxel-stream.test.js
 
 # ============================================================================
 # OMI 13-STEP OPERATIONAL PIPELINE (Diagnostic)

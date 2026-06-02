@@ -798,3 +798,24 @@ omi-0000-0000-0000-0000-0000-0000-009e-0001/128 MUST execute-the-twelve-step-pip
 #   block references, and ο/Ο delimited records. The reader sits between ENTER
 #   and COMPOSE in the operational pipeline.
 omi-0000-0000-0000-0000-0000-0000-009f-0001/128 MUST parse-o-expression-streams-from-imo-payload-blocks
+
+# ============================================================================
+# LIVE PROXY EVENT CONNECTORS (Rules 0xA0–0xA1)
+# ============================================================================
+# Core: The live proxy connector turns network motion into readable OMI
+#       structure before projection; no event reaches the voxel layer until
+#       its address validates and its payload reads through the O-Expression
+#       stream reader.
+# ============================================================================
+
+# [Rule 0xA0]: Live Proxy Event Connection to Reader Pipeline
+#   Network events arriving via NAT64/SSE must be validated, parsed through
+#   the O-Expression stream reader, and emitted as structured imo-record
+#   events before any projection or voxel state update proceeds.
+omi-0000-0000-0000-0000-0000-0000-00a0-0001/128 MUST connect-live-proxy-events-to-omi-reader-pipeline
+
+# [Rule 0xA1]: Live Network Event Projection Through Q_xy Voxel State
+#   Parsed network events must be projected through the Q_xy quadratic form
+#   to produce voxel state diffs — updates, removal expirations, coordinate-
+#   indexed depth and color — for consumption by DOM canvas or portal.html.
+omi-0000-0000-0000-0000-0000-0000-00a1-0001/128 MUST project-live-network-events-through-qxy-voxel-state
