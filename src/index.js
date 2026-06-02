@@ -76,3 +76,4 @@ export * from "./web/tri-tier-network.js";
 export * from "./document/animated-document.js";
 export * from "./neat/tinyneat-policy.js";
 export * from "./distributed/index.js";
+export * from "./omilog/index.js";

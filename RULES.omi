@@ -486,29 +486,41 @@ omi-0000-0000-0000-0000-0000-0000-0004-0002/128 MUST route-state-through-fs-gs-r
 omi-ca55-0000-0000-0000-0000-0000-0004-0003/128 MUST derive-shadow-canvas-from-four-fold-selector
 
 # ============================================================================
-# SYMBOLIC CHARACTER ENCODING PROJECTION
-# Specification Level: Rules 0x72 through 0x74
-# Core Doctrine: Symbols carry derived state; symbols do not generate law.
+# BASE36 / SYMBOLIC CARRIER PROJECTION
+# Specification Level: Rules 0x72 through 0x76
+# Core Doctrine: Delta Law creates W=36; Base36 names the 36 positions;
+#   Base36 does not create the OMI orbit.
 # ============================================================================
 
-# [Rule 0x72]: Base36 Orbital Projection Carrier
-#   The visible Base36 carrier MUST use the uppercase ASCII alphabet
-#   0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ. It MAY project W=36 orbit offsets,
-#   slot5040 receipts, and fixed factorial bridge values, but it SHALL NOT
-#   replace numeric OMI metadata or the 8-segment pointer grammar.
-omi-0000-0000-0000-0000-0000-0000-0036-0072/128 MUST project-base36-orbital-carriers
+# [Rule 0x72]: Base36 Orbital Symbol Alphabet
+#   Base36 is the visible alphabet of the Delta-derived W=36 orbit tracker.
+#   The Delta Law (period 8, prime 73) creates W=36 = block B=01369863 width.
+#   Base36 names the 36 remainder positions; it does not create them.
+omi-0000-0000-0000-0000-0000-0000-0036-0072/128 MUST project-base36-orbital-symbols
 
-# [Rule 0x73]: Unicode Emoji Semantic Projection Carrier
-#   Emoji carriers MUST be grounded in the vendored Unicode emoji data files.
-#   Generated emoji canvas cells MAY carry deterministic RGB/base64/row/col
-#   metadata, but hand-picked emoji maps SHALL NOT act as canonical authority.
-omi-0000-0000-0000-0000-0000-0000-0011-0073/128 MUST ground-emoji-carriers-in-unicode-data
+# [Rule 0x73]: Bijective Symbol Canonicalization
+#   Base36 symbol state MUST be canonicalized through the Delta Law chain:
+#   Delta Law → period 8 → prime 73 → block B → W=36 → divmod → symbol.
+#   Symbols read orbital position; they do not create it.
+omi-0000-0000-0000-0000-0000-0000-0036-0073/128 MUST canonicalize-bijective-symbol-state
 
-# [Rule 0x74]: Symbolic Carrier Authority Boundary
-#   Base36 and emoji symbols MUST remain projection-only carriers for already
-#   derived OMI state. Domino pair carriers and binary16 emoji registers remain
-#   research provenance until exact Unicode ranges and executable tests exist.
-omi-0000-0000-0000-0000-0000-0000-0000-0074/128 MUST enforce-symbolic-carrier-projection-boundary
+# [Rule 0x74]: Unary Root Presence Boundary
+#   Unary root presence (segment 0x0001) MUST NOT be derived from Base36
+#   symbol count or emoji carrier cardinality. Presence is a structural
+#   invariant of the pointer/routing layer, not the projection layer.
+omi-0000-0000-0000-0000-0000-0000-0001-0074/128 MUST preserve-unary-root-presence-boundary
+
+# [Rule 0x75]: Signed Fold Symbol Boundary
+#   Signed fold symbols (segment 0x0002) MUST remain at the fold/mirror
+#   boundary. They MAY be projected through Base36 or emoji for visual
+#   display, but no symbol fold count may replace the signed fold invariant.
+omi-0000-0000-0000-0000-0000-0000-0002-0075/128 MUST preserve-signed-fold-symbol-boundary
+
+# [Rule 0x76]: Unicode Symbolic Carrier Authority
+#   Unicode emoji and symbolic carriers MUST remain projection-only.
+#   No carrier symbol may validate an OMI frame, authorize a closure,
+#   or replace the quadratic form.
+omi-0000-0000-0000-0000-0000-0000-0000-0076/128 MUST preserve-unicode-symbolic-carrier-authority
 
 # ============================================================================
 # OMICRON BINARY QUADRATIC PROJECTION FORM
@@ -537,3 +549,81 @@ omi-0000-0000-0000-0000-0000-0000-007a-0001/128 MUST derive-local240-from-quadra
 #   slot5040 metadata, but MUST NOT replace pointer, frame validation, rule,
 #   fact, or test authority.
 omi-0000-0000-0000-0000-0000-0000-007b-0001/128 MUST preserve-quadratic-symbolic-projection-boundary
+
+# ============================================================================
+# OMI DECLARATIVE CORE — PARSER, SOURCE BLOCKS, EMOJI, OMIOM CASCADE
+# Specification Level: Rules 0x7C through 0x83
+# Core Doctrine: Five .omi files form OMI's declarative core.
+# ============================================================================
+
+# [Rule 0x7C]: Native OMI Declarative Parser Gate
+omi-0000-0000-0000-0000-0000-0000-007c-0001/128 MUST parse-native-omi-declarative-records
+
+# [Rule 0x7D]: Declarative Core Authority Boundary
+omi-0000-0000-0000-0000-0000-0000-007d-0001/128 MUST preserve-declarative-core-authority-boundary
+
+# [Rule 0x7E]: OMI Dot-Notation Cons Surface
+omi-0000-0000-0000-0000-0000-0000-c005-007e/128 MUST parse-omi-dot-notation-as-cons-surface
+
+# [Rule 0x7F]: Wittgenstein Karnaugh Gnomon Table
+omi-0000-0000-0000-0000-0000-0000-c1a4-007f/128 MUST preserve-wittgenstein-karnaugh-gnomon-table
+
+# [Rule 0x80]: OMI Source Block Delimitation
+omi-0000-0000-0000-0000-0000-0000-0080-0001/128 MUST parse-omi-source-block-delimiters
+
+# [Rule 0x81]: OMI Source Block Authority Boundary
+omi-0000-0000-0000-0000-0000-0000-0081-0001/128 MUST preserve-omi-source-block-authority-boundary
+
+# [Rule 0x82]: Emoji Carrier Vendor Resolution
+omi-0000-0000-0000-0000-0000-0000-1f60-0082/128 MUST resolve-emoji-carriers-from-vendor-unicode-data
+
+# [Rule 0x83]: OMIOM Cascade Resolution
+omi-0000-0000-0000-0000-0000-0000-0c55-0083/128 MUST resolve-omi-declarations-by-prefix-specificity
+
+# ============================================================================
+# OMILOG / IMO NATIVE COMPILATION
+# Specification Level: Rules 0x84 through 0x8A
+# Core Doctrine: Omilog (.omi) expresses; IMO (.imo) compiles.
+# ============================================================================
+
+# [Rule 0x84]: Omilog O-Expression Source Language
+#   O-expression = expression inside omi-/-imo source block = addressed O-expression.
+#   Every O-expression is scoped by the enclosing OMI address (the source record).
+#   There is no anonymous O-expression.
+omi-0000-0000-0000-0000-0000-0000-0084-0001/128 MUST parse-omilog-o-expressions
+
+# [Rule 0x85]: WLOG-Safe Rewrite Requires Closure
+#   No WLOG without closure proving symmetry.
+#   CLOSURES.omi 0xC010 (clause omi-imo-palindromic-symmetry) provides this closure.
+omi-0000-0000-0000-0000-0000-0000-0085-0001/128 MUST require-closure-for-wlog-safe-rewrite
+
+# [Rule 0x86]: O-expression Authority Boundary
+#   Q_frame(S) validates state.
+#   Omilog expresses state through addressed O-expressions.
+#   Q_xy(x,y) projects decoded state into symbolic geometry.
+#   These three capabilities MUST NOT collapse into one another.
+omi-0000-0000-0000-0000-0000-0000-0086-0001/128 MUST preserve-o-expression-authority-boundary
+
+# [Rule 0x87]: OMIOM Prefix Cascade
+#   The OMIOM prefix-specificity cascade applies to Omilog records.
+#   omi-/-imo source block content resolves by OMI address prefix specificity.
+omi-0000-0000-0000-0000-0000-0000-0087-0001/128 MUST resolve-omilog-records-by-prefix-specificity
+
+# [Rule 0x88]: OMI Source / IMO Object Split
+#   .omi  = readable Omilog source  (keyword-declarative, addressable)
+#   .imo  = compiled native OMI object (operator-native, restricted char plane)
+omi-0000-0000-0000-0000-0000-0000-0088-0001/128 MUST compile-readable-omi-source-to-native-imo-object
+
+# [Rule 0x89]: IMO Native Character Plane
+#   .imo content is restricted to ASCII bytes 0x00..0x3F plus Unicode carriers
+#   (U+0080 and above: emoji, symbols, non-Latin scripts).
+#   Bytes 0x40..0x7E (Latin letters, @, [, \, ], ^, _, `, {, |, }, ~)
+#   MUST NOT appear in .imo compiled output.
+omi-0000-0000-0000-0000-0000-0000-0089-0001/128 MUST restrict-imo-native-syntax-to-low-ascii-and-unicode-carriers
+
+# [Rule 0x8A]: OMI/IMO Authority Boundary
+#   .omi declares rules, facts, closures, combinators, and cons pairs.
+#   .imo compiles those declarations into native character form.
+#   Neither file format validates OMI frames, authorizes symbolic projection,
+#   or replaces the binary quadratic form.
+omi-0000-0000-0000-0000-0000-0000-008a-0001/128 MUST preserve-omi-source-imo-object-authority-boundary

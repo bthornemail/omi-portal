@@ -1,127 +1,131 @@
+# COMBINATORS.omi
 # Declarative OMI files are not runtime authority by themselves.
 # Runtime authority requires pointer, rule, implementation, test,
 # and replay/projection path.
+#
+# COMBINATORS compose lawful operations. They do not validate
+# frames, ground facts, or seal closure by themselves.
 
-# [Combinator 0x01]: Delta Motion Combinator
+# [Combinator 0x01]: Delta Motion
 omi-0000-0000-5a3c-0000-0000-0000-0000-b001/128 COMBINE delta-motion
 
-INPUT:
-  x:uint16
-  C:uint16 = 0x5A3C
-
-FORM:
-  Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C
-
-OUTPUT:
-  x':uint16
-
-PROPERTY:
-  bounded-16-bit-motion
-  period-8-orbit
+omi-
+  (
+    (input . ((x . uint16) (C . 0x5A3C)))
+    (form . "Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C")
+    (output . "x':uint16")
+    (property .
+      (rotations-preserve-bits
+       xor-preserves-reversibility
+       constant-breaks-zero-fixed-point
+       mask-preserves-boundedness))
+  )
+-imo
 
 # [Combinator 0x02]: Omicron Binary Quadratic Projection
 omi-0000-0000-0000-0000-0000-0000-0078-b002/128 COMBINE quadratic-projection
 
-INPUT:
-  x in 0..3
-  y in 0..3
+omi-
+  (
+    (input . ((x . 0..3) (y . 0..3)))
+    (form . "Q_xy(x,y) = 60x² + 16xy + 4y²")
+    (output .
+      ((q . Q_xy)
+       (local240 . "q mod 240")
+       (zRoot . "q / 6")))
+    (property .
+      ("Q_xy(3,3)=720"
+       "Q_xy(3,3)/6=120"
+       "local240 ∈ 0..239"))
+  )
+-imo
 
-FORM:
-  Q_xy(x,y) = 60x² + 16xy + 4y²
-
-OUTPUT:
-  q
-  local240 = q mod 240
-  zRoot = q / 6
-
-PROPERTY:
-  Q_xy(3,3)=720
-  Q_xy(3,3)/6=120
-
-# [Combinator 0x03]: Replay Slot Combinator
+# [Combinator 0x03]: Replay Slot
 omi-0000-0000-0000-0000-0000-0000-5040-b003/128 COMBINE replay-slot
 
-INPUT:
-  fano7 in 0..6
-  role3 in 0..2
-  local240 in 0..239
+omi-
+  (
+    (input .
+      ((fano7 . 0..6)
+       (role3 . 0..2)
+       (local240 . 0..239)))
+    (form . "slot5040 = fano7×720 + role3×240 + local240")
+    (output . "slot5040 ∈ 0..5039")
+    (property . "5040 = 7×3×240 = 7!")
+  )
+-imo
 
-FORM:
-  slot5040 = fano7×720 + role3×240 + local240
-
-OUTPUT:
-  slot5040 in 0..5039
-
-# [Combinator 0x04]: Base36 Projection Combinator
+# [Combinator 0x04]: Base36 Projection
 omi-0000-0000-0000-0000-0000-0000-0036-b004/128 COMBINE base36-projection
 
-INPUT:
-  symbol in 0..9,A..Z
-
-FORM:
-  offset36 = value(symbol) mod 36
-  hueAngleDegrees = offset36 × 10
-
-OUTPUT:
-  offset36
-  hueAngleDegrees
-
-AUTHORITY:
-  projection-only
+omi-
+  (
+    (input . position)
+    (form .
+      ((quotient36 . "floor(position / 36)")
+       (remainder36 . "position mod 36")
+       (symbol36 . "encodeBase36(remainder36)")))
+    (output .
+      (quotient36 remainder36 symbol36))
+    (boundary .
+      (Delta-Law-derives-W36
+       Base36-names-W36
+       Base36-does-not-create-orbit
+       Base36-visible-five-is-not-hidden-factor-five))
+  )
+-imo
 
 # [Combinator 0x10]: Wittgenstein Operator Table
 omi-0000-0000-0000-0000-0000-0000-c1a4-0010/128 COMBINE wittgenstein-operator-table
 
-TRUTH:
-  bit3 = f(T,T)
-  bit2 = f(T,F)
-  bit1 = f(F,T)
-  bit0 = f(F,F)
-
-CANONICAL:
-  W0  = 0000 = FALSE
-  W1  = 0001 = NOR
-  W6  = 0110 = XOR
-  W8  = 1000 = AND
-  W14 = 1110 = OR
-  W15 = 1111 = TRUE
-
-BOUNDARY:
-  operator indices remain 0..15
+omi-
+  (
+    (domain . ((p . "{F,T}") (q . "{F,T}")))
+    (truth-order .
+      ((bit3 . "f(T,T)")
+       (bit2 . "f(T,F)")
+       (bit1 . "f(F,T)")
+       (bit0 . "f(F,F)")))
+    (truth .
+      ((W0 . "0000 = FALSE")
+       (W1 . "0001 = NOR")
+       (W6 . "0110 = XOR")
+       (W8 . "1000 = AND")
+       (W14 . "1110 = OR")
+       (W15 . "1111 = TRUE")))
+    (property . all-binary-truth-functions-covered)
+  )
+-imo
 
 # [Combinator 0x11]: Karnaugh Gnomon Map
 omi-0000-0000-0000-0000-0000-0000-c1a4-0011/128 COMBINE karnaugh-gnomon-map
 
-KARNAUGH:
-  q=T   q=F
-  p=T   bit3  bit2
-  p=F   bit1  bit0
-
-PROPERTY:
-  preserves-Wittgenstein-bit-order
+omi-
+  (
+    (karnaugh .
+      ((row0 . (bit3 bit2))
+       (row1 . (bit1 bit0))))
+    (role . "represent each Wittgenstein operator as a 2x2 bitboard")
+    (property . truth-surface-is-geometric)
+  )
+-imo
 
 # [Combinator 0x12]: Carry-Forward Gnomon
 omi-0000-0000-0000-0000-0000-0000-c1a4-0012/128 COMBINE carry-forward-gnomon
 
-INPUT:
-  p
-  q
-  cin
-
-OPERATORS:
-  W6  = XOR
-  W8  = AND
-  W14 = OR
-
-FORM:
-  P     = W6(p,q)
-  G     = W8(p,q)
-  sum   = W6(P,cin)
-  carry = W14(G,W8(P,cin))
-
-OUTPUT:
-  sum
-  carry
-
-PROPERTY:
-  central-4-bit-gnomon-carry-forward-adder
+omi-
+  (
+    (input . (p q cin))
+    (operators .
+      ((W6 . XOR)
+       (W8 . AND)
+       (W14 . OR)))
+    (form .
+      ((P . W6(p,q))
+       (G . W8(p,q))
+       (sum . W6(P,cin))
+       (carry . W14(G,W8(P,cin)))))
+    (output . (sum carry))
+    (property . central-4-bit-gnomon-carry-forward-adder)
+  )
+-imo

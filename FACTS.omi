@@ -152,25 +152,39 @@ omi-0000-0000-0000-0000-0000-0000-0004-1004/128 FACT us-channel-projection-activ
 omi-ca55-0000-0000-0000-0000-0000-0004-1005/128 FACT shadow-canvas-four-fold-selector-active
 
 # ============================================================================
-# SYMBOLIC CHARACTER ENCODING PROJECTION FACTS
-# Rules 0x72 through 0x74 — symbols carry derived state, not authority.
+# BASE36 / SYMBOLIC CARRIER PROJECTION FACTS
+# Rules 0x72 through 0x76 — symbols carry derived state, not authority.
 # ============================================================================
 
-# --- Base36 Orbital Carrier Facts (0x72) ---
+# --- Base36 Orbital Facts (0x72) ---
 omi-0000-0000-0000-0000-0000-0000-0036-0078/128 FACT base36-hidden-five-root-120-3C
 omi-0000-0000-0000-0000-0000-0000-0036-00f0/128 FACT base36-bridge-240-6O
 omi-0000-0000-0000-0000-0000-0000-0036-0018/128 FACT base36-four-fold-surface-24-O
 omi-0000-0000-0000-0000-0000-0000-0036-02d0/128 FACT base36-six-factorial-sweep-720-K0
 omi-0000-0000-0000-0000-0000-0000-0036-13b0/128 FACT base36-seven-factorial-ring-5040-3W0
 
+# --- Base36 Alignment Facts (0x72) ---
+omi-0000-0000-0000-0000-0000-0000-0036-1001/128 FACT base36-orbit-alphabet-active
+omi-0000-0000-0000-0000-0000-0000-0036-1002/128 FACT base36-width-equals-delta-orbit-tracker
+omi-0000-0000-0000-0000-0000-0000-0036-1003/128 FACT base36-visible-five-is-not-hidden-factor-five
+
 # --- Emoji Projection Provenance Facts (0x73) ---
 omi-0000-0000-0000-0000-0000-0000-0011-0001/128 FACT unicode-emoji-test-source-vendor-emoji-test
 omi-0000-0000-0000-0000-0000-0000-0011-0002/128 FACT unicode-emoji-sequences-source-vendor-emoji-sequences
-omi-0000-0000-0000-0000-0000-0000-0011-0003/128 FACT unicode-emoji-zwj-source-vendor-emoji-zwj-sequences
+omi-0000-0000-0000-0000-0000-0000-0011-0003/128 FACT unicode-emoji-zwj-source-vendor-emoji-sequences
 
 # --- Symbolic Authority Boundary Facts (0x74) ---
 omi-0000-0000-0000-0000-0000-0000-0001-0074/128 FACT symbolic-carriers-are-projection-only
 omi-0000-0000-0000-0000-0000-0000-0002-0074/128 FACT domino-and-binary16-emoji-registers-remain-research-provenance
+
+# --- Unary Root Presence Facts (0x74) ---
+omi-0000-0000-0000-0000-0000-0000-0001-1074/128 FACT unary-root-presence-boundary-documented
+
+# --- Signed Fold Symbol Boundary Facts (0x75) ---
+omi-0000-0000-0000-0000-0000-0000-0002-1075/128 FACT signed-fold-symbol-boundary-documented
+
+# --- Unicode Symbolic Carrier Authority Facts (0x76) ---
+omi-0000-0000-0000-0000-0000-0000-0000-1076/128 FACT unicode-symbolic-carrier-authority-documented
 
 # ============================================================================
 # OMICRON BINARY QUADRATIC PROJECTION FORM FACTS
@@ -182,3 +196,66 @@ omi-0000-0000-0000-0000-0000-0000-0078-1002/128 FACT quadratic-form-spans-six-fa
 omi-0000-0000-0000-0000-0000-0000-0078-1003/128 FACT quadratic-form-divided-by-six-spans-five-factorial-root-scale
 omi-0000-0000-0000-0000-0000-0000-007a-1001/128 FACT local240-derivable-from-quadratic-form-modulo-240
 omi-0000-0000-0000-0000-0000-0000-007b-1001/128 FACT quadratic-symbolic-projection-boundary-documented
+
+# ============================================================================
+# OMI DECLARATIVE CORE FACTS
+# Rules 0x7C through 0x83 — parser, source blocks, emoji, OMIOM cascade.
+# ============================================================================
+
+# --- Native OMI Declarative Core Facts (0x7C-0x7F) ---
+
+omi-0000-0000-0000-0000-0000-0000-007c-1001/128 FACT native-omi-parser-implemented
+omi-0000-0000-0000-0000-0000-0000-007c-1002/128 FACT native-omi-parser-loads-rules-and-facts-compatibly
+
+omi-0000-0000-0000-0000-0000-0000-007d-1001/128 FACT declarative-core-authority-boundary-documented
+omi-0000-0000-0000-0000-0000-0000-c005-107e/128 FACT omi-dot-notation-cons-surface-documented
+omi-0000-0000-0000-0000-0000-0000-c1a4-107f/128 FACT wittgenstein-karnaugh-gnomon-table-documented
+
+# --- Source Block Facts (0x80-0x81) ---
+
+omi-0000-0000-0000-0000-0000-0000-0080-1001/128 FACT omi-source-block-parser-implemented
+omi-0000-0000-0000-0000-0000-0000-0081-1001/128 FACT omi-source-block-authority-boundary-tested
+
+# --- Emoji and OMIOM Cascade Facts (0x82-0x83) ---
+
+omi-0000-0000-0000-0000-0000-0000-1f60-1082/128 FACT emoji-carrier-vendor-resolution-implemented
+omi-0000-0000-0000-0000-0000-0000-0c55-1083/128 FACT omiom-prefix-cascade-resolution-documented
+
+# ============================================================================
+# OMILOG / IMO NATIVE COMPILATION FACTS
+# Rules 0x84 through 0x8A — O-expressions, WLOG, char plane, source/object split.
+# ============================================================================
+
+# --- Omilog O-expression Facts (0x84) ---
+
+omi-0000-0000-0000-0000-0000-0000-0084-1001/128 FACT omilog-o-expression-parser-implemented
+omi-0000-0000-0000-0000-0000-0000-0084-1002/128 FACT omilog-o-expression-scoped-by-omi-address
+
+# --- WLOG Rewrite Facts (0x85) ---
+
+omi-0000-0000-0000-0000-0000-0000-0085-1001/128 FACT wlog-safe-rewrite-closure-tested
+omi-0000-0000-0000-0000-0000-0000-0085-1002/128 FACT omi-imo-palindromic-symmetry-closure-provided
+
+# --- O-expression Authority Boundary Facts (0x86) ---
+
+omi-0000-0000-0000-0000-0000-0000-0086-1001/128 FACT o-expression-authority-boundary-tested
+omi-0000-0000-0000-0000-0000-0000-0086-1002/128 FACT omilog-expresses-q-frame-validates-q-xy-projects
+
+# --- OMIOM Prefix Cascade Facts (0x87) ---
+
+omi-0000-0000-0000-0000-0000-0000-0087-1001/128 FACT omiom-prefix-cascade-implemented
+
+# --- OMI Source / IMO Object Split Facts (0x88) ---
+
+omi-0000-0000-0000-0000-0000-0000-0088-1001/128 FACT readable-omi-source-compiles-to-native-imo-object
+omi-0000-0000-0000-0000-0000-0000-0088-1002/128 FACT omi-declares-imo-compiles-documented
+
+# --- IMO Native Character Plane Facts (0x89) ---
+
+omi-0000-0000-0000-0000-0000-0000-0089-1001/128 FACT imo-native-character-plane-tested
+omi-0000-0000-0000-0000-0000-0000-0089-1002/128 FACT imo-rejects-ascii-0x40-through-0x7e
+
+# --- OMI/IMO Authority Boundary Facts (0x8A) ---
+
+omi-0000-0000-0000-0000-0000-0000-008a-1001/128 FACT omi-imo-authority-boundary-tested
+omi-0000-0000-0000-0000-0000-0000-008a-1002/128 FACT omi-imo-does-not-replace-q-frame-or-q-xy

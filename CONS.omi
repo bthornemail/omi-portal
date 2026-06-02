@@ -1,152 +1,158 @@
+# CONS.omi
 # Declarative OMI files are not runtime authority by themselves.
 # Runtime authority requires pointer, rule, implementation, test,
 # and replay/projection path.
+#
+# CONS reduces structural pairs. It defines notation and pairing;
+# it does not validate frames or authorize symbolic state.
 
 # [Cons 0x01]: OMI Cons-Combinator Field Schema
 omi-0000-0000-0000-0000-0000-0000-c005-0001/128 CONS omi-cons-combinator-field-schema
 
-FORM:
-  (Omicron . (Tetragrammaton . Metatron))
-
-BINARY16_ABSTRACTION:
-  Omicron Sign-Bit         = sign bit / car / polarity
-  Tetragrammaton Exponent  = exponent / cdr-car / scale window
-  Metatron Significand     = significand / cdr-cdr / payload witness
-
-ROLE:
-  abstract binary field layout into OMI cons-combinator notation
-
-BOUNDARY:
-  notation describes structure
-  notation does not validate the frame
-  Q_frame(S) validates before Q_xy projects
+omi-
+  (
+    (form . (Omicron . (Tetragrammaton . Metatron)))
+    (binary16-abstraction .
+      ((Omicron-Sign-Bit . "sign bit / car / polarity / fold rail")
+       (Tetragrammaton-Exponent . "exponent / cdr-car / scale window / 2^5 body")
+       (Metatron-Significand . "significand / cdr-cdr / 11-bit prime-signature witness")))
+    (role . "abstract binary field layout into OMI cons-combinator notation")
+    (boundary .
+      (notation-describes-structure
+       notation-does-not-validate-frame
+       Q_frame-validates-before-Q_xy-projects))
+  )
+-imo
 
 # [Cons 0x02]: Palindromic Mnemonic OMI Token
 omi-0000-0000-0000-0000-0000-0000-0c05-0002/128 CONS omi-palindromic-mnemonic-token
 
-TOKEN:
-  omi---imo
+omi-
+  (
+    (token . omi---imo)
+    (aliases . (omi omi---))
+    (dot . (omi . (--- . imo)))
+    (expanded . (Omicron . (Tetragrammaton . Metatron)))
+    (role . "visible mnemonic carrier for OMI meta-circular cons reduction")
+    (authority . projection-only)
+    (forbids .
+      (token-authorizes-invalid-frame
+       dot-notation-replaces-Q-frame-validation
+       hyphen-count-replaces-frame-validation))
+  )
+-imo
 
-ALIASES:
-  omi
-  omi---
+# [Cons 0x03]: Meta-Memory Bit-Blip Projection Boundary
+omi-0000-0000-0000-0000-0000-0000-b11b-0003/128 CONS meta-memory-bit-blip-projection-boundary
 
-DOT:
-  (omi . (--- . imo))
-
-EXPANDED_FORM:
-  (Omicron . (Tetragrammaton . Metatron))
-
-ROLE:
-  visible mnemonic carrier for OMI meta-circular cons reduction
-
-AUTHORITY:
-  projection-only
-
-FORBIDS:
-  token-authorizes-invalid-frame
-  dot-notation-replaces-Q-frame-validation
-  hyphen-count-authorizes-frame-validity
-
-BOUNDARY:
-  hyphen count may express scale, mnemonic depth, or visual projection metadata
-  hyphen count is not validity
-  omi---imo is not a valid frame by itself
-
-# [Cons 0x03]: Meta-Memory Bit-Blip
-omi-0000-0000-0000-0000-0000-0000-b11b-0003/128 CONS meta-memory-bit-blip
-
-INPUT:
-  cell = (Omicron . (Tetragrammaton . Metatron))
-
-OPERATION:
-  Omicron' = Omicron XOR 1
-
-PROJECTION:
-  rotateY(0deg) ↔ rotateY(180deg)
-  zRoot = Q_xy(x,y)/6
-
-BOUNDARY:
-  bit-blip-mutates-projection-state-not-frame-validity
+omi-
+  (
+    (input . "cell = (Omicron . (Tetragrammaton . Metatron))")
+    (operation . "Omicron' = Omicron XOR 1")
+    (projection .
+      ((rotateY . "0deg ↔ 180deg")
+       (zRoot . "Q_xy(x,y)/6")))
+    (boundary .
+      (bit-blip-mutates-projection-state
+       bit-blip-does-not-validate-frame-authority))
+  )
+-imo
 
 # [Cons 0x10]: Binary Operator Cons
 omi-0000-0000-0000-0000-0000-0000-c005-0010/128 CONS binary-operator-cons
 
-FORM:
-  (operator . (left . right))
-
-TRUTH:
-  operator in W0..W15
-
-ROLE:
-  pair a Wittgenstein operator with binary operands
+omi-
+  (
+    (form . (operator . (p . q)))
+    (where . "operator = W0..W15")
+    (role . "apply one Wittgenstein operator to two inputs")
+  )
+-imo
 
 # [Cons 0x11]: Carry Pair Cons
 omi-0000-0000-0000-0000-0000-0000-c005-0011/128 CONS carry-pair-cons
 
-FORM:
-  (sum . carry)
-
-DERIVED_FROM:
-  carry-forward-gnomon
-
-ROLE:
-  expose central gnomon adder result as a cons pair
+omi-
+  (
+    (form . (sum . carry))
+    (role . "output pair of carry-forward gnomon")
+  )
+-imo
 
 # [Cons 0x12]: Dot/Alist Texture Carrier
 omi-0000-0000-0000-0000-0000-0000-c005-0012/128 CONS dot-alist-texture-carrier
 
-ALIST:
-  ((FS . texture.barcode-ink)
-   ((GS . target)
-     ((RS . surface)
-       ((US . applies-to) . carrier.aztec carrier.code16k carrier.maxicode carrier.beecode)))
-   ((GS . material)
-     ((RS . class)
-       ((US . value) . black-ink)
-       ((US . reflectance) . low)
-       ((US . finish) . flat)))
-   ((GS . pattern)
-     ((RS . basis)
-       ((US . primitive) . carrier-modules)
-       ((US . detail) . scannable-contrast)))
-   ((GS . resolution)
-     ((RS . render-depth)
-       ((US . far) . mark)
-       ((US . middle) . module-field)
-       ((US . near) . carrier-cells)
-       ((US . inspect) . receipt-record))))
-
-ROLE:
-  preserve texture/barcode route metadata as structured dot notation
-
-BOUNDARY:
-  alist projects carrier state but does not validate frame authority
+omi-
+  (
+    (alist .
+      ((FS . texture.barcode-ink)
+        ((GS . target)
+          ((RS . surface)
+            ((US . applies-to) . carrier.aztec carrier.code16k carrier.maxicode carrier.beecode)))
+        ((GS . material)
+          ((RS . class)
+            ((US . value) . black-ink)
+            ((US . reflectance) . low)
+            ((US . finish) . flat)))
+        ((GS . pattern)
+          ((RS . basis)
+            ((US . primitive) . carrier-modules)
+            ((US . detail) . scannable-contrast)))
+        ((GS . resolution)
+          ((RS . render-depth)
+            ((US . far) . mark)
+            ((US . middle) . module-field)
+            ((US . near) . carrier-cells)
+            ((US . inspect) . receipt-record)))))
+    (role . "describe barcode ink texture as FS/GS/RS/US alist")
+    (authority . projection-only)
+  )
+-imo
 
 # [Cons 0x20]: POS Feature Alist Route
 omi-0000-0000-0000-0000-0000-0000-c005-0020/128 CONS pos-feature-alist-route
 
-ALIST:
-  ((omi-(pos . open-class) . omi-(feature . lexical))
-   (omi-(pos . closed-class) . omi-(feature . inflection))
-   (omi-(pos . other) . omi-(feature . other)))
-
-ROLE:
-  route Universal POS class and feature mode into symbolic projection geometry
-
-BOUNDARY:
-  POS/feature alist projects semantic state but does not validate frame authority
+omi-
+  (
+    (alist .
+      '((omi-(pos . open-class) . omi-(feature . lexical))
+        (omi-(pos . closed-class) . omi-(feature . inflection))
+        (omi-(pos . other) . omi-(feature . other))))
+    (role . "route Universal POS class and feature mode into symbolic projection geometry")
+    (boundary .
+      (POS-feature-alist-projects-semantic-state
+       POS-feature-alist-does-not-validate-frame-authority))
+  )
+-imo
 
 # [Cons 0x21]: Color Alist Route
 omi-0000-0000-0000-0000-0000-0000-c005-0021/128 CONS color-alist-route
 
-ALIST:
-  ((omi-(color . fp16-base) . deterministic-canvas-color)
-   (omi-(color . local240) . bridge-opacity)
-   (omi-(color . zRoot) . projection-depth))
+omi-
+  (
+    (alist .
+      ((omi-(color . fp16-base) . deterministic-canvas-color)
+       (omi-(color . local240) . bridge-opacity)
+       (omi-(color . zRoot) . projection-depth)))
+    (role . "carry deterministic color metadata for visible projection")
+    (boundary . (color-notation-is-projection-only))
+  )
+-imo
 
-ROLE:
-  carry deterministic color metadata for visible projection
+# [Cons 0x22]: Emoji Rewrite Pair Alist
+omi-0000-0000-0000-0000-0000-0000-c005-0022/128 CONS emoji-rewrite-pair-alist
 
-BOUNDARY:
-  color notation is projection-only
+omi-
+  (
+    (rewrite .
+      '((omi-🛹 . omi-🏷️)
+        (omi-🦺 . omi-🚐)
+        (omi-⏰ . omi-🤴🏿)))
+    (source . "./vendor/emoji/*.txt")
+    (role . "declare emoji carrier pairs as symbolic rewrite edges")
+    (authority . projection-only)
+    (boundary .
+      (emoji-carrier-must-resolve-through-vendor-data
+       emoji-does-not-authorize-OMI-frame))
+  )
+-imo

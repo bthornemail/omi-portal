@@ -1,81 +1,106 @@
+# CLOSURES.omi
 # Declarative OMI files are not runtime authority by themselves.
 # Runtime authority requires pointer, rule, implementation, test,
 # and replay/projection path.
+#
+# CLOSURES seal bounded states. They do not invent operations,
+# ground implementations, or authorize symbolic projection.
 
 # [Closure 0x01]: Frame Validation Before Projection
 omi-0000-0000-0000-0000-0000-0000-0079-c001/128 CLOSE frame-validation-before-projection
 
-REQUIRES:
-  Q_frame(S) = 0
-
-SEALS:
-  128-bit envelope
-
-FORBIDS:
-  symbolic-projection-authorizes-invalid-frame
-
-BOUNDARY:
-  Q_frame validates first
-  Q_xy projects second
+omi-
+  (
+    (requires . (Q_frame(S) = 0))
+    (seals . 128-bit-envelope)
+    (forbids .
+      (symbolic-projection-authorizes-invalid-frame
+       dot-notation-replaces-frame-validation
+       omi-palindrome-authorizes-invalid-frame))
+    (boundary .
+      (Q_frame-validates-first
+       Q_xy-projects-second))
+  )
+-imo
 
 # [Closure 0x02]: Replay Ring Closure
 omi-0000-0000-0000-0000-0000-0000-5040-c002/128 CLOSE fano-spo-local240-replay-ring
 
-REQUIRES:
-  fano7 in 0..6
-  role3 in 0..2
-  local240 in 0..239
+omi-
+  (
+    (requires .
+      ((fano7 . 0..6)
+       (role3 . 0..2)
+       (local240 . 0..239)))
+    (form . "slot5040 = fano7×720 + role3×240 + local240")
+    (seals . "slot5040 ∈ 0..5039")
+    (forbids . replay-slot-outside-5040-ring)
+  )
+-imo
 
-FORM:
-  slot5040 = fano7×720 + role3×240 + local240
-
-SEALS:
-  slot5040 in 0..5039
-
-# [Closure 0x03]: Symbolic Projection Authority Closure
+# [Closure 0x03]: Symbolic Projection Authority Boundary
 omi-0000-0000-0000-0000-0000-0000-007b-c003/128 CLOSE symbolic-projection-authority-boundary
 
-REQUIRES:
-  pointer
-  rule
-  implementation
-  test
-  replay/projection path
+omi-
+  (
+    (requires .
+      (pointer rule implementation test replay/projection-path))
+    (seals . projection-only-symbolic-state)
+    (forbids .
+      (base36-authorizes-state
+       emoji-authorizes-state
+       domino-authorizes-state
+       color-authorizes-state
+       cons-token-authorizes-state))
+  )
+-imo
 
-FORBIDS:
-  Base36-authorizes-invalid-frame
-  emoji-authorizes-invalid-frame
-  domino-authorizes-invalid-frame
-  canvas-color-authorizes-invalid-frame
+# [Closure 0x04]: Local240 Boundedness
+omi-0000-0000-0000-0000-0000-0000-0240-c004/128 CLOSE local240-boundedness
 
-AUTHORITY:
-  projection-only
-
-# [Closure 0x04]: Local240 Boundedness Closure
-omi-0000-0000-0000-0000-0000-0000-00f0-c004/128 CLOSE local240-boundedness
-
-FORM:
-  local240 = Q_xy(x,y) mod 240
-
-SEALS:
-  local240 in 0..239
-
-BOUNDARY:
-  local240 follows Q_frame validation
+omi-
+  (
+    (requires . "Q_xy(x,y)=60x²+16xy+4y²")
+    (form . "local240 = Q_xy(x,y) mod 240")
+    (seals . "local240 ∈ 0..239")
+    (property . "240 = 2×5! = 15×16 = 16²−16 = 6!/3")
+  )
+-imo
 
 # [Closure 0x05]: Q Frame / Q XY Non-Collapse Boundary
 omi-0000-0000-0000-0000-0000-0000-0079-c005/128 CLOSE q-frame-q-xy-non-collapse-boundary
 
-TRUTH:
-  Q_frame(S) validates the 128-bit OMI envelope
-  Q_xy(x,y)=60x²+16xy+4y² projects decoded state into geometry
+omi-
+  (
+    (truth .
+      ("Q_frame(S) validates the 128-bit OMI envelope"
+       "Q_xy(x,y)=60x²+16xy+4y² projects decoded state into geometry"))
+    (forbids .
+      (deriving-validity-from-projection
+       dot-notation-replaces-Q-frame-validation
+       omi-palindrome-authorizes-invalid-frame))
+    (boundary .
+      (validate-first
+       project-second
+       replay-third
+       show-fourth))
+  )
+-imo
 
-FORBIDS:
-  deriving-validity-from-projection
-  dot-notation-replaces-Q-frame-validation
+# [Closure 0x36]: Base36 Projection Authority Closure
+omi-0000-0000-0000-0000-0000-0000-0036-c036/128 CLOSE base36-projection-authority-boundary
 
-BOUNDARY:
-  validate first
-  project second
-  replay third
-  show fourth
+omi-
+  (
+    (requires .
+      (Delta-Law
+       period-8
+       W36
+       valid-OMI-state))
+    (seals . Base36-as-visible-orbit-alphabet)
+    (forbids .
+      (Base36-creates-orbit
+       Base36-validates-frame
+       Base36-digit-five-equals-hidden-factor-five))
+  )
+-imo

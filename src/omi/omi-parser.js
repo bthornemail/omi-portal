@@ -74,6 +74,9 @@ export function parseOmiDocument(text, { source = undefined } = {}) {
   const malformed = [];
   let currentRecord = null;
   let currentSection = null;
+  let inSourceBlock = false;
+  let sourceBlockLines = null;
+  let sourceBlockStartLine = null;
 
   const appendSectionLine = (line) => {
     if (!currentRecord || !currentSection) return false;
@@ -81,10 +84,48 @@ export function parseOmiDocument(text, { source = undefined } = {}) {
     return true;
   };
 
+  const closeSourceBlock = (closeLine) => {
+    if (!currentRecord) {
+      malformed.push({
+        line: closeLine,
+        source,
+        text: "-imo",
+        reason: "Source block closer without preceding record"
+      });
+      return;
+    }
+    currentRecord.sourceBlock = {
+      opener: "omi-",
+      closer: "-imo",
+      startLine: sourceBlockStartLine,
+      endLine: closeLine,
+      raw: sourceBlockLines.join("")
+    };
+  };
+
   const lines = String(text || "").split(/\r?\n/);
   lines.forEach((rawLine, index) => {
     const lineNumber = index + 1;
     const trimmed = rawLine.trim();
+
+    if (inSourceBlock) {
+      if (trimmed === "-imo") {
+        closeSourceBlock(lineNumber);
+        inSourceBlock = false;
+        sourceBlockLines = null;
+        sourceBlockStartLine = null;
+        return;
+      }
+      sourceBlockLines.push(rawLine + "\n");
+      return;
+    }
+
+    if (trimmed === "omi-") {
+      inSourceBlock = true;
+      sourceBlockLines = [];
+      sourceBlockStartLine = lineNumber;
+      return;
+    }
 
     if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("//")) return;
 
@@ -120,6 +161,15 @@ export function parseOmiDocument(text, { source = undefined } = {}) {
       });
     }
   });
+
+  if (inSourceBlock) {
+    malformed.push({
+      line: sourceBlockStartLine,
+      source,
+      text: "omi-",
+      reason: "Unclosed omi- source block"
+    });
+  }
 
   return {
     records: records.map(finalizeRecordSections),

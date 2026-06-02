@@ -108,9 +108,9 @@ test("Research assimilation: symbolic character carriers are projection-only can
   assert.equal("timelineSlot" in metrics, true);
   assert.equal("coreTruthRow" in metrics, true);
 
-  assert.match(rules, /project-base36-orbital-carriers/);
-  assert.match(rules, /ground-emoji-carriers-in-unicode-data/);
-  assert.match(rules, /enforce-symbolic-carrier-projection-boundary/);
+  assert.match(rules, /project-base36-orbital-symbols/);
+  assert.match(rules, /canonicalize-bijective-symbol-state/);
+  assert.match(rules, /preserve-unary-root-presence-boundary/);
   assert.match(facts, /base36-hidden-five-root-120-3C/);
   assert.match(facts, /unicode-emoji-test-source-vendor-emoji-test/);
   assert.match(facts, /symbolic-carriers-are-projection-only/);

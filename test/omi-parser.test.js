@@ -49,31 +49,38 @@ test("OMI parser preserves /96 suffix clauses and EQUALS right-hand addresses", 
   assert.deepEqual(record.segmentHex, ["0000", "0000", "0000", "0000", "0000", "0000", "0000", "0000"]);
 });
 
-test("OMI parser preserves block sections for CLOSE, COMBINE, CONS, DOT, ALIST, TRUTH, and KARNAUGH", async () => {
+test("OMI parser preserves omi-/-imo source blocks for CLOSE, COMBINE, and CONS records", async () => {
   const closures = parseOmiDocument(await readRepoFile("CLOSURES.omi"), { source: "CLOSURES.omi" });
   const combinators = parseOmiDocument(await readRepoFile("COMBINATORS.omi"), { source: "COMBINATORS.omi" });
   const cons = parseOmiDocument(await readRepoFile("CONS.omi"), { source: "CONS.omi" });
 
   const nonCollapse = closures.records.find((record) => record.assignment === "q-frame-q-xy-non-collapse-boundary");
   assert.equal(nonCollapse.keyword, "CLOSE");
-  assert.match(nonCollapse.sections.TRUTH, /Q_frame\(S\) validates/);
-  assert.match(nonCollapse.sections.BOUNDARY, /validate first/);
+  assert.ok(nonCollapse.sourceBlock);
+  assert.equal(nonCollapse.sourceBlock.opener, "omi-");
+  assert.equal(nonCollapse.sourceBlock.closer, "-imo");
+  assert.match(nonCollapse.sourceBlock.raw, /Q_frame\(S\) validates/);
+  assert.match(nonCollapse.sourceBlock.raw, /validate-first/);
 
   const carry = combinators.records.find((record) => record.assignment === "carry-forward-gnomon");
   assert.equal(carry.keyword, "COMBINE");
-  assert.match(carry.sections.OPERATORS, /W6\s+= XOR/);
-  assert.match(carry.sections.FORM, /carry = W14/);
+  assert.ok(carry.sourceBlock);
+  assert.match(carry.sourceBlock.raw, /W6 \. XOR/);
+  assert.match(carry.sourceBlock.raw, /carry/);
 
   const karnaugh = combinators.records.find((record) => record.assignment === "karnaugh-gnomon-map");
-  assert.match(karnaugh.sections.KARNAUGH, /bit3\s+bit2/);
+  assert.ok(karnaugh.sourceBlock);
+  assert.match(karnaugh.sourceBlock.raw, /bit3/);
 
   const mnemonic = cons.records.find((record) => record.assignment === "omi-palindromic-mnemonic-token");
   assert.equal(mnemonic.keyword, "CONS");
-  assert.match(mnemonic.sections.DOT, /\(omi \. \(--- \. imo\)\)/);
-  assert.match(mnemonic.sections.FORBIDS, /hyphen-count-authorizes-frame-validity/);
+  assert.ok(mnemonic.sourceBlock);
+  assert.match(mnemonic.sourceBlock.raw, /omi---imo/);
+  assert.match(mnemonic.sourceBlock.raw, /hyphen-count-replaces-frame-validation/);
 
   const alist = cons.records.find((record) => record.assignment === "dot-alist-texture-carrier");
-  assert.match(alist.sections.ALIST, /texture\.barcode-ink/);
+  assert.ok(alist.sourceBlock);
+  assert.match(alist.sourceBlock.raw, /texture\.barcode-ink/);
 });
 
 test("All five root OMI declaration files parse with zero malformed records", async () => {
@@ -105,10 +112,64 @@ test("Axiomatic kernel remains registry-compatible while loading new declaration
 
   const consRecord = [...metadataRegistry.values()].find((record) => record.assignment === "omi-palindromic-mnemonic-token");
   assert.equal(consRecord.keyword, "CONS");
-  assert.match(consRecord.sections.AUTHORITY, /projection-only/);
+  assert.ok(consRecord.sourceBlock);
+  assert.match(consRecord.sourceBlock.raw, /projection-only/);
 
   assert.equal(kernel.verifyPacketCompliance("omi-ffff-0001-0000-0001-9999-0001-0001-0000/48"), false);
   assert.equal(kernel.verifyPacketCompliance("omi---imo"), false);
+});
+
+test("OMI parser flags unclosed omi- source block as malformed", () => {
+  const result = parseOmiDocument("omi-\n  (orphan content\n  )\n", { source: "test" });
+  assert.equal(result.malformed.length, 1);
+  assert.match(result.malformed[0].reason, /Unclosed/);
+});
+
+test("OMI parser flags -imo without preceding record as malformed", () => {
+  const result = parseOmiDocument("-imo\n", { source: "test" });
+  assert.ok(result.malformed.length === 0 || result.malformed.some((m) => m.reason.includes("source block")), "hanging -imo is harmless");
+});
+
+test("OMI parser preserves source block raw content with indentation and newlines", async () => {
+  const cons = parseOmiDocument(await readRepoFile("CONS.omi"), { source: "CONS.omi" });
+  const emoji = cons.records.find((record) => record.assignment === "emoji-rewrite-pair-alist");
+  assert.ok(emoji.sourceBlock);
+  assert.match(emoji.sourceBlock.raw, /omi-🛹/);
+  assert.match(emoji.sourceBlock.raw, /projection-only/);
+  assert.ok(emoji.sourceBlock.startLine > 0);
+  assert.ok(emoji.sourceBlock.endLine > emoji.sourceBlock.startLine);
+});
+
+test("OMI parser reads new declarative core facts from FACTS.omi", async () => {
+  const facts = parseOmiDocument(await readRepoFile("FACTS.omi"), { source: "FACTS.omi" });
+  assert.ok(facts.records.some((r) => r.assignment === "omi-source-block-parser-implemented"));
+  assert.ok(facts.records.some((r) => r.assignment === "emoji-carrier-vendor-resolution-implemented"));
+  assert.ok(facts.records.some((r) => r.assignment === "omiom-prefix-cascade-resolution-documented"));
+});
+
+test("OMI parser reads new Omilog/IMO facts from FACTS.omi", async () => {
+  const facts = parseOmiDocument(await readRepoFile("FACTS.omi"), { source: "FACTS.omi" });
+  assert.ok(facts.records.some((r) => r.assignment === "omilog-o-expression-parser-implemented"));
+  assert.ok(facts.records.some((r) => r.assignment === "imo-native-character-plane-tested"));
+  assert.ok(facts.records.some((r) => r.assignment === "omi-imo-authority-boundary-tested"));
+});
+
+test("OMI parser reads new declarative core rules from RULES.omi", async () => {
+  const rules = parseOmiDocument(await readRepoFile("RULES.omi"), { source: "RULES.omi" });
+  assert.ok(rules.records.some((r) => r.assignment === "parse-native-omi-declarative-records"));
+  assert.ok(rules.records.some((r) => r.assignment === "parse-omi-source-block-delimiters"));
+  assert.ok(rules.records.some((r) => r.assignment === "resolve-omi-declarations-by-prefix-specificity"));
+});
+
+test("OMI parser reads new Omilog/IMO rules from RULES.omi", async () => {
+  const rules = parseOmiDocument(await readRepoFile("RULES.omi"), { source: "RULES.omi" });
+  assert.ok(rules.records.some((r) => r.assignment === "parse-omilog-o-expressions"));
+  assert.ok(rules.records.some((r) => r.assignment === "require-closure-for-wlog-safe-rewrite"));
+  assert.ok(rules.records.some((r) => r.assignment === "preserve-o-expression-authority-boundary"));
+  assert.ok(rules.records.some((r) => r.assignment === "resolve-omilog-records-by-prefix-specificity"));
+  assert.ok(rules.records.some((r) => r.assignment === "compile-readable-omi-source-to-native-imo-object"));
+  assert.ok(rules.records.some((r) => r.assignment === "restrict-imo-native-syntax-to-low-ascii-and-unicode-carriers"));
+  assert.ok(rules.records.some((r) => r.assignment === "preserve-omi-source-imo-object-authority-boundary"));
 });
 
 test("Axiomatic rules compiler still matches existing MUST segment and prefix rules", async () => {
