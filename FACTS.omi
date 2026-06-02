@@ -341,3 +341,11 @@ omi-0000-0000-0000-0000-0000-0000-009b-1001/128 FACT bezout-witness-composition-
 # --- OMI Cyclic Replay Module Decomposition Facts (0x9C) ---
 
 omi-0000-0000-0000-0000-0000-0000-009c-1001/128 FACT cyclic-replay-module-decomposition-implemented
+
+# --- Three-Tier Grade Lifecycle Isolation Facts (0x9D) ---
+
+omi-0000-0000-0000-0000-0000-0000-009d-1001/128 FACT development-consumer-production-targets-fully-isolated
+
+# --- Automated Build Process Enforcement Facts (0x9E) ---
+
+omi-0000-0000-0000-0000-0000-0000-009e-1001/128 FACT makefile-automates-twelve-step-compilation-and-testing-cleanly

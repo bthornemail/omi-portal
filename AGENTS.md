@@ -93,6 +93,11 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Rule 0x9A: `derive-common-generator-for-paired-omi-pointers` — common CIDR/LL/closure generator from two pointers
 - Rule 0x9B: `witness-shared-closures-through-combinator-composition` — Bézout-style witness composition (SHOULD)
 - Rule 0x9C: `decompose-finite-omi-record-sets-into-cyclic-replay-components` — cyclic replay decomposition (SHOULD)
+- Rule 0x9D: `separate-compilation-targets-into-development-consumer-and-production-grades` — Makefile grade lifecycle isolation (MUST)
+- Rule 0x9E: `execute-the-twelve-step-pipeline-via-canonical-makefile-targets` — Makefile automates the 12-step OMI pipeline (MUST)
+- Makefile grade router: `dev` (development), `consumer` (readable package), `production` (compiled artifacts), `verify-safe` (non-eBPF gates)
+- Build integrator: `scripts/oppid-coherence-check.js` — walks FACTS.omi/RULES.omi to verify OPPID generator discipline
+- OMI compiler CLI: `scripts/compile-omi.js` — lowers `.omi` source to `.imo` compiled objects with Omicron delimiters
 - Emoji test data: `vendor/emoji/emoji-test.txt`
 - Emoji sequences: `vendor/emoji/emoji-sequences.txt`
 - Emoji ZWJ sequences: `vendor/emoji/emoji-zwj-sequences.txt`
@@ -115,8 +120,9 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 Run these before handing off implementation changes:
 
 ```bash
-make compile-ebpf-gate    # required before tests if BPF object is stale
-npm test
+make verify-safe          # primary: docs + Omilog + OPPID + build (non-eBPF, daily green)
+make verify-ebpf          # eBPF kernel gate (requires clang + bpftool)
+npm test                  # full test suite (1072+ tests)
 npm run build
 ```
 

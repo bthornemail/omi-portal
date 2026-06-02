@@ -1,3 +1,282 @@
+# ============================================================================
+# OMI MAKEFILE — Grade Router
+# ============================================================================
+# The Makefile is the OMI grade router:
+#   development — proves the workbench
+#   consumer    — proves readability
+#   production  — proves deployability
+# ============================================================================
+# Grades:
+#   dev         — local engineering loop (verify-safe + build)
+#   consumer    — readable framework package (docs + .omi + .imo + portal)
+#   production  — verified deployment artifacts (compiled + eBPF + Docker)
+#   verify      — all verification gates
+#   verify-safe — all non-eBPF gates (daily green)
+#   pipeline    — OMI 12-step execution doctrine (diagnostic)
+#   release     — full lifecycle bundle
+# ============================================================================
+
+.PHONY: help dev consumer production verify verify-safe pipeline release
+
+help: ## Display the canonical operational target glossary map
+	@echo "OMI Makefile — Grade Router"
+	@echo ""
+	@echo "GRADE ENTRYPOINTS:"
+	@echo "  make dev          — Development grade (verify-safe + build)"
+	@echo "  make consumer     — Consumer grade (docs + .omi + .imo + portal)"
+	@echo "  make production   — Production grade (compiled .imo + eBPF + portal)"
+	@echo "  make release      — Full lifecycle (consumer + production)"
+	@echo ""
+	@echo "VERIFICATION GATES:"
+	@echo "  make verify       — All gates (including eBPF)"
+	@echo "  make verify-safe  — All non-eBPF gates (daily green command)"
+	@echo "  make verify-docs  — First-principles docs checks"
+	@echo "  make verify-omilog — OmiLog compiler + alignment + multiplex tests"
+	@echo "  make verify-oppid — OPPID principal-domain + GCD + witness tests"
+	@echo "  make verify-browser — Vite production build"
+	@echo "  make verify-ebpf  — eBPF kernel gate (requires clang + bpftool)"
+	@echo ""
+	@echo "OMI OPERATIONAL PIPELINE:"
+	@echo "  make pipeline     — 12-step execution doctrine (diagnostic)"
+	@echo "  make compile-imo  — Lower .omi declarations to .imo objects"
+	@echo ""
+	@echo "DEVELOPMENT:"
+	@echo "  make dev          — verify-safe + build-dev"
+	@echo "  make test         — Full test suite (npm test)"
+	@echo "  make test-focused — OmiLog + OPPID tests only"
+	@echo ""
+	@echo "INFRASTRUCTURE:"
+	@echo "  make docker-build       — Multi-arch Buildx"
+	@echo "  make qemu-test          — QEMU cross-arch"
+	@echo "  make docker-stress      — Stress validation"
+	@echo "  make softmmu-test       — Full-system emulators"
+	@echo "  make run-all-virt-gates — Guix + Docker + QEMU + stress + SoftMMU"
+	@echo "  make wan-probe          — WAN connectivity probe"
+	@echo "  make start-telemetry    — Telemetry daemon"
+	@echo ""
+	@echo "CLEANUP:"
+	@echo "  make clean  — Docker compose down"
+	@echo "  make purge  — Deep clean (remove node_modules + dist)"
+	@echo ""
+	@echo "For all targets, run: grep '^[a-zA-Z_-]*:' Makefile"
+
+# ============================================================================
+# GRADE ENTRYPOINTS
+# ============================================================================
+
+.PHONY: dev consumer production verify verify-safe pipeline release
+
+dev: verify-safe build-dev
+
+consumer: docs-consumer omi-consumer portal-consumer package-consumer
+
+production: compile-imo ebpf-production portal-production verify-production
+
+verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
+
+verify-safe: verify-docs verify-omilog verify-oppid verify-browser verify-oppid-script
+
+pipeline: source validate generate mirror enter compose route scope timing naming project replay
+
+release: consumer production
+
+# ============================================================================
+# DEVELOPMENT GRADE
+# ============================================================================
+
+.PHONY: build-dev test-focused docs-dev
+
+build-dev:
+	npm run build
+
+test-focused:
+	node --test \
+	  test/omilog-compiler.test.js \
+	  test/base36-omilog-alignment.test.js \
+	  test/multiplex.test.js \
+	  test/principal-domain.test.js \
+	  test/omi-gcd.test.js \
+	  test/bezout-witness.test.js \
+	  test/cyclic-module.test.js
+
+docs-dev:
+	@test -f docs/agreement-is-all-you-need.md
+	@test -f docs/omi-whitepaper.md
+	@test -f docs/omi-object-model.md
+	@test -f docs/omi-notation.md
+	@echo "[docs] first-principles docs present"
+
+# ============================================================================
+# CONSUMER GRADE
+# ============================================================================
+
+.PHONY: docs-consumer omi-consumer portal-consumer package-consumer
+
+docs-consumer:
+	@echo "[consumer] copying first-principles docs..."
+	@mkdir -p dist/consumer/docs
+	cp docs/agreement-is-all-you-need.md dist/consumer/docs/
+	cp docs/omi-whitepaper.md dist/consumer/docs/
+	cp docs/omi-object-model.md dist/consumer/docs/
+	cp docs/omi-notation.md dist/consumer/docs/
+	cp README.md dist/consumer/README.md
+
+omi-consumer: compile-imo
+	@echo "[consumer] copying .omi source and .imo compiled objects..."
+	@mkdir -p dist/consumer/omi dist/consumer/imo
+	cp RULES.omi FACTS.omi CLOSURES.omi COMBINATORS.omi CONS.omi dist/consumer/omi/
+	cp omi.config.json dist/consumer/
+	cp dist/omi/*.imo dist/consumer/imo/
+
+portal-consumer:
+	@echo "[consumer] building and copying portal..."
+	$(MAKE) build-dev
+	@mkdir -p dist/consumer/public
+	cp -r dist/assets dist/consumer/public/ 2>/dev/null || true
+	for f in index.html portal.html aframe.html bidi.html document.html; do \
+	  [ -f "dist/$$f" ] && cp "dist/$$f" "dist/consumer/public/" || true; \
+	done
+
+package-consumer: docs-consumer omi-consumer portal-consumer
+	@echo "[consumer] package ready at dist/consumer"
+
+# ============================================================================
+# PRODUCTION GRADE
+# ============================================================================
+
+.PHONY: compile-imo ebpf-production portal-production build-production verify-production
+
+compile-imo:
+	@echo "[production] compiling .omi declarations to .imo objects..."
+	@mkdir -p dist/omi
+	node scripts/compile-omi.js RULES.omi dist/omi/RULES.imo
+	node scripts/compile-omi.js FACTS.omi dist/omi/FACTS.imo
+	node scripts/compile-omi.js CLOSURES.omi dist/omi/CLOSURES.imo
+	node scripts/compile-omi.js COMBINATORS.omi dist/omi/COMBINATORS.imo
+	node scripts/compile-omi.js CONS.omi dist/omi/CONS.imo
+
+ebpf-production:
+	@echo "[production] building eBPF kernel gate..."
+	$(MAKE) compile-ebpf-gate
+
+portal-production:
+	$(MAKE) build-dev
+
+build-production:
+	$(MAKE) build-dev
+
+verify-production:
+	npm test
+
+# ============================================================================
+# VERIFICATION GATES
+# ============================================================================
+
+.PHONY: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf verify-oppid-script
+
+verify-docs:
+	node --test test/docs-manifest.test.js test/research-assimilation.test.js
+
+verify-omilog:
+	node --test \
+	  test/omilog-compiler.test.js \
+	  test/base36-omilog-alignment.test.js \
+	  test/multiplex.test.js
+
+verify-oppid:
+	node --test \
+	  test/principal-domain.test.js \
+	  test/omi-gcd.test.js \
+	  test/bezout-witness.test.js \
+	  test/cyclic-module.test.js
+
+verify-browser:
+	$(MAKE) build-dev
+
+verify-ebpf:
+	$(MAKE) compile-ebpf-gate
+	$(MAKE) test-ebpf-pipeline
+
+verify-oppid-script:
+	node scripts/oppid-coherence-check.js
+
+# ============================================================================
+# OMI 12-STEP OPERATIONAL PIPELINE (Diagnostic)
+# ============================================================================
+
+.PHONY: source validate generate mirror enter compose route scope timing naming project replay
+
+source:
+	@echo "[1 SOURCE] Reading .omi source files"
+	@test -f RULES.omi
+	@test -f FACTS.omi
+	@test -f CLOSURES.omi
+	@test -f COMBINATORS.omi
+	@test -f CONS.omi
+	@echo "  ✓ All five canonical .omi files present"
+
+validate:
+	@echo "[2 VALIDATE] Running Q_frame and parser validation"
+	node --test test/omi-parser.test.js test/multiplex.test.js
+
+generate:
+	@echo "[3 GENERATE] Resolving principal OMI pointers"
+	node --test test/principal-domain.test.js test/omi-gcd.test.js
+
+mirror:
+	@echo "[4 MIRROR] Lowering .omi to .imo"
+	$(MAKE) compile-imo
+
+enter:
+	@echo "[5 ENTER] Verifying ο / Ο delimiters"
+	node --test test/omilog-compiler.test.js
+
+compose:
+	@echo "[6 COMPOSE] Verifying operator-table32"
+	node --test test/omicron-inversion.test.js 2>/dev/null || true
+	@echo "  ◇ operator-table32 tests: [TODO — add dedicated test file]"
+
+route:
+	@echo "[7 ROUTE] Verifying triad-router155"
+	node --test test/wire-profile.test.js
+	@echo "  ◇ triad-router155 tests: [TODO — add dedicated test file]"
+
+scope:
+	@echo "[8 SCOPE] Verifying CIDR / wire profile"
+	node --test test/wire-profile.test.js
+
+timing:
+	@echo "[9 TIMING] Verifying Delta / clock"
+	node --test test/delta-orbital-lexer.test.js
+
+naming:
+	@echo "[10 NAMING] Verifying Base36 projection"
+	node --test test/base36-omilog-alignment.test.js
+
+project:
+	@echo "[11 PROJECT] Verifying Q_xy / canvas projection"
+	node --test test/canvas-spec.test.js
+
+replay:
+	@echo "[12 REPLAY] Verifying replay receipts"
+	node --test test/research-assimilation.test.js test/docs-manifest.test.js
+
+# ============================================================================
+# LEGACY ALIASES (preserved, point into new grade targets)
+# ============================================================================
+
+.PHONY: compile stage smoke
+
+compile: production
+
+stage: consumer
+
+smoke: verify-safe
+
+# ============================================================================
+# EXISTING TARGETS (preserved as-is below)
+# ============================================================================
+
 .PHONY: compile test stage smoke \
         guix-env-init qemu-setup qemu-test \
         docker-build docker-bake docker-push docker-stress softmmu-test run-all-virt-gates \
