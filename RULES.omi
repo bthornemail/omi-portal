@@ -641,3 +641,89 @@ omi-0000-0000-0000-0000-0000-0000-008b-0001/128 MUST wrap-imo-records-with-omicr
 #   chiral/cardinal wire frame constants S1 = 0x03BF and S6 = 0x039F.
 #   This ensures isomorphism between the 128-bit frame and the .imo bytecode.
 omi-0000-0000-0000-0000-0000-0000-008c-0001/128 MUST align-imo-delimiters-with-wire-frame-omicron-constants
+
+# ============================================================================
+# SEQUENCING, FANO LOTTERY, AND SEXAGESIMAL LOGIC CLOCK
+# Specification Level: Rules 0x8D through 0x90
+# Core Doctrine: Validate → Tick → Orient → Select → Frame → Replay → Project.
+# ============================================================================
+
+# [Rule 0x8D]: Fano Lottery Replay Sequencing
+#   The Fano lottery slot MUST be derived from canonical kernel state, tick,
+#   chirality bit, ordered partition, Fano selector, role3, and local240.
+#   slot5040 = fano7 × 720 + role3 × 240 + local240.
+omi-0000-0000-0000-0000-0000-0000-008d-0001/128 MUST derive-fano-lottery-from-canonical-kernel-state
+
+# [Rule 0x8E]: Sexagesimal Logic Clock
+#   The sexagesimal logic clock MUST be derived from Δ(x) period-8 replay.
+#   60 = sexagesimal loop; 360 = orientation sweep; 5040 = master replay.
+omi-0000-0000-0000-0000-0000-0000-008e-0001/128 MUST derive-sexagesimal-logic-clock-from-delta-replay
+
+# [Rule 0x8F]: Omicron Chirality Dataflow
+#   The lowercase omicron ο (U+03BF) MUST be preserved as chiral entry / inbound data flow.
+#   The uppercase Omicron Ο (U+039F) MUST be preserved as cardinal exit / outbound closure.
+#   Readable omi- maps to ο; -imo maps to Ο.
+omi-0000-0000-0000-0000-0000-0000-008f-0001/128 MUST preserve-lower-and-upper-omicron-dataflow-chirality
+
+# [Rule 0x90]: Sequencing Before Projection
+#   Sequencing (tick → chirality → Fano → role → local240 → slot5040) MUST occur
+#   after Q_frame(S) validation and before Q_xy(x,y) projection.
+#   The forbidden order is: symbol → projection → validity.
+#   The lawful order is: validity → sequencing → projection.
+omi-0000-0000-0000-0000-0000-0000-0090-0001/128 MUST sequence-before-qxy-projection
+
+# ============================================================================
+# FACTORIAL BRANCHING AND 32-ION OPERATOR ANALOGY
+# Specification Level: Rules 0x91 through 0x94
+# Core Doctrine: Odd factorials select; even factorials project; upper operate.
+# ============================================================================
+
+# [Rule 0x91]: Factorial Branch Split
+#   OMI separates factorial operations into two branches:
+#     Even: 8! → 6! → 4! → 2! (carrier/projection/frame)
+#     Odd:  7! → 5! → 3! → 1! (selection/root/replay)
+omi-0000-0000-0000-0000-0000-0000-0091-0001/128 MUST preserve-even-and-odd-factorial-branches
+
+# [Rule 0x92]: Upper Factorial Operator Shell
+#   The upper shell (12! → 11! → 10! → 9!) operates over both
+#   factorial branches as a meta-operator and boundary layer.
+omi-0000-0000-0000-0000-0000-0000-0092-0001/128 MUST apply-9-through-12-factorials-as-meta-operator-shell
+
+# [Rule 0x93]: Thirty-Two-State Native Operator Basis
+#   The native OMI hidden/control basis is 32 states (2^5 = 32),
+#   corresponding to the 0x00..0x1F range in the compiled .imo plane.
+omi-0000-0000-0000-0000-0000-0000-0093-0001/128 MUST preserve-32-state-native-operator-basis
+
+# [Rule 0x94]: Hypercomplex Analogy Boundary
+#   The trigintaduonion / 32-ion model is a structural analogy for
+#   noncommutative, nonassociative orientation tables over a 32-state basis.
+#   It is not runtime arithmetic authority unless multiplication tables
+#   and tests are implemented.
+omi-0000-0000-0000-0000-0000-0000-0094-0001/128 MUST treat-32-ion-model-as-analogy-until-tested
+
+# ============================================================================
+# TRIGINTADUONION PROCESS MODEL FOR OPERATOR ROUTING (Rules 0x95–0x98)
+# ============================================================================
+# Core: OMI uses the Cayley–Dickson process pattern and trigintaduonion
+#       32-state operator scaffold for operator composition and routing.
+# ============================================================================
+
+# [Rule 0x95]: Trigintaduonion Process Model
+#   OMI maps the trigintaduonion 32-state operator basis (e0..e31) to the
+#   hidden/control operator plane (0x00..0x1F) as a process scaffold.
+omi-0000-0000-0000-0000-0000-0000-0095-0001/128 MUST map-trigintaduonion-process-to-omi-operator-basis
+
+# [Rule 0x96]: Thirty-Two Operator Interaction Table
+#   OMI derives operator composition from a 32×32 interaction table
+#   (1024 cells) modeled after the trigintaduonion multiplication table shape.
+omi-0000-0000-0000-0000-0000-0000-0096-0001/128 MUST derive-omi-operator-interactions-from-32-by-32-process-table
+
+# [Rule 0x97]: Distinguished Triad Incidence Router
+#   OMI routes S-P-O incidence through the 155 distinguished triads of the
+#   trigintaduonion, partitioned into five OMI file categories.
+omi-0000-0000-0000-0000-0000-0000-0097-0001/128 MUST route-spo-incidence-through-155-distinguished-triads
+
+# [Rule 0x98]: Sixty-Four Native Plane Expansion
+#   OMI maps the 64-ion doubling pattern to the full 0x00..0x3F native
+#   compiled .imo plane.
+omi-0000-0000-0000-0000-0000-0000-0098-0001/128 MUST map-64-ion-doubling-to-full-imo-native-plane

@@ -267,3 +267,61 @@ omi-0000-0000-0000-0000-0000-0000-008b-1001/128 FACT imo-records-wrapped-with-li
 # --- Omicron Delimiter / Wire Frame Alignment Facts (0x8C) ---
 
 omi-0000-0000-0000-0000-0000-0000-008c-1001/128 FACT imo-delimiters-align-with-s1-s6-wire-frame-constants
+
+# ============================================================================
+# SEQUENCING, FANO LOTTERY, AND SEXAGESIMAL LOGIC CLOCK FACTS
+# Rules 0x8D through 0x90 — sequencing doctrine for Omi-Notation.
+# ============================================================================
+
+# --- Fano Lottery Replay Sequencing Facts (0x8D) ---
+
+omi-0000-0000-0000-0000-0000-0000-008d-1001/128 FACT fano-lottery-replay-sequencing-documented
+
+# --- Sexagesimal Logic Clock Facts (0x8E) ---
+
+omi-0000-0000-0000-0000-0000-0000-008e-1001/128 FACT sexagesimal-logic-clock-documented
+
+# --- Omicron Chirality Dataflow Facts (0x8F) ---
+
+omi-0000-0000-0000-0000-0000-0000-008f-1001/128 FACT omicron-chirality-dataflow-documented
+
+# --- Sequencing Before Projection Facts (0x90) ---
+
+omi-0000-0000-0000-0000-0000-0000-0090-1001/128 FACT sequencing-before-projection-tested
+
+# ============================================================================
+# FACTORIAL BRANCHING AND 32-ION OPERATOR ANALOGY FACTS
+# Rules 0x91 through 0x94 — factorial branching and 32-state operator basis.
+# ============================================================================
+
+# --- Factorial Branch Split Facts (0x91) ---
+
+omi-0000-0000-0000-0000-0000-0000-0091-1001/128 FACT even-odd-factorial-branch-split-documented
+
+# --- Upper Factorial Operator Shell Facts (0x92) ---
+
+omi-0000-0000-0000-0000-0000-0000-0092-1001/128 FACT upper-factorial-operator-shell-documented
+
+# --- Thirty-Two-State Native Operator Basis Facts (0x93) ---
+
+omi-0000-0000-0000-0000-0000-0000-0093-1001/128 FACT native-32-state-operator-basis-documented
+
+# --- Hypercomplex Analogy Boundary Facts (0x94) ---
+
+omi-0000-0000-0000-0000-0000-0000-0094-1001/128 FACT hypercomplex-analogy-boundary-documented
+
+# --- Trigintaduonion Process Model Facts (0x95) ---
+
+omi-0000-0000-0000-0000-0000-0000-0095-1001/128 FACT trigintaduonion-process-model-documented
+
+# --- Thirty-Two Operator Interaction Table Facts (0x96) ---
+
+omi-0000-0000-0000-0000-0000-0000-0096-1001/128 FACT operator-table32-module-implemented
+
+# --- Distinguished Triad Incidence Router Facts (0x97) ---
+
+omi-0000-0000-0000-0000-0000-0000-0097-1001/128 FACT triad-router155-module-implemented
+
+# --- Sixty-Four Native Plane Expansion Facts (0x98) ---
+
+omi-0000-0000-0000-0000-0000-0000-0098-1001/128 FACT native-plane64-expansion-implemented

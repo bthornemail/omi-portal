@@ -1211,3 +1211,1056 @@ Omi-Notation is the syntax layer; Q_frame is the validator; Q_xy is the projecto
 ```
 
 The Omi Object Model specification is structurally anchored. By mapping human-readable declarations to low-ASCII operational codes wrapped within native Unicode Omicron delimiters, the bytecode is fully unified with the network packet parameters. The system calculates multi-dimensional transitions cleanly inside the browser's hardware-accelerated rendering plane with zero runtime processing overhead.
+
+---
+
+## Part 4: Sequencing, Fano Lottery, and the Sexagesimal Logic Clock
+
+---
+
+## 29. Sequencing, Fano Lottery, and the Sexagesimal Logic Clock
+
+Omi-Notation does not merely describe static records. It also describes the lawful order in which records are replayed, selected, folded, and projected.
+
+The missing sequencing doctrine is:
+
+```text
+Delta Law gives replay.
+Chirality gives order.
+Fano gives selection.
+Sexagesimal looping gives clock cadence.
+7! gives the replay ring.
+```
+
+The full period ladder is:
+
+```text
+7      = Fano orbit
+60     = sexagesimal logic-clock orbit
+240    = local frame / Light Garden frame bridge
+360    = orientation sweep
+5040   = 7! Fano replay lottery / master reset
+```
+
+These are not independent numerology layers. They form one sequencing stack:
+
+```text
+atomic kernel
+→ chirality bit
+→ Fano selection
+→ sexagesimal incidence clock
+→ 240 local frame bridge
+→ 360 orientation sweep
+→ 5040 replay ring
+```
+
+The Omi-Notation authority boundary remains unchanged:
+
+```text
+Q_frame validates the carrier.
+Sequencing orders replay.
+Q_xy projects decoded state.
+```
+
+Sequencing does not validate a frame. It orders lawful frames after validation.
+
+---
+
+## 30. Chirality of Omicron Delimiters
+
+The compiled `.imo` object form is wrapped by the Omicron delimiter pair:
+
+```text
+ο ... Ο
+```
+
+Where:
+
+```text
+ο = U+03BF = lowercase omicron = chiral entry / inbound data flow
+Ο = U+039F = uppercase Omicron = cardinal exit / outbound closure
+```
+
+This pair is not decorative. It reflects the direction of data flow in the notation.
+
+Readable source aliases:
+
+```text
+omi-  → ο
+-imo  → Ο
+```
+
+Wire-frame constants:
+
+```text
+S1 = 0x03BF  → ο  → chiral entry delimiter
+S6 = 0x039F  → Ο  → cardinal exit delimiter
+```
+
+Therefore, every compiled `.imo` record is a directional descriptor:
+
+```text
+ο OPERATOR / NATIVE_ADDRESS Ο
+```
+
+The lowercase omicron opens the instruction as an entering, chiral, selectable path.
+
+The uppercase Omicron closes the instruction as a cardinal, replayable, stabilized boundary.
+
+Canonical interpretation:
+
+```text
+ο = enter / select / orient / chirality
+Ο = close / seal / cardinality / replay boundary
+```
+
+This mirrors the OMI frame:
+
+```text
+S1 opens the chiral interior.
+S6 closes the cardinal boundary.
+```
+
+The delimiter pair therefore encodes direction:
+
+```text
+ο → data enters the descriptor
+Ο → data exits as a closed record
+```
+
+---
+
+## 31. Chirality Selection Law in Omi-Notation
+
+Partition alone does not define order.
+
+A candidate space may be split into two subsets:
+
+```text
+partition(S) → (S0, S1)
+```
+
+But the order of traversal is derived from the kernel chirality bit:
+
+```text
+bit := kernel_bit(state, tick)
+```
+
+Then:
+
+```text
+if bit = 0:
+  ordered := (S0, S1)
+else:
+  ordered := (S1, S0)
+```
+
+This means:
+
+```text
+partition defines structure.
+chirality defines order.
+order defines schedule.
+schedule defines replay.
+```
+
+Omi-Notation must reject any rule that chooses by representation order alone:
+
+```text
+always choose first-listed
+always choose low
+always choose left
+always choose S0
+```
+
+Those are invalid because they derive order from representation instead of canonical kernel state.
+
+The correct law is:
+
+```text
+firstness is derived.
+```
+
+There is no intrinsic first branch. Firstness is produced by canonical chirality.
+
+---
+
+## 32. The 7! Fano Lottery Replay Ring
+
+The Fano lottery is the replay-selection ring produced by combining:
+
+```text
+7 Fano points
+3 semantic roles
+240 local bridge states
+```
+
+The canonical slot equation is:
+
+```text
+slot5040 = fano7 × 720 + role3 × 240 + local240
+```
+
+And:
+
+```text
+5040 = 7 × 3 × 240 = 7!
+```
+
+This gives OMI a replay ledger with 5040 possible stabilized slots.
+
+Interpretation:
+
+```text
+fano7    = which Fano selector point is active
+role3    = subject / predicate / object lane
+local240 = local bridge position
+slot5040 = full replay receipt
+```
+
+The Fano lottery is called a "lottery" because selection is not arbitrary, random, or UI-driven. It is a canonical draw from the replayable kernel state.
+
+```text
+kernel state + tick → chirality bit
+chirality bit → ordered partition
+ordered partition → Fano selector
+Fano selector + role + local240 → slot5040
+```
+
+Thus, the Fano lottery is deterministic.
+
+It is lottery-like only in the sense that it selects one active incidence from a lawful candidate space.
+
+---
+
+## 33. Atomic Kernel as Sexagesimal Logic Clock
+
+The atomic kernel is not a wall clock.
+
+It is a logic clock.
+
+The kernel law is:
+
+```text
+Δ(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C
+```
+
+For fixed width, fixed constant, and fixed initial state, replay is deterministic:
+
+```text
+xₖ = Δ⁽ᵏ⁾(x₀)
+```
+
+The period-8 behavior derives the prime-73 carrier:
+
+```text
+1/73 = 0.(01369863)
+B = [0,1,3,6,9,8,6,3]
+W = sum(B) = 36
+```
+
+This creates the Base36 orbit tracker:
+
+```text
+position → divmod(position, 36)
+```
+
+The sexagesimal clock layer then stabilizes incidence scheduling:
+
+```text
+60 = sexagesimal loop
+360 = six sexagesimal loops / orientation sweep
+5040 = fourteen 360-loops / 7! master replay
+```
+
+Canonical sequencing ladder:
+
+```text
+Δ period         → 8
+decimal carrier  → 1/73
+tracker width    → 36
+logic clock      → 60
+orientation      → 360
+master replay    → 5040
+```
+
+This is why the atomic kernel functions as a sexagesimal logic clock:
+
+```text
+it does not measure external time;
+it orders internal replay.
+```
+
+---
+
+## 34. Light Garden Frame Bridge
+
+The Light Garden layer explains the role of `240`.
+
+It does not split time into intervals. It splits observation into frames of reference.
+
+```text
+traditional encoding:
+  split time into intervals
+
+Light Garden:
+  split observation into complete frames
+```
+
+The local bridge is:
+
+```text
+240 = 15 × 16
+240 = 2 × 5!
+240 = 6! / 3
+```
+
+In OMI, `240` is the complete local bridge for one semantic role.
+
+Since:
+
+```text
+720 = 3 × 240
+```
+
+the full semantic sweep divides into:
+
+```text
+subject   → 240
+predicate → 240
+object    → 240
+```
+
+The Light Garden interpretation is:
+
+```text
+each local240 is a complete frame of reference.
+```
+
+This is why `local240` is not just a number. It is a local observation frame.
+
+The shared invariant is the centroid or canonical root state.
+
+```text
+frame changes;
+centroid remains.
+```
+
+In OMI terms:
+
+```text
+projection changes;
+validated carrier remains.
+```
+
+---
+
+## 35. Sequencing Rule for Omi-Notation
+
+The complete sequencing rule is:
+
+```text
+1. Validate the frame with Q_frame.
+2. Read the kernel tick.
+3. Derive the chirality bit from canonical state.
+4. Partition the candidate incidence space.
+5. Use chirality to order the partition.
+6. Select the Fano point.
+7. Resolve role3.
+8. Resolve local240.
+9. Compute slot5040.
+10. Project with Q_xy.
+```
+
+As a pipeline:
+
+```text
+Q_frame(S)
+→ Δ kernel tick
+→ chirality bit
+→ Fano selector
+→ role3
+→ local240
+→ slot5040
+→ Q_xy projection
+```
+
+This prevents projection-first interpretation.
+
+The forbidden order is:
+
+```text
+symbol → projection → validity
+```
+
+The lawful order is:
+
+```text
+validity → sequencing → projection
+```
+
+---
+
+## 36. Canonical Sequencing Rules
+
+The following rules should be added to `RULES.omi` after the Omicron delimiter band:
+
+```text
+# [Rule 0x8D]: Fano Lottery Replay Sequencing
+omi-0000-0000-0000-0000-0000-0000-008d-0001/128 MUST derive-fano-lottery-from-canonical-kernel-state
+
+# [Rule 0x8E]: Sexagesimal Logic Clock
+omi-0000-0000-0000-0000-0000-0000-008e-0001/128 MUST derive-sexagesimal-logic-clock-from-delta-replay
+
+# [Rule 0x8F]: Omicron Chirality Dataflow
+omi-0000-0000-0000-0000-0000-0000-008f-0001/128 MUST preserve-lower-and-upper-omicron-dataflow-chirality
+
+# [Rule 0x90]: Sequencing Before Projection
+omi-0000-0000-0000-0000-0000-0000-0090-0001/128 MUST sequence-before-qxy-projection
+```
+
+Matching facts should only be added after implementation and tests exist:
+
+```text
+omi-0000-0000-0000-0000-0000-0000-008d-1001/128 FACT fano-lottery-replay-sequencing-documented
+omi-0000-0000-0000-0000-0000-0000-008e-1001/128 FACT sexagesimal-logic-clock-documented
+omi-0000-0000-0000-0000-0000-0000-008f-1001/128 FACT omicron-chirality-dataflow-documented
+omi-0000-0000-0000-0000-0000-0000-0090-1001/128 FACT sequencing-before-projection-tested
+```
+
+---
+
+## 37. Test Requirements for Sequencing
+
+A conforming implementation should prove:
+
+```text
+chirality selection is deterministic
+chirality selection is replay-stable
+UI/list order does not affect selection
+one tick produces one orientation decision
+slot5040 = fano7×720 + role3×240 + local240
+slot5040 stays in 0..5039
+lowercase ο opens a chiral record
+uppercase Ο closes a cardinal record
+sexagesimal tick loops at 60
+orientation sweep loops at 360
+master replay loops at 5040
+sequencing occurs after Q_frame validation
+Q_xy projection occurs after sequencing
+```
+
+---
+
+## 38. Final Sequencing Doctrine
+
+The missing sentence is:
+
+```text
+Omi-Notation is not only an encapsulation notation; it is a replay-sequencing notation.
+```
+
+Full doctrine:
+
+```text
+Q_frame validates the shell.
+Δ advances the logic clock.
+Chirality orients the partition.
+Fano selects the incidence.
+local240 frames the observation.
+slot5040 records the replay.
+Q_xy projects the result.
+```
+
+Short form:
+
+```text
+Validate.
+Tick.
+Orient.
+Select.
+Frame.
+Replay.
+Project.
+```
+
+The most important update is this line:
+
+```text
+ο is chiral entry; Ο is cardinal closure.
+```
+
+That gives the delimiter pair an actual data-flow meaning, not just a visual wrapper.
+
+---
+
+## Part 5: Factorial Branching and the 32-Ion Operator Analogy
+
+---
+
+## 39. Factorial Branching and 32-State Operator Basis
+
+Omi-Notation uses two factorial branches and one upper operator shell.
+
+```text
+Even branch:          8! → 6! → 4! → 2!
+Odd branch:           7! → 5! → 3! → 1!
+Upper operator shell: 12! → 11! → 10! → 9!
+```
+
+The even branch governs carrier flow, projection, selector surfaces, and chirality gates.
+
+The odd branch governs selection, replay, hidden root state, role permutation, and identity.
+
+The upper operator shell acts over both branches as a meta-operator and boundary layer.
+
+The short doctrine is:
+
+```text
+Odd factorials select.
+Even factorials project.
+Upper factorials operate.
+```
+
+---
+
+### 1. Even Branch: Carrier and Projection
+
+The even branch is:
+
+```text
+8! → 6! → 4! → 2!
+```
+
+It describes the visible projection path.
+
+| Factorial | Role             | OMI Function                        |
+| --------- | ---------------- | ----------------------------------- |
+| `8!`      | carrier envelope | outer permutation / carrier space   |
+| `6!`      | semantic sweep   | `720 = 3 × 240`                     |
+| `4!`      | selector surface | `24`-state selector / 4-bit surface |
+| `2!`      | chirality pair   | binary fold / orientation gate      |
+
+This branch handles:
+
+```text
+carrier
+projection
+surface
+selector state
+chirality
+visible frame motion
+```
+
+The even branch is where a validated record enters a projectable, oriented carrier path.
+
+---
+
+### 2. Odd Branch: Selection and Replay
+
+The odd branch is:
+
+```text
+7! → 5! → 3! → 1!
+```
+
+It describes the hidden selection and replay path.
+
+| Factorial | Role                   | OMI Function                          |
+| --------- | ---------------------- | ------------------------------------- |
+| `7!`      | Fano replay ring       | `5040`-slot replay cycle              |
+| `5!`      | hidden packet root     | `120 = 240 / 2`                       |
+| `3!`      | S-P-O role permutation | subject / predicate / object ordering |
+| `1!`      | unit identity          | root anchor / fixed point             |
+
+This branch handles:
+
+```text
+Fano selection
+hidden root
+S-P-O ordering
+identity
+replay receipt
+```
+
+The odd branch is where a projected local frame closes into replay-stable selection.
+
+---
+
+### 3. The 240-State Bridge
+
+The two branches interlock through the 240-state bridge:
+
+```text
+240 = 2 × 5!
+240 = 15 × 16
+240 = 6! / 3
+```
+
+This means:
+
+```text
+5!  = hidden root
+240 = visible local bridge
+6!  = semantic sweep
+7!  = Fano replay ring
+```
+
+The bridge connects the hidden odd-root branch to the visible even-projection branch.
+
+```text
+5! hidden root
+    ↓
+240 local bridge
+    ↓
+6! semantic sweep
+    ↓
+7! replay ring
+```
+
+So `240` is not just a count. It is the local frame where selection and projection meet.
+
+---
+
+### 4. Upper Operator Shell
+
+The upper shell is:
+
+```text
+12! → 11! → 10! → 9!
+```
+
+This shell does not replace the even or odd branches. It operates over them.
+
+| Factorial | Role                     | OMI Function                           |
+| --------- | ------------------------ | -------------------------------------- |
+| `12!`     | full meta-operator shell | global namespace / maximum envelope    |
+| `11!`     | complement shell         | exclusion / missing-face boundary      |
+| `10!`     | symbolic bridge          | decimal / bijective / Base36 interface |
+| `9!`      | incidence shell          | 3×3 incidence / boundary gate          |
+
+The upper shell governs boundary scaling, symbolic transition, and meta-operator behavior.
+
+It should be described as:
+
+```text
+The upper factorial shell operates on the two branches.
+It does not validate frames.
+It does not replace sequencing.
+It does not create projection authority.
+```
+
+---
+
+### 5. Branch Interleaving
+
+The factorial tower interleaves numerically:
+
+```text
+1! identity
+2! chirality pair
+3! S-P-O role permutation
+4! selector surface
+5! hidden packet root
+6! semantic sweep
+7! Fano replay ring
+8! carrier envelope
+```
+
+But operationally, the system separates them:
+
+```text
+odd  = selection / root / role / replay
+even = chirality / selector / sweep / projection
+```
+
+This gives the core branch doctrine:
+
+```text
+1!, 3!, 5!, 7! form the hidden selection branch.
+2!, 4!, 6!, 8! form the visible projection branch.
+9!, 10!, 11!, 12! form the upper operator shell.
+```
+
+---
+
+### 6. 32-State Operator Basis
+
+The 32-ion / trigintaduonion model is useful because it gives a structural analogy for a 32-state basis.
+
+In OMI, this maps to:
+
+```text
+32 = 2^5
+0x00..0x1F = 32 hidden/control operator positions
+0x20..0x3F = 32 visible structural positions
+0x00..0x3F = 64-position compiled native character plane
+```
+
+The important boundary is:
+
+```text
+The 32-ion model is a structural analogy.
+It is not runtime arithmetic authority unless the multiplication table is implemented and tested.
+```
+
+So OMI should not claim to perform trigintaduonion multiplication merely because it uses a 32-state basis.
+
+The accurate claim is:
+
+```text
+Omi-Notation uses the 32-ion idea as a model for noncommutative,
+nonassociative orientation tables over a 5-bit native operator basis.
+```
+
+---
+
+### 7. Omicron Delimiter Branch Meaning
+
+The Omicron delimiters now have branch meaning:
+
+```text
+ο = little omicron = chiral entry into the even projection branch
+Ο = big Omicron    = cardinal closure into the odd selection branch
+```
+
+Expanded:
+
+```text
+ο enters:
+  2! → 4! → 6! → 8!
+  chirality → selector → semantic sweep → carrier envelope
+
+Ο closes into:
+  1! → 3! → 5! → 7!
+  identity → S-P-O role → hidden root → Fano replay ring
+```
+
+So a compiled `.imo` record:
+
+```text
+ο +/native-address Ο
+```
+
+means:
+
+```text
+enter through chiral carrier orientation
+apply the native operator/address
+close into replay-stable selection
+```
+
+The delimiter pair is not decorative. It encodes data-flow direction.
+
+---
+
+### 8. Updated Authority Chain
+
+The correct authority chain is:
+
+```text
+Q_frame(S) validates the 128-bit wire frame.
+Δ advances the logic clock.
+2! chirality orients the partition.
+ο enters the even projection branch.
+4! selector surface resolves the local selector.
+6! semantic sweep organizes S-P-O projection.
+8! carrier envelope carries the visible state.
+240 bridges visible projection with hidden root.
+Ο closes into the odd selection branch.
+1! identity anchors the unit.
+3! role permutation orders S-P-O.
+5! hidden root preserves packet root.
+7! Fano replay ring records the replay slot.
+Q_xy(x,y) projects decoded state into geometry.
+```
+
+Short form:
+
+```text
+Validate.
+Tick.
+Orient.
+Enter.
+Project.
+Bridge.
+Close.
+Select.
+Replay.
+Project.
+```
+
+---
+
+### 9. Canonical Rules
+
+```text
+# ============================================================================
+# FACTORIAL BRANCHING AND 32-STATE OPERATOR BASIS (Rules 0x91–0x94)
+# ============================================================================
+# Core Doctrine: Odd factorials select; even factorials project; upper operate.
+# ============================================================================
+
+# [Rule 0x91]: Factorial Branch Split
+#   OMI separates factorial operations into two branches:
+#     Even: 8! → 6! → 4! → 2! (carrier/projection/frame)
+#     Odd:  7! → 5! → 3! → 1! (selection/root/replay)
+omi-0000-0000-0000-0000-0000-0000-0091-0001/128 MUST preserve-even-and-odd-factorial-branches
+
+# [Rule 0x92]: Upper Factorial Operator Shell
+#   The upper shell (12! → 11! → 10! → 9!) operates over both
+#   factorial branches as a meta-operator and boundary layer.
+omi-0000-0000-0000-0000-0000-0000-0092-0001/128 MUST apply-9-through-12-factorials-as-meta-operator-shell
+
+# [Rule 0x93]: Thirty-Two-State Native Operator Basis
+#   The native OMI hidden/control basis is 32 states (2^5 = 32),
+#   corresponding to the 0x00..0x1F range in the compiled .imo plane.
+omi-0000-0000-0000-0000-0000-0000-0093-0001/128 MUST preserve-32-state-native-operator-basis
+
+# [Rule 0x94]: Hypercomplex Analogy Boundary
+#   The trigintaduonion / 32-ion model is a structural analogy for
+#   noncommutative, nonassociative orientation tables over a 32-state basis.
+#   It is not runtime arithmetic authority unless multiplication tables
+#   and tests are implemented.
+omi-0000-0000-0000-0000-0000-0000-0094-0001/128 MUST treat-32-ion-model-as-analogy-until-tested
+```
+
+### 10. Canonical Facts
+
+```text
+# ============================================================================
+# FACTORIAL BRANCHING FACTS (0x91–0x94)
+# ============================================================================
+
+omi-0000-0000-0000-0000-0000-0000-0091-1001/128 FACT even-odd-factorial-branch-split-documented
+omi-0000-0000-0000-0000-0000-0000-0092-1001/128 FACT upper-factorial-operator-shell-documented
+omi-0000-0000-0000-0000-0000-0000-0093-1001/128 FACT native-32-state-operator-basis-documented
+omi-0000-0000-0000-0000-0000-0000-0094-1001/128 FACT hypercomplex-analogy-boundary-documented
+```
+
+### 11. Final Doctrine Summary
+
+```text
+ODD factorials select:
+  7! → 5! → 3! → 1!
+
+EVEN factorials project:
+  8! → 6! → 4! → 2!
+
+UPPER factorials operate:
+  12! → 11! → 10! → 9!
+
+ο opens the even carrier/projection branch.
+Ο closes into the odd selection/replay branch.
+
+2! chirality acts on 3! role permutation to produce oriented S-P-O scheduling.
+
+240 = 2 × 5! = 15 × 16 = 6! / 3 bridges the branches.
+
+5040 = 7 × 3 × 240 = 7! is the complete replay ring.
+
+The 32-ion model is a structural analogy for the 5-bit native operator basis.
+It does not become arithmetic authority until a multiplication table and tests exist.
+```
+
+One sentence:
+
+```text
+Odd factorials select; even factorials project; upper factorials operate; ο opens the even carrier branch; Ο closes into the odd replay branch; and the 32-ion analogy models the 5-bit native operator basis without replacing Q_frame validation.
+
+---
+
+## 40. Trigintaduonion Process Model for OMI Operator Routing
+
+OMI uses the Cayley–Dickson process pattern as an architectural scaffold:
+
+```text
+Cayley–Dickson gives the process pattern.
+Trigintaduonion gives the 32-state operator basis.
+64-ion gives the expanded native .imo plane.
+CIDR gives containment and scope.
+OMI gives validation, replay, notation, and projection.
+```
+
+The trigintaduonion source provides: 32 basis units `e0..e31`, Cayley–Dickson doubling from sedenions, next doubling into 64-ions, a 32×32 multiplication table, PG(4,2) representation, and 155 distinguished triads.
+
+### The Cayley–Dickson Process as Architectural Pattern
+
+```text
+source pair
+→ mirrored object
+→ doubled basis
+→ ordered multiplication/interaction table
+→ projective incidence
+→ triad routing
+```
+
+OMI translation:
+
+```text
+.omi source
+→ .imo object
+→ 32 hidden/control operators
+→ 64 native character positions
+→ ordered operator interaction table
+→ Fano / PG-style incidence routing
+→ S-P-O triad router
+```
+
+### Module: trigintaduonion-model.js
+
+Provides the 32-state operator basis mapping:
+
+```text
+e0..e31  ↔  0x00..0x1F  hidden/control operator positions
+64-ion   ↔  0x00..0x3F  full .imo native compiled plane
+```
+
+Exports: `BASIS32`, `HIDDEN_OPERATOR_PLANE`, `VISIBLE_OPERATOR_PLANE`, `NATIVE_PLANE64`, `basis32()`, `native64()`, `splitBasis32()`, `branchForBasis()`.
+
+### Module: cayley-dickson-process.js
+
+Models the doubling process without requiring full arithmetic:
+
+```text
+(a, b) process pair  →  readable/source side and mirrored/object side
+.omi                 →  .imo
+0x00..0x1F           →  hidden/control half
+0x20..0x3F           →  visible/structural half
+0x00..0x3F           →  full native compiled .imo plane
+```
+
+Exports: `doublePlane()`, `mirrorOmiToImo()`, `conjugateDescriptor()`, `splitNativePlane64()`.
+
+### Module: operator-table32.js
+
+A 32×32 operator interaction table (1024 cells) modeled after the trigintaduonion multiplication table shape:
+
+```text
+32 basis positions × 32 basis positions = 1024 interaction cells
+```
+
+Not a full hypercomplex multiplication table. An OMI operator composition table. Exports: `operatorProduct32()`, `operatorSign32()`, `operatorResult32()`, `isOperatorOrderSensitive()`.
+
+### Module: triad-router155.js
+
+155 distinguished triads partitioned into five OMI categories:
+
+```text
+45  → RULES
+20  → FACTS
+15  → CLOSURES
+60  → COMBINATORS
+15  → CONS
+```
+
+Each triad provides an S-P-O incidence route. Exports: `resolveTriad()`, `triadCategory()`, `routeTriadToOmiFile()`, `triadToSpoRoute()`.
+
+### How every OMI feature fits the process model
+
+| OMI feature       | Trig / Cayley–Dickson process role      |
+| ----------------- | --------------------------------------- |
+| `.omi`            | source half of process pair             |
+| `.imo`            | mirrored object half                    |
+| `omi → imo`       | source/object conjugation pattern       |
+| `0x00..0x1F`      | 32-ion basis model `e0..e31`            |
+| `0x00..0x3F`      | 64-ion doubled native plane             |
+| `ο`               | entry into chiral/operator process      |
+| `Ο`               | closure into stable replay/result       |
+| `LL`              | basis/lane selector                     |
+| `NN`              | node-body payload coordinate            |
+| `MM`              | carrier/projection payload coordinate   |
+| CIDR prefix       | scope of process application            |
+| `Q_frame`         | validates process shell                 |
+| Delta Law         | advances process tick                   |
+| Base36            | names derived orbit position            |
+| `Q_xy`            | projects process result                 |
+| `slot5040`        | records replay receipt                  |
+| 155 triads        | S-P-O incidence routing table           |
+| five `.omi` files | triad categories and declaration planes |
+
+### Process flow
+
+```text
+1. Read .omi source declaration.
+2. Validate OMI address with Q_frame.
+3. Lower .omi into .imo.
+4. Wrap .imo record with ο / Ο.
+5. Map native byte into 32-state operator basis.
+6. Expand through 64-position native plane when needed.
+7. Use operator-table32 for ordered composition.
+8. Use triad-router155 for S-P-O incidence.
+9. Apply CIDR prefix specificity.
+10. Project result through Q_xy.
+11. Record replay through slot5040.
+```
+
+Short form:
+
+```text
+Source.
+Validate.
+Mirror.
+Enter.
+Compose.
+Route.
+Scope.
+Project.
+Replay.
+```
+
+### Canonical Rules
+
+```text
+# ============================================================================
+# TRIGINTADUONION PROCESS MODEL FOR OPERATOR ROUTING (Rules 0x95–0x98)
+# ============================================================================
+# Core: OMI uses the Cayley–Dickson process pattern and trigintaduonion
+#       32-state operator scaffold for operator composition and routing.
+# ============================================================================
+
+# [Rule 0x95]: Trigintaduonion Process Model
+#   OMI maps the trigintaduonion 32-state operator basis (e0..e31) to the
+#   hidden/control operator plane (0x00..0x1F) as a process scaffold.
+omi-0000-0000-0000-0000-0000-0000-0095-0001/128 MUST map-trigintaduonion-process-to-omi-operator-basis
+
+# [Rule 0x96]: Thirty-Two Operator Interaction Table
+#   OMI derives operator composition from a 32×32 interaction table
+#   (1024 cells) modeled after the trigintaduonion multiplication table shape.
+omi-0000-0000-0000-0000-0000-0000-0096-0001/128 MUST derive-omi-operator-interactions-from-32-by-32-process-table
+
+# [Rule 0x97]: Distinguished Triad Incidence Router
+#   OMI routes S-P-O incidence through the 155 distinguished triads of the
+#   trigintaduonion, partitioned into five OMI file categories.
+omi-0000-0000-0000-0000-0000-0000-0097-0001/128 MUST route-spo-incidence-through-155-distinguished-triads
+
+# [Rule 0x98]: Sixty-Four Native Plane Expansion
+#   OMI maps the 64-ion doubling pattern to the full 0x00..0x3F native
+#   compiled .imo plane.
+omi-0000-0000-0000-0000-0000-0000-0098-0001/128 MUST map-64-ion-doubling-to-full-imo-native-plane
+```
+
+### Canonical Facts
+
+```text
+# ============================================================================
+# TRIGINTADUONION PROCESS MODEL FACTS (0x95–0x98)
+# ============================================================================
+
+omi-0000-0000-0000-0000-0000-0000-0095-1001/128 FACT trigintaduonion-process-model-documented
+omi-0000-0000-0000-0000-0000-0000-0096-1001/128 FACT operator-table32-module-implemented
+omi-0000-0000-0000-0000-0000-0000-0097-1001/128 FACT triad-router155-module-implemented
+omi-0000-0000-0000-0000-0000-0000-0098-1001/128 FACT native-plane64-expansion-implemented
+```
+
+### Final formulation
+
+```text
+OMI uses CIDR for scope, Cayley–Dickson for process doubling,
+trigintaduonions for the 32-state operator scaffold,
+64-ions for the full native plane scaffold,
+Base36 for orbit naming,
+Q_frame for validation,
+and Q_xy for projection.
+```
+```

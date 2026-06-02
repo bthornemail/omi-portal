@@ -75,6 +75,18 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Omilog barrel: `src/omilog/index.js`
 - Rule 0x8B: `wrap-imo-records-with-omicron-delimiters` — compiled `.imo` uses ο/Ο
 - Rule 0x8C: `align-imo-delimiters-with-wire-frame-omicron-constants` — S1/S6 mirror
+- Rule 0x8D: `derive-fano-lottery-from-canonical-kernel-state` — slot5040 = fano7×720 + role3×240 + local240
+- Rule 0x8E: `derive-sexagesimal-logic-clock-from-delta-replay` — Δ period-8 → sexagesimal clock
+- Rule 0x8F: `preserve-lower-and-upper-omicron-dataflow-chirality` — ο chiral entry, Ο cardinal closure
+- Rule 0x90: `sequence-before-qxy-projection` — validity → sequencing → projection
+- Rule 0x91: `preserve-even-and-odd-factorial-branches` — odd select, even project, upper operate
+- Rule 0x92: `apply-9-through-12-factorials-as-meta-operator-shell` — upper shell acts on both branches
+- Rule 0x93: `preserve-32-state-native-operator-basis` — 0x00..0x1F = 32 hidden/control operator positions
+- Rule 0x94: `treat-32-ion-model-as-analogy-until-tested` — structural, not arithmetic, authority
+- Rule 0x95: `map-trigintaduonion-process-to-omi-operator-basis` — 32-state operator scaffold from trigintaduonion e0..e31
+- Rule 0x96: `derive-omi-operator-interactions-from-32-by-32-process-table` — 1024-cell operator composition table
+- Rule 0x97: `route-spo-incidence-through-155-distinguished-triads` — 155 triads partitioned into five OMI file categories
+- Rule 0x98: `map-64-ion-doubling-to-full-imo-native-plane` — 64-position native plane from 64-ion doubling pattern
 - Emoji test data: `vendor/emoji/emoji-test.txt`
 - Emoji sequences: `vendor/emoji/emoji-sequences.txt`
 - Emoji ZWJ sequences: `vendor/emoji/emoji-zwj-sequences.txt`
