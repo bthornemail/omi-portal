@@ -54,6 +54,10 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make wan-probe          — WAN connectivity probe"
 	@echo "  make start-telemetry    — Telemetry daemon"
 	@echo ""
+	@echo "RELEASE:"
+	@echo "  make release          — Full lifecycle (consumer + production + manifest)"
+	@echo "  make release-manifest — Write release receipt to dist/release/manifest.json"
+	@echo ""
 	@echo "CLEANUP:"
 	@echo "  make clean  — Docker compose down"
 	@echo "  make purge  — Deep clean (remove node_modules + dist)"
@@ -64,7 +68,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest
 
 dev: verify-safe build-dev
 
@@ -78,7 +82,13 @@ verify-safe: verify-docs verify-omilog verify-oppid verify-browser verify-oppid-
 
 pipeline: source validate generate mirror enter compose route scope timing naming project replay
 
-release: consumer production
+release: consumer production release-manifest
+
+release-manifest:
+	@echo "[release] generating release manifest..."
+	@mkdir -p dist/release
+	node scripts/generate-release-manifest.js > dist/release/manifest.json
+	@echo "[release] manifest written to dist/release/manifest.json"
 
 # ============================================================================
 # DEVELOPMENT GRADE
