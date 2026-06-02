@@ -7,7 +7,7 @@ export function packMultiplexAddress(laneLL, bodyNN, carrierMM) {
   const s5 = (carrierMM & 0xFFFF).toString(16).padStart(4, '0');
   const s6 = "039f";
   const s7 = ((laneLL & 0xFF) << 8 | 0xFF).toString(16).padStart(4, '0');
-  return `omi-${s0}-${s1}-${s2}-${s3}-${s4}-${s5}-${s6}-${s7}/128`;
+  return `omi-${s0}-${s1}-${s2}-${s3}-${s4}-${s5}-${s6}-${s7}`;
 }
 
 export function unpackMultiplexAddress(addressString) {

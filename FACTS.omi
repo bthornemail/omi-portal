@@ -361,3 +361,148 @@ omi-0000-0000-0000-0000-0000-0000-00a0-1001/128 FACT live-proxy-event-reader-con
 # --- Q_xy Voxel State Projection Facts (0xA1) ---
 
 omi-0000-0000-0000-0000-0000-0000-00a1-1001/128 FACT live-network-events-project-through-qxy-voxel-state
+
+# --- Live Portal Binding Facts (0xA2) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a2-1001/128 FACT live-portal-binding-bridges-voxels-through-custom-dom-events
+
+# --- Narrative World Model Facts (0xA3) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a3-1001/128 FACT narrative-world-model-compiler-implemented
+omi-0000-0000-0000-0000-0000-0000-00a3-1002/128 FACT narrative-loader-loads-canonical-documents-in-order
+omi-0000-0000-0000-0000-0000-0000-00a3-1003/128 FACT emoji-notation-map-maps-actors-to-emoji-carriers
+omi-0000-0000-0000-0000-0000-0000-00a3-1004/128 FACT persistent-world-state-supports-tick-actor-relation-gate-lifecycle
+
+# --- Sexagesimal Weight Table Facts (0xAA) ---
+
+omi-0000-0000-0000-0000-0000-0000-00aa-1001/128 FACT sexagesimal-regular-fractions-mapped-for-centroid-weights
+omi-0000-0000-0000-0000-0000-0000-00aa-1002/128 FACT tetrahedral-weights-sum-to-1-0-regular
+omi-0000-0000-0000-0000-0000-0000-00aa-1003/128 FACT five-source-weights-sum-to-1-0-regular
+
+# --- Canonical Triple Centroid Facts (0xAB) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ab-1001/128 FACT canonical-triple-centroid-implemented
+omi-0000-0000-0000-0000-0000-0000-00ab-1002/128 FACT canonical-triple-requires-3-of-4-tetrahedron-witnesses
+omi-0000-0000-0000-0000-0000-0000-00ab-1003/128 FACT 155-triad-budget-partitioned-across-five-omi-file-roles
+
+# --- Address Self-Sufficiency Facts (0xAC) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ac-1001/128 FACT omicron-address-step-encoding-implemented
+
+# --- Claim Reduction Parsing Facts (0xAD) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ad-1001/128 FACT prefix-and-lens-claim-reduction-parser-implemented
+
+# --- Reader Lens Syntax Facts (0xAE) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ae-1001/128 FACT at-marked-reader-lens-parser-implemented
+
+# --- World Clock Facts (0xA5) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a5-1001/128 FACT scrubbable-world-clock-autonomous-stepping-implemented
+omi-0000-0000-0000-0000-0000-0000-00a5-1002/128 FACT scrubbable-world-clock-supports-tick-receipt-motif-scrub
+
+# --- Interaction Gate Facts (0xA6) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a6-1001/128 FACT world-interaction-gate-opens-on-touch-closes-on-timeout
+
+# --- Movie Renderer Facts (0xA7) ---
+
+omi-0000-0000-0000-0000-0000-0000-00a7-1001/128 FACT movie-world-renderer-produces-complete-render-frames
+
+# ============================================================================
+# ATOMIC KERNEL FACTS (Rules 0xB8–0xBB)
+# ============================================================================
+
+# --- Lower Stack Omicron Chirality Facts (0xB8) ---
+
+omi-0000-0000-0000-0000-0000-0000-00b8-1001/128 FACT lower-stack-chirality-encoding-implemented
+omi-0000-0000-0000-0000-0000-0000-00b8-1002/128 FACT lower-stack-even-tick-maps-to-chiral-entry
+omi-0000-0000-0000-0000-0000-0000-00b8-1003/128 FACT lower-stack-odd-tick-maps-to-cardinal-closure
+
+# --- Upper Stack Bidi Cosmetic Lens Facts (0xB9) ---
+
+omi-0000-0000-0000-0000-0000-0000-00b9-1001/128 FACT upper-stack-bidi-lens-implemented
+omi-0000-0000-0000-0000-0000-0000-00b9-1002/128 FACT upper-stack-even-tick-maps-to-ltr
+omi-0000-0000-0000-0000-0000-0000-00b9-1003/128 FACT upper-stack-odd-tick-maps-to-rtl
+
+# --- Delta Law Separation Facts (0xBA) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ba-1001/128 FACT delta-law-single-tick-domain-documented
+omi-0000-0000-0000-0000-0000-0000-00ba-1002/128 FACT lens-projection-does-not-replace-delta-law-tick
+
+# --- Cosmic Orbit Recovery Facts (0xBB) ---
+
+omi-0000-0000-0000-0000-0000-0000-00bb-1001/128 FACT cosmic-orbit-digmod36-implemented
+omi-0000-0000-0000-0000-0000-0000-00bb-1002/128 FACT cosmetic-reader-lens-applies-chirality-as-dom-direction
+
+# ============================================================================
+# SEXAGESIMAL RECIPROCAL ROUTER FACTS (Rules 0xBC–0xBD)
+# ============================================================================
+
+# --- Regular Denominator Routing Facts (0xBC) ---
+
+omi-0000-0000-0000-0000-0000-0000-00bc-1001/128 FACT regular-denominator-routing-implemented
+omi-0000-0000-0000-0000-0000-0000-00bc-1002/128 FACT regular-denominator-set-spans-all-2a-3b-5c-product-combinations
+
+# --- Repeating Denominator Routing Facts (0xBD) ---
+
+omi-0000-0000-0000-0000-0000-0000-00bd-1001/128 FACT repeating-denominator-routing-implemented
+omi-0000-0000-0000-0000-0000-0000-00bd-1002/128 FACT twin-prime-59-61-boundary-adjacent-to-60-documented
+omi-0000-0000-0000-0000-0000-0000-00bd-1003/128 FACT irrational-omicron-mode-switch-for-unknown-denominators
+
+# ============================================================================
+# MIQUEL POINT-CIRCLE TOPOLOGY FACTS (Rules 0xBE–0xBF)
+# ============================================================================
+
+# --- Color Carrier Divmod Facts (0xBE) ---
+
+omi-0000-0000-0000-0000-0000-0000-00be-1001/128 FACT color-carrier-divmod36-orbit-recovery-implemented
+omi-0000-0000-0000-0000-0000-0000-00be-1002/128 FACT color-channel-pairs-produce-sixteen-million-seven-hundred-thousand-states
+
+# --- Miquel Topology Facts (0xBF) ---
+
+omi-0000-0000-0000-0000-0000-0000-00bf-1001/128 FACT miquel-levi-graph-possesses-forty-eight-automorphisms-of-octahedral-symmetry
+omi-0000-0000-0000-0000-0000-0000-00bf-1002/128 FACT miquel-incidence-maps-eight-points-to-six-circles
+
+# ============================================================================
+# CANVAS COLOR ROUTING CANON FACTS (Rules 0xC0–0xC2)
+# ============================================================================
+
+# --- Lower Hex Structural Color Facts (0xC0) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c0-1001/128 FACT lower-structural-canvas-hex-color-routing-implemented
+omi-0000-0000-0000-0000-0000-0000-00c0-1002/128 FACT hex-color-encodes-lower-body-exact-structural-state
+
+# --- Upper Preset Reader Color Facts (0xC1) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c1-1001/128 FACT upper-reader-preset-color-routing-implemented
+omi-0000-0000-0000-0000-0000-0000-00c1-1002/128 FACT preset-color-keys-are-cosmetic-reader-aliases
+
+# --- JSON Canvas Geometry/Color Boundary Facts (0xC2) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c2-1001/128 FACT json-canvas-geometry-is-structural-body-preset-colors-are-reader-lenses
+
+# ============================================================================
+# RRGGBBAA ADDRESS SEED AND ORBIT FACTS (Rules 0xC3–0xC6)
+# ============================================================================
+
+# --- RRGGBBAA Seed Facts (0xC3) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c3-1001/128 FACT json-canvas-rrggbbaa-seed-implemented
+omi-0000-0000-0000-0000-0000-0000-00c3-1002/128 FACT rgb-is-lower-body-aa-is-incidence-attachment
+
+# --- Color Orbit Recovery Facts (0xC4) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c4-1001/128 FACT json-canvas-color-orbit-recovery-divmod36-implemented
+omi-0000-0000-0000-0000-0000-0000-00c4-1002/128 FACT offset-zero-thirty-five-maps-to-base36-digits
+
+# --- AA Mode Switch Facts (0xC5) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c5-1001/128 FACT aa-thirty-seven-mode-switch-sentinel-implemented
+omi-0000-0000-0000-0000-0000-0000-00c5-1002/128 FACT thirty-seven-never-collides-with-base36-orbit-offsets
+
+# --- Miquel RGB Incidence Facts (0xC6) ---
+
+omi-0000-0000-0000-0000-0000-0000-00c6-1001/128 FACT miquel-rgb-eight-vertex-six-face-incidence-implemented
+omi-0000-0000-0000-0000-0000-0000-00c6-1002/128 FACT rgb-cube-realizes-eight-three-six-four-incidence-structure

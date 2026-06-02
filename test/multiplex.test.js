@@ -4,7 +4,7 @@ import { packMultiplexAddress, unpackMultiplexAddress } from "../src/omilog/mult
 
 test("packMultiplexAddress produces canonical LL/MM/NN address", () => {
   const addr = packMultiplexAddress(0x04, 0x0003, 0x0002);
-  assert.equal(addr, "omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128");
+  assert.equal(addr, "omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff");
 });
 
 test("packMultiplexAddress preserves constants at S1 and S6", () => {

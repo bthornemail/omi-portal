@@ -364,6 +364,24 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
     });
   });
 
+  describe('isOmiAddressAtom — @ lens syntax (0xAD)', () => {
+    it('detects address with /@60 lens', () => {
+      assert.ok(isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128/@60'));
+    });
+    it('detects address with stacked lenses', () => {
+      assert.ok(isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128/@60/@4'));
+    });
+    it('detects address with @ lens without CIDR', () => {
+      assert.ok(isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/@720'));
+    });
+    it('detects address with all lens types', () => {
+      assert.ok(isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/@60/@360/@720/@5040/@4/@5/@16'));
+    });
+    it('rejects bare / without number', () => {
+      assert.ok(!isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/'));
+    });
+  });
+
   describe('integration: O-expression with OMI addresses', () => {
     it('parses an O-expression with embedded OMI address', () => {
       const src = '(define generator omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128)';

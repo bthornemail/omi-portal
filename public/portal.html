@@ -583,7 +583,72 @@
   compileWord(wordInput.value);
   log('OMI portal · rooted tower · 5!–12! · 240‑state bridge · 1/73 stepping · 5-fold/4-fold doctrine','ok');
   log('The climb does not step to 5. The climb preserves 5.','ok');
+
+  // ─── LIVE PROXY SSE STREAM ────────────────────────────────────────
+  // Connects to the proxy event connector at /stream, listens for
+  // voxel:batch custom DOM events, and updates the torus grid + log.
+  const SSE_ENDPOINT = localStorage.getItem('omi-sse-endpoint') || '/stream';
+
+  function initLiveStream(endpoint) {
+    try {
+      const source = new EventSource(endpoint);
+      log(`📡 live proxy stream connecting to ${endpoint}`, 'info');
+
+      source.onmessage = (msg) => {
+        if (!msg.data) return;
+        // Parse each .imo line from the payload
+        const lines = msg.data.split('\n').filter(l => l.trim());
+        for (const line of lines) {
+          // Check for ο/Ο delimited records
+          const imoMatch = line.match(/^ο\s+([!=\\)\\.+])\/([^\s]+)\s+Ο$/);
+          if (imoMatch) {
+            const op = imoMatch[1];
+            const addr = imoMatch[2];
+            log(`📡 ${op} / ${addr}`, 'ok');
+            // Map address to torus coordinates
+            const parts = addr.split('/')[0].split('-').filter(p => p.length > 0);
+            if (parts.length >= 2) {
+              const x = parseInt(parts[0], 10) % 4;
+              const y = parts.length > 2 ? (parseInt(parts[2], 10) % 4) : (parseInt(parts[1], 10) % 4);
+              const idx = y * 4 + x;
+              const cell = torusGrid.children[idx];
+              if (cell) {
+                const opColors = { '!': '#FF4444', '=': '#44AAFF', ')': '#FFAA00', '+': '#44DD44', '.': '#AA66FF' };
+                cell.style.backgroundColor = opColors[op] || '#888888';
+                cell.style.boxShadow = `0 0 20px ${opColors[op] || '#888888'}`;
+                cell.style.transition = 'all 0.3s ease';
+                cell.dataset.liveOp = op;
+                setTimeout(() => {
+                  cell.style.backgroundColor = '';
+                  cell.style.boxShadow = '';
+                }, 2000);
+              }
+            }
+            return;
+          }
+          // Check for source block records
+          const srcMatch = line.match(/^ο\s+\x1e([^\x1f]+)\x1f\s+Ο$/u);
+          if (srcMatch) {
+            log(`📦 source block: ${srcMatch[1].slice(0, 30)}`, 'mid');
+            return;
+          }
+        }
+      };
+
+      source.onerror = () => {
+        log('⚠️ live stream connection lost — retrying in 5s', 'no');
+        setTimeout(() => {
+          source.close();
+          initLiveStream(endpoint);
+        }, 5000);
+      };
+    } catch (err) {
+      log(`❌ cannot connect to live stream: ${err.message}`, 'no');
+    }
+  }
+
+  initLiveStream(SSE_ENDPOINT);
 })();
 </script>
-</body>
+</body></html>
 </html>

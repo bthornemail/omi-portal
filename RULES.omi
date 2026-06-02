@@ -819,3 +819,322 @@ omi-0000-0000-0000-0000-0000-0000-00a0-0001/128 MUST connect-live-proxy-events-t
 #   to produce voxel state diffs — updates, removal expirations, coordinate-
 #   indexed depth and color — for consumption by DOM canvas or portal.html.
 omi-0000-0000-0000-0000-0000-0000-00a1-0001/128 MUST project-live-network-events-through-qxy-voxel-state
+
+# ============================================================================
+# LIVE PORTAL BINDING (Rule 0xA2)
+# ============================================================================
+# Core: The Live Portal Binding bridges the voxel stream into the browser DOM,
+#       enabling the portal.html canvas to render live NAT64/proxy-derived voxel
+#       diffs visibly on screen via EventSource and CustomEvent dispatch.
+# ============================================================================
+
+# [Rule 0xA2]: Live Portal Binding Through Custom DOM Events
+#   Browser portal rendering surfaces MUST subscribe to voxel:batch custom DOM
+#   events dispatched by the OmiLivePortalBinder and MUST update the visual
+#   torus grid within 2 seconds of receiving an update, with a 3-second TTL
+#   expiration cycle. The SSE connection SHALL auto-reconnect on error with a
+#   5-second backoff.
+omi-0000-0000-0000-0000-0000-0000-00a2-0001/128 MUST bind-live-portal-voxels-through-custom-dom-events
+
+# ============================================================================
+# NARRATIVE WORLD MODEL (Rule 0xA3)
+# ============================================================================
+# Core: The Narrative World Model compiles story text into persistent symbolic
+#       terrain: narrative documents load in canonical order, world objects
+#       receive emoji carriers, and the world state container persists across
+#       ticks, epochs, and interaction cycles.
+# ============================================================================
+
+# [Rule 0xA3]: Narrative-to-Persistent-World-Model Compilation
+#   Narrative markdown documents MUST load in canonical order (PRELUDE →
+#   ARTICLE I–VIII → ASIDE → EPILOUGE) and MUST be parseable into structured
+#   documents with title, section, paragraphs, and lines. World actors MUST be
+#   mappable to emoji carriers through the notation map. The persistent world
+#   state MUST support tick advance, actor/relation/tension/gate lifecycle, and
+#   epoch-respecting receipt logging with maxReceipts bounding.
+omi-0000-0000-0000-0000-0000-0000-00a3-0001/128 MUST compile-narratives-into-persistent-world-models
+
+# ============================================================================
+# SEXAGESIMAL WEIGHT TABLES AND CENTROID TRIPLES (Rules 0xAA–0xAB)
+# ============================================================================
+# Core: Sexagesimal regular fractions provide exact centroid weights for the
+#       tetrahedral 4-vertex agreement model. Repeating fractions are reserved
+#       for cadence, replay, and world motion. Canonical triples require ≥3
+#       witness vertices and sexagesimal weights closing to 1;00.
+# ============================================================================
+
+# [Rule 0xAA]: Canonical Triple Weighting with Sexagesimal Centroid Ratios
+#   Canonical narrative-world triples MUST be weighted using exact sexagesimal
+#   regular fractions (0;15 per vertex in tetrahedral model, 0;12 per source
+#   in five-source model). The centroid weight sum MUST close to 1;00 within
+#   1/120 tolerance. A triple is canonical only when ≥3 of the 4 tetrahedron
+#   vertices (narrative, UPOS, WordNet, emoji) agree at the OMI centroid.
+omi-0000-0000-0000-0000-0000-0000-00aa-0001/128 MUST weight-canonical-narrative-triples-with-sexagesimal-centroid-ratios
+
+# [Rule 0xAB]: Regular vs Repeating Fraction Separation
+#   Regular denominators (2^a × 3^b × 5^c: 2,3,4,5,6,8,10,12,15,20,24,30,60)
+#   MUST be used for stable extraction weights, centroid balance, and source
+#   agreement. Repeating denominators (7,11,13,17,19,59,61) MUST be reserved
+#   for cadence, replay, Fano-lottery, and world-motion clocks. The 155 triad
+#   budget (45+20+15+60+15) MUST map to the five OMI declarative file roles.
+omi-0000-0000-0000-0000-0000-0000-00ab-0001/128 MUST distinguish-regular-extraction-weights-from-repeating-replay-cadences
+
+# ============================================================================
+# ADDRESS SELF-SUFFICIENCY AND CLAIM REDUCTION (Rules 0xAC–0xAD)
+# ============================================================================
+# Core: The OMI address carries its own creation step inside the Omicron frame.
+#       Prefixes and lenses do not create identity or validity — they only
+#       reduce unnecessary claims or select a reader view over already-encoded
+#       state. The address is the thing; the prefix is just how much of the
+#       thing is being claimed at that moment.
+# ============================================================================
+
+# [Rule 0xAC]: Encode Creation Step Inside Omicron Address Before Prefix or Lens Claims
+#   Every valid OMI address MUST encode its creation step inside the Omicron
+#   frame (S0–S7) without relying on any suffix. The step is encoded through
+#   the LL lane selector, the NN node-body step coordinate, and the MM carrier
+#   projection step coordinate. The Q_xy projector, factorial lattice, and
+#   Fano permutation cycle jointly determine step identity from the frame
+#   contents alone. A CIDR prefix (/N) does not add step identity — it only
+#   declares how precisely the already-encoded step is being claimed.
+omi-0000-0000-0000-0000-0000-0000-00ac-0001/128 MUST encode-creation-step-inside-omicron-address-before-prefix-or-lens-claims
+
+# [Rule 0xAD]: Treat Prefixes and Lens Suffixes as Claim Reduction, Not Authority
+#   CIDR prefixes (/N, N=0..128) MUST be treated as claim-boundary reductions
+#   over an already-valid OMI address. Lens suffixes (/@N) MUST be treated as
+#   reader views — they select a projection, cadence, extraction plane, or
+#   orientation over the already-encoded state. Neither prefix nor lens
+#   creates address validity; validity derives from the Omicron frame alone.
+#   The distinction is syntactic: /N = CIDR claim boundary, /@N = reader lens.
+omi-0000-0000-0000-0000-0000-0000-00ad-0001/128 MUST treat-prefixes-and-lenses-as-claim-reduction-not-authority
+
+# ============================================================================
+# READER LENS SYNTAX (Rule 0xAE)
+# ============================================================================
+# Core: After the CIDR claim prefix, OMI projection/cadence lenses use the @
+#       marker to distinguish them from CIDR scope. A backoff notation (/N-M)
+#       allows compact CIDR backoff without colliding with the lens stack.
+# ============================================================================
+
+# [Rule 0xAE]: Distinguish CIDR Claim Prefixes from @-Marked Reader Lenses
+#   In OMI notation, the first slash announces a CIDR claim prefix (/N for
+#   N=0..128). Every subsequent lens MUST be marked with @ (/@N) to prevent
+#   ambiguity with CIDR scope. A claim backoff (/N-M) reduces the claim by
+#   M bits without entering the lens stack. Therefore /@4 is a tetrahedral
+#   reader lens, /4 is a CIDR /4 claim boundary, and /128-4 is a backoff
+#   from /128 to /124. The lens stack never creates or modifies identity;
+#   it only selects a reader view over already-encoded state.
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 MUST distinguish-cidr-claim-prefixes-from-at-marked-reader-lenses
+
+# ============================================================================
+# SLICE 3: WORLD CLOCK, INTERACTION GATE, MOVIE RENDERER (Rules 0xA5–0xA7)
+# ============================================================================
+# Core: The world clock makes narrative terrain autonomous — when no one
+#       interacts, the world continues stepping; when touched, the gate opens
+#       selectors; when idle returns, the movie resumes.
+# ============================================================================
+
+# [Rule 0xA5]: Preserve Open World State Across Non-Interaction
+#   The world clock MUST continue autonomous stepping when no interaction is
+#   active. The clock wraps at 5040 ticks per epoch. Scrubbing (user jump to
+#   a specific tick, receipt, motif, or scene) is a temporary probe that does
+#   not break the autonomous cadence — after the scrub operation, the clock
+#   may resume from the scrubbed position.
+omi-0000-0000-0000-0000-0000-0000-00a5-0001/128 MUST preserve-open-world-state-across-noninteraction
+
+# [Rule 0xA6]: Open Selector UI at Narrative Interaction Gates
+#   An interaction gate MUST open when a user touches the narrative world,
+#   pausing or slowing the world clock. While the gate is open, selector UI
+#   becomes available and the world enters interactive inspection mode. The
+#   gate MUST auto-close after a configurable timeout, resuming autonomous
+#   stepping. Entering scrub mode (tick/receipt/motif/scene jump) also opens
+#   the gate with the same timeout lifecycle.
+omi-0000-0000-0000-0000-0000-0000-00a6-0001/128 MUST open-selector-ui-at-narrative-interaction-gates
+
+# [Rule 0xA7]: Resume Autonomous World Stepping After Interaction Timeout
+#   After the interaction gate closes due to timeout, the world clock MUST
+#   resume autonomous stepping from its current position. The gate timeout
+#   mechanism is the sole authority for returning to idle — explicit close
+#   and timeout-based auto-close are equivalent transitions. The movie
+#   renderer displays the current frame (actors, voxels, gate state) at
+#   every tick, whether interactive or idle.
+omi-0000-0000-0000-0000-0000-0000-00a7-0001/128 MUST resume-autonomous-world-stepping-after-interaction-timeout
+
+# ============================================================================
+# ATOMIC KERNEL — DELTA LAW DUAL LOWER/UPPER STACK (Rules 0xB8–0xBB)
+# ============================================================================
+# Core: The Delta Law atomic clock governs both stacks. The lower stack (≤8!)
+#       encodes through Omicron symbols (ο/Ο). The upper stack (9!–12!) encodes
+#       through unicode-bidi cosmetic reader lens (ltr/rtl). The two stacks
+#       share a single tick domain with separate chirality encoding surfaces.
+# ============================================================================
+
+# [Rule 0xB8]: Encode Lower Stack Through Omicron Symbol Chirality
+#   The lower factorial stack (0!–8!) MUST encode clock state through Omicron
+#   symbol chirality: even ticks use ο (U+03BF, chiral entry), odd ticks use
+#   Ο (U+039F, cardinal closure). The Delta Law period-8 tick sequence
+#   [0,1,3,6,9,8,6,3] mod 16 is the canonical clock signature for seeds 0, 1
+#   and their period-8 transforms.
+omi-0000-0000-0000-0000-0000-0000-00b8-0001/128 MUST encode-lower-stack-through-omicron-symbol-chirality
+
+# [Rule 0xB9]: Encode Upper Stack Through Unicode-Bidi Cosmetic Reader Lens
+#   The upper factorial stack (9!–12!) MUST encode clock state through a
+#   unicode-bidi cosmetic reader lens: even ticks map to ltr (left-to-right),
+#   odd ticks map to rtl (right-to-left). This is a reader-surface projection,
+#   not a structural identity claim — the Delta Law tick remains the sole
+#   structural authority.
+omi-0000-0000-0000-0000-0000-0000-00b9-0001/128 MUST encode-upper-stack-through-unicode-bidi-cosmetic-reader-lens
+
+# [Rule 0xBA]: Separate Low-Power Delta Law Tick From High-Power Lens Projection
+#   The Delta Law tick (period-8 bijection over 16-bit space) MUST remain the
+#   single source of clock authority for both stacks. The Omicron symbol and
+#   the unicode-bidi lens are chirality encoding surfaces — they project tick
+#   state without replacing it. No lens surface may create an independent clock.
+omi-0000-0000-0000-0000-0000-0000-00ba-0001/128 MUST separate-delta-law-tick-from-lens-projection
+
+# [Rule 0xBB]: Cosmic Orbit Recovery Through Base36 digmod 36
+#   The cosmic orbit position MUST be recoverable through digmod 36: the
+#   base36 remainder identifies the orbital cell, the quotient tracks full
+#   orbit cycles. The 5040-cycle (7!) wraps the orbital position across
+#   celestial layers. The cosmetic reader lens applies the upper chirality
+#   bit as dir=ltr/rtl on DOM elements with data-omicron-lens attribute.
+omi-0000-0000-0000-0000-0000-0000-00bb-0001/128 MUST recover-cosmic-orbit-through-base36-digmod36
+
+# ============================================================================
+# SEXAGESIMAL RECIPROCAL ROUTER (Rules 0xBC–0xBD)
+# ============================================================================
+# Core: Regular denominators (2^a × 3^b × 5^c) produce finite sexagesimal
+#       fractions and route through stable synchronization. Repeating
+#       denominators (7,11,13,17,19,59,61) produce infinite repeating
+#       fractions and route through cyclical replay. The 59/61 twin-prime
+#       boundary adjacent to 60 bounds the repeating period lengths.
+#       Denominators outside both sets enter irrational Omicron mode-switch.
+# ============================================================================
+
+# [Rule 0xBC]: Route Regular Denominators Through Stable Synchronization
+#   Denominators of the form 2^a × 3^b × 5^c (divisors of 60) MUST produce
+#   finite regular sexagesimal fractions and route through stable-sync
+#   channels. The canonical regular denominator set includes
+#   {1,2,3,4,5,6,8,10,12,15,20,24,30,60}. Regular fractions serve as exact
+#   centroid weights and extraction anchors.
+omi-0000-0000-0000-0000-0000-0000-00bc-0001/128 MUST route-regular-denominators-through-stable-synchronization
+
+# [Rule 0xBD]: Route Repeating Denominators Through Cyclical Replay
+#   Denominators adjacent to the malevolent primes (7,11,13,17,19,59,61) and
+#   the 59/61 twin-prime boundary adjacent to 60 MUST produce infinite
+#   repeating sexagesimal fractions and route through replay-loop channels.
+#   The 59 and 61 twin-prime boundary marks the period-length extreme within
+#   the repeating domain. Denominators outside both regular and repeating
+#   sets enter irrational Omicron mode-switch (no finite or repeating
+#   sexagesimal representation).
+omi-0000-0000-0000-0000-0000-0000-00bd-0001/128 MUST route-repeating-denominators-through-cyclical-replay
+
+# ============================================================================
+# MIQUEL POINT-CIRCLE TOPOLOGY (Rules 0xBE–0xBF)
+# ============================================================================
+# Core: The Miquel configuration (8₃ 6₄) maps 8 vertices of the cube to the
+#       lower ≤8! structural stack and 6 circles/square faces to the upper
+#       9!–12! cosmetic shell. divmod(0xRRGGBBAA, 36) recovers the orbital
+#       position, with even/odd offset selecting the 73/37 prime mode-switch.
+# ============================================================================
+
+# [Rule 0xBE]: 32-Bit Color Carrier Divmod Orbit/Offset Recovery
+#   Every 32-bit RRGGBBAA color carrier MUST be recoverable through the
+#   divmod(RRGGBBAA, 36) orbital tracking computation. The quotient selects
+#   the macro data page (orbit), and the remainder (0–35) positions the
+#   micro-clock step along the 36-count Delta Law orientation loop. Even
+#   remainder activates prime mode 73 (lower regular body); odd remainder
+#   activates prime mode 37 (upper cosmetic reader layer).
+omi-0000-0000-0000-0000-0000-0000-00be-0001/128 MUST execute-orbit-offset-recovery-via-thirty-six-count-color-carrier-divmod
+
+# [Rule 0xBF]: Miquel Point-Circle Topology Enclosure
+#   The incidence relations I ⊆ V × E of the OMI address schema MUST map
+#   to the Miquel configuration (8₃ 6₄): 8 points as cube vertices / lower
+#   structural atomic core, 6 circles as cube faces / upper cosmetic lens
+#   shell, 12 pairwise intersections as S-P-O edge vectors / replay paths.
+#   The dual (6₄ 8₃) maps 6 octahedron vertices to 8 circumscribed circles
+#   for .imo conjugation operations.
+omi-0000-0000-0000-0000-0000-0000-00bf-0001/128 MUST map-incidence-relations-to-eight-point-six-circle-miquel-configurations
+
+# ============================================================================
+# CANVAS COLOR ROUTING CANON (Rules 0xC0–0xC2)
+# ============================================================================
+# Core: Lower stack (≤8!) encodes structural state through exact six-digit
+#       hex colors (#RRGGBB). Upper stack (9!–12!) encodes cosmetic/reader
+#       state through JSON Canvas preset color keys ("1"–"6"). Geometry
+#       remains structural; preset colors remain cosmetic lenses.
+# ============================================================================
+
+# [Rule 0xC0]: Route Terminating Regular Fractions and Hex Colors Through
+#   Lower Structural Canvas Body
+#   The lower stack (≤8!) MUST route terminating regular sexagesimal
+#   fractions and full six-digit hex colors (#RRGGBB) through the structural
+#   canvas body layer. Omicron symbols, the binary quadratic form Q_xy, the
+#   Delta Law atomic clock, and Base36 orbit recovery all share this layer.
+#   A hex color in this layer is an exact structural body assignment.
+omi-0000-0000-0000-0000-0000-0000-00c0-0001/128 MUST route-terminating-fractions-and-hex-colors-through-lower-structural-canvas-body
+
+# [Rule 0xC1]: Route Repeating Non-Regular Fractions and Canvas Preset
+#   Colors Through Upper Reader Cosmetic Shell
+#   The upper stack (9!–12!) MUST route infinite repeating non-regular
+#   sexagesimal fractions and JSON Canvas preset color keys ("1" red
+#   through "6" purple) through the reader cosmetic lens shell. Unicode-bidi
+#   direction, CSS display, and template sequencing share this layer.
+#   A preset color key is a cosmetic reader alias, not a structural
+#   body assignment.
+omi-0000-0000-0000-0000-0000-0000-00c1-0001/128 MUST route-repeating-fractions-and-canvas-preset-colors-through-upper-reader-shell
+
+# [Rule 0xC2]: Preserve JSON Canvas Geometry as Structural State While
+#   Treating Color Presets as Reader Lenses
+#   JSON Canvas geometry fields (id, type, x, y, width, height) MUST be
+#   treated as lower structural state — addressable through OMI principal
+#   pointers and the Q_xy projection form. JSON Canvas color fields MUST be
+#   classified as either lower hex structural colors or upper preset reader
+#   colors and routed to their respective layers. A preset color applied to
+#   a structural geometry does not make the geometry cosmetic; the split is
+#   field-level, not node-level.
+omi-0000-0000-0000-0000-0000-0000-00c2-0001/128 MUST preserve-json-canvas-geometry-as-structural-state-while-treating-color-presets-as-reader-lenses
+
+# ============================================================================
+# RRGGBBAA ADDRESS SEED AND ORBIT (Rules 0xC3–0xC6)
+# ============================================================================
+# Core: JSON Canvas colors encode as RRGGBBAA seeds where RRGGBB is the
+#       lower structural color body and AA is the address/incidence/attachment
+#       byte. divmod(RRGGBBAA, 36) recovers the Base36 orbit/offset. 37 is
+#       reserved as the mode-switch sentinel outside Base36 0..35. The RGB
+#       color cube (8 vertices, 6 channel faces, 24 incidences) realizes the
+#       Miquel (8_3, 6_4) incidence structure.
+# ============================================================================
+
+# [Rule 0xC3]: Encode JSON Canvas Color Addresses as RRGGBBAA 32-Bit Seeds
+#   Every JSON Canvas OMI color address MUST be representable as a 32-bit
+#   RRGGBBAA seed: lower 24 bits = RRGGBB structural color body, upper 8
+#   bits = AA address attachment/incidence lens byte. The AA byte is the
+#   incidence selector — it scopes which reader lens, emoji carrier, or
+#   attachment plane is active over the structural color body.
+omi-0000-0000-0000-0000-0000-0000-00c3-0001/128 MUST encode-json-canvas-color-addresses-as-rrggbbaa-seeds
+
+# [Rule 0xC4]: Recover JSON Canvas Color Orbits Through divmod(RRGGBBAA, 36)
+#   The canonical orbit recovery for any RRGGBBAA seed MUST be:
+#   orbit = floor(seed / 36), offset = seed mod 36. The offset (0..35)
+#   maps directly to Base36 digit positions. This preserves the Delta Law
+#   (period 8, prime 73, W=36) as the sole orbital authority.
+omi-0000-0000-0000-0000-0000-0000-00c4-0001/128 MUST recover-json-canvas-color-orbits-through-divmod-rrggbbaa-by-thirty-six
+
+# [Rule 0xC5]: Reserve 37 as the AA Mode-Switch Sentinel Outside Base36
+#   The value AA = 37 (0x25) MUST be reserved as the Omicron mode-switch
+#   sentinel. Because divmod(seed, 36) can never return 37 as an offset, 37
+#   is collision-free — it signals an irrational/transcendental/template
+#   mode transition without corrupting Base36 orbit recovery. Any AA = 37
+#   MUST trigger a mode-switch evaluation before further orbit processing.
+omi-0000-0000-0000-0000-0000-0000-00c5-0001/128 MUST reserve-thirty-seven-as-aa-mode-switch-outside-base36-offsets
+
+# [Rule 0xC6]: Map JSON Canvas RGB Color Cube Through 8-Vertex 6-Face
+#   Miquel Incidence
+#   The RGB color cube MUST realize the Miquel (8_3, 6_4) incidence
+#   structure: 8 vertices are the binary RGB corners, 6 faces are the
+#   channel constraints (R=0, R=255, G=0, G=255, B=0, B=255), each vertex
+#   lies on exactly 3 faces, each face contains exactly 4 vertices, yielding
+#   24 incidence attachments. The AA byte routes which incidence attachment
+#   is active per color-address pair.
+omi-0000-0000-0000-0000-0000-0000-00c6-0001/128 MUST map-json-canvas-rgb-color-cube-through-eight-vertex-six-face-incidence

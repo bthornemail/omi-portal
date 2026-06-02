@@ -689,6 +689,41 @@ A rejected layout or conceptual gap is never left un-routed. It must immediately
 
 The goal is never to restrict creative thought; the goal is to build a high-fidelity compiler that insulates shared intelligence against processing degradation.
 
+### O14 — Fold Address Onto Its Own Creation Step (Self-Sufficiency)
+### O15 — Three-Way Distinction: Claim / Backoff / Lens
+
+A valid OMI address is self-sufficient: its Omicron frame (S0–S7) encodes the step
+of its creation through the LL lane selector, NN node-body coordinate, and MM
+carrier projection coordinate. No prefix or suffix adds identity — every suffix
+only reduces unnecessary claims or selects a reader view over already-encoded state.
+
+**Fold rule (O14):**
+```text
+Given an OMI address A = omi-S0-S1-S2-S3-S4-S5-S6-S7,
+the creation step is a function of the frame alone:
+  step720(A)  = Q_xy(S3, S4)       — LL-derived Fano/lane coordinate
+  slot5040(A) = fano7 × 720 + role3 × 240 + local240
+No prefix /N or lens /@N changes step(A). A prefix claims exactness;
+a lens selects a projection. The address is the thing. (/0xAD)
+```
+
+**Fold rule (O15):**
+```text
+OMI notation has three distinct suffix forms:
+  /N     = CIDR claim boundary          (first slash, no @)
+  /N-M   = claim backoff                (reduce claim by M bits)
+  /@N    = reader lens                  (select projection/cadence)
+These are non-interchangeable. /128-4 is backoff to /124,
+while /128/@4 is the tetrahedral reader lens. Neither creates
+identity; both operate on an already-valid address. (/0xAE)
+```
+
+**Derived invariant:**
+```text
+∀ address A, ∀ prefix p ∈ [0,128], ∀ backoff b, ∀ lenses L:
+  step(A) = step(A/p) = step(A/p-b) = step(A/p/@L₁/@L₂/...)
+```
+
 ### The Complete 12-Step Structural Execution Flow
 
 With the trigintaduonion process model locked in as the runtime scaffold and the OPPID (Omicron Prime Principle Ideal Domain) generator discipline established, the complete unified data-handling pipeline executes across active modules in this exact order:
@@ -716,5 +751,8 @@ trigintaduonions for the 32-state operator scaffold,
 64-ions for the full native plane scaffold,
 Base36 for orbit naming,
 Q_frame for validation,
-and Q_xy for projection.
+Q_xy for projection,
+and the Omicron frame alone for creation-step identity —
+prefixes are claim reductions, lenses are reader views,
+neither adds validity to the address.
 ```

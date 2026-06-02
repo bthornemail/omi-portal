@@ -68,7 +68,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence
 
 dev: verify-safe build-dev
 
@@ -78,7 +78,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-wan verify-browser verify-oppid-script
+verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -215,6 +215,42 @@ verify-reader:
 
 verify-wan:
 	node --test test/nat64-virtual-adapter.test.js test/proxy-event-connector.test.js test/live-voxel-stream.test.js
+
+verify-portal-binder:
+	node --test test/live-portal-binder.test.js
+
+verify-narrative:
+	node --test test/narrative-world-model.test.js test/narrative-document-pipeline.test.js
+
+verify-centroid:
+	node --test test/triple-centroid.test.js
+
+verify-lens-parser:
+	node --test test/omi-lens-parser.test.js
+
+verify-slice3:
+	node --test test/scrubbable-world-clock.test.js test/world-interaction-gate.test.js test/movie-world-renderer.test.js
+
+verify-atomic-kernel:
+	node --test test/atomic-kernel.test.js test/cosmic-orbit.test.js
+
+verify-reciprocal-router:
+	node --test test/sexagesimal-reciprocals.test.js
+
+verify-miquel-router:
+	node --test test/miquel-router.test.js
+
+verify-canvas-color:
+	node --test test/omi-canvas-color-router.test.js
+
+verify-json-canvas-schema:
+	node --test test/json-canvas-address-schema.test.js test/json-canvas-omi-router.test.js
+
+verify-rrggbbaa-orbit:
+	node --test test/rrggbbaa-orbit.test.js
+
+verify-miquel-rgb-incidence:
+	node --test test/miquel-rgb-incidence.test.js
 
 # ============================================================================
 # OMI 13-STEP OPERATIONAL PIPELINE (Diagnostic)

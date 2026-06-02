@@ -88,6 +88,35 @@ In OMI:
 
 This model is used for IPC routing, CodeMirror BiDi evaluation cells, Prolog/WordNet routing packets, and DataView projection outputs.
 
+## Address Self-Sufficiency Doctrine
+
+An OMI address is valid iff its Omicron frame encodes the step of its creation.
+The address carries its own identity — no prefix or lens suffix contributes to
+that identity. Every suffix is a claim-reduction or reader-view selection over
+already-encoded state.
+
+**Creation step encoding** (Rule 0xAC):
+
+```
+address    = omi-S0-S1-S2-S3-S4-S5-S6-S7
+step720(A) = Q_xy(S3, S4)                        — LL lane coordinate
+slot5040   = fano7 × 720 + role3 × 240 + local240
+```
+
+Where `S3 = 0x2bLL` and `S4 = 0x2fLL` encode the LL lane selector; the Fano
+plane index, role layer, and local frame offset are derived from the full frame.
+
+**Claim vs. lens distinction** (Rule 0xAD):
+
+| Syntax | Role | Example |
+|--------|------|---------|
+| `omi-<frame>` | Canonical self-sufficient address | `omi-0400-03bf-0000-2b04-2f04-0000-039f-04ff` |
+| `/N` | CIDR claim boundary | `/128` = exact claim, `/48` = local frame |
+| `/@N` | Reader lens | `/@60` = sexagesimal cadence, `/@4` = tetrahedral plane |
+
+No suffix creates validity. The address is the thing. Prefixes and lenses only
+reduce unnecessary claims or select a view over what the address already is.
+
 ## CIDR, IP6, And IPR
 
 CIDR and IPv6 provide the language for containment. OMI uses the same ideas without claiming that every token is a network socket.

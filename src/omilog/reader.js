@@ -15,7 +15,7 @@ const IMO_SOURCE_RE = new RegExp(
   `^\\s*${LITTLE_OMICRON}\\s+${RS}([^${US}]+)${US}\\s+${BIG_OMICRON}\\s*$`
 );
 
-const OMI_ADDRESS_RE = /^(?:omi-|ffff-)[0-9a-fA-F-]+(?:\/+\d+)?(?:\/[^\s)]*)?/;
+const OMI_ADDRESS_RE = /^(?:omi-|ffff-)[0-9a-fA-F-]+(?:\/\d+(?:-\d+)?)?(?:\/@\d+)*$/;
 
 const EMOJI_RE = /^\p{Extended_Pictographic}/u;
 
@@ -240,8 +240,7 @@ function classifyAtom(value) {
   }
 
   if (isOmiAddressAtom(value)) {
-    const [, addr, bits] = value.match(/^((?:omi-|ffff-)[0-9a-fA-F-]+(?:\/+\d+)?)(?:\/[^\s)]*)?/) || [];
-    return { type: 'omi-address', value: addr || value };
+    return { type: 'omi-address', value };
   }
 
   if (/^-?\d+$/.test(value)) {
