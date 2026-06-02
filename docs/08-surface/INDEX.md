@@ -13,4 +13,4 @@ Index of the 8 canonical browser object surfaces defined in `omi-object-model.md
 | 7 | **CodeMirror 6** | Transactional text token and BiDi bridge surface | implemented | `src/bidi/codemirror-bidi.js` |
 | 8 | **WordNet/Prolog** | Synset relation and semantic centroid surface | implemented | `src/wordnet/`, `src/prolog/` |
 
-See `docs/07-application/omi-object-model.md` § "Browser Object Surfaces" for the canonical surface definitions.
+See `docs/omi-object-model.md` § "Browser Object Surfaces" for the canonical surface definitions.

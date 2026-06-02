@@ -182,7 +182,7 @@ test("OMI Object Model manifest declares protocol sequencing phases", async () =
 test("OMI research inbox claims are promoted through canonical docs, not _temp manifest entries", async () => {
   const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
-  const objectModel = await readFile(new URL("../docs/07-application/omi-object-model.md", import.meta.url), "utf8");
+  const objectModel = await readFile(new URL("../docs/omi-object-model.md", import.meta.url), "utf8");
   const binaryQuadraticForm = await readFile(new URL("../docs/07-application/omi-binary-quadratic-form.md", import.meta.url), "utf8");
   const distributed = await readFile(new URL("../docs/03-network/omi-distributed-protocol.md", import.meta.url), "utf8");
 
@@ -204,7 +204,7 @@ test("OMI research inbox claims are promoted through canonical docs, not _temp m
 test("OMI Declarative Core root files are canonical manifest sources", async () => {
   const manifest = JSON.parse(await readFile(new URL("../docs/10-declaration/omi-object-model.manifest.json", import.meta.url), "utf8"));
   const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
-  const objectModel = await readFile(new URL("../docs/07-application/omi-object-model.md", import.meta.url), "utf8");
+  const objectModel = await readFile(new URL("../docs/omi-object-model.md", import.meta.url), "utf8");
   const expected = ["RULES.omi", "FACTS.omi", "CLOSURES.omi", "COMBINATORS.omi", "CONS.omi"];
 
   for (const path of expected) {

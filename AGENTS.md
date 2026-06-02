@@ -2,6 +2,8 @@
 
 This repository is the root OMI Portal workspace. Treat it as the canonical implementation branch.
 
+The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you-need.md` — agreement as constructive alignment, disagreement as an unresolved file path, and the collaboration doctrine that turns shared intelligence into executable structure.
+
 ## Ground Rules
 
 - Preserve the existing POS graph channel behavior.
@@ -35,8 +37,8 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 ## Current Canonical Roots
 
 - Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`)
-- Main framework doc: `docs/07-application/omi-object-model.md`
-- Omi-Notation spec: `docs/07-application/omi-notation.md`
+- Main framework doc: `docs/omi-object-model.md`
+- Omi-Notation spec: `docs/omi-notation.md`
 - Construction doc: `POSTULATES.md` (Euclidean layer — what may be constructed)
 - Fold doc: `AXIOMS.md` (origami layer — how objects may be folded, reflected, transformed)
 - Derivation doc: `DECLARATIONS.md` (how RULES.omi clauses become FACTS.omi rows)
@@ -87,6 +89,10 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Rule 0x96: `derive-omi-operator-interactions-from-32-by-32-process-table` — 1024-cell operator composition table
 - Rule 0x97: `route-spo-incidence-through-155-distinguished-triads` — 155 triads partitioned into five OMI file categories
 - Rule 0x98: `map-64-ion-doubling-to-full-imo-native-plane` — 64-position native plane from 64-ion doubling pattern
+- Rule 0x99: `generate-every-closed-omi-region-from-one-principal-pointer` — OPPID: every region has one principal generator
+- Rule 0x9A: `derive-common-generator-for-paired-omi-pointers` — common CIDR/LL/closure generator from two pointers
+- Rule 0x9B: `witness-shared-closures-through-combinator-composition` — Bézout-style witness composition (SHOULD)
+- Rule 0x9C: `decompose-finite-omi-record-sets-into-cyclic-replay-components` — cyclic replay decomposition (SHOULD)
 - Emoji test data: `vendor/emoji/emoji-test.txt`
 - Emoji sequences: `vendor/emoji/emoji-sequences.txt`
 - Emoji ZWJ sequences: `vendor/emoji/emoji-zwj-sequences.txt`

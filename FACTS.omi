@@ -325,3 +325,19 @@ omi-0000-0000-0000-0000-0000-0000-0097-1001/128 FACT triad-router155-module-impl
 # --- Sixty-Four Native Plane Expansion Facts (0x98) ---
 
 omi-0000-0000-0000-0000-0000-0000-0098-1001/128 FACT native-plane64-expansion-implemented
+
+# --- Omicron Prime Principle Ideal Domain Facts (0x99) ---
+
+omi-0000-0000-0000-0000-0000-0000-0099-1001/128 FACT principal-domain-model-implemented
+
+# --- OMI GCD Common Generator Facts (0x9A) ---
+
+omi-0000-0000-0000-0000-0000-0000-009a-1001/128 FACT omi-gcd-common-generator-implemented
+
+# --- OMI Bezout Witness Composition Facts (0x9B) ---
+
+omi-0000-0000-0000-0000-0000-0000-009b-1001/128 FACT bezout-witness-composition-implemented
+
+# --- OMI Cyclic Replay Module Decomposition Facts (0x9C) ---
+
+omi-0000-0000-0000-0000-0000-0000-009c-1001/128 FACT cyclic-replay-module-decomposition-implemented

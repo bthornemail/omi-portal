@@ -81,9 +81,9 @@ End-user protocols, object model, declarative framework, whitepaper.
 
 | Document | Primary Layer | Role |
 |---|---|---|
-| `07-application/omi-object-model.md` | Application / Surface | Canonical framework declaration: 8 browser surfaces, Lisp transformer model (cons/car/cdr), CIDR/IPv6 containment, FS/GS/RS/US routing, factorial lifecycle, distributed state semantics |
+| `omi-object-model.md` | Application / Surface | Canonical framework declaration: 8 browser surfaces, Lisp transformer model (cons/car/cdr), CIDR/IPv6 containment, FS/GS/RS/US routing, factorial lifecycle, distributed state semantics |
 | `03-network/omi-core-spec.md` | Network / Application | Normative implementation specification with RFC 2119 key words, MUST/SHOULD/MAY requirements, 10 conformance test categories |
-| `07-application/omi-whitepaper.md` | Application | Standalone first-principles specification (OMI-WP-v0.1): 6 axioms, OMI-CIDR addressing, cons semantics, delta law, sexagesimal layer, factorial lattice, conformance |
+| `omi-whitepaper.md` | Application | Standalone first-principles specification (OMI-WP-v0.1): 6 axioms, OMI-CIDR addressing, cons semantics, delta law, sexagesimal layer, factorial lattice, conformance |
 | `07-application/prolog-wordnet-aframe.md` | Application / Surface | Prolog WordNet fact broker on service bus ::3, Fano routing token syntax, A-Frame entity binding for 3D synset rendering |
 
 ---
@@ -94,7 +94,7 @@ Browser rendering surfaces: DOM, CSSOM, SVG, A-Frame, JSON Canvas, CodeMirror 6,
 
 | Document | Primary Layer | Role |
 |---|---|---|
-| `07-application/omi-object-model.md` | Application / Surface | Defines all 8 browser object surfaces — DOM (runtime tree), CSSOM (selector routing), JSDOM (server mirror), SVG (2D graph), A-Frame (3D WebGL), JSON Canvas (portable graph), CodeMirror 6 (transactional text), WordNet/Prolog (synset centroid) |
+| `omi-object-model.md` | Application / Surface | Defines all 8 browser object surfaces — DOM (runtime tree), CSSOM (selector routing), JSDOM (server mirror), SVG (2D graph), A-Frame (3D WebGL), JSON Canvas (portable graph), CodeMirror 6 (transactional text), WordNet/Prolog (synset centroid) |
 | `07-application/prolog-wordnet-aframe.md` | Application / Surface | A-Frame scene binding with `<a-entity>` attributes and Prolog fact broker |
 | `06-presentation/codemirror-bidi-bridge.md` | Presentation / Application | CM6 BiDi editor extension as a text surface |
 | `08-surface/INDEX.md` | Surface | Index of browser surface implementations with file locations and status |
@@ -142,8 +142,8 @@ Manifest, index, provenance, axioms.
 | `06-presentation/omi-file-format.md` | | | | | | ● | | | | |
 | `06-presentation/control-descriptors.md` | | | | | | ● | | | | |
 | `06-presentation/codemirror-bidi-bridge.md` | | | | | | ● | ○ | ○ | | |
-| `07-application/omi-object-model.md` | | | | | | | ● | ○ | | |
-| `07-application/omi-whitepaper.md` | | | | | | | ● | | | |
+| `omi-object-model.md` | | | | | | | ● | ○ | | |
+| `omi-whitepaper.md` | | | | | | | ● | | | |
 | `07-application/prolog-wordnet-aframe.md` | | | | | | | ● | ○ | | |
 | `08-surface/INDEX.md` | | | | | | | | ● | | |
 | `09-diagram/INDEX.md` | | | | | | | | | ● | |

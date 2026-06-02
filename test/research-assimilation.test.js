@@ -29,7 +29,7 @@ async function assertExists(path) {
 test("Research assimilation: 240 bridge and factorial tower claims are canonicalized outside _temp", async () => {
   const readme = await readRepoFile("README.md");
   const glossary = await readRepoFile("GLOSSARY.md");
-  const objectModel = await readRepoFile("docs/07-application/omi-object-model.md");
+  const objectModel = await readRepoFile("docs/omi-object-model.md");
   const portal = await readRepoFile("public/portal.html");
 
   for (const doc of [readme, glossary, objectModel]) {
@@ -90,7 +90,7 @@ test("Research assimilation: symbolic character carriers are projection-only can
   const facts = await readRepoFile("FACTS.omi");
   const readme = await readRepoFile("README.md");
   const glossary = await readRepoFile("GLOSSARY.md");
-  const objectModel = await readRepoFile("docs/07-application/omi-object-model.md");
+  const objectModel = await readRepoFile("docs/omi-object-model.md");
 
   const kernel = new OmiBarycentricCanvasKernel();
   const S = parseOmiAddressToSegments(GENESIS_TOKEN);
@@ -129,7 +129,7 @@ test("Research assimilation: Q_frame validates and Q_xy projects as separate qua
   const ontology = await readRepoFile("ONTOLOGY.md");
   const readme = await readRepoFile("README.md");
   const glossary = await readRepoFile("GLOSSARY.md");
-  const objectModel = await readRepoFile("docs/07-application/omi-object-model.md");
+  const objectModel = await readRepoFile("docs/omi-object-model.md");
   const binaryQuadraticForm = await readRepoFile("docs/07-application/omi-binary-quadratic-form.md");
 
   assert.equal(omiQuadraticProject(3, 3), 720);
@@ -164,7 +164,7 @@ test("Research assimilation: Q_frame validates and Q_xy projects as separate qua
 
 test("Research assimilation: MCRSGSP provenance maps only to implemented distributed carriers", async () => {
   const distributedDoc = await readRepoFile("docs/03-network/omi-distributed-protocol.md");
-  const objectModel = await readRepoFile("docs/07-application/omi-object-model.md");
+  const objectModel = await readRepoFile("docs/omi-object-model.md");
   const manifest = JSON.parse(await readRepoFile("docs/10-declaration/omi-object-model.manifest.json"));
 
   assert.match(distributedDoc, /MCRSGSP/);

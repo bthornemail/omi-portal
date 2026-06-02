@@ -4,3 +4,7 @@ export * from "./trigintaduonion-model.js";
 export * from "./cayley-dickson-process.js";
 export * from "./operator-table32.js";
 export * from "./triad-router155.js";
+export * from "./principal-domain.js";
+export * from "./omi-gcd.js";
+export * from "./bezout-witness.js";
+export * from "./cyclic-module.js";

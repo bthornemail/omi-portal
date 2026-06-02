@@ -33,14 +33,15 @@ See [10-declaration/LAYERS.md](10-declaration/LAYERS.md) for the full cross-refe
 - [`06-presentation/codemirror-bidi-bridge.md`](06-presentation/codemirror-bidi-bridge.md) — CM6 BiDi transaction bridge and memory plane
 
 ## 07 Application — Protocols & Object Model
-- [`07-application/omi-object-model.md`](07-application/omi-object-model.md) — Canonical framework: 8 browser surfaces, Lisp transformers, routing, distributed semantics
+- [`agreement-is-all-you-need.md`](agreement-is-all-you-need.md) — First Principle: collaboration/process protocol (agreement as compiler primitive)
+- [`omi-object-model.md`](omi-object-model.md) — Canonical framework: 8 browser surfaces, Lisp transformers, routing, distributed semantics
 - [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Implementation substrate with RFC 2119 conformance requirements
-- [`07-application/omi-whitepaper.md`](07-application/omi-whitepaper.md) — Standalone first-principles specification
+- [`omi-whitepaper.md`](omi-whitepaper.md) — Standalone first-principles specification
 - [`07-application/prolog-wordnet-aframe.md`](07-application/prolog-wordnet-aframe.md) — Prolog WordNet synset broker and A-Frame scene binding
 
 ## 08 Surface — Browser Rendering
 - [`08-surface/INDEX.md`](08-surface/INDEX.md) — Browser surface implementations index
-- [`07-application/omi-object-model.md`](07-application/omi-object-model.md) — 8 browser object surfaces (DOM, CSSOM, SVG, A-Frame, etc.)
+- [`omi-object-model.md`](omi-object-model.md) — 8 browser object surfaces (DOM, CSSOM, SVG, A-Frame, etc.)
 
 ## 09 Diagram — Visual & Schematic
 - [`09-diagram/INDEX.md`](09-diagram/INDEX.md) — Diagrammatic asset reference (barcode carriers, canvas export)

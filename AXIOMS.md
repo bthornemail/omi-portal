@@ -689,22 +689,23 @@ A rejected layout or conceptual gap is never left un-routed. It must immediately
 
 The goal is never to restrict creative thought; the goal is to build a high-fidelity compiler that insulates shared intelligence against processing degradation.
 
-### The Complete 11-Step Structural Execution Flow
+### The Complete 12-Step Structural Execution Flow
 
-With the trigintaduonion process model locked in as the runtime scaffold, the complete unified data-handling pipeline executes across active modules in this exact order:
+With the trigintaduonion process model locked in as the runtime scaffold and the OPPID (Omicron Prime Principle Ideal Domain) generator discipline established, the complete unified data-handling pipeline executes across active modules in this exact order:
 
 ```text
 [1. SOURCE]     ──► Read high-level, human-readable .omi source files.
 [2. VALIDATE]   ──► Verify the 128-bit wire carrier shell via Q_frame(S) == 0.
-[3. MIRROR]     ──► Execute Cayley-Dickson doubling to lower .omi to .imo bytecode.
-[4. ENTER]      ──► Enclose the low-ASCII opcode line within native ο / Ο delimiters.
-[5. COMPOSE]    ──► Process the 32x32 operator-table32 matrix for composition.
-[6. ROUTE]      ──► Intersect S-P-O coordinate paths via the triad-router155 engine.
-[7. SCOPE]      ──► Enforce CIDR prefix network specificity (/128 down to /64).
-[8. TIMING]     ──► Advance the internal logic pacing tick via the Delta Law.
-[9. NAMING]     ──► Read the derived orbital position using the Base36 label layer.
-[10. PROJECT]   ──► Extrude 2.5D visual polyomino/domino voxels via Q_xy(x,y).
-[11. REPLAY]    ──► Compress historical context states into the slot5040 receipt.
+[3. GENERATE]   ──► Resolve principal pointer / ideal generator for the region.
+[4. MIRROR]     ──► Execute Cayley-Dickson doubling to lower .omi to .imo bytecode.
+[5. ENTER]      ──► Enclose the low-ASCII opcode line within native ο / Ο delimiters.
+[6. COMPOSE]    ──► Process the 32x32 operator-table32 matrix for composition.
+[7. ROUTE]      ──► Intersect S-P-O coordinate paths via the triad-router155 engine.
+[8. SCOPE]      ──► Enforce CIDR prefix network specificity (/128 down to /64).
+[9. TIMING]     ──► Advance the internal logic pacing tick via the Delta Law.
+[10. NAMING]    ──► Read the derived orbital position using the Base36 label layer.
+[11. PROJECT]   ──► Extrude 2.5D visual polyomino/domino voxels via Q_xy(x,y).
+[12. REPLAY]    ──► Compress historical context states into the slot5040 receipt.
 ```
 
 ### Canon Sentence

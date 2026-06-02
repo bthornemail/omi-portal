@@ -4,7 +4,7 @@ This file is now a historical source index. The original exploratory `dev-docs/`
 
 ## Current Canonical Sources
 
-- [OMI Object Model](../07-application/omi-object-model.md): top-level declaration of addressing, DOM/CSSOM/JSDOM surfaces, Lisp transformers, routing semantics, and memory layout.
+- [OMI Object Model](../omi-object-model.md): top-level declaration of addressing, DOM/CSSOM/JSDOM surfaces, Lisp transformers, routing semantics, and memory layout.
 - [OMI Core Spec](../03-network/omi-core-spec.md): implementation-facing substrate rules for pure OMI-CIDR ids, `data-omi-address`, and CSSOM selectors.
 - [Canonical Addressing](../03-network/canonical-addressing.md): current 8-segment `/48` address grammar.
 - [OMI File Format](../06-presentation/omi-file-format.md): binary `car` pre-header and printable dot-delimited `cdr` payload.

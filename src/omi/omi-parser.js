@@ -1,5 +1,11 @@
 export const OMI_DECLARATIVE_KEYWORDS = Object.freeze([
   "MUST",
+  "MUST_NOT",
+  "MUST_IMPLY",
+  "MUST_IF",
+  "PERMITS",
+  "FORBIDS",
+  "SHOULD",
   "FACT",
   "EQUALS",
   "CLOSE",

@@ -141,7 +141,7 @@ The pre-header declares chirality/endian BOM, polarity/BiDi flow, Float32/Float6
 omi-ffff-127-0-0-1-0x1a.NOUN-VERB-SYM.AAC_QEAAAL_AykAQA
 ```
 
-See [OMI File Format](./omi-file-format.md) for the binary frame and runtime compiler API.
+See [OMI File Format](./06-presentation/omi-file-format.md) for the binary frame and runtime compiler API.
 
 ## Routing Tables
 
@@ -517,4 +517,4 @@ Every implementation verifying against this sequencing standard must explicitly 
 2. Zero-Copy Serialization Boundary: Passing data from the thread-shared memory maps over external WebRTC or browser canvases requires uploading raw float arrays straight to the active VBO channels or DataView blocks. Data must not be cast into JSON string objects or intermediate array containers.
 3. Factorial Time Alignment: All resource sweeps, pipeline cleanups, and layout cache evictions must latch directly to the 720 and 5040 tick milestones. This aligns system operations with the least common multiple of the underlying bitwise rotator clocks.
 
-See [OMI Protocol Sequencing](./omi-protocol-sequencing.md) for the standalone sequencing specification.
+See [OMI Protocol Sequencing](./04-transport/omi-protocol-sequencing.md) for the standalone sequencing specification.
