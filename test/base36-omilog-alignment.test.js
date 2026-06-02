@@ -3,7 +3,7 @@ import { strict as assert } from "node:assert";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseOmiDocument } from "../src/omi/omi-parser.js";
-import { compileOmiFile, lowerRecordToImo, isNativeCharPlaneSafe } from "../src/omilog/omi-imo-compiler.js";
+import { LITTLE_OMICRON, BIG_OMICRON, compileOmiFile, lowerRecordToImo, isNativeCharPlaneSafe } from "../src/omilog/omi-imo-compiler.js";
 import { projectBase36Symbol } from "../src/canvas/omicron-canvas.js";
 
 async function readRepoFile(path) {
@@ -61,7 +61,9 @@ test("base36-projection lowers to native .imo operator + with correct segment", 
   assert.ok(base36);
 
   const imoLine = lowerRecordToImo(base36);
-  assert.ok(imoLine.startsWith("+/"), "Base36 projection must lower to COMBINE (+) operator");
+  assert.ok(imoLine.startsWith(LITTLE_OMICRON), "Base36 .imo must start with little omicron");
+  assert.ok(imoLine.endsWith(BIG_OMICRON), "Base36 .imo must end with big omicron");
+  assert.ok(imoLine.includes("+/"), "Base36 projection must lower to COMBINE (+) operator");
   assert.ok(imoLine.includes("54"), "Address must contain decimal 54 for 0x0036 segment");
   assert.ok(imoLine.includes("45060"), "Address must contain decimal 45060 for 0xb004 segment");
   assert.ok(isNativeCharPlaneSafe(imoLine), ".imo output must be native-safe");

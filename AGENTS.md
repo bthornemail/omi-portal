@@ -17,6 +17,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - **Ο** (U+039F) = cardinal boundary operator / zero-frame / subnet containment
 - **ο** (U+03BF) = chiral execution operator / local cons transition
 - `Ο-<car>-<cdr>` = Omi cons pair (car = control/boundary, cdr = payload/continuation)
+- `.imo` compiled records wrap with **ο** (U+03BF) as entry delimiter and **Ο** (U+039F) as exit delimiter, mirroring S1/S6 in the 128-bit wire frame
 - `δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C` = bitwise cons transition (period-8)
 - `--` = zero compression (IPv6 `::`-style)
 - `/N` = CIDR prefix scope (0–128, `/48` canonical local frame)
@@ -35,6 +36,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 
 - Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`)
 - Main framework doc: `docs/07-application/omi-object-model.md`
+- Omi-Notation spec: `docs/07-application/omi-notation.md`
 - Construction doc: `POSTULATES.md` (Euclidean layer — what may be constructed)
 - Fold doc: `AXIOMS.md` (origami layer — how objects may be folded, reflected, transformed)
 - Derivation doc: `DECLARATIONS.md` (how RULES.omi clauses become FACTS.omi rows)
@@ -68,6 +70,11 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - FACTS Parametric evaluator kernel: `src/omi/facts-evaluator.js`
 - Wikimedia Steiner triple kernel: `src/omi/wikimedia-kernel.js`
 - Cluster discovery mesh kernel: `src/omi/cluster-discovery.js`
+- OmiLog compiler: `src/omilog/omi-imo-compiler.js` (`.omi` → `.imo` lowering)
+- Omilog multiplex: `src/omilog/multiplex.js` (LL/MM/NN frame packing)
+- Omilog barrel: `src/omilog/index.js`
+- Rule 0x8B: `wrap-imo-records-with-omicron-delimiters` — compiled `.imo` uses ο/Ο
+- Rule 0x8C: `align-imo-delimiters-with-wire-frame-omicron-constants` — S1/S6 mirror
 - Emoji test data: `vendor/emoji/emoji-test.txt`
 - Emoji sequences: `vendor/emoji/emoji-sequences.txt`
 - Emoji ZWJ sequences: `vendor/emoji/emoji-zwj-sequences.txt`
@@ -83,7 +90,7 @@ This repository is the root OMI Portal workspace. Treat it as the canonical impl
 - Keep browser GUIs lightweight and wired to exported helpers.
 - Use native DOM `dataset` and CSSOM selectors as the filtering/display source of truth when possible.
 - Keep speculative WebRTC, CoTURN, HNSW, CodeMirror, Prolog runtime, and WebGL surfaces clearly labeled unless they are implemented locally.
-- Add tests for parser, manifest, and deterministic indexing changes.
+- Add tests for parser, manifest, compiler, and deterministic indexing changes.
 
 ## Verification
 

@@ -1,5 +1,8 @@
 import { parseOmiDocument } from '../omi/omi-parser.js';
 
+export const LITTLE_OMICRON = '\u03BF'; // ο (U+03BF) — chiral entry delimiter
+export const BIG_OMICRON = '\u039F';    // Ο (U+039F) — cardinal exit delimiter
+
 export const KEYWORD_TO_IMO = Object.freeze({
   MUST: '!',
   FACT: '=',
@@ -59,7 +62,7 @@ export function lowerRecordToImo(record) {
   if (!op) return null;
 
   const addr = nativeAddressFromRecord(record);
-  const line = `${op}/${addr}`;
+  const line = `${LITTLE_OMICRON} ${op}/${addr} ${BIG_OMICRON}`;
   if (!isNativeCharPlaneSafe(line)) {
     throw new Error(`IMO native char plane violation in record ${record.address}: ${line}`);
   }
@@ -74,7 +77,7 @@ export function* lowerOmiDocumentToImo(parsed) {
     }
 
     if (record.sourceBlock) {
-      yield `\x1e${nativeAddressFromRecord(record)}\x1f`;
+      yield `${LITTLE_OMICRON} \x1e${nativeAddressFromRecord(record)}\x1f ${BIG_OMICRON}`;
     }
   }
 }

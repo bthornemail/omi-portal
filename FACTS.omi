@@ -259,3 +259,11 @@ omi-0000-0000-0000-0000-0000-0000-0089-1002/128 FACT imo-rejects-ascii-0x40-thro
 
 omi-0000-0000-0000-0000-0000-0000-008a-1001/128 FACT omi-imo-authority-boundary-tested
 omi-0000-0000-0000-0000-0000-0000-008a-1002/128 FACT omi-imo-does-not-replace-q-frame-or-q-xy
+
+# --- Omicron-Delimited IMO Records Facts (0x8B) ---
+
+omi-0000-0000-0000-0000-0000-0000-008b-1001/128 FACT imo-records-wrapped-with-little-and-big-omicron
+
+# --- Omicron Delimiter / Wire Frame Alignment Facts (0x8C) ---
+
+omi-0000-0000-0000-0000-0000-0000-008c-1001/128 FACT imo-delimiters-align-with-s1-s6-wire-frame-constants

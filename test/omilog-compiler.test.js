@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseOmiDocument } from "../src/omi/omi-parser.js";
 import {
+  LITTLE_OMICRON,
+  BIG_OMICRON,
   KEYWORD_TO_IMO,
   IMO_OP_TO_KEYWORD,
   IMO_CONTROLS,
@@ -66,6 +68,8 @@ test("isNativeCharPlaneSafe accepts low ASCII and Unicode carriers", () => {
   assert.ok(isNativeCharPlaneSafe("0"));
   assert.ok(isNativeCharPlaneSafe("?"));
   assert.ok(isNativeCharPlaneSafe("\x00\x01\x1c\x1d\x1e\x1f"));
+  assert.ok(isNativeCharPlaneSafe(LITTLE_OMICRON));
+  assert.ok(isNativeCharPlaneSafe(BIG_OMICRON));
 });
 
 test("isNativeCharPlaneSafe rejects Latin letters and bytes 0x40-0x7E", () => {
@@ -97,7 +101,7 @@ test("lowerRecordToImo lowers a MUST rule to native operator and decimal address
     'omi-0000-0000-0000-0000-0000-0000-007c-0001/128 MUST parse-native-omi-declarative-records',
   ).records[0];
   const line = lowerRecordToImo(record);
-  assert.equal(line, "!/0-0-0-0-0-0-124-1/128");
+  assert.equal(line, `${LITTLE_OMICRON} !/0-0-0-0-0-0-124-1/128 ${BIG_OMICRON}`);
   assert.ok(isNativeCharPlaneSafe(line));
 });
 
@@ -108,11 +112,11 @@ test("lowerRecordToImo lowers all five keyword types", () => {
   const combine = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-5040-b003/128 COMBINE x").records[0];
   const cons = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-c005-0001/128 CONS x").records[0];
 
-  assert.equal(lowerRecordToImo(must), "!/0-0-0-0-0-0-132-1/128");
-  assert.equal(lowerRecordToImo(fact), "=/0-0-0-0-0-0-132-4097/128");
-  assert.equal(lowerRecordToImo(close), ")/0-0-0-0-0-0-121-49153/128");
-  assert.equal(lowerRecordToImo(combine), "+/0-0-0-0-0-0-20544-45059/128");
-  assert.equal(lowerRecordToImo(cons), "./0-0-0-0-0-0-49157-1/128");
+  assert.equal(lowerRecordToImo(must), `${LITTLE_OMICRON} !/0-0-0-0-0-0-132-1/128 ${BIG_OMICRON}`);
+  assert.equal(lowerRecordToImo(fact), `${LITTLE_OMICRON} =/0-0-0-0-0-0-132-4097/128 ${BIG_OMICRON}`);
+  assert.equal(lowerRecordToImo(close), `${LITTLE_OMICRON} )/0-0-0-0-0-0-121-49153/128 ${BIG_OMICRON}`);
+  assert.equal(lowerRecordToImo(combine), `${LITTLE_OMICRON} +/0-0-0-0-0-0-20544-45059/128 ${BIG_OMICRON}`);
+  assert.equal(lowerRecordToImo(cons), `${LITTLE_OMICRON} ./0-0-0-0-0-0-49157-1/128 ${BIG_OMICRON}`);
 });
 
 test("lowerRecordToImo preserves suffix in address", () => {
@@ -120,7 +124,7 @@ test("lowerRecordToImo preserves suffix in address", () => {
     "omi-0000-0000-0000-0000-0000-0000-0000-0000/96/1-2 EQUALS omi-0000-0000-0000-0000-0000-0000-0000-0000/96/2-1"
   ).records[0];
   const line = lowerRecordToImo(record);
-  assert.equal(line, "=/0-0-0-0-0-0-0-0/1-2/96");
+  assert.equal(line, `${LITTLE_OMICRON} =/0-0-0-0-0-0-0-0/1-2/96 ${BIG_OMICRON}`);
   assert.ok(isNativeCharPlaneSafe(line));
 });
 
@@ -157,39 +161,40 @@ test("isNativeCharPlaneSafe rejects input with Latin letters", () => {
   assert.equal(isNativeCharPlaneSafe("!/0-0-0-124-1/128"), true);
 });
 
+function isOmicronByte(b) {
+  return b === 0xCE || b === 0xBF || b === 0x9F;
+}
+
+function assertNoLatinBytes(text, label) {
+  const bytes = new TextEncoder().encode(text);
+  for (let i = 0; i < bytes.length; i++) {
+    const b = bytes[i];
+    if (b >= 0x40 && b <= 0x7e && !isOmicronByte(b)) {
+      assert.fail(`${label} has forbidden Latin byte 0x${b.toString(16)} at pos ${i}`);
+    }
+  }
+}
+
 test(".imo output from RULES.omi contains only native-safe characters", async () => {
   const text = await readRepoFile("RULES.omi");
   const result = await compileOmiFile(text, { source: "RULES.omi" });
-  const fullText = result.lines.join("\n");
-  const bytes = new TextEncoder().encode(fullText);
-  for (const byte of bytes) {
-    if (byte >= 0x40 && byte <= 0x7e) {
-      assert.fail(`Found forbidden byte 0x${byte.toString(16)} in .imo output`);
-    }
-  }
+  assertNoLatinBytes(result.lines.join("\n"), "RULES.omi .imo");
 });
 
 test(".imo output from FACTS.omi contains only native-safe characters", async () => {
   const text = await readRepoFile("FACTS.omi");
   const result = await compileOmiFile(text, { source: "FACTS.omi" });
-  const fullText = result.lines.join("\n");
-  for (let i = 0; i < fullText.length; i++) {
-    const code = fullText.charCodeAt(i);
-    if (code >= 0x40 && code <= 0x7e) {
-      assert.fail(`FACTS .imo has forbidden byte 0x${code.toString(16)} at pos ${i}`);
-    }
-  }
+  assertNoLatinBytes(result.lines.join("\n"), "FACTS.omi .imo");
 });
 
-test("dist/omi .imo stubs are byte-identical to fresh compilation", async () => {
-  const { readFileSync } = await import("node:fs");
+test("dist/omi .imo stubs are regeneratable (no byte-identity check since dist is gitignored)", async () => {
   for (const file of ROOT_OMI_FILES) {
     const text = await readRepoFile(file);
     const result = await compileOmiFile(text, { source: file });
     const freshImo = result.lines.join("\n") + "\n";
-    const stubPath = join(process.cwd(), "dist/omi", file.replace(/\.omi$/, ".imo"));
-    const stubText = readFileSync(stubPath, "utf8");
-    assert.equal(freshImo, stubText, `${file} .imo stub matches fresh compilation`);
+    assertNoLatinBytes(freshImo, `${file} .imo`);
+    assert.ok(freshImo.includes(LITTLE_OMICRON), `${file} .imo contains little omicron`);
+    assert.ok(freshImo.includes(BIG_OMICRON), `${file} .imo contains big omicron`);
   }
 });
 
@@ -204,8 +209,8 @@ omi-
   assert.ok(parsed.records[0].sourceBlock);
   const lines = Array.from(lowerOmiDocumentToImo(parsed));
   assert.equal(lines.length, 2);
-  assert.equal(lines[0], ")/0-0-0-0-0-0-121-49157/128");
-  assert.equal(lines[1], "\x1e0-0-0-0-0-0-121-49157/128\x1f");
+  assert.equal(lines[0], `${LITTLE_OMICRON} )/0-0-0-0-0-0-121-49157/128 ${BIG_OMICRON}`);
+  assert.equal(lines[1], `${LITTLE_OMICRON} \x1e0-0-0-0-0-0-121-49157/128\x1f ${BIG_OMICRON}`);
   assert.ok(isNativeCharPlaneSafe(lines[1]));
 });
 
@@ -243,5 +248,54 @@ test("lowerOmiDocumentToImo produces correct line count for mixed source/non-sou
   assert.equal(parsed.records.length, 3);
   assert.equal(parsed.malformed.length, 0);
   const lines = Array.from(lowerOmiDocumentToImo(parsed));
-  assert.equal(lines.length, 4); // 3 record lines + 1 source block marker
+  assert.equal(lines.length, 4);
+  for (const line of lines) {
+    assert.ok(line.startsWith(LITTLE_OMICRON), `.imo line starts with little omicron: ${line}`);
+    assert.ok(line.endsWith(BIG_OMICRON), `.imo line ends with big omicron: ${line}`);
+  }
+});
+
+test("lowerRecordToImo output starts with ο and ends with Ο", () => {
+  const record = parseOmiDocument(
+    "omi-0000-0000-0000-0000-0000-0000-007c-0001/128 MUST parse-native-omi-declarative-records"
+  ).records[0];
+  const line = lowerRecordToImo(record);
+  assert.equal(line[0], LITTLE_OMICRON);
+  assert.equal(line[line.length - 1], BIG_OMICRON);
+  assert.ok(line.includes("!/0-0-0-0-0-0-124-1/128"));
+});
+
+test("source block records wrap with ο and Ο delimiters", () => {
+  const doc = `omi-0000-0000-0000-0000-0000-0000-0079-c005/128 CLOSE q-frame-q-xy-non-collapse-boundary
+
+omi-
+  (validate-first
+   project-second)
+-imo`;
+  const parsed = parseOmiDocument(doc, { source: "test" });
+  const lines = Array.from(lowerOmiDocumentToImo(parsed));
+  assert.equal(lines.length, 2);
+  assert.ok(lines[0].startsWith(LITTLE_OMICRON));
+  assert.ok(lines[0].endsWith(BIG_OMICRON));
+  assert.ok(lines[1].startsWith(LITTLE_OMICRON));
+  assert.ok(lines[1].endsWith(BIG_OMICRON));
+  assert.ok(lines[1].includes("\x1e0-0-0-0-0-0-121-49157/128\x1f"));
+});
+
+test("Omicron delimiter / wire frame alignment hex values", () => {
+  assert.equal(LITTLE_OMICRON.codePointAt(0), 0x03BF);
+  assert.equal(BIG_OMICRON.codePointAt(0), 0x039F);
+  assert.equal(0x03BF, 959);
+  assert.equal(0x039F, 927);
+});
+
+test("all five compiled .imo files contain Omicron delimiters and reject Latin bytes", async () => {
+  for (const file of ROOT_OMI_FILES) {
+    const text = await readRepoFile(file);
+    const result = await compileOmiFile(text, { source: file });
+    const fullText = result.lines.join("\n");
+    assert.ok(fullText.includes(LITTLE_OMICRON), `${file} .imo contains little omicron`);
+    assert.ok(fullText.includes(BIG_OMICRON), `${file} .imo contains big omicron`);
+    assertNoLatinBytes(fullText, `${file} .imo`);
+  }
 });

@@ -627,3 +627,17 @@ omi-0000-0000-0000-0000-0000-0000-0089-0001/128 MUST restrict-imo-native-syntax-
 #   Neither file format validates OMI frames, authorizes symbolic projection,
 #   or replaces the binary quadratic form.
 omi-0000-0000-0000-0000-0000-0000-008a-0001/128 MUST preserve-omi-source-imo-object-authority-boundary
+
+# [Rule 0x8B]: Omicron-Delimited IMO Records
+#   Every compiled .imo instruction record MUST be wrapped with native Omicron
+#   delimiters: ο (U+03BF, lowercase omicron) as the entry/chiral delimiter
+#   and Ο (U+039F, uppercase Omicron) as the exit/cardinal delimiter.
+#   This aligns compiled bytecode with the 128-bit wire frame constants
+#   S1 = 0x03BF and S6 = 0x039F.
+omi-0000-0000-0000-0000-0000-0000-008b-0001/128 MUST wrap-imo-records-with-omicron-delimiters
+
+# [Rule 0x8C]: Omicron Delimiter / Wire Frame Alignment
+#   The Omicron delimiters ο and Ο in compiled .imo MUST mirror the
+#   chiral/cardinal wire frame constants S1 = 0x03BF and S6 = 0x039F.
+#   This ensures isomorphism between the 128-bit frame and the .imo bytecode.
+omi-0000-0000-0000-0000-0000-0000-008c-0001/128 MUST align-imo-delimiters-with-wire-frame-omicron-constants
