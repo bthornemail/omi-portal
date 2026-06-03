@@ -181,6 +181,18 @@ omi-
     (upper-reader-generator . 0x7d)
     (non-linear-aliases . (adjective modifier open-quality))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0010)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
   )
 -imo
 
@@ -201,6 +213,18 @@ omi-
     (upper-reader-generator . 0x7d)
     (non-linear-aliases . (noun synset-centroid semantic-subject))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0010)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
   )
 -imo
 
@@ -221,6 +245,18 @@ omi-
     (upper-reader-generator . 0x7d)
     (non-linear-aliases . (verb process transition))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0010)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
   )
 -imo
 
@@ -241,6 +277,18 @@ omi-
     (upper-reader-generator . 0x7e)
     (non-linear-aliases . (mood modality clause-attitude))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0100)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
   )
 -imo
 
@@ -261,6 +309,18 @@ omi-
     (upper-reader-generator . 0x7e)
     (non-linear-aliases . (tense temporal-feature timeline-lens))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0200)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
   )
 -imo
 
@@ -281,6 +341,18 @@ omi-
     (upper-reader-generator . 0x7f)
     (non-linear-aliases . (canvas surface wordnet-synset prolog-s))
     (authority . cons-monotonic-reduction-index)
+    (triad-dispatch .
+      ((triad . 36)
+       (modulus . 155)
+       (mode . prefix3)
+       (category . rules)
+       (local-index . 36)
+       (plane . real)
+       (branch . A)
+       (coreMax . 0x0200)
+       (tower . (8! 6! 4! 2!))
+       (authority . secondary-index)
+       (forbids . (triad-reorders-primary-rrggbbaa-key triad-validates-lower-body))))
     (forbids . (proxy-seed-replaces-wordnet-centroid-authority))
   )
 -imo

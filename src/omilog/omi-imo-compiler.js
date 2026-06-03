@@ -1,4 +1,5 @@
 import { parseOmiDocument } from '../omi/omi-parser.js';
+import { deriveTriadDispatch } from './triad-dispatch.js';
 
 export const LITTLE_OMICRON = '\u03BF'; // ο (U+03BF) — chiral entry delimiter
 export const BIG_OMICRON = '\u039F';    // Ο (U+039F) — cardinal exit delimiter
@@ -82,7 +83,7 @@ export function* lowerOmiDocumentToImo(parsed) {
   }
 }
 
-export function compileOmiParsed(parsed) {
+export function compileOmiParsed(parsed, options = {}) {
   if (parsed.malformed && parsed.malformed.length > 0) {
     throw new Error(
       `Cannot compile source with ${parsed.malformed.length} malformed records: ` +
@@ -90,10 +91,18 @@ export function compileOmiParsed(parsed) {
     );
   }
   const lines = Array.from(lowerOmiDocumentToImo(parsed));
-  return { records: parsed.records, lines, imoText: lines.join('\n') };
+  const result = { records: parsed.records, lines, imoText: lines.join('\n') };
+  if (options.triadDispatch) {
+    result.triadDispatch = deriveTriadDispatch(parsed, options);
+  }
+  return result;
 }
 
-export async function compileOmiFile(text, { source = 'unknown.omi' } = {}) {
+export function compileOmiParsedWithTriadDispatch(parsed, options = {}) {
+  return compileOmiParsed(parsed, { ...options, triadDispatch: true });
+}
+
+export async function compileOmiFile(text, { source = 'unknown.omi', ...options } = {}) {
   const parsed = parseOmiDocument(text, { source });
-  return compileOmiParsed(parsed);
+  return compileOmiParsed(parsed, options);
 }

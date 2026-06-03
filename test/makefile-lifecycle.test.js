@@ -79,6 +79,7 @@ describe('OMI-PORTAL: Makefile Build Automation & Environment Grade Verification
     const content = fs.readFileSync(path.join(ROOT, 'Makefile'), 'utf-8');
     assert.ok(content.includes('generate-router-seeds:'), 'Makefile must generate vectors/*.omi router seeds');
     assert.ok(content.includes('verify-router-seeds:'), 'Makefile must verify router seed drift and compilation');
+    assert.ok(content.includes('audit-cons-triad-dispatch:'), 'Makefile must audit CONS triad dispatch lanes');
     assert.ok(content.includes('vectors/pos.omi'), 'Router seeds must live under vectors/, not dist/');
   });
 

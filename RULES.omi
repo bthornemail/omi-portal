@@ -1176,3 +1176,29 @@ omi-0000-0000-0000-0000-0000-0000-00ce-0001/128 MUST resolve-aa-pos-pointers-thr
 #   non-linear semantic aliases or relinks MUST live inside CONS source blocks,
 #   not by reordering primary lookup keys.
 omi-0000-0000-0000-0000-0000-0000-00cf-0001/128 MUST treat-cons-as-sole-rrggbbaa-lookup-table-for-upper-readers
+
+# ============================================================================
+# TRIAD DISPATCH SECONDARY CONS INDEX (Rules 0xD1-0xD3)
+# ============================================================================
+# Core: Triad Dispatch derives a secondary modulo-155 lane from OMI segment
+#       low bytes. It routes already-valid records into reader branches without
+#       reordering RRGGBBAA primary keys or validating lower object state.
+# ============================================================================
+
+# [Rule 0xD1]: Derive Triad Dispatch as Secondary CONS Index
+#   Triad Dispatch MUST derive triad155 = (low(S0) + low(S1) + low(S2)) mod
+#   155 in canonical prefix3 mode. full8 mode MAY exist as a diagnostic pass
+#   but MUST NOT replace the canonical prefix3 secondary index.
+omi-0000-0000-0000-0000-0000-0000-00d1-0001/128 MUST derive-triad-dispatch-as-secondary-cons-index-mod-one-hundred-fifty-five
+
+# [Rule 0xD2]: Preserve RRGGBBAA Primary Order Across Triad Dispatch
+#   Triad Dispatch MUST NOT reorder CONS.omi RRGGBBAA primary lookup keys.
+#   The triad lane lives inside CONS source blocks as metadata and never
+#   becomes the primary memory-map ordering authority.
+omi-0000-0000-0000-0000-0000-0000-00d2-0001/128 MUST preserve-rrggbbaa-monotonic-primary-order-when-triad-dispatch-is-added
+
+# [Rule 0xD3]: Route Triad Branch Planes Without Lower-Body Validation
+#   coreMax MAY route branch plane selection between Real Plane A and
+#   Imaginary Plane B, but it MUST NOT validate Q_frame, Q_xy, Delta Law,
+#   lower Omicron frame state, or RRGGBBAA key authority.
+omi-0000-0000-0000-0000-0000-0000-00d3-0001/128 MUST route-triad-branch-plane-without-validating-lower-body

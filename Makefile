@@ -40,6 +40,7 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make pipeline     — 13-step execution doctrine (diagnostic)"
 	@echo "  make compile-imo  — Lower .omi declarations to .imo objects"
 	@echo "  make generate-router-seeds — Generate vectors/*.omi proxy seed configs"
+	@echo "  make audit-cons-triad-dispatch — Audit CONS RRGGBBAA triad lanes"
 	@echo ""
 	@echo "DEVELOPMENT:"
 	@echo "  make dev          — verify-safe + build-dev"
@@ -69,7 +70,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence generate-router-seeds compile-router-seeds verify-router-seeds
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence generate-router-seeds compile-router-seeds verify-router-seeds audit-cons-triad-dispatch
 
 dev: verify-safe build-dev
 
@@ -108,7 +109,8 @@ test-focused:
 	  test/principal-domain.test.js \
 	  test/omi-gcd.test.js \
 	  test/bezout-witness.test.js \
-	  test/cyclic-module.test.js
+	  test/cyclic-module.test.js \
+	  test/triad-dispatch.test.js
 
 docs-dev:
 	@test -f docs/agreement-is-all-you-need.md
@@ -263,8 +265,12 @@ compile-router-seeds: generate-router-seeds
 
 verify-router-seeds:
 	node scripts/generate-router-seeds.js --check
-	node --test test/router-seeds.test.js
+	node --test test/router-seeds.test.js test/triad-dispatch.test.js
+	$(MAKE) audit-cons-triad-dispatch
 	$(MAKE) compile-router-seeds
+
+audit-cons-triad-dispatch:
+	node scripts/audit-cons-triad-dispatch.js --require-source-blocks
 
 # ============================================================================
 # OMI 13-STEP OPERATIONAL PIPELINE (Diagnostic)
@@ -308,8 +314,7 @@ compose:
 
 route:
 	@echo "[8 ROUTE] Verifying triad-router155"
-	node --test test/wire-profile.test.js
-	@echo "  ◇ triad-router155 tests: [TODO — add dedicated test file]"
+	node --test test/wire-profile.test.js test/triad-dispatch.test.js
 
 scope:
 	@echo "[9 SCOPE] Verifying CIDR / wire profile"

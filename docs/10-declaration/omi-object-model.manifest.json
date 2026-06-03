@@ -37,6 +37,13 @@
       "sourceNotes": "Standalone browser UI for exploring the carry lookahead adder substrate. Renders JSON Canvas nodes via dataset attributes and runs real-time 4-bit CLA on user-supplied inputs."
     },
     {
+      "path": "dev-docs/tetragrammatron-meta-memory-automaton.md",
+      "role": "implementation-facing Tetragrammatron meta-memory automaton reference for the five-factor CONS/RRGGBBAA router",
+      "canonicalStatus": "reference",
+      "keyConcepts": ["Tetragrammatron", "meta-memory automaton", "five canonical OMI factors", "CONS RRGGBBAA lookup", "vectors router seeds", "Triad Dispatch", "actual code anchors"],
+      "sourceNotes": "Filed reference document mapping the conceptual hidden 5! bridge to implemented modules, generated vectors, Triad Dispatch, tests, Makefile targets, and Rules/Facts 0xCB-0xD3. It is reference provenance, not a new canonical root."
+    },
+    {
       "path": "src/omi/bijective-cube-kernel.js",
       "role": "bijective two-cube state transition kernel — N-1 non-redundant federated replication",
       "canonicalStatus": "canonical",

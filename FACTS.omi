@@ -534,3 +534,21 @@ omi-0000-0000-0000-0000-0000-0000-00ce-1002/128 FACT wordnet-centroid-authority-
 
 omi-0000-0000-0000-0000-0000-0000-00cf-1001/128 FACT cons-rrggbbaa-lookup-table-is-monotonic
 omi-0000-0000-0000-0000-0000-0000-00cf-1002/128 FACT non-linear-router-aliases-live-in-cons-source-blocks
+
+# ============================================================================
+# TRIAD DISPATCH SECONDARY INDEX FACTS (Rules 0xD1-0xD3)
+# ============================================================================
+
+# --- Triad Secondary Index Facts (0xD1) ---
+
+omi-0000-0000-0000-0000-0000-0000-00d1-1001/128 FACT triad-dispatch-secondary-index-implemented
+omi-0000-0000-0000-0000-0000-0000-00d1-1002/128 FACT pre-boot-root-prefix3-triad-anchor-is-thirty-six
+
+# --- RRGGBBAA Primary Order Preservation Facts (0xD2) ---
+
+omi-0000-0000-0000-0000-0000-0000-00d2-1001/128 FACT rrggbbaa-primary-order-preserved-across-triad-dispatch
+
+# --- Triad Branch Plane Routing Facts (0xD3) ---
+
+omi-0000-0000-0000-0000-0000-0000-00d3-1001/128 FACT triad-branch-plane-routing-implemented
+omi-0000-0000-0000-0000-0000-0000-00d3-1002/128 FACT triad-branch-plane-routing-does-not-validate-lower-body
