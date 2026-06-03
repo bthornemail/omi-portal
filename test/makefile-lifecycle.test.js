@@ -75,6 +75,13 @@ describe('OMI-PORTAL: Makefile Build Automation & Environment Grade Verification
     }
   });
 
+  it('Assertion 0x06b: Should verify router seed Makefile targets are available', () => {
+    const content = fs.readFileSync(path.join(ROOT, 'Makefile'), 'utf-8');
+    assert.ok(content.includes('generate-router-seeds:'), 'Makefile must generate vectors/*.omi router seeds');
+    assert.ok(content.includes('verify-router-seeds:'), 'Makefile must verify router seed drift and compilation');
+    assert.ok(content.includes('vectors/pos.omi'), 'Router seeds must live under vectors/, not dist/');
+  });
+
   it('Assertion 0x07: Should verify Makefile has legacy alias for compile -> production', () => {
     const content = fs.readFileSync(path.join(ROOT, 'Makefile'), 'utf-8');
     assert.ok(content.includes('compile:'), 'Makefile must have compile: alias');

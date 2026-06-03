@@ -39,6 +39,7 @@ help: ## Display the canonical operational target glossary map
 	@echo "OMI OPERATIONAL PIPELINE:"
 	@echo "  make pipeline     — 13-step execution doctrine (diagnostic)"
 	@echo "  make compile-imo  — Lower .omi declarations to .imo objects"
+	@echo "  make generate-router-seeds — Generate vectors/*.omi proxy seed configs"
 	@echo ""
 	@echo "DEVELOPMENT:"
 	@echo "  make dev          — verify-safe + build-dev"
@@ -68,7 +69,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence generate-router-seeds compile-router-seeds verify-router-seeds
 
 dev: verify-safe build-dev
 
@@ -78,7 +79,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script
+verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -251,6 +252,19 @@ verify-rrggbbaa-orbit:
 
 verify-miquel-rgb-incidence:
 	node --test test/miquel-rgb-incidence.test.js
+
+generate-router-seeds:
+	node scripts/generate-router-seeds.js
+
+compile-router-seeds: generate-router-seeds
+	node scripts/compile-omi.js vectors/pos.omi vectors/pos.imo
+	node scripts/compile-omi.js vectors/features.omi vectors/features.imo
+	node scripts/compile-omi.js vectors/pl.omi vectors/pl.imo
+
+verify-router-seeds:
+	node scripts/generate-router-seeds.js --check
+	node --test test/router-seeds.test.js
+	$(MAKE) compile-router-seeds
 
 # ============================================================================
 # OMI 13-STEP OPERATIONAL PIPELINE (Diagnostic)

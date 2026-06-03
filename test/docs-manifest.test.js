@@ -206,9 +206,15 @@ test("OMI Declarative Core root files are canonical manifest sources", async () 
   const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
   const objectModel = await readFile(new URL("../docs/omi-object-model.md", import.meta.url), "utf8");
   const expected = ["RULES.omi", "FACTS.omi", "CLOSURES.omi", "COMBINATORS.omi", "CONS.omi"];
+  const vectors = ["vectors/pos.omi", "vectors/features.omi", "vectors/pl.omi"];
 
   for (const path of expected) {
     assert.ok(manifest.sources.some((source) => source.path === path && source.canonicalStatus === "canonical"), `${path} must be canonical`);
+    assert.ok(manifest.layerMap.documentAssignments.some((assignment) => assignment.path === path && assignment.primary === "declaration"), `${path} must be assigned to declaration`);
+  }
+
+  for (const path of vectors) {
+    assert.ok(manifest.sources.some((source) => source.path === path && source.canonicalStatus === "generated"), `${path} must be generated`);
     assert.ok(manifest.layerMap.documentAssignments.some((assignment) => assignment.path === path && assignment.primary === "declaration"), `${path} must be assigned to declaration`);
   }
 
@@ -219,7 +225,9 @@ test("OMI Declarative Core root files are canonical manifest sources", async () 
     assert.match(doc, /CLOSURES\.omi declares completion and boundedness conditions/);
     assert.match(doc, /COMBINATORS\.omi declares lawful composition operators/);
     assert.match(doc, /CONS\.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures/);
+    assert.match(doc, /Generated router seed configs live under `vectors\/`/);
     assert.match(doc, /RULES declare\./);
     assert.match(doc, /CONS reduce\./);
+    assert.match(doc, /vectors\/\*\.omi route through CONS\./);
   }
 });

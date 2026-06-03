@@ -1138,3 +1138,41 @@ omi-0000-0000-0000-0000-0000-0000-00c5-0001/128 MUST reserve-thirty-seven-as-aa-
 #   24 incidence attachments. The AA byte routes which incidence attachment
 #   is active per color-address pair.
 omi-0000-0000-0000-0000-0000-0000-00c6-0001/128 MUST map-json-canvas-rgb-color-cube-through-eight-vertex-six-face-incidence
+
+# ============================================================================
+# FIVE-FACTOR CONS/RRGGBBAA SEMANTIC ROUTER (Rules 0xCB-0xCF)
+# ============================================================================
+# Core: POS, feature, and WordNet-Prolog router seeds are generated proxy
+#       configs. They reduce through the five canonical factors, with CONS as
+#       the sole monotonic RRGGBBAA lookup table for upper-reader dispatch.
+# ============================================================================
+
+# [Rule 0xCB]: Map WLOG Pointer Domains Through the Five Canonical Factors
+#   WLOG semantic pointer domains MUST reduce through RULES, FACTS, CLOSURES,
+#   COMBINATORS, and CONS. Generated proxy seed configs MUST NOT become new
+#   root authority files.
+omi-0000-0000-0000-0000-0000-0000-00cb-0001/128 MUST map-wlog-pointers-to-five-factors-via-rrggbbaa-seeds
+
+# [Rule 0xCC]: Route Universal POS Through the AA Low Byte
+#   Universal POS tags MUST map deterministically to AA low-byte values
+#   0x01 through 0x11 in existing POS order. This route preserves POS graph
+#   behavior and resolves through CONS before any upper-reader projection.
+omi-0000-0000-0000-0000-0000-0000-00cc-0001/128 MUST map-aa-lower-byte-to-universal-pos-tags-for-semantic-routing
+
+# [Rule 0xCD]: Route Universal Features Through the AA High Byte
+#   Universal feature attachments MUST occupy the AA high byte of the router
+#   attachment field. Feature routes MUST remain distinct from POS low-byte
+#   attachments and MUST reduce through CONS source-block bindings.
+omi-0000-0000-0000-0000-0000-0000-00cd-0001/128 MUST map-aa-high-byte-to-universal-features-bitfield
+
+# [Rule 0xCE]: Bridge WordNet-Prolog Seeds Without Replacing Centroid Authority
+#   WordNet-Prolog seed bridges MUST preserve existing synset centroid identity.
+#   The bridge may expose deterministic proxy records, but it MUST NOT replace
+#   WordNet lookup, relation, or centroid authority.
+omi-0000-0000-0000-0000-0000-0000-00ce-0001/128 MUST resolve-aa-pos-pointers-through-wordnet-prolog-bridge
+
+# [Rule 0xCF]: Keep CONS as the Sole Monotonic RRGGBBAA Lookup Table
+#   CONS.omi MUST index primary RRGGBBAA lookup keys in ascending order. Any
+#   non-linear semantic aliases or relinks MUST live inside CONS source blocks,
+#   not by reordering primary lookup keys.
+omi-0000-0000-0000-0000-0000-0000-00cf-0001/128 MUST treat-cons-as-sole-rrggbbaa-lookup-table-for-upper-readers

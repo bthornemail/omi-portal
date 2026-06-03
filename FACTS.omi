@@ -506,3 +506,31 @@ omi-0000-0000-0000-0000-0000-0000-00c5-1002/128 FACT thirty-seven-never-collides
 
 omi-0000-0000-0000-0000-0000-0000-00c6-1001/128 FACT miquel-rgb-eight-vertex-six-face-incidence-implemented
 omi-0000-0000-0000-0000-0000-0000-00c6-1002/128 FACT rgb-cube-realizes-eight-three-six-four-incidence-structure
+
+# ============================================================================
+# FIVE-FACTOR CONS/RRGGBBAA ROUTER FACTS (Rules 0xCB-0xCF)
+# ============================================================================
+
+# --- Five-Factor Pointer Domain Facts (0xCB) ---
+
+omi-0000-0000-0000-0000-0000-0000-00cb-1001/128 FACT five-factor-wlog-pointer-router-implemented
+
+# --- AA Low-Byte POS Route Facts (0xCC) ---
+
+omi-0000-0000-0000-0000-0000-0000-00cc-1001/128 FACT aa-lower-byte-pos-router-seeds-generated
+omi-0000-0000-0000-0000-0000-0000-00cc-1002/128 FACT universal-pos-aa-low-byte-range-is-0x01-through-0x11
+
+# --- AA High-Byte Feature Route Facts (0xCD) ---
+
+omi-0000-0000-0000-0000-0000-0000-00cd-1001/128 FACT aa-high-byte-feature-router-seeds-generated
+omi-0000-0000-0000-0000-0000-0000-00cd-1002/128 FACT feature-attachments-are-distinct-from-pos-low-byte-routes
+
+# --- WordNet-Prolog Bridge Route Facts (0xCE) ---
+
+omi-0000-0000-0000-0000-0000-0000-00ce-1001/128 FACT wordnet-prolog-router-seeds-preserve-synset-identity
+omi-0000-0000-0000-0000-0000-0000-00ce-1002/128 FACT wordnet-centroid-authority-is-not-replaced-by-proxy-seeds
+
+# --- CONS Lookup Monotonicity Facts (0xCF) ---
+
+omi-0000-0000-0000-0000-0000-0000-00cf-1001/128 FACT cons-rrggbbaa-lookup-table-is-monotonic
+omi-0000-0000-0000-0000-0000-0000-00cf-1002/128 FACT non-linear-router-aliases-live-in-cons-source-blocks

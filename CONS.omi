@@ -156,3 +156,131 @@ omi-
        emoji-does-not-authorize-OMI-frame))
   )
 -imo
+
+# ============================================================================
+# CONS RRGGBBAA MONOTONIC ROUTER LOOKUP TABLE (Rule 0xCF)
+# ============================================================================
+# Primary keys are sorted by ascending RRGGBBAA. Non-linear semantic aliases
+# and relinks live inside source blocks rather than by reordering this table.
+# ============================================================================
+
+# [Cons 0xCF-0001]: POS ADJ Low-Byte Route
+omi-0000-03bf-7c00-0000-0010-0001-039f-7dff/128 CONS cons-rrggbbaa-pos-adj
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0000-0010-0001-039f-7dff/128)
+    (rrggbbaa . 0x00000001)
+    (rgb-body . #000000)
+    (aa-attachment . 0x0001)
+    (aa-low-byte . 0x01)
+    (aa-high-byte . 0x00)
+    (pos-seed . vectors/pos.omi#pos-seed-adj)
+    (feature-seed . nil)
+    (prolog-seed . nil)
+    (upper-reader-generator . 0x7d)
+    (non-linear-aliases . (adjective modifier open-quality))
+    (authority . cons-monotonic-reduction-index)
+  )
+-imo
+
+# [Cons 0xCF-0008]: POS NOUN Low-Byte Route
+omi-0000-03bf-7c00-0000-0010-0008-039f-7dff/128 CONS cons-rrggbbaa-pos-noun
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0000-0010-0008-039f-7dff/128)
+    (rrggbbaa . 0x00000008)
+    (rgb-body . #000000)
+    (aa-attachment . 0x0008)
+    (aa-low-byte . 0x08)
+    (aa-high-byte . 0x00)
+    (pos-seed . vectors/pos.omi#pos-seed-noun)
+    (feature-seed . nil)
+    (prolog-seed . vectors/pl.omi#prolog-seed-canvas)
+    (upper-reader-generator . 0x7d)
+    (non-linear-aliases . (noun synset-centroid semantic-subject))
+    (authority . cons-monotonic-reduction-index)
+  )
+-imo
+
+# [Cons 0xCF-0010]: POS VERB Low-Byte Route
+omi-0000-03bf-7c00-0000-0010-0010-039f-7dff/128 CONS cons-rrggbbaa-pos-verb
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0000-0010-0010-039f-7dff/128)
+    (rrggbbaa . 0x00000010)
+    (rgb-body . #000000)
+    (aa-attachment . 0x0010)
+    (aa-low-byte . 0x10)
+    (aa-high-byte . 0x00)
+    (pos-seed . vectors/pos.omi#pos-seed-verb)
+    (feature-seed . nil)
+    (prolog-seed . nil)
+    (upper-reader-generator . 0x7d)
+    (non-linear-aliases . (verb process transition))
+    (authority . cons-monotonic-reduction-index)
+  )
+-imo
+
+# [Cons 0xCF-01000000]: Feature Mood High-Byte Route
+omi-0000-03bf-7c00-0100-0020-0100-039f-7eff/128 CONS cons-rrggbbaa-feature-mood
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0100-0020-0100-039f-7eff/128)
+    (rrggbbaa . 0x01000000)
+    (rgb-body . #010000)
+    (aa-attachment . 0x0100)
+    (aa-low-byte . 0x00)
+    (aa-high-byte . 0x01)
+    (pos-seed . nil)
+    (feature-seed . vectors/features.omi#feature-seed-mood)
+    (prolog-seed . nil)
+    (upper-reader-generator . 0x7e)
+    (non-linear-aliases . (mood modality clause-attitude))
+    (authority . cons-monotonic-reduction-index)
+  )
+-imo
+
+# [Cons 0xCF-01000100]: Feature Tense High-Byte Route
+omi-0000-03bf-7c00-0100-0120-0200-039f-7eff/128 CONS cons-rrggbbaa-feature-tense
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0100-0120-0200-039f-7eff/128)
+    (rrggbbaa . 0x01000100)
+    (rgb-body . #010001)
+    (aa-attachment . 0x0200)
+    (aa-low-byte . 0x00)
+    (aa-high-byte . 0x02)
+    (pos-seed . nil)
+    (feature-seed . vectors/features.omi#feature-seed-tense)
+    (prolog-seed . nil)
+    (upper-reader-generator . 0x7e)
+    (non-linear-aliases . (tense temporal-feature timeline-lens))
+    (authority . cons-monotonic-reduction-index)
+  )
+-imo
+
+# [Cons 0xCF-02000008]: WordNet-Prolog Canvas Bridge Route
+omi-0000-03bf-7c00-0200-0030-0008-039f-7fff/128 CONS cons-rrggbbaa-wordnet-canvas
+
+omi-
+  (
+    (cidr-pointer . omi-0000-03bf-7c00-0200-0030-0008-039f-7fff/128)
+    (rrggbbaa . 0x02000008)
+    (rgb-body . #020000)
+    (aa-attachment . 0x0008)
+    (aa-low-byte . 0x08)
+    (aa-high-byte . 0x00)
+    (pos-seed . vectors/pos.omi#pos-seed-noun)
+    (feature-seed . nil)
+    (prolog-seed . vectors/pl.omi#prolog-seed-canvas)
+    (upper-reader-generator . 0x7f)
+    (non-linear-aliases . (canvas surface wordnet-synset prolog-s))
+    (authority . cons-monotonic-reduction-index)
+    (forbids . (proxy-seed-replaces-wordnet-centroid-authority))
+  )
+-imo

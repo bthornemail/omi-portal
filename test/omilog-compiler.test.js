@@ -30,7 +30,7 @@ async function readRepoFile(path) {
   return readFile(join(process.cwd(), path), "utf8");
 }
 
-test("KEYWORD_TO_IMO maps all six keywords", () => {
+test("KEYWORD_TO_IMO maps all six native keyword entries", () => {
   assert.equal(KEYWORD_TO_IMO.MUST, "!");
   assert.equal(KEYWORD_TO_IMO.FACT, "=");
   assert.equal(KEYWORD_TO_IMO.EQUALS, "=");
@@ -46,6 +46,7 @@ test("IMO_OP_TO_KEYWORD round-trips correctly", () => {
   assert.equal(IMO_OP_TO_KEYWORD[")"], "CLOSE");
   assert.equal(IMO_OP_TO_KEYWORD["+"], "COMBINE");
   assert.equal(IMO_OP_TO_KEYWORD["."], "CONS");
+  assert.equal(IMO_OP_TO_KEYWORD["?"], undefined);
 });
 
 test("IMO_CONTROLS defines FS GS RS US at expected code points", () => {
@@ -66,7 +67,6 @@ test("isNativeCharPlaneSafe accepts low ASCII and Unicode carriers", () => {
   assert.ok(isNativeCharPlaneSafe("🏷️"));
   assert.ok(isNativeCharPlaneSafe("🤴🏿"));
   assert.ok(isNativeCharPlaneSafe("0"));
-  assert.ok(isNativeCharPlaneSafe("?"));
   assert.ok(isNativeCharPlaneSafe("\x00\x01\x1c\x1d\x1e\x1f"));
   assert.ok(isNativeCharPlaneSafe(LITTLE_OMICRON));
   assert.ok(isNativeCharPlaneSafe(BIG_OMICRON));
@@ -105,15 +105,17 @@ test("lowerRecordToImo lowers a MUST rule to native operator and decimal address
   assert.ok(isNativeCharPlaneSafe(line));
 });
 
-test("lowerRecordToImo lowers all five keyword types", () => {
+test("lowerRecordToImo lowers all compiler keyword operators", () => {
   const must = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-0084-0001/128 MUST x").records[0];
   const fact = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-0084-1001/128 FACT x").records[0];
+  const equals = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-0084-1002/128 EQUALS y").records[0];
   const close = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-0079-c001/128 CLOSE x").records[0];
   const combine = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-5040-b003/128 COMBINE x").records[0];
   const cons = parseOmiDocument("omi-0000-0000-0000-0000-0000-0000-c005-0001/128 CONS x").records[0];
 
   assert.equal(lowerRecordToImo(must), `${LITTLE_OMICRON} !/0-0-0-0-0-0-132-1/128 ${BIG_OMICRON}`);
   assert.equal(lowerRecordToImo(fact), `${LITTLE_OMICRON} =/0-0-0-0-0-0-132-4097/128 ${BIG_OMICRON}`);
+  assert.equal(lowerRecordToImo(equals), `${LITTLE_OMICRON} =/0-0-0-0-0-0-132-4098/128 ${BIG_OMICRON}`);
   assert.equal(lowerRecordToImo(close), `${LITTLE_OMICRON} )/0-0-0-0-0-0-121-49153/128 ${BIG_OMICRON}`);
   assert.equal(lowerRecordToImo(combine), `${LITTLE_OMICRON} +/0-0-0-0-0-0-20544-45059/128 ${BIG_OMICRON}`);
   assert.equal(lowerRecordToImo(cons), `${LITTLE_OMICRON} ./0-0-0-0-0-0-49157-1/128 ${BIG_OMICRON}`);

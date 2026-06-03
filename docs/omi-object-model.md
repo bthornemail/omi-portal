@@ -277,7 +277,7 @@ Browser meta-compiler drafts remain prototypes. When their ideas graduate, they 
 
 ## OMI Declarative Core
 
-The OMI Declarative Core is split into five files:
+The OMI Declarative Core is split into five canonical root files:
 
 ```text
 RULES.omi declares normative invariants.
@@ -287,7 +287,9 @@ COMBINATORS.omi declares lawful composition operators.
 CONS.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures.
 ```
 
-This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, and cons forms do not replace validation.
+Generated router seed configs live under `vectors/` and reduce through CONS. `vectors/pos.omi`, `vectors/features.omi`, and `vectors/pl.omi` are static proxy seed configs, not root authority files.
+
+This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, cons forms do not replace validation, and generated vectors do not replace POS graph or WordNet centroid authority.
 
 ```text
 RULES declare.
@@ -295,6 +297,7 @@ FACTS ground.
 CLOSURES seal.
 COMBINATORS compose.
 CONS reduce.
+vectors/*.omi route through CONS.
 ```
 
 ## Distributed State Semantics

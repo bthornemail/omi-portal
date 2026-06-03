@@ -368,7 +368,7 @@ The MCRSGSP storage draft is applied as provenance for implemented distributed p
 
 ### 6.8 OMI Declarative Core
 
-The OMI Declarative Core is split into five files:
+The OMI Declarative Core is split into five canonical root files:
 
 ```text
 RULES.omi declares normative invariants.
@@ -378,7 +378,9 @@ COMBINATORS.omi declares lawful composition operators.
 CONS.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures.
 ```
 
-This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, and cons forms do not replace validation.
+Generated router seed configs live under `vectors/` and reduce through CONS. They are traversable proxy seeds for POS, Universal Features, and WordNet-Prolog bridge routes, not new root authority files.
+
+This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, cons forms do not replace validation, and generated vector seeds do not replace POS graph or WordNet centroid authority.
 
 ```text
 RULES declare.
@@ -386,6 +388,7 @@ FACTS ground.
 CLOSURES seal.
 COMBINATORS compose.
 CONS reduce.
+vectors/*.omi route through CONS.
 ```
 
 ---

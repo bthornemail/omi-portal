@@ -129,3 +129,24 @@ omi-
     (property . central-4-bit-gnomon-carry-forward-adder)
   )
 -imo
+
+# [Combinator 0xCF-06]: Semantic Router Seed Reduction
+omi-0000-0000-0000-0000-0000-0000-00cf-b006/128 COMBINE semantic-router-seed-reduction
+
+omi-
+  (
+    (input .
+      (pos-seed feature-seed wordnet-prolog-seed cidr-pointer rrggbbaa))
+    (compose .
+      ((pos . aa-low-byte)
+       (feature . aa-high-byte)
+       (wordnet . synset-centroid-identity)
+       (cidr . pre-boot-pointer)
+       (cons . monotonic-rrggbbaa-lookup)))
+    (output . upper-reader-generator)
+    (boundary .
+      (generated-seeds-are-static-proxy-configs
+       cons-resolves-primary-key
+       wordnet-centroid-authority-preserved))
+  )
+-imo

@@ -14,3 +14,4 @@ export * from "./atomic-kernel.js";
 export * from "./cosmic-orbit.js";
 export * from "./reciprocal-router.js";
 export * from "./miquel-router.js";
+export * from "./router-seeds.js";

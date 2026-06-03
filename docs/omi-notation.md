@@ -551,7 +551,7 @@ O-expressions are unevaluated until a compiler, closure checker, or lookup engin
 
 ## 10. The Five Declarative Files
 
-Omi-Notation is used across five declarative source files:
+Omi-Notation is used across five canonical declarative source files:
 
 ```text
 RULES.omi
@@ -605,11 +605,13 @@ omi-address/prefix COMBINE combinator-name
 
 ### 10.5 CONS.omi
 
-Declares dot notation, cons cells, alists, and palindromic mnemonic reduction.
+Declares dot notation, cons cells, alists, palindromic mnemonic reduction, and the monotonic RRGGBBAA lookup table.
 
 ```text
 omi-address/prefix CONS cons-name
 ```
+
+Generated `vectors/pos.omi`, `vectors/features.omi`, and `vectors/pl.omi` files are static proxy seed configs that reduce through CONS. They are not canonical root authority files.
 
 Each file may use `omi- / -imo` source blocks.
 
@@ -855,18 +857,18 @@ O-expressions are unevaluated until a compiler, closure checker, or lookup engin
 
 ## 17. The Five Declarative Core Files
 
-The Omi Object Model notation layer divides its core configuration definitions across five standalone manifest files. This architecture guarantees strict isolation of concerns, preventing logical bleeding between constraints, implementations, and reduction grammars.
+The Omi Object Model notation layer divides its core configuration definitions across five standalone root files. This architecture guarantees strict isolation of concerns, preventing logical bleeding between constraints, implementations, reduction grammars, and generated proxy seed configs.
 
 ```text
 +-----------------------------------------------------------------------+
-|                   THE FIVE DECLARATIVE CORES                          |
+|                    THE FIVE DECLARATIVE CORES                         |
 +-----------------------------------------------------------------------+
 |                                                                       |
 |  RULES.omi       → Declares Normative Invariants   (Obligations)      |
 |  FACTS.omi       → Grounds Tested Code Truths      (Realities)        |
 |  CLOSURES.omi    → Seals Bounded State Completions (Terminations)     |
 |  COMBINATORS.omi → Composes Functional Operations  (Operators)        |
-|  CONS.omi        → Reduces Meta-Circular Structures (Pairings)        |
+|  CONS.omi        → Reduces Structures and RRGGBBAA Lookups (Pairings) |
 +-----------------------------------------------------------------------+
 ```
 
@@ -904,11 +906,13 @@ omi-address/prefix COMBINE combinator-transformation-name
 
 ### 17.5 V. CONS.omi (Meta-Circular Structures)
 
-Declares dot notation layouts, primitive cons cells, association lists, and palindromic mnemonic reduction rules. It tracks how high-level symbols lower into native computer instructions.
+Declares dot notation layouts, primitive cons cells, association lists, palindromic mnemonic reduction rules, and the monotonic RRGGBBAA lookup table for generated proxy seeds.
 
 ```text
 omi-address/prefix CONS cons-pairing-name
 ```
+
+Generated router seed files under `vectors/` are traversable POS, feature, and WordNet-Prolog proxy configs. They reduce through CONS and do not replace POS graph behavior, WordNet synset centroid authority, or the five canonical roots.
 
 ---
 

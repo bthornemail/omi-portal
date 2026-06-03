@@ -278,6 +278,71 @@
 
   </div>
 
+  <!-- FOURTH ROW: Cluster Telemetry + Triad Router S-P-O Dispatch -->
+  <div class="grid" style="margin-top:1rem">
+
+    <div class="card purple" style="grid-column:span 2">
+      <div class="flex-between">
+        <h2>📡 cluster telemetry — δC signature gateway</h2>
+        <span><span class="badge" id="telemBadge">◉ offline</span></span>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="metric"><span>Δ peers signed</span><span class="val" id="telemPeerCount">0</span></div>
+          <div class="metric"><span>Δ last signature</span><span class="val" id="telemLastSig" style="font-size:.7rem">—</span></div>
+          <div>
+            <div style="display:flex;gap:.3rem;margin-top:.3rem">
+              <input type="text" id="telemPeerInput" value="2607:f1c0:f0b7:df00::1" style="flex:1;min-width:0;background:var(--code);border:1px solid var(--line);border-radius:999px;padding:.3rem .6rem;color:var(--ink);font-family:monospace;font-size:.7rem">
+              <button id="telemSignBtn" style="padding:.3rem .7rem;font-size:.7rem">✎ sign</button>
+              <button id="telemSimBtn" class="sec" style="padding:.3rem .7rem;font-size:.7rem">▶ sim</button>
+              <button id="telemClearBtn" class="sec" style="padding:.3rem .7rem;font-size:.7rem">✕ clear</button>
+            </div>
+          </div>
+          <div style="margin-top:.4rem;max-height:150px;overflow:auto;font-family:monospace;font-size:.65rem;background:var(--code);border-radius:10px;padding:.4rem;border:1px solid var(--line)">
+            <div id="telemPeerList"><span style="color:var(--muted)">no peers signed</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="metric"><span>SAB telemetry slots (64 × 64-bit)</span><span class="val" id="telemSlotCount">0</span></div>
+          <div class="sab-grid" id="telemSabGrid" style="display:grid;grid-template-columns:repeat(16,1fr);gap:2px;padding:4px;background:var(--code);border-radius:10px;border:1px solid var(--line)">
+          </div>
+          <div style="display:flex;gap:.3rem;margin-top:.3rem;font-size:.65rem;color:var(--muted)">
+            <span>■ hot (non‑zero)</span>
+            <span>□ zero</span>
+            <span id="telemSabNonzero">0 / 64 active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold">
+      <div class="flex-between">
+        <h2>⊞ triad‑router155 · S‑P‑O dispatch</h2>
+        <span class="badge amber">155 triads</span>
+      </div>
+      <div class="grid-2" style="margin-bottom:.3rem">
+        <div style="font-size:.7rem">
+          <div class="metric"><span>RULES.omi</span><span class="val">45 triads</span></div>
+          <div class="metric"><span>FACTS.omi</span><span class="val">20 triads</span></div>
+          <div class="metric"><span>CLOSURES.omi</span><span class="val">15 triads</span></div>
+        </div>
+        <div style="font-size:.7rem">
+          <div class="metric"><span>COMBINATORS.omi</span><span class="val">60 triads</span></div>
+          <div class="metric"><span>CONS.omi</span><span class="val">15 triads</span></div>
+          <div class="metric"><span>Σ</span><span class="val">155</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem">
+        <button id="triadCompileBtn" class="sec" style="padding:.2rem .6rem;font-size:.7rem">⟳ dispatch current</button>
+        <span style="font-size:.65rem;color:var(--muted);align-self:center">S‑P‑O lane from compiled address</span>
+      </div>
+      <div id="triadDispatch" style="background:var(--code);border-radius:10px;padding:.4rem;border:1px solid var(--line);font-family:monospace;font-size:.65rem;min-height:80px">
+        <span style="color:var(--muted)">compile an OMI address to see triad routing</span>
+      </div>
+    </div>
+
+  </div>
+
   <!-- FOOTER: Canonical doctrine -->
   <div style="margin-top:1.5rem;padding-top:.8rem;border-top:1px solid var(--line);font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center">
     <span>⟨omi — imo⟩ palindromic meta‑circular compiler</span>
@@ -584,7 +649,236 @@
   log('OMI portal · rooted tower · 5!–12! · 240‑state bridge · 1/73 stepping · 5-fold/4-fold doctrine','ok');
   log('The climb does not step to 5. The climb preserves 5.','ok');
 
-  // ─── LIVE PROXY SSE STREAM ────────────────────────────────────────
+  // ─── CLUSTER TELEMETRY — δC Signature Gateway ─────────────────────
+  class OmiClusterTelemetry {
+    constructor() {
+      this.peers = new Map();
+      this.sab = new Array(64).fill(0n);
+      this.history = [];
+    }
+
+    deltaC(x, c = 0x1337C0DE) {
+      const rotl1 = ((x << 1n) | (x >> 63n)) & 0xFFFFFFFFFFFFFFFFn;
+      const rotl3 = ((x << 3n) | (x >> 61n)) & 0xFFFFFFFFFFFFFFFFn;
+      const rotr2 = ((x >> 2n) | (x << 62n)) & 0xFFFFFFFFFFFFFFFFn;
+      return (rotl1 ^ rotl3 ^ rotr2 ^ BigInt(c)) & 0xFFFFFFFFFFFFFFFFn;
+    }
+
+    signPeer(address) {
+      const hex = address.replace(/[^0-9a-fA-F]/g, '');
+      const raw = BigInt('0x' + (hex || '0'));
+      const sig = this.deltaC(raw & 0xFFFFFFFFFFFFn);
+      this.peers.set(address, sig);
+      const slotIdx = this.peers.size % 64;
+      this.sab[slotIdx] = (this.sab[slotIdx] + sig) & 0xFFFFFFFFFFFFFFFFn;
+      this.history.push({ address, sig, t: Date.now() });
+      if (this.history.length > 50) this.history.shift();
+      this.render();
+      return sig;
+    }
+
+    clearPeers() {
+      this.peers.clear();
+      this.sab = new Array(64).fill(0n);
+      this.history = [];
+      this.render();
+    }
+
+    simulate(count = 3) {
+      const addrs = [
+        '2607:f1c0:f0b7:df00::' + (Math.floor(Math.random() * 0xffff)).toString(16),
+        '2001:db8::' + (Math.floor(Math.random() * 0xffff)).toString(16),
+        'fe80::' + (Math.floor(Math.random() * 0xffff)).toString(16),
+        'fc00:' + (Math.floor(Math.random() * 0xffff)).toString(16) + '::' + Math.floor(Math.random() * 0xffff).toString(16),
+        '2607:f1c0:f0b7:df00:' + Math.floor(Math.random() * 0xffff).toString(16) + ':' + Math.floor(Math.random() * 0xffff).toString(16) + '::' + Math.floor(Math.random() * 0xffff).toString(16),
+      ];
+      for (let i = 0; i < count; i++) {
+        const addr = addrs[i % addrs.length];
+        const sig = this.signPeer(addr);
+        log(`📡 δC signed ${addr} → 0x${sig.toString(16).padStart(16, '0')}`, 'ok');
+        // Blip torus correlating to signature low nibble
+        const cellIdx = Number(sig & 0xFn) % 16;
+        const cell = torusGrid.children[cellIdx];
+        if (cell) {
+          cell.style.boxShadow = '0 0 24px var(--green)';
+          cell.style.borderColor = 'var(--green)';
+          setTimeout(() => { cell.style.boxShadow = ''; cell.style.borderColor = ''; }, 1500);
+        }
+      }
+    }
+
+    snapshot() {
+      const s = {};
+      for (const [addr, sig] of this.peers) s[addr] = sig.toString(16);
+      s.sabSlots = [...this.sab];
+      return s;
+    }
+
+    render() {
+      const peerCount = $('telemPeerCount');
+      if (peerCount) peerCount.textContent = `${this.peers.size}`;
+      const badge = $('telemBadge');
+      if (badge) {
+        badge.textContent = this.peers.size > 0 ? '◉ online' : '◉ offline';
+        badge.className = `badge ${this.peers.size > 0 ? 'green' : ''}`;
+      }
+      // Last sig
+      const lastSig = $('telemLastSig');
+      if (lastSig && this.history.length > 0) {
+        const last = this.history[this.history.length - 1];
+        lastSig.textContent = `0x${last.sig.toString(16).padStart(16, '0')}`;
+      } else if (lastSig) {
+        lastSig.textContent = '—';
+      }
+      // Peer list
+      const list = $('telemPeerList');
+      if (list) {
+        if (this.peers.size === 0) {
+          list.innerHTML = '<span style="color:var(--muted)">no peers signed</span>';
+        } else {
+          list.innerHTML = '';
+          for (const [addr, sig] of this.peers) {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;justify-content:space-between;padding:1px 0;border-bottom:1px solid rgba(255,255,255,.03)';
+            row.innerHTML = `<span style="color:var(--cyan)">${addr}</span><span style="color:var(--amber);font-size:.6rem">0x${sig.toString(16).padStart(16,'0').slice(0,12)}…</span>`;
+            list.appendChild(row);
+          }
+        }
+      }
+      // SAB grid
+      const grid = $('telemSabGrid');
+      if (grid) {
+        grid.innerHTML = '';
+        let nonzero = 0;
+        for (let i = 0; i < 64; i++) {
+          const v = this.sab[i];
+          const cell = document.createElement('div');
+          cell.style.cssText = 'aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-family:monospace;border:1px solid var(--line);transition:all .25s';
+          if (v !== 0n) {
+            nonzero++;
+            const intensity = Math.min(255, Number(v & 0xFFn));
+            cell.style.background = `rgba(92,240,255,${0.1 + intensity / 512})`;
+            cell.style.borderColor = 'var(--cyan)';
+            cell.textContent = (v & 0xFn).toString(16);
+          } else {
+            cell.style.background = 'rgba(14,22,40,.6)';
+          }
+          cell.title = `slot[${i}] = 0x${v.toString(16).padStart(16,'0')}`;
+          grid.appendChild(cell);
+        }
+        const slotCount = $('telemSabNonzero');
+        if (slotCount) slotCount.textContent = `${nonzero} / 64 active`;
+        const slotTotal = $('telemSlotCount');
+        if (slotTotal) slotTotal.textContent = `${nonzero}`;
+      }
+    }
+  }
+
+  const telemetry = new OmiClusterTelemetry();
+  telemetry.render();
+
+  // Telemetry event bindings
+  const telemSignBtn = $('telemSignBtn');
+  const telemPeerInput = $('telemPeerInput');
+  const telemSimBtn = $('telemSimBtn');
+  const telemClearBtn = $('telemClearBtn');
+
+  if (telemSignBtn && telemPeerInput) {
+    telemSignBtn.addEventListener('click', () => {
+      const addr = telemPeerInput.value.trim();
+      if (!addr) return log('❌ empty peer address', 'no');
+      telemetry.signPeer(addr);
+      log(`✎ signed peer ${addr}`, 'ok');
+    });
+    telemPeerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') telemSignBtn.click();
+    });
+  }
+  if (telemSimBtn) {
+    telemSimBtn.addEventListener('click', () => {
+      telemetry.simulate(4);
+      log('▶ simulated 4 cluster peer signatures', 'mid');
+    });
+  }
+  if (telemClearBtn) {
+    telemClearBtn.addEventListener('click', () => {
+      telemetry.clearPeers();
+      log('✕ telemetry cleared', 'info');
+    });
+  }
+
+  // ─── TRIAD‑ROUTER155 — S‑P‑O Lane Dispatch ────────────────────────
+  const TRIAD_PARTITIONS_BROWSER = { rules: 45, facts: 20, closures: 15, combinators: 60, cons: 15 };
+  const TRIAD_KEYS = Object.keys(TRIAD_PARTITIONS_BROWSER);
+  const TRIAD_PREFIX_MAP = { rules: 'RULES', facts: 'FACTS', closures: 'CLOSURES', combinators: 'COMBINATORS', cons: 'CONS' };
+
+  function resolveTriadBrowser(index) {
+    if (index < 0 || index >= 155) return null;
+    let offset = 0;
+    for (const key of TRIAD_KEYS) {
+      const count = TRIAD_PARTITIONS_BROWSER[key];
+      if (index < offset + count) return { category: key, localIndex: index - offset, globalIndex: index };
+      offset += count;
+    }
+    return null;
+  }
+
+  function triadCategoryBrowser(triad) {
+    if (!Array.isArray(triad) || triad.length !== 3) return null;
+    const sum = (triad[0] + triad[1] + triad[2]) % 5;
+    return ['cons', 'combinator', 'rules', 'facts', 'closures'][sum];
+  }
+
+  function triadToSpoRouteBrowser(triad) {
+    if (!Array.isArray(triad) || triad.length !== 3) return null;
+    return {
+      subject: { index: triad[0], role: 'S' },
+      predicate: { index: triad[1], role: 'P' },
+      object: { index: triad[2], role: 'O' }
+    };
+  }
+
+  function dispatchTriadFromFrame(frame) {
+    if (!frame) return;
+    const S = frame.S;
+    const triadIndex = ((S[0] & 0xFF) + (S[1] & 0xFF) + (S[2] & 0xFF)) % 155;
+    const resolved = resolveTriadBrowser(triadIndex);
+    const spo = resolved ? triadToSpoRouteBrowser([triadIndex, (triadIndex + 17) % 155, (triadIndex + 41) % 155]) : null;
+    const coreMax = Math.max(S[4] & 0xFF, S[5] & 0xFF, S[6] & 0xFF);
+    const branch = coreMax <= 15 ? 'A: REAL PLANE — low‑ASCII / 2.5D visual voxel tracks' : 'B: IMAGINARY PLANE — non‑associative bidi / cosmetic reader tracks';
+    const lane = spo ? `${spo.subject.role}:${spo.subject.index} → ${spo.predicate.role}:${spo.predicate.index} → ${spo.object.role}:${spo.object.index}` : '—';
+
+    const dispatch = $('triadDispatch');
+    if (!dispatch) return;
+    dispatch.innerHTML = `
+      <div class="metric"><span>triad index</span><span class="val">${triadIndex} / 154</span></div>
+      <div class="metric"><span>category</span><span class="val" style="color:var(--amber)">${resolved ? resolved.category : '—'}</span></div>
+      <div class="metric"><span>OMI file</span><span class="val" style="color:var(--green)">${resolved ? (TRIAD_PREFIX_MAP[resolved.category] || '').toLowerCase() + '.omi' : '—'}</span></div>
+      <div class="metric"><span>local index</span><span class="val">${resolved ? resolved.localIndex : '—'}</span></div>
+      <div class="metric"><span>S‑P‑O lane</span><span class="val" style="font-size:.6rem;color:var(--purple)">${lane}</span></div>
+      <div class="metric"><span>branch</span><span class="val" style="font-size:.6rem;color:${coreMax <= 15 ? 'var(--green)' : 'var(--orange)'}">${branch}</span></div>
+      <div class="metric"><span>core max index</span><span class="val">${coreMax}</span></div>
+      <div class="metric"><span>triad composition</span><span class="val" style="font-size:.6rem">[${triadIndex}, ${(triadIndex + 17) % 155}, ${(triadIndex + 41) % 155}]</span></div>
+    `;
+    log(`⊞ triad dispatch → idx ${triadIndex} / ${resolved ? resolved.category : '?'} / ${branch.slice(0, 30)}`, 'mid');
+  }
+
+  // Wire triad dispatch to compile
+  const triadCompileBtn = $('triadCompileBtn');
+  if (triadCompileBtn) {
+    triadCompileBtn.addEventListener('click', () => {
+      if (lastFrame) dispatchTriadFromFrame(lastFrame);
+      else log('❌ compile an address first', 'no');
+    });
+  }
+
+  // Auto‑dispatch on compile
+  const origCompile = compileWord;
+  compileWord = function(word) {
+    const result = origCompile.call(this, word);
+    if (result && result.frame) dispatchTriadFromFrame(result.frame);
+    return result;
+  };
   // Connects to the proxy event connector at /stream, listens for
   // voxel:batch custom DOM events, and updates the torus grid + log.
   const SSE_ENDPOINT = localStorage.getItem('omi-sse-endpoint') || '/stream';

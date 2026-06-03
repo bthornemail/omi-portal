@@ -154,6 +154,15 @@ test("OMI parser reads new Omilog/IMO facts from FACTS.omi", async () => {
   assert.ok(facts.records.some((r) => r.assignment === "omi-imo-authority-boundary-tested"));
 });
 
+test("OMI parser reads five-factor router facts from FACTS.omi", async () => {
+  const facts = parseOmiDocument(await readRepoFile("FACTS.omi"), { source: "FACTS.omi" });
+  assert.ok(facts.records.some((r) => r.assignment === "five-factor-wlog-pointer-router-implemented"));
+  assert.ok(facts.records.some((r) => r.assignment === "aa-lower-byte-pos-router-seeds-generated"));
+  assert.ok(facts.records.some((r) => r.assignment === "aa-high-byte-feature-router-seeds-generated"));
+  assert.ok(facts.records.some((r) => r.assignment === "wordnet-prolog-router-seeds-preserve-synset-identity"));
+  assert.ok(facts.records.some((r) => r.assignment === "cons-rrggbbaa-lookup-table-is-monotonic"));
+});
+
 test("OMI parser reads new declarative core rules from RULES.omi", async () => {
   const rules = parseOmiDocument(await readRepoFile("RULES.omi"), { source: "RULES.omi" });
   assert.ok(rules.records.some((r) => r.assignment === "parse-native-omi-declarative-records"));
@@ -170,6 +179,15 @@ test("OMI parser reads new Omilog/IMO rules from RULES.omi", async () => {
   assert.ok(rules.records.some((r) => r.assignment === "compile-readable-omi-source-to-native-imo-object"));
   assert.ok(rules.records.some((r) => r.assignment === "restrict-imo-native-syntax-to-low-ascii-and-unicode-carriers"));
   assert.ok(rules.records.some((r) => r.assignment === "preserve-omi-source-imo-object-authority-boundary"));
+});
+
+test("OMI parser reads five-factor router rules from RULES.omi", async () => {
+  const rules = parseOmiDocument(await readRepoFile("RULES.omi"), { source: "RULES.omi" });
+  assert.ok(rules.records.some((r) => r.assignment === "map-wlog-pointers-to-five-factors-via-rrggbbaa-seeds"));
+  assert.ok(rules.records.some((r) => r.assignment === "map-aa-lower-byte-to-universal-pos-tags-for-semantic-routing"));
+  assert.ok(rules.records.some((r) => r.assignment === "map-aa-high-byte-to-universal-features-bitfield"));
+  assert.ok(rules.records.some((r) => r.assignment === "resolve-aa-pos-pointers-through-wordnet-prolog-bridge"));
+  assert.ok(rules.records.some((r) => r.assignment === "treat-cons-as-sole-rrggbbaa-lookup-table-for-upper-readers"));
 });
 
 test("Axiomatic rules compiler still matches existing MUST segment and prefix rules", async () => {

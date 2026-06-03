@@ -104,3 +104,23 @@ omi-
        Base36-digit-five-equals-hidden-factor-five))
   )
 -imo
+
+# [Closure 0xCF-06]: CONS RRGGBBAA Lookup Monotonic Closure
+omi-0000-0000-0000-0000-0000-0000-00cf-c006/128 CLOSE cons-rrggbbaa-lookup-monotonic-closure
+
+omi-
+  (
+    (requires .
+      (RULES FACTS CLOSURES COMBINATORS CONS))
+    (seals . cons-primary-lookup-key-order)
+    (order . ascending-rrggbbaa)
+    (forbids .
+      (generated-proxy-seed-becomes-root-authority
+       semantic-relinking-by-reordering-primary-keys
+       pos-feature-prolog-routes-bypass-cons))
+    (boundary .
+      (primary-keys-monotonic
+       aliases-live-in-source-blocks
+       generated-vectors-reduce-through-cons))
+  )
+-imo
