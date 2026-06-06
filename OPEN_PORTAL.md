@@ -33,7 +33,7 @@ http://localhost:5173/
 
 ## Useful Portal Pages
 
-- `/` main portal index
+- `/` Object Inbox
 - `/portal.html` interactive portal surface
 - `/document.html` document view
 - `/bidi.html` BiDi/CodeMirror view

@@ -2,390 +2,1035 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>OMI POS SCGNN Smith Canvas</title>
+  <title>OMI Object Inbox</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0b0f14;
-      --panel: #111827;
-      --panel-2: #0d131c;
-      --border: #263244;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --orange: #f97316;
-      --green: #22c55e;
-      --blue: #60a5fa;
-      --teal: #2dd4bf;
+      color-scheme: light;
+      --bg: #f5f7f8;
+      --surface: #ffffff;
+      --surface-2: #eef3f1;
+      --line: #d8dfdd;
+      --line-strong: #b8c4c1;
+      --text: #17211d;
+      --muted: #60706b;
+      --soft: #788883;
+      --green: #147d53;
+      --green-soft: #e4f5ed;
+      --blue: #2467a3;
+      --blue-soft: #e7f0f8;
+      --amber: #946200;
+      --amber-soft: #fff4d8;
+      --red: #a64045;
+      --red-soft: #fbe9ea;
+      --violet: #6554a5;
+      --violet-soft: #eeeaf9;
+      --shadow: 0 10px 30px rgba(24, 36, 32, 0.08);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    main {
-      display: grid;
-      grid-template-columns: minmax(360px, 0.95fr) minmax(420px, 1.25fr);
-      gap: 18px;
-      min-height: 100vh;
-      padding: 18px;
-    }
-    section {
-      min-width: 0;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 16px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 650;
-      letter-spacing: 0;
-    }
-    .sub {
-      margin: -6px 0 2px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-    textarea {
-      width: 100%;
-      min-height: 132px;
-      resize: vertical;
-      background: var(--panel-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px;
       line-height: 1.45;
-      font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
-    .row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+
+    button, input, textarea {
+      font: inherit;
     }
-    button {
-      border: 1px solid #334155;
-      border-radius: 6px;
-      background: #1f2937;
+
+    button, a.button {
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--surface);
       color: var(--text);
       min-height: 36px;
       padding: 0 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { border-color: #475569; background: #243244; }
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .metric {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      min-height: 62px;
-    }
-    .label {
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .value {
-      margin-top: 5px;
-      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      word-break: break-all;
-    }
-    .workers {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .worker {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 9px;
-      min-width: 0;
-    }
-    .worker strong { display: block; font-size: 13px; }
-    .worker span { display: block; margin-top: 4px; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .chart-wrap {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 12px;
-      padding: 16px;
-      min-height: calc(100vh - 36px);
-    }
-    .chart-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .legend {
-      display: flex;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      flex-wrap: wrap;
-    }
-    .top-link {
-      color: var(--text);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #1f2937;
-      min-height: 36px;
-      padding: 8px 10px;
-      font-size: 13px;
-      font-weight: 650;
-    }
-    .swatch {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 650;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
     }
-    .dot {
+
+    button:hover, a.button:hover {
+      border-color: #82928d;
+      background: #f9fbfb;
+    }
+
+    button.primary {
+      background: #173c32;
+      color: #fff;
+      border-color: #173c32;
+    }
+
+    button.primary:hover {
+      background: #0f2f27;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+    }
+
+    .rail {
+      border-right: 1px solid var(--line);
+      background: #fbfcfc;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+
+    .brand strong {
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .sync-pill {
+      font-size: 12px;
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid #bde8d1;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-weight: 700;
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 9px 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .nav a.active {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .nav span {
+      color: var(--soft);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .developer-links {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .developer-links .label {
+      color: var(--soft);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 0 4px;
+      font-weight: 800;
+    }
+
+    .developer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 7px 8px;
+      border-radius: 8px;
+    }
+
+    .developer-links a:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .developer-links .dev-note {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.35;
+      padding: 7px 8px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #f7f9f8;
+    }
+
+    main {
+      min-width: 0;
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .search-wrap {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      min-height: 36px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(340px, 0.9fr) minmax(420px, 1.25fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 760;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 760;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .inbox-list {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .object-card {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .object-card:hover,
+    .object-card.active {
+      border-color: #7da995;
+      box-shadow: 0 0 0 3px rgba(20, 125, 83, 0.1);
+    }
+
+    .card-line {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-weight: 760;
+      color: var(--text);
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 760;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status.accepted { color: var(--green); background: var(--green-soft); border-color: #bde8d1; }
+    .status.mirrored { color: var(--blue); background: var(--blue-soft); border-color: #c7ddf1; }
+    .status.local { color: var(--amber); background: var(--amber-soft); border-color: #eed79b; }
+    .status.conflict { color: var(--red); background: var(--red-soft); border-color: #efc0c3; }
+    .status.unverified { color: var(--violet); background: var(--violet-soft); border-color: #d8d0ef; }
+
+    .attention {
+      padding: 12px 16px 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .attention-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfcfc;
+    }
+
+    .signal {
       width: 9px;
       height: 9px;
       border-radius: 50%;
-      display: inline-block;
+      margin-top: 6px;
+      background: var(--green);
     }
-    canvas {
-      width: 100%;
-      min-height: 440px;
-      height: calc(100vh - 180px);
-      border: 1px solid var(--border);
+
+    .signal.warn { background: var(--amber); }
+    .signal.risk { background: var(--red); }
+
+    .inspector {
+      display: grid;
+      gap: 0;
+    }
+
+    .object-title {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .tabbar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 12px 16px 0;
+    }
+
+    .tabbar button {
+      min-height: 34px;
+      font-size: 13px;
+      background: #f8faf9;
+    }
+
+    .tabbar button.active {
+      background: #173c32;
+      color: #fff;
+      border-color: #173c32;
+    }
+
+    .tab-body {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 14px;
+    }
+
+    .object-view,
+    .trust-panel,
+    .activity-box,
+    .advanced-box {
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: #0d1117;
+      padding: 14px;
+      background: #fbfcfc;
+      min-width: 0;
     }
-    pre {
-      margin: 0;
-      max-height: 240px;
-      overflow: auto;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+
+    .field-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .field span:first-child {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .trust-panel {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .trust-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .trust-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .timeline-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      margin-top: 6px;
+    }
+
+    .context-tree {
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .context-node {
+      border-left: 3px solid var(--line-strong);
+      padding-left: 10px;
+    }
+
+    .export-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .export-option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
       padding: 12px;
-      color: #cbd5e1;
-      font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
+      background: #fff;
+      display: grid;
+      gap: 6px;
     }
-    @media (max-width: 980px) {
-      main { grid-template-columns: 1fr; }
-      .chart-wrap { min-height: auto; }
-      canvas { height: 520px; }
-      .workers, .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .advanced-box code {
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      background: #17211d;
+      color: #d9f2e5;
+      overflow-wrap: anywhere;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
+      background: #17211d;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: var(--shadow);
+      pointer-events: none;
+      font-size: 14px;
+      z-index: 10;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1050px) {
+      .app { grid-template-columns: 1fr; }
+      .rail {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .developer-links {
+        margin-top: 0;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .developer-links .label {
+        grid-column: 1 / -1;
+      }
+      .workspace,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      main { padding: 12px; }
+      .topbar,
+      .search-wrap {
+        grid-template-columns: 1fr;
+      }
+      .actions {
+        justify-content: start;
+      }
+      .nav,
+      .developer-links,
+      .export-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .field {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section class="controls">
-      <h1>ChiralCanvas Smith Matrix</h1>
-      <p class="sub">POS tokens compile to JSON Canvas, then the graph is projected into a 5040-slot shared matrix rendered as Γ, z, and y on a Smith chart.</p>
-
-      <textarea id="input">The chiral clock routes text into file blobs through graph links.</textarea>
-      <div class="row">
-        <button id="compile">Compile Graph</button>
-        <button id="toggle">Run</button>
-        <button id="step">Step</button>
+  <div class="app">
+    <aside class="rail">
+      <div class="brand">
+        <strong>OMI</strong>
+        <span class="sync-pill">Local</span>
       </div>
 
-      <div class="metric-grid">
-        <div class="metric">
-          <div class="label">Centroid</div>
-          <div class="value">FS.GS.RS.US/128</div>
+      <nav class="nav" aria-label="Workspace">
+        <a href="#" class="active">Inbox <span>5</span></a>
+        <a href="#">Objects <span>12</span></a>
+        <a href="#">Events <span>3</span></a>
+        <a href="#">Notes <span>4</span></a>
+        <a href="#">Files <span>2</span></a>
+        <a href="#">Receipts <span>9</span></a>
+        <a href="#">Mirrors <span>2</span></a>
+        <a href="#">Conflicts <span>1</span></a>
+      </nav>
+
+      <div class="developer-links" aria-label="Developer">
+        <div class="label">Developer</div>
+        <a href="/portal.html">Protocol portal</a>
+        <a href="/document.html">DOM inspector</a>
+        <a href="/bidi.html">BiDi projection</a>
+        <span class="dev-note">3D demo: npm run dev:aframe</span>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="search-wrap">
+          <input id="objectSearch" type="search" aria-label="Open object" placeholder="Search, paste a link, receipt, address, or file name">
+          <button class="primary" id="openSearch">Open</button>
         </div>
-        <div class="metric">
-          <div class="label">Matrix</div>
-          <div class="value" id="matrix-kind">SharedArrayBuffer(5040)</div>
-        </div>
-        <div class="metric">
-          <div class="label">Tick Slot</div>
-          <div class="value" id="tick-slot">0/5040</div>
-        </div>
-        <div class="metric">
-          <div class="label">Active Γ</div>
-          <div class="value" id="gamma-readout">0 + j0</div>
+        <div class="actions" aria-label="Create">
+          <button data-action="new-note">New Note</button>
+          <button data-action="new-event">New Event</button>
+          <button data-action="import-file">Import File</button>
+          <button data-action="scan-qr">Scan QR</button>
         </div>
       </div>
 
-      <div class="workers" id="workers"></div>
-      <pre id="out"></pre>
-    </section>
+      <div class="workspace">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h1>Object Inbox</h1>
+              <div class="subtle">Recent objects, trust state, and what needs review.</div>
+            </div>
+            <span class="status accepted">Ready</span>
+          </div>
+          <div class="inbox-list" id="objectList"></div>
+        </section>
 
-    <section class="chart-wrap">
-      <div class="chart-head">
-        <div>
-          <h1>5040 Smith Chart</h1>
-          <p class="sub">Tick is impedance-plane ΓZ. Tock is the 180 degree admittance-plane pair ΓY.</p>
-        </div>
-        <div class="legend">
-          <a class="top-link" href="/document.html">Document</a>
-          <a class="top-link" href="/bidi.html">BiDi CM6</a>
-          <span class="swatch"><span class="dot" style="background:var(--orange)"></span>Tick Z</span>
-          <span class="swatch"><span class="dot" style="background:var(--green)"></span>Tock Y</span>
-          <span class="swatch"><span class="dot" style="background:var(--blue)"></span>r circles</span>
-          <span class="swatch"><span class="dot" style="background:var(--teal)"></span>x arcs</span>
-        </div>
+        <section class="panel inspector" aria-live="polite">
+          <div class="panel-head">
+            <div class="object-title">
+              <h1 id="detailTitle">Sunday Night Lights Ride</h1>
+              <div class="subtle" id="detailContext">Community / Bike Ride / Route</div>
+            </div>
+            <span id="detailStatus" class="status accepted">Accepted</span>
+          </div>
+
+          <div class="tabbar" role="tablist" aria-label="Object sections">
+            <button class="active" data-tab="view">View</button>
+            <button data-tab="history">History</button>
+            <button data-tab="context">Context</button>
+            <button data-tab="receipts">Receipts</button>
+            <button data-tab="export">Export</button>
+            <button data-tab="advanced">Advanced</button>
+          </div>
+
+          <div class="tab-body" id="tabBody"></div>
+        </section>
       </div>
-      <canvas id="smith" aria-label="Smith chart rendering of the 5040-slot chiral matrix"></canvas>
-      <pre id="canvas-out"></pre>
-    </section>
-  </main>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Attention</h2>
+            <div class="subtle">Objects that changed, need trust, or need a decision.</div>
+          </div>
+          <button id="reviewNext">Review next</button>
+        </div>
+        <div class="attention" id="attentionList"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
 
   <script type="module">
-    import {
-      CHANNEL_META,
-      ChiralSmithCanvas,
-      compileTextToPOSSCGNN,
-      createSmithMatrix,
-      loadSmithTick,
-      storeSmithTick,
-      writeCanvasGraphToSmithMatrix
-    } from "./src/index.js";
+    const objects = [
+      {
+        id: "ride",
+        title: "Sunday Night Lights Ride",
+        type: "Event",
+        status: "Accepted",
+        statusClass: "accepted",
+        updated: "12 minutes ago",
+        source: "Local organizer",
+        context: "Community / Bike Ride / Route",
+        summary: {
+          Title: "Sunday Night Lights Ride",
+          Meetup: "Popeyes parking lot",
+          Route: "Vermont Ave Florence to Imperial and back",
+          Distance: "3.2 miles one way",
+          Food: "Hot dogs, hot links, sodas",
+          Safety: "Main street ride, stay in lane"
+        },
+        trust: { receipts: "3", mirrors: "2 peers", conflicts: "none", source: "known", verified: "now" },
+        history: ["Created event page", "Route added", "Safety note added", "Rider joined"],
+        receipts: ["created: accepted", "route: accepted", "safety note: accepted"],
+        exportText: "Share link, QR code, calendar file, route card",
+        raw: "omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48"
+      },
+      {
+        id: "route",
+        title: "Bike Route Map",
+        type: "Route",
+        status: "Mirrored",
+        statusClass: "mirrored",
+        updated: "24 minutes ago",
+        source: "Brian's portal",
+        context: "Community / Map / Route",
+        summary: {
+          Title: "Bike Route Map",
+          Start: "Vermont Ave Florence",
+          Turnaround: "Imperial",
+          Surface: "Main street",
+          Notes: "Keep group tight at intersections"
+        },
+        trust: { receipts: "2", mirrors: "2 peers", conflicts: "none", source: "known", verified: "18 minutes ago" },
+        history: ["Imported map", "Mirrored by peer", "Route note updated"],
+        receipts: ["map: accepted", "mirror: accepted"],
+        exportText: "Share link, QR code, GPX-style route note",
+        raw: "omi-0200-03bf-7c00-2b02-2f02-1434-039f-02ff/48"
+      },
+      {
+        id: "menu",
+        title: "Hot Dog Menu",
+        type: "Menu",
+        status: "Local-only",
+        statusClass: "local",
+        updated: "31 minutes ago",
+        source: "Local draft",
+        context: "Community / Vendor / Menu",
+        summary: {
+          Vendor: "Ride table",
+          Items: "Hot dogs, hot links, sodas",
+          Prices: "Draft",
+          Availability: "Mirror pending"
+        },
+        trust: { receipts: "1", mirrors: "pending", conflicts: "none", source: "local", verified: "local only" },
+        history: ["Draft saved locally", "Mirror pending"],
+        receipts: ["draft: local receipt"],
+        exportText: "Mirror, print card, QR code",
+        raw: "omi-0300-03bf-7c00-2b03-2f03-1434-039f-03ff/48"
+      },
+      {
+        id: "notes",
+        title: "OMI Podcast Notes",
+        type: "Note",
+        status: "Accepted",
+        statusClass: "accepted",
+        updated: "1 hour ago",
+        source: "Personal vault",
+        context: "Knowledge / Notes / Podcast",
+        summary: {
+          Title: "OMI Podcast Notes",
+          Topic: "Object trust and local-first sharing",
+          Links: "2 sources",
+          Claims: "4 clipped claims"
+        },
+        trust: { receipts: "1", mirrors: "none", conflicts: "none", source: "known", verified: "1 hour ago" },
+        history: ["Note created", "Source clipped", "Claim added"],
+        receipts: ["note: accepted"],
+        exportText: "Markdown, receipt bundle, share link",
+        raw: "omi-0400-03bf-7c00-2b04-2f04-1434-039f-04ff/48"
+      },
+      {
+        id: "draft",
+        title: "Snub Geometry Draft",
+        type: "Claim",
+        status: "Conflict",
+        statusClass: "conflict",
+        updated: "2 hours ago",
+        source: "Shared note",
+        context: "Knowledge / Geometry / Draft",
+        summary: {
+          Claim: "Two versions disagree on the route through the proof.",
+          VersionA: "Accepted draft from 7:42 PM",
+          VersionB: "Accepted draft from 7:51 PM",
+          Decision: "Keep both, mark current, fork, or merge note"
+        },
+        trust: { receipts: "2 versions", mirrors: "1 peer", conflicts: "2 accepted versions", source: "known", verified: "needs review" },
+        history: ["Draft imported", "Second version received", "Conflict marked"],
+        receipts: ["version A: accepted", "version B: accepted"],
+        exportText: "Compare bundle, forked note, receipt report",
+        raw: "omi-0500-03bf-7c00-2b05-2f05-1434-039f-05ff/48"
+      }
+    ];
 
-    const input = document.getElementById("input");
-    const out = document.getElementById("out");
-    const canvasOut = document.getElementById("canvas-out");
-    const tickSlot = document.getElementById("tick-slot");
-    const gammaReadout = document.getElementById("gamma-readout");
-    const matrixKind = document.getElementById("matrix-kind");
-    const workersEl = document.getElementById("workers");
+    const attentionItems = [
+      { tone: "risk", title: "Snub Geometry Draft", text: "Two accepted versions need review." },
+      { tone: "warn", title: "Hot Dog Menu", text: "Local-only draft has not mirrored yet." },
+      { tone: "warn", title: "New source", text: "One object was opened from an unknown source." },
+      { tone: "", title: "Bike Route Map", text: "Mirrored by 2 peers." }
+    ];
 
-    const matrix = createSmithMatrix({ shared: true });
-    const hasSharedMatrix = typeof SharedArrayBuffer !== "undefined" && matrix.buffer instanceof SharedArrayBuffer;
-    matrixKind.textContent = hasSharedMatrix
-      ? "SharedArrayBuffer(5040)"
-      : "ArrayBuffer fallback(5040)";
+    const list = document.getElementById("objectList");
+    const attentionList = document.getElementById("attentionList");
+    const tabBody = document.getElementById("tabBody");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailContext = document.getElementById("detailContext");
+    const detailStatus = document.getElementById("detailStatus");
+    const toast = document.getElementById("toast");
 
-    const smith = new ChiralSmithCanvas(document.getElementById("smith"), matrix);
-    const vertices = Object.entries(CHANNEL_META).map(([channel, meta], index) => ({
-      channel,
-      index,
-      code: parseInt(meta.code, 16),
-      address: meta.ipv4,
-      type: meta.nodeType
-    }));
+    let activeId = objects[0].id;
+    let activeTab = "view";
 
-    let compiled = null;
-    let running = false;
-    let raf = 0;
-    let workers = [];
-
-    function makeWorkerURL() {
-      const source = `
-        let view, vertex;
-        const SLOTS = 5040;
-        self.onmessage = (event) => {
-          if (event.data.type === "init") {
-            view = new Int32Array(event.data.buffer);
-            vertex = event.data.vertex;
-            setInterval(() => {
-              if (!view || !vertex) return;
-              const tick = Atomics.load(view, 0) >>> 0;
-              const sector = Math.floor((SLOTS - 1) / 4);
-              const base = 1 + vertex.index * sector;
-              const offset = (tick + vertex.code * 17) % sector;
-              const slot = Math.min(SLOTS - 1, base + offset);
-              const value = ((tick * 1103515245 + vertex.code * 2654435761 + slot) >>> 0) & 0x7fffffff;
-              Atomics.store(view, slot, value);
-              self.postMessage({ channel: vertex.channel, slot, tick });
-            }, 80);
-          }
-        };
-      `;
-      return URL.createObjectURL(new Blob([source], { type: "application/javascript" }));
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
-    function bootWorkers() {
-      if (!hasSharedMatrix) return;
-      workers.forEach((worker) => worker.terminate());
-      workers = [];
-      const workerURL = makeWorkerURL();
-      vertices.forEach((vertex) => {
-        const worker = new Worker(workerURL);
-        worker.postMessage({ type: "init", buffer: matrix.buffer, vertex });
-        worker.onmessage = (event) => {
-          const el = document.getElementById(`worker-${event.data.channel}`);
-          if (el) el.querySelector("span").textContent = `${vertices.find((v) => v.channel === event.data.channel).address} · slot ${event.data.slot}`;
-        };
-        workers.push(worker);
+    function activeObject() {
+      return objects.find((object) => object.id === activeId) || objects[0];
+    }
+
+    function renderList() {
+      list.innerHTML = objects.map((object) => `
+        <button class="object-card ${object.id === activeId ? "active" : ""}" data-object="${object.id}">
+          <span class="card-line">
+            <span>
+              <span class="card-title">${object.title}</span>
+              <span class="meta-row">${object.type} - ${object.updated}</span>
+            </span>
+            <span class="status ${object.statusClass}">${object.status}</span>
+          </span>
+          <span class="meta-row">
+            <span>${object.source}</span>
+            <span>${object.context}</span>
+          </span>
+        </button>
+      `).join("");
+
+      list.querySelectorAll("[data-object]").forEach((card) => {
+        card.addEventListener("click", () => {
+          activeId = card.dataset.object;
+          activeTab = "view";
+          render();
+        });
       });
     }
 
-    function renderWorkers() {
-      workersEl.innerHTML = vertices.map((vertex) => `
-        <div class="worker" id="worker-${vertex.channel}">
-          <strong>${vertex.channel} · ${vertex.type}</strong>
-          <span>${vertex.address} · ${vertex.code.toString(16)}</span>
+    function renderAttention() {
+      attentionList.innerHTML = attentionItems.map((item) => `
+        <div class="attention-item">
+          <span class="signal ${item.tone}"></span>
+          <div>
+            <strong>${item.title}</strong>
+            <div class="subtle">${item.text}</div>
+          </div>
         </div>
       `).join("");
     }
 
-    function compile() {
-      compiled = compileTextToPOSSCGNN(input.value);
-      writeCanvasGraphToSmithMatrix(matrix, compiled.canvas, loadSmithTick(matrix));
-      out.textContent = JSON.stringify({
-        tokens: compiled.tokens,
-        features: compiled.features,
-        nodes: compiled.nodes.length,
-        edges: compiled.edges.length
-      }, null, 2);
-      canvasOut.textContent = JSON.stringify(compiled.canvas, null, 2);
-      smith.render();
+    function renderTrust(object) {
+      return `
+        <aside class="trust-panel">
+          <h3>Trust</h3>
+          <div class="trust-row"><span>Status</span><strong>${object.status}</strong></div>
+          <div class="trust-row"><span>Receipts</span><strong>${object.trust.receipts}</strong></div>
+          <div class="trust-row"><span>Mirrors</span><strong>${object.trust.mirrors}</strong></div>
+          <div class="trust-row"><span>Conflicts</span><strong>${object.trust.conflicts}</strong></div>
+          <div class="trust-row"><span>Source</span><strong>${object.trust.source}</strong></div>
+          <div class="trust-row"><span>Last verified</span><strong>${object.trust.verified}</strong></div>
+        </aside>
+      `;
     }
 
-    function advanceTick(delta = 1) {
-      const next = loadSmithTick(matrix) + delta;
-      storeSmithTick(matrix, next);
+    function renderView(object) {
+      const fields = Object.entries(object.summary).map(([key, value]) => `
+        <div class="field"><span>${key}</span><strong>${value}</strong></div>
+      `).join("");
+
+      return `
+        <div class="detail-grid">
+          <article class="object-view">
+            <h2>${object.title}</h2>
+            <div class="subtle">${object.type} - ${object.source}</div>
+            <div class="field-list">${fields}</div>
+          </article>
+          ${renderTrust(object)}
+        </div>
+        <div class="quick-actions">
+          <button class="primary" data-action="save">Save</button>
+          <button data-action="share">Share</button>
+          <button data-action="mirror">Mirror</button>
+          <button data-action="verify">Verify</button>
+          <button data-action="export-qr">Export QR</button>
+        </div>
+      `;
     }
 
-    function frame() {
-      if (running) advanceTick(1);
-      const state = smith.render();
-      tickSlot.textContent = `${state.slot}/5040`;
-      gammaReadout.textContent = `${state.point.gamma.re.toFixed(3)} ${state.point.gamma.im >= 0 ? "+" : "-"} j${Math.abs(state.point.gamma.im).toFixed(3)}`;
-      raf = requestAnimationFrame(frame);
+    function renderHistory(object) {
+      return `
+        <div class="activity-box">
+          <h2>History</h2>
+          <div class="timeline">
+            ${object.history.map((item) => `
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <span>${item}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
     }
 
-    document.getElementById("compile").addEventListener("click", compile);
-    document.getElementById("step").addEventListener("click", () => {
-      advanceTick(1);
-      const state = smith.render();
-      tickSlot.textContent = `${state.slot}/5040`;
-    });
-    document.getElementById("toggle").addEventListener("click", (event) => {
-      running = !running;
-      event.currentTarget.textContent = running ? "Pause" : "Run";
-    });
-    window.addEventListener("resize", () => {
-      smith.resize();
-      smith.render();
-    });
-    window.addEventListener("beforeunload", () => {
-      cancelAnimationFrame(raf);
-      workers.forEach((worker) => worker.terminate());
+    function renderContext(object) {
+      const nodes = object.context.split(" / ");
+      return `
+        <div class="activity-box">
+          <h2>Context</h2>
+          <div class="context-tree">
+            ${nodes.map((node, index) => `
+              <div class="context-node" style="margin-left:${index * 18}px">${node}</div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderReceipts(object) {
+      return `
+        <div class="detail-grid">
+          <div class="activity-box">
+            <h2>Receipts</h2>
+            <div class="timeline">
+              ${object.receipts.map((item) => `
+                <div class="timeline-item">
+                  <span class="timeline-dot"></span>
+                  <span>${item}</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+          ${renderTrust(object)}
+        </div>
+      `;
+    }
+
+    function renderExport(object) {
+      return `
+        <div class="export-grid">
+          ${object.exportText.split(", ").map((item) => `
+            <div class="export-option">
+              <strong>${item}</strong>
+              <span class="subtle">Ready from current object state.</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="quick-actions">
+          <button class="primary" data-action="copy-link">Copy link</button>
+          <button data-action="download">Download bundle</button>
+        </div>
+      `;
+    }
+
+    function renderAdvanced(object) {
+      return `
+        <div class="advanced-box">
+          <h2>Advanced</h2>
+          <div class="field-list">
+            <div class="field"><span>Frame</span><code>${object.raw}</code></div>
+            <div class="field"><span>Storage</span><strong>Recovered candidate, pending OMI acceptance checks</strong></div>
+            <div class="field"><span>Boundary</span><strong>Availability is not acceptance</strong></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTab(object) {
+      if (activeTab === "history") return renderHistory(object);
+      if (activeTab === "context") return renderContext(object);
+      if (activeTab === "receipts") return renderReceipts(object);
+      if (activeTab === "export") return renderExport(object);
+      if (activeTab === "advanced") return renderAdvanced(object);
+      return renderView(object);
+    }
+
+    function renderInspector() {
+      const object = activeObject();
+      detailTitle.textContent = object.title;
+      detailContext.textContent = object.context;
+      detailStatus.textContent = object.status;
+      detailStatus.className = `status ${object.statusClass}`;
+
+      document.querySelectorAll(".tabbar button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.tab === activeTab);
+      });
+
+      tabBody.innerHTML = renderTab(object);
+      tabBody.querySelectorAll("[data-action]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const action = button.dataset.action.replaceAll("-", " ");
+          showToast(`${action} queued for ${object.title}`);
+        });
+      });
+    }
+
+    function render() {
+      renderList();
+      renderInspector();
+    }
+
+    document.querySelectorAll(".tabbar button").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTab = button.dataset.tab;
+        renderInspector();
+      });
     });
 
-    renderWorkers();
-    compile();
-    bootWorkers();
-    frame();
+    document.querySelectorAll("[data-action]").forEach((button) => {
+      button.addEventListener("click", () => {
+        showToast(button.dataset.action.replaceAll("-", " "));
+      });
+    });
+
+    document.getElementById("openSearch").addEventListener("click", () => {
+      const input = document.getElementById("objectSearch");
+      const text = input.value.trim();
+      showToast(text ? `open queued: ${text}` : "Paste a link, receipt, address, or file name");
+    });
+
+    document.getElementById("reviewNext").addEventListener("click", () => {
+      activeId = "draft";
+      activeTab = "receipts";
+      render();
+      showToast("Conflict opened for review");
+    });
+
+    renderAttention();
+    render();
   </script>
 </body>
 </html>

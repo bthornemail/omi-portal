@@ -69,7 +69,7 @@ docker compose down
 
 Ask the tester to open the shared URL and check these paths:
 
-- `/` loads the main portal index.
+- `/` shows the Object Inbox with recent objects and trust status.
 - `/portal.html` loads the interactive portal surface.
 - `/document.html` loads the document view.
 - `/bidi.html` loads the BiDi/CodeMirror view.
@@ -100,6 +100,7 @@ Please send back:
 - Browser and version
 - Device and operating system
 - Whether each page loaded
+- Whether the Object Inbox made the next action clear
 - Anything confusing on the first screen
 - Any blank screens, broken links, overlapping text, or console errors
 - Screenshots or a short screen recording if something looks wrong

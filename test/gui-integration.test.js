@@ -46,6 +46,28 @@ test("HTML references external CSS and JS as separate assets", async () => {
   );
 });
 
+test("Root front door is an object workspace, not a protocol demo", async () => {
+  const htmlPath = join(process.cwd(), "index.html");
+  const rawHtml = await fs.readFile(htmlPath, "utf8");
+
+  assert.ok(rawHtml.includes("<title>OMI Object Inbox</title>"));
+  assert.ok(rawHtml.includes("Object Inbox"));
+  assert.ok(rawHtml.includes("Recent objects, trust state, and what needs review."));
+  assert.ok(rawHtml.includes("View"));
+  assert.ok(rawHtml.includes("History"));
+  assert.ok(rawHtml.includes("Context"));
+  assert.ok(rawHtml.includes("Receipts"));
+  assert.ok(rawHtml.includes("Export"));
+  assert.ok(rawHtml.includes("Developer"));
+  assert.ok(rawHtml.includes("/portal.html"));
+  assert.ok(rawHtml.includes("/document.html"));
+  assert.ok(rawHtml.includes("/bidi.html"));
+  assert.ok(rawHtml.includes("3D demo: npm run dev:aframe"));
+  assert.equal(rawHtml.includes('href="/aframe.html"'), false);
+  assert.ok(rawHtml.includes("Availability is not acceptance"));
+  assert.equal(rawHtml.includes("ChiralCanvas Smith Matrix"), false);
+});
+
 test("Frontend JavaScript exports OmiFrontendPipelineBridge class and instantiates on DOMContentLoaded", async () => {
   const jsPath = join(process.cwd(), "public", "bidi.js");
   const rawJs = await fs.readFile(jsPath, "utf8");
