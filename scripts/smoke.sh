@@ -2,10 +2,12 @@
 # ============================================================================
 # OMI PROTOCOL: AUTOMATED DEPLOYMENT SELECTION & SMOKE TEST UTILITY
 # File Target: scripts/smoke.sh
-# Validation Target: omi-core-gateway (Port 8080 Isolation Boundary)
+# Validation Target: omi-portal (Port 8080 Isolation Boundary)
 # ============================================================================
 
 set -e
+
+OMI_PORT="${OMI_PORT:-8080}"
 
 echo "================================================================="
 echo "LAUNCHING OMI CORE GATEWAY ISOLATION BOUNDARY SMOKE TEST"
@@ -26,13 +28,13 @@ while [ "$STATUS" != "healthy" ]; do
         exit 1
     fi
     sleep 1
-    STATUS=$(docker inspect --format='{{.State.Health.Status}}' omi-portal-1 2>/dev/null || echo "starting")
+    STATUS=$(docker inspect --format='{{.State.Health.Status}}' omi-portal 2>/dev/null || echo "starting")
     COUNTER=$((COUNTER + 1))
 done
 echo " -> Success: Container health check reports optimal execution status."
 
-echo "[3/4] Intercepting cross-origin isolation headers via port 8080..."
-HEADERS=$(curl -sI http://localhost:8080/)
+echo "[3/4] Intercepting cross-origin isolation headers via port ${OMI_PORT}..."
+HEADERS=$(curl -sI "http://localhost:${OMI_PORT}/")
 
 COOP=$(echo "$HEADERS" | grep -i "Cross-Origin-Opener-Policy:" || true)
 COEP=$(echo "$HEADERS" | grep -i "Cross-Origin-Embedder-Policy:" || true)

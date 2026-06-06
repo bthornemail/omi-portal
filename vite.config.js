@@ -1,8 +1,25 @@
 import { resolve } from "node:path";
-import { copyFileSync, existsSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, readFileSync, rmSync } from "node:fs";
 import { defineConfig } from "vite";
 
-const PUBLIC_HTML_ENTRYPOINTS = ["aframe.html", "document.html", "bidi.html", "portal.html"];
+const CORE_HTML_ENTRYPOINTS = ["document.html", "bidi.html", "portal.html"];
+const DEMO_HTML_ENTRYPOINTS = ["aframe.html"];
+const DEV_HTML_ENTRYPOINTS = [...DEMO_HTML_ENTRYPOINTS, ...CORE_HTML_ENTRYPOINTS];
+const BUILD_AFRAME = process.env.OMI_BUILD_AFRAME === "1";
+const BUILD_HTML_ENTRYPOINTS = BUILD_AFRAME
+  ? [...DEMO_HTML_ENTRYPOINTS, ...CORE_HTML_ENTRYPOINTS]
+  : CORE_HTML_ENTRYPOINTS;
+
+const buildInput = {
+  main: resolve(__dirname, "index.html"),
+  document: resolve(__dirname, "public/document.html"),
+  bidi: resolve(__dirname, "public/bidi.html"),
+  portal: resolve(__dirname, "public/portal.html")
+};
+
+if (BUILD_AFRAME) {
+  buildInput.aframe = resolve(__dirname, "public/aframe.html");
+}
 
 export default defineConfig({
   plugins: [
@@ -11,7 +28,7 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use(async (req, res, next) => {
           const pathname = req.url?.split("?")[0]?.replace(/^\//, "");
-          if (!PUBLIC_HTML_ENTRYPOINTS.includes(pathname)) {
+          if (!DEV_HTML_ENTRYPOINTS.includes(pathname)) {
             next();
             return;
           }
@@ -34,11 +51,15 @@ export default defineConfig({
         });
       },
       closeBundle() {
-        for (const file of PUBLIC_HTML_ENTRYPOINTS) {
+        for (const file of BUILD_HTML_ENTRYPOINTS) {
           const processed = resolve(__dirname, "dist/public", file);
           if (existsSync(processed)) {
             copyFileSync(processed, resolve(__dirname, "dist", file));
           }
+        }
+        if (!BUILD_AFRAME) {
+          rmSync(resolve(__dirname, "dist", "aframe.html"), { force: true });
+          rmSync(resolve(__dirname, "dist", "public", "aframe.html"), { force: true });
         }
       }
     }
@@ -56,13 +77,7 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, "index.html"),
-        aframe: resolve(__dirname, "public/aframe.html"),
-        document: resolve(__dirname, "public/document.html"),
-        bidi: resolve(__dirname, "public/bidi.html"),
-        portal: resolve(__dirname, "public/portal.html")
-      },
+      input: buildInput,
       output: {
         manualChunks(id) {
           if (id.includes("erasure") || id.includes("reed-solomon")) {

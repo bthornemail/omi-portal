@@ -155,10 +155,14 @@ Thus `omi---imo` is a visible mnemonic for the transformation from readable OMI 
 
 It does **not** validate a frame.
 
+Likewise, `omi-*`, `imo-*`, and `*-imo` tokens are aliases or templates until a canonical reader resolves them into a validated frame. Prefix text is not object authority.
+
 ```text
 omi---imo names the structure.
 Q_frame validates the carrier.
 ```
+
+Browser-facing GUI projections may expose this mnemonic as both a linear traversal stream and a hierarchical containment tree. See `docs/omi-object-model.md` for the projection bridge; the GUI view remains projection-only and does not add validation authority.
 
 ---
 

@@ -58,17 +58,17 @@ fi
 # docker-compose.yml
 cat > "$TARGET/docker-compose.yml" << 'DOCKCOMP'
 services:
-  omi-kernel-node:
+  omi-portal:
     build:
       context: .
-      dockerfile: Dockerfile.softmmu
+      dockerfile: Dockerfile
       target: runtime
-    container_name: omi-core-gateway
+    container_name: omi-portal
     restart: always
     volumes:
       - shared-bus:/tmp/omi-bus
     ports:
-      - "8080:80"
+      - "${OMI_PORT:-8080}:80"
     labels:
       omi.context-root: "omi-ffff-127-0-0-1"
       omi.memory-stride: "40320B"
@@ -81,7 +81,7 @@ services:
     container_name: omi-qemu-matrix
     restart: on-failure
     depends_on:
-      - omi-kernel-node
+      - omi-portal
     security_opt:
       - apparmor:unconfined
     devices:
@@ -198,7 +198,7 @@ cp "$OMI_ROOT/src/omi/trigraph-preprocessor.js" "$TARGET/src/omi/trigraph-prepro
 cp "$OMI_ROOT/src/omi/place-value-interpreter.js" "$TARGET/src/omi/place-value-interpreter.js"
 
 echo "[create-omi] Installing dependencies..."
-cd "$TARGET" && npm ci --quiet 2>/dev/null || npm install --quiet 2>/dev/null
+cd "$TARGET" && npm ci --quiet --omit=dev 2>/dev/null || npm install --quiet --omit=dev 2>/dev/null
 
 echo "[create-omi] Done. Scaffolded OMI workspace at: $TARGET"
 echo ""

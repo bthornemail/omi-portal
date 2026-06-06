@@ -9,7 +9,7 @@ FROM node:${NODE_VERSION} AS base
 WORKDIR /build
 RUN apk add --no-cache build-base
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts --omit=dev
 
 # ============================================================
 # STAGE 2: test — run unit suite
@@ -32,12 +32,13 @@ RUN npm run build
 FROM nginx:${NGINX_VERSION} AS runtime
 
 RUN addgroup -S omi && adduser -S -G omi omi
+RUN rm -f /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /build/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN touch /var/run/nginx.pid && \
-    chown -R omi:omi /var/cache/nginx /var/run/nginx.pid /usr/share/nginx/html
+    chown -R omi:omi /var/cache/nginx /var/log/nginx /var/run/nginx.pid /usr/share/nginx/html
 
 EXPOSE 80
 

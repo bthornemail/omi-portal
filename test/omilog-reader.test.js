@@ -10,6 +10,7 @@ import {
   readImoPayloadBlock,
   isEmojiAtom,
   isOmiAddressAtom,
+  isOmiAliasAtom,
   OExpressionSyntaxError
 } from '../src/omilog/reader.js';
 
@@ -60,9 +61,15 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
       assert.strictEqual(expr.type, 'omi-address');
     });
 
-    it('parses an ffff- address', () => {
-      const expr = readOExpression('ffff-127-0-0-1/48');
+    it('parses an eight-segment ffff- address', () => {
+      const expr = readOExpression('ffff-0000-0000-0000-0000-0000-007f-0001/48');
       assert.strictEqual(expr.type, 'omi-address');
+    });
+
+    it('parses omi notation templates as aliases, not addresses', () => {
+      assert.deepEqual(readOExpression('omi-abc'), { type: 'omi-low-alias', value: 'omi-abc' });
+      assert.deepEqual(readOExpression('imo-abc'), { type: 'omi-high-alias', value: 'imo-abc' });
+      assert.deepEqual(readOExpression('omi---imo'), { type: 'omi-frame-mnemonic', value: 'omi---imo' });
     });
   });
 
@@ -347,8 +354,8 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
       assert.ok(isOmiAddressAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128'));
     });
 
-    it('detects an ffff- address', () => {
-      assert.ok(isOmiAddressAtom('ffff-127-0-0-1/48'));
+    it('detects an eight-segment ffff- address', () => {
+      assert.ok(isOmiAddressAtom('ffff-0000-0000-0000-0000-0000-007f-0001/48'));
     });
 
     it('detects a short OMI address', () => {
@@ -361,6 +368,17 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
 
     it('returns false for numbers', () => {
       assert.ok(!isOmiAddressAtom('42'));
+    });
+
+    it('does not treat notation aliases as validated addresses', () => {
+      assert.ok(!isOmiAddressAtom('omi-abc'));
+      assert.ok(!isOmiAddressAtom('omi---imo'));
+      assert.ok(!isOmiAddressAtom('imo-abc'));
+      assert.ok(!isOmiAddressAtom('ffff-127-0-0-1/48'));
+      assert.ok(isOmiAliasAtom('omi-abc'));
+      assert.ok(isOmiAliasAtom('omi---imo'));
+      assert.ok(isOmiAliasAtom('imo-abc'));
+      assert.ok(!isOmiAliasAtom('omi-0400-03bf-0003-2b04-2f04-0002-039f-04ff/128'));
     });
   });
 

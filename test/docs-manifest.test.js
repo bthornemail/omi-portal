@@ -199,6 +199,8 @@ test("OMI research inbox claims are promoted through canonical docs, not _temp m
   assert.match(binaryQuadraticForm, /Symbols project the law\.\s*Symbols do not create the law\./);
   assert.match(distributed, /MCRSGSP/);
   assert.match(distributed, /provenance, not a canonical runtime/);
+  assert.match(distributed, /MCRSGSP provides recoverable candidates\.\s*OMI decides accepted objects\./);
+  assert.match(distributed, /Gossip moves\.\s*Reed-Solomon recovers\.\s*Causality bounds\.\s*OMI accepts\.\s*Projection displays\./);
 });
 
 test("OMI Declarative Core root files are canonical manifest sources", async () => {

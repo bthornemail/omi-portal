@@ -10,7 +10,7 @@ services:
     container_name: omi-portal
     restart: always
     ports:
-      - "8080:80"
+      - "${OMI_PORT:-8080}:80"
     labels:
       omi.context-root: "ffff-127--/48"
       omi.service-bus: "::1..::8"

@@ -38,6 +38,25 @@ The Monotone Causal Reed-Solomon Gossip Storage Protocol (MCRSGSP) draft in `dev
 
 Any WAN deployment, consensus-free cluster rollout, or transport-specific behavior is aspirational unless it is covered by a local test.
 
+MCRSGSP is OMI's coordination-free gossip storage substrate: it lets fragments propagate, repair, and reconstruct without consensus, while leaving canonical acceptance to the OMI validation and receipt pipeline.
+
+```text
+Gossip moves.
+Reed-Solomon recovers.
+Causality bounds.
+OMI accepts.
+Projection displays.
+```
+
+Authority boundary:
+
+```text
+MCRSGSP provides recoverable candidates.
+OMI decides accepted objects.
+```
+
+MCRSGSP moves fragments, preserves causal admissibility, repairs missing pieces, and reconstructs candidates. It does not decide final truth.
+
 ## Distributed State Rules
 
 Remote OMI state is fragment-oriented:
@@ -53,6 +72,16 @@ payload fragment
 Fragments are immutable after generation. Any `k` of `n` RS fragments may reconstruct a candidate only when the selected fragment set is causally closed.
 
 Distributed state grows monotonically. New fragments may expand the set of derivable candidates, but they must not invalidate previously derivable candidates. Local 720/5040 memory sweeps do not destroy distributed fragment state.
+
+The authority path remains:
+
+```text
+fragment gossip
+  -> causal closure
+  -> RS-sufficient reconstruction
+  -> candidate materialization
+  -> OMI validation / resolution / receipt
+```
 
 ## Implementation Gate
 

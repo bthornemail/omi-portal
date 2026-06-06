@@ -29,7 +29,7 @@ function countTestFiles(dir) {
 }
 
 function checkEbpfArtifact() {
-  const objPath = join(ROOT, 'dist', 'ebpf', 'ebpf-pipeline.o');
+  const objPath = join(ROOT, 'artifacts', 'ebpf', 'ebpf-pipeline.o');
   if (existsSync(objPath)) {
     return { present: true, size: readFileSync(objPath).length };
   }

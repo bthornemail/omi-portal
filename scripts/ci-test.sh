@@ -14,7 +14,7 @@ echo "=== OMI CI Test Pipeline ==="
 # 1. Unit tests (native)
 run_unit() {
   echo "--- [1/4] Unit Tests ---"
-  npm ci --ignore-scripts
+  npm ci --ignore-scripts --omit=dev
   npm test
   echo " -> [PASS] All unit tests pass"
 }
@@ -50,20 +50,23 @@ run_smoke() {
   fi
 
   # Build and run smoke test
+  OMI_PORT="${OMI_PORT:-8080}"
   docker compose down --volumes --remove-orphans 2>/dev/null || true
-  docker compose up --build -d omi-kernel-node 2>/dev/null || {
+  SMOKE_CONTAINER=omi-portal
+  docker compose up --build -d omi-portal 2>/dev/null || {
     # Fallback: build directly
     docker build -t omi-portal-smoke -f Dockerfile --target runtime .
-    docker run -d --name omi-smoke -p 8080:80 omi-portal-smoke
+    docker run -d --name omi-smoke -p "${OMI_PORT}:80" omi-portal-smoke
+    SMOKE_CONTAINER=omi-smoke
   }
 
   # Wait for health
   TIMEOUT=15
   COUNTER=0
-  while [ "$(docker inspect --format='{{.State.Health.Status}}' omi-smoke 2>/dev/null || echo starting)" != "healthy" ]; do
+  while [ "$(docker inspect --format='{{.State.Health.Status}}' "$SMOKE_CONTAINER" 2>/dev/null || echo starting)" != "healthy" ]; do
     if [ $COUNTER -gt $TIMEOUT ]; then
       echo " -> ERROR: smoke container unhealthy"
-      docker logs omi-smoke 2>/dev/null || true
+      docker logs "$SMOKE_CONTAINER" 2>/dev/null || true
       exit 1
     fi
     sleep 1
@@ -71,7 +74,7 @@ run_smoke() {
   done
 
   # Verify COOP/COEP headers
-  HEADERS=$(curl -sI http://localhost:8080/ 2>/dev/null || true)
+  HEADERS=$(curl -sI "http://localhost:${OMI_PORT}/" 2>/dev/null || true)
   echo "$HEADERS" | grep -qi "Cross-Origin-Opener-Policy.*same-origin" || {
     echo " -> ERROR: COOP header missing"
     exit 1
@@ -82,6 +85,7 @@ run_smoke() {
   }
 
   docker rm -f omi-smoke 2>/dev/null || true
+  docker compose down --volumes --remove-orphans 2>/dev/null || true
   echo " -> [PASS] Smoke test — COOP/COEP verified"
 }
 

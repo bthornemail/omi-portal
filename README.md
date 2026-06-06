@@ -5,6 +5,10 @@
 
 OMI Portal is a protocol runtime for turning addresses, packets, documents, clocks, and browser pages into **verifiable reference states**.
 
+## Open The Portal
+
+New here? See [OPEN_PORTAL.md](OPEN_PORTAL.md) for the shortest local and Docker walkthrough. Testing with someone over the internet? See [REMOTE_TESTING.md](REMOTE_TESTING.md).
+
 At the center of OMI is the **OMI address pointer**:
 
 ```text
@@ -364,7 +368,7 @@ The quadratic boundary is normative: `Q_frame(S)=E_var+E_const` validates the 12
 
 Color/clock research is treated as software visualization semantics. OMI may map clock, precision, and receipt state to deterministic JSON Canvas color fields, but optical-clock language is only an analogy unless a local source module and test prove the behavior.
 
-The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. Deployment and transport behavior remains aspirational unless it is wired to local tests.
+The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. MCRSGSP provides recoverable candidates; OMI decides accepted objects through validation, resolution, and receipt. Deployment and transport behavior remains aspirational unless it is wired to local tests.
 
 ### 6.8 OMI Declarative Core
 
@@ -488,11 +492,11 @@ make compile-ebpf-gate
 This should build:
 
 ```text
-dist/ebpf/ebpf-pipeline.o
-dist/delta_orbital_gate.o
+artifacts/ebpf/ebpf-pipeline.o
+artifacts/ebpf/delta_orbital_gate.o
 ```
 
-The full test suite may expect the eBPF object to exist, so compile it before running all tests. The latest notation milestone explicitly rebuilt the eBPF object before running the full test suite.
+`make verify-ebpf` requires the object and verifies its ELF shape. The general Node test suite skips only that ELF fixture when the artifact is absent, so browser-only and QEMU lanes do not need clang. The object lives outside `dist/` because Vite clears `dist/` on each browser build.
 
 ### 9.2 Run Tests
 

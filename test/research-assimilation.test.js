@@ -170,6 +170,10 @@ test("Research assimilation: MCRSGSP provenance maps only to implemented distrib
   assert.match(distributedDoc, /MCRSGSP/);
   assert.match(objectModel, /MCRSGSP/);
   assert.match(distributedDoc, /provenance, not a canonical runtime/);
+  assert.match(distributedDoc, /MCRSGSP provides recoverable candidates\.\s*OMI decides accepted objects\./);
+  assert.match(objectModel, /MCRSGSP provides recoverable candidates\.\s*OMI decides accepted objects\./);
+  assert.match(distributedDoc, /Gossip moves\.\s*Reed-Solomon recovers\.\s*Causality bounds\.\s*OMI accepts\.\s*Projection displays\./);
+  assert.match(objectModel, /reader may recognize\s*resolver may promote\s*validation and receipt accept/);
   assert.equal(manifest.sources.some((source) => source.path.startsWith("dev-docs/_temp/")), false);
 
   for (const sourcePath of [

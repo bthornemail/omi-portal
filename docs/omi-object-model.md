@@ -2,7 +2,9 @@
 
 This document is the canonical declaration of the OMI Object Model. It unifies the exploratory notes in `dev-docs/` into one stable framework for addressable browser interfaces.
 
-OMI treats an `omi-*` token as both an object identity and a route. The same token can appear as a DOM `id`, a `data-omi-address` attribute, a CSSOM id selector prefix, a JSON Canvas node address, an A-Frame entity route, a CodeMirror text token, or a binary memory projection key.
+OMI treats an `omi-*` token as a contextual notation alias until it is resolved and validated. The same token can appear as a DOM `id`, a `data-omi-address` attribute, a CSSOM id selector prefix, a JSON Canvas node address, an A-Frame entity route, a CodeMirror text token, or a binary memory projection key, but the prefix alone never creates object identity.
+
+Strings do not become OMI objects by containing `omi`. A token becomes address authority only after canonical context resolves it and `Q_frame` accepts the carrier.
 
 ## Core Declaration
 
@@ -67,6 +69,19 @@ CSSOM id matching is the native subtree query model:
 ```
 
 Each hyphen-delimited segment narrows the route. DOM nodes keep `data-omi-address` for JavaScript lookup, while CSSOM geometry uses id-based substring selectors so the visual layer remains tied to the protocol pointer.
+
+## Linear And Hierarchical Projection
+
+OMI GUI projections expose the same addressed state through two inspectable views:
+
+| View | Preserves | Typical carriers |
+|---|---|---|
+| Linear traversal stream | source/object order, replay order, and indexable sequence | `omi → payload → imo`, DOM `id`, `data-omi-*`, JSON Canvas node order |
+| Hierarchical containment tree | scope, containment, and selector nesting | `FS → GS → RS → US`, document/context/control/unit, nested DOM/SVG/A-Frame elements |
+
+The linear stream is the route that a reader can replay, scan, index, or compare against compiled object traversal. The hierarchical tree is the folded GUI containment surface that a browser can select, scope, and render without changing the underlying pointer.
+
+Fonts, glyphs, Unicode codepoints, and BiDi presentation details are visual carriers for GUI precision. They may make the projection legible, but they do not create semantic authority, replace WordNet synset centroid identity, alter POS graph behavior, or validate state. `Q_frame` validates the carrier, Omilog expresses the addressed declaration, and `Q_xy` projects decoded state into visible geometry.
 
 ## Lisp Transformer Model
 
@@ -306,6 +321,21 @@ This section declares the distributed storage semantics for OMI remote addresses
 
 Implemented locally: Reed-Solomon erasure coding, causal closure, version vectors, fragment storage, gossip propagation, and anti-entropy repair. Transport deployment, WAN rollout, and global coordination claims remain aspirational unless wired to source and tests.
 
+MCRSGSP is OMI's monotone gossip storage substrate. It propagates immutable fragments, preserves causal admissibility, repairs missing pieces, and reconstructs recoverable candidates. It is not the authority layer and does not decide final truth.
+
+```text
+MCRSGSP provides recoverable candidates.
+OMI decides accepted objects.
+```
+
+The acceptance boundary remains:
+
+```text
+reader may recognize
+resolver may promote
+validation and receipt accept
+```
+
 ### Fragment-Based Propagation
 
 Remote OMI data distributes as independent RS-encoded fragments over unreliable transport, not as monolithic messages. Each fragment carries:
@@ -356,6 +386,16 @@ Candidates := all valid RS reconstructions derivable from causally closed observ
 ```
 
 Join(A, B) = A ∪ B. The system defines no delete operation over valid candidates. Application-layer policies MAY define preferred candidate selection, ranking, or materialized views above the protocol semantics.
+
+Candidate materialization remains upstream of OMI acceptance:
+
+```text
+Gossip moves.
+Reed-Solomon recovers.
+Causality bounds.
+OMI accepts.
+Projection displays.
+```
 
 ## Verification Prospectus
 

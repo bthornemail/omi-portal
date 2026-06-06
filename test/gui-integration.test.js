@@ -128,6 +128,11 @@ test("Vite config exposes public HTML entrypoints at root URLs without root stub
   assert.equal(packageJson.scripts["preview:aframe"], "vite preview --host 0.0.0.0 --open /aframe.html");
   assert.equal(packageJson.scripts["preview:bidi"], "vite preview --host 0.0.0.0 --open /bidi.html");
   assert.equal(packageJson.scripts["preview:document"], "vite preview --host 0.0.0.0 --open /document.html");
+  assert.ok(viteConfig.includes("OMI_BUILD_AFRAME"), "A-Frame must be opt-in for production builds");
+  assert.equal(packageJson.dependencies.aframe, undefined);
+  assert.equal(packageJson.dependencies["aframe-environment-component"], undefined);
+  assert.equal(packageJson.devDependencies.aframe, "^1.7.1");
+  assert.equal(packageJson.devDependencies["aframe-environment-component"], "^1.5.0");
 });
 
 test("WAN dashboard loads static qemu-user lane manifest without launch controls", async () => {

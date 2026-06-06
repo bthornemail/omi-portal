@@ -16,7 +16,7 @@ WORKDIR /test
 RUN apk add --no-cache build-base
 
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts --omit=dev
 
 COPY . .
 

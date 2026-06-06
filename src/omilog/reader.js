@@ -15,7 +15,10 @@ const IMO_SOURCE_RE = new RegExp(
   `^\\s*${LITTLE_OMICRON}\\s+${RS}([^${US}]+)${US}\\s+${BIG_OMICRON}\\s*$`
 );
 
-const OMI_ADDRESS_RE = /^(?:omi-|ffff-)[0-9a-fA-F-]+(?:\/\d+(?:-\d+)?)?(?:\/@\d+)*$/;
+const OMI_ADDRESS_RE = /^(?:omi-(?:[0-9a-fA-F]{1,8}-){7}[0-9a-fA-F]{1,8}|ffff-(?:[0-9a-fA-F]{1,8}-){6}[0-9a-fA-F]{1,8})(?:\/\d{1,3}(?:-\d{1,3})?)?(?:\/@\d+)*$/;
+const OMI_FRAME_MNEMONIC_RE = /^omi-+-imo$/;
+const OMI_LOW_ALIAS_RE = /^omi(?:-.+)?$/;
+const OMI_HIGH_ALIAS_RE = /^(?:imo-.+|.+-imo)$/;
 
 const EMOJI_RE = /^\p{Extended_Pictographic}/u;
 
@@ -243,6 +246,11 @@ function classifyAtom(value) {
     return { type: 'omi-address', value };
   }
 
+  const omiAlias = classifyOmiAlias(value);
+  if (omiAlias) {
+    return omiAlias;
+  }
+
   if (/^-?\d+$/.test(value)) {
     return { type: 'number', value: parseInt(value, 10) };
   }
@@ -290,6 +298,9 @@ export function readOExpressionAtom(source) {
   const expr = readExpr(state);
   if (expr.type !== 'atom' && expr.type !== 'number' &&
       expr.type !== 'omi-address' && expr.type !== 'emoji' &&
+      expr.type !== 'omi-frame-mnemonic' &&
+      expr.type !== 'omi-low-alias' &&
+      expr.type !== 'omi-high-alias' &&
       expr.type !== 'nil' && expr.type !== 'string') {
     throw new OExpressionSyntaxError(
       `Expected atom, got ${expr.type}`,
@@ -381,7 +392,25 @@ export function isEmojiAtom(value) {
 
 export function isOmiAddressAtom(value) {
   if (typeof value !== 'string') return false;
-  OMI_ADDRESS_RE.lastIndex = 0;
   const match = OMI_ADDRESS_RE.exec(value);
   return match !== null && match[0].length === value.length;
+}
+
+export function classifyOmiAlias(value) {
+  if (typeof value !== 'string' || value.length === 0) return null;
+  if (isOmiAddressAtom(value)) return null;
+  if (OMI_FRAME_MNEMONIC_RE.test(value)) {
+    return { type: 'omi-frame-mnemonic', value };
+  }
+  if (OMI_LOW_ALIAS_RE.test(value)) {
+    return { type: 'omi-low-alias', value };
+  }
+  if (OMI_HIGH_ALIAS_RE.test(value)) {
+    return { type: 'omi-high-alias', value };
+  }
+  return null;
+}
+
+export function isOmiAliasAtom(value) {
+  return classifyOmiAlias(value) !== null;
 }

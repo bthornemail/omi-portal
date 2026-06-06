@@ -702,7 +702,7 @@ a[href^="web+omicron:"]:hover {
 
 /* 55. Telemetry packet loss indicator — amber above 0%, red above 20% */
 [data-wan-loss="0"] { stroke: #00ffcc; }
-[data-wan-loss][data-wan-loss^="0"][data-wan-loss!="0"] { stroke: #ffaa00; }
+[data-wan-loss]:not([data-wan-loss="0"])[data-wan-loss^="0"] { stroke: #ffaa00; }
 [data-wan-loss]:not([data-wan-loss="0"]):not([data-wan-loss^="0"]) { stroke: #ff0055; }
 
 /* 56. Telemetry RTT bar — green < 50ms, amber 50-200ms, red > 200ms */

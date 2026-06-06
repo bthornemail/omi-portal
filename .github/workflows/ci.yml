@@ -26,7 +26,7 @@ jobs:
           node-version: "24"
           cache: npm
 
-      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts --omit=dev
 
       - name: Run unit tests
         run: npm test
@@ -76,7 +76,7 @@ jobs:
           docker run --rm --platform ${{ matrix.platform }} \
             -v ${{ github.workspace }}:/test -w /test \
             node:24-alpine \
-            sh -c "npm ci --ignore-scripts --quiet && npm test"
+            sh -c "npm ci --ignore-scripts --omit=dev --quiet && npm test"
 
   # ============================================================
   # DOCKER BUILD + SMOKE TEST
@@ -102,13 +102,13 @@ jobs:
 
       - name: Start compose and wait for health
         run: |
-          docker compose up -d omi-kernel-node
+          docker compose up -d omi-portal
           TIMEOUT=30
           COUNTER=0
-          while [ "$(docker inspect --format='{{.State.Health.Status}}' omi-core-gateway 2>/dev/null || echo starting)" != "healthy" ]; do
+          while [ "$(docker inspect --format='{{.State.Health.Status}}' omi-portal 2>/dev/null || echo starting)" != "healthy" ]; do
             if [ $COUNTER -gt $TIMEOUT ]; then
               echo "ERROR: unhealthy after ${TIMEOUT}s"
-              docker compose logs omi-kernel-node
+              docker compose logs omi-portal
               exit 1
             fi
             sleep 2
