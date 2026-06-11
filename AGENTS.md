@@ -16,13 +16,13 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 
 ## Core Axioms (OMI = Omicron Object Model)
 
-- **Ο** (U+039F) = cardinal boundary operator / zero-frame / subnet containment
+- **Ο** (U+039F) = cardinal boundary operator / zero-frame / gauge closure / frame boundary
 - **ο** (U+03BF) = chiral execution operator / local cons transition
 - `Ο-<car>-<cdr>` = Omi cons pair (car = control/boundary, cdr = payload/continuation)
 - `.imo` compiled records wrap with **ο** (U+03BF) as entry delimiter and **Ο** (U+039F) as exit delimiter, mirroring S1/S6 in the 128-bit wire frame
 - `δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C` = bitwise cons transition (period-8)
-- `--` = zero compression (IPv6 `::`-style)
-- `/N` = CIDR prefix scope (0–128, `/48` canonical local frame)
+- `--` = relational bridge / omi---imo cell join
+- `/N` = relational descent path (0–128, `/4` canonical local frame); CIDR `/N` is adapter-only
 - `60` = sexagesimal place-value clock (Hellenistic digit bound 0–59)
 - `240 = 4×60` public projection lattice
 - `360 = 6×60` orientation field
@@ -36,7 +36,11 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 
 ## Current Canonical Roots
 
-- Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`)
+- Address root: `ffff-127-0-0-1` (no `omi-` alias; canonical is `ffff-127--/48`); relational descent form: `ο<ffff><127><0><0><1>Ο`
+- Omi-Plane Capsule spec: `docs/omi-plane-capsule.md` (supplementary Unicode encapsulation layer)
+- Omi-Gauge Autonomous Function Space: `docs/omi-gauge-autonomous-function-space.md` (computed rows, pure functions, 0xAA55 acceptance seal)
+- Omi-Nomogram/SlideRule/Query Plane: `docs/omi-nomogram.md` (deterministic function scales, post-address payloads, ?---? surface)
+- OmiPipe/MCRSGSP layer alignment: `docs/omi-pipe-mcrsgsp-alignment.md` (streaming frames, erasure-coded fragments, receipt authority)
 - Main framework doc: `docs/omi-object-model.md`
 - Omi-Notation spec: `docs/omi-notation.md`
 - Construction doc: `POSTULATES.md` (Euclidean layer — what may be constructed)
@@ -44,7 +48,8 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Derivation doc: `DECLARATIONS.md` (how RULES.omi clauses become FACTS.omi rows)
 - Manifest: `docs/10-declaration/omi-object-model.manifest.json`
 - GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`
-- CIDR kernel: `src/omi/omicron-kernel.js`
+- Consolidated canon v0: `docs/omi-native-gauge-consolidated-canon.md` (final realignment: CIDR retired from native grammar, two-cube mirrors, factorial row gauge, PPP escape grammar, regular geometry predicates, Fano/trigintaduonion incidence, HNSW runtime measurement, 11-cell/buckyball shell, sexagesimal degree inspection)
+- CIDR kernel (historical adapter): `src/omi/omicron-kernel.js`
 - Sexagesimal kernel: `src/omi/sexagesimal-kernel.js`
 - Inversion kernel: `src/omi/inversion-kernel.js`
 - Lisp kernel: `src/omi/lisp-kernel.js`
@@ -90,7 +95,7 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Rule 0x97: `route-spo-incidence-through-155-distinguished-triads` — 155 triads partitioned into five OMI file categories
 - Rule 0x98: `map-64-ion-doubling-to-full-imo-native-plane` — 64-position native plane from 64-ion doubling pattern
 - Rule 0x99: `generate-every-closed-omi-region-from-one-principal-pointer` — OPPID: every region has one principal generator
-- Rule 0x9A: `derive-common-generator-for-paired-omi-pointers` — common CIDR/LL/closure generator from two pointers
+- Rule 0x9A: `derive-common-generator-for-paired-omi-pointers` — common CIDR/LL/closure generator from two pointers; note: CIDR is adapter-only, native form is relational descent
 - Rule 0x9B: `witness-shared-closures-through-combinator-composition` — Bézout-style witness composition (SHOULD)
 - Rule 0x9C: `decompose-finite-omi-record-sets-into-cyclic-replay-components` — cyclic replay decomposition (SHOULD)
 - Rule 0x9D: `separate-compilation-targets-into-development-consumer-and-production-grades` — Makefile grade lifecycle isolation (MUST)

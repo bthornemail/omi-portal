@@ -33,25 +33,37 @@ telemetry
 
 ### OMI Pointer
 
-An **OMI pointer** is a reference address in canonical form:
+An **OMI pointer** is a relational gauge reference in canonical form:
 
 ```text
-omi-<S0>-<S1>-<S2>-<S3>-<S4>-<S5>-<S6>-<S7>/<prefix>
+omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
 ```
 
-Each `S` segment is a 16-bit hexadecimal word.
-
-Together:
+The native grammar is relational descent, not CIDR prefix length:
 
 ```text
-8 × 16 bits = 128 bits
+hyphens delimit the frame body
+slashes walk the relational path
+control rows define the machine scope
+rewrite tables resolve interpretation
+receipts accept the result
 ```
+
+A CIDR adapter form exists for network compatibility:
+
+```text
+omi-<S0>-<S1>-<S2>-<S3>-<S4>-<S5>-<S6>-<S7>/<claim>
+```
+
+Where each `S` segment is a 16-bit word, but the `/claim` is a CIDR claim boundary (adapter-only), not native OMI scope.
 
 An OMI pointer can identify:
 
 ```text
-a packet
-a rule
+a stream cell
+a gauge row
+a geometry predicate
+a Horn-clause path
 a DOM element
 a JSON Canvas node
 a memory receipt
@@ -75,43 +87,74 @@ telemetry records
 rule pointers
 ```
 
-Example:
+Example (CIDR adapter form):
 
 ```text
 omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48
 ```
 
-### OMI Address Frame
-
-An **OMI address frame** is the full 128-bit instruction word represented as eight 16-bit segments.
+Relational descent form:
 
 ```text
-S = [S0, S1, S2, S3, S4, S5, S6, S7]
+omi-<0100>/<03bf>/<7c00>/<2b01-2f01>/<1434-039f>-imo
+```
+
+### OMI Address Frame
+
+An **OMI address frame** is a gauge-stream cell with Omicron entry/exit gates.
+
+Native form:
+
+```text
+ο <slot> Ο
+```
+
+Relational descent form:
+
+```text
+omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
 ```
 
 The same frame can be treated as:
 
 ```text
 a lexer input
-an IPv6 source address
+a gauge row
+a geometry predicate target
 a replay receipt source
 a symbolic payload envelope
 a visual selector target
 ```
 
-### Prefix Scope
+A CIDR/historical adapter may also represent the frame as eight 16-bit segments:
 
-The suffix after `/` is the OMI prefix scope.
+```text
+S = [S0, S1, S2, S3, S4, S5, S6, S7]
+```
 
-Common scopes:
+But the native form is the gauge-stream cell with relational descent path.
 
-| Prefix | Meaning                                         |
-| -----: | ----------------------------------------------- |
-|  `/48` | Canonical local runtime frame                   |
-|  `/80` | Rule-family or ABI boundary                     |
-|  `/96` | Gateway, translation, or mapped-prefix boundary |
-| `/112` | Narrow rule/register boundary                   |
-| `/128` | Exact object pointer                            |
+### Prefix Scope (Three-Way Distinction)
+
+The suffix after `/` is a relational descent path segment. CIDR `/N` prefix-length claims are adapter-only.
+
+The native grammar makes a three-way distinction:
+
+| Segment  | Meaning                                                  |
+| -------- | -------------------------------------------------------- |
+|  `/N`    | CIDR claim boundary (adapter); does not create identity  |
+|  `/N-M`  | Claim backoff / range reduction                          |
+|  `/@N`   | Reader lens; cosmetic interpretation, not authority      |
+
+The Omicron frame alone encodes step identity (Rule 0xAC). Prefixes and lenses do not add identity (Rule 0xAD).
+
+The native relational descent path uses named segments:
+
+```text
+/<control>/<selector>/<relation>/<unit>
+```
+
+CIDR claim boundaries may be used for network adapter compatibility but are never identity-bearing in the native grammar.
 
 ### Canonical Local Context Root
 
@@ -141,17 +184,23 @@ is accepted for compatibility and normalized to:
 omi-ffff-127-0-0-1
 ```
 
-### CIDR Projection
+### CIDR Adapter (Historical)
 
-**CIDR projection** is the use of IP-style prefix containment as a route-table, subtree, and rule-boundary language for OMI atoms.
+**CIDR** (Classless Inter-Domain Routing) is no longer native OMI grammar.
 
-An OMI pointer can therefore behave like both:
+It remains as a historical adapter, import/export lens, and network compatibility layer:
 
 ```text
-an object id
-and
-a prefix-addressed route
+an IPv4/IPv6 address → OMI frame mapper
+a network prefix → relational descent claim boundary
+a compatibility lens for existing routing infrastructure
 ```
+
+In native OMI, the slash denotes relational descent, not CIDR prefix length.
+
+The three-way distinction applies: `/N` = CIDR claim (adapter-only), `/N-M` = backoff, `/@N` = reader lens.
+
+> CIDR does not create identity. The Omicron frame alone encodes identity.
 
 ---
 
@@ -1306,7 +1355,7 @@ Example:
 
 ```text
 Term: 240-State Bridge
-Definition: The active byte-square surface formed by 16×16−16 = 240. In OMI, 240 = 2×5! (hidden root reading) = 15×16 (visible nibble/carrier reading) = 6!/3. It is the exact bridge between the packet core (5! = 120) and the semantic sweep (6! = 720) via ×2 and ×3, and across seven Fano selectors into the full 5040-slot replay ring (7! = 7×3×240). The decimal period of 1/73 (01369863, period 8) provides stepping digits {0,1,3,6,8,9} — never 5, because factor 5 is presupposed inside 240.
+Definition: The active byte-square surface formed by 16×16−16 = 240. In OMI, 240 = 2×5! (hidden root reading) = 15×16 (visible nibble/carrier reading) = 6!/3. It is the exact bridge between the packet core (5! = 120) and the semantic sweep (6! = 720) via ×2 and ×3, and across seven Fano selectors into the full 5040-slot replay ring (7! = 7×3×240).
 Pointer: omi-0000-0000-0000-0000-0000-0000-00f0-0000/128
 Rule: bind-five-fold-packet-to-240-bridge
 Source: src/omi/meta-compiler.js, public/portal.html
@@ -1315,6 +1364,1312 @@ Projection: Karnaugh torus Z-extrusion, slot5040 decomposition
 Failure behavior: Q(S) ≠ 0 → frame evicted
 Consumer use: derive slot5040 = fano7×720 + role3×240 + local240
 Provider use: orient packet core (5!) into active byte surface for S‑P‑O sweep
+```
+
+---
+
+## 2. Canonical OMI Terms
+
+Computed-Form Glossary — Omicron Object Model, Omi-Gauge, Omi-Lisp, Omi-CONS, and Projection Surfaces
+
+### A
+
+**Aegean Pointer**
+
+An Aegean numeral or separator used as a pointer into a geometry, stream, or rendering LUT.
+
+Aegean pointers do not need variable names. Their codepoints carry their values, and their active frame determines how they are interpreted.
+
+    𐄀 → frame / separator / point
+    𐄁 → dot / line / relation
+    𐄂 → double dot / triangle / constructor
+    𐄇 → 1 / tetrahedral pointer
+    𐄈 → 2 / 5-cell pointer
+    𐄉 → 3 / 8-cell pointer
+
+**Agreement**
+
+The OMI principle that a relation becomes valid only after it is accepted by receipt.
+
+Agreement does not erase difference. It binds orientation without collapse.
+
+**Agreement Without Collapse**
+
+The rule that two surfaces may agree without becoming identical.
+
+    projection is not authority
+    receipt accepts relation
+    identity remains bounded
+    orientation is preserved
+
+**Allowed Epistemology**
+
+The post-address rule that external payloads must declare what kind of knowing they carry.
+
+In Omi-CONS:
+
+    CAR = what is carried
+    CDR = how it continues
+    CID = whether it agrees
+
+**Archimedean Surface**
+
+The runtime traversal shell used for walking, projecting, or coordinating an OMI relation.
+
+Its dual coordination shell is Catalan.
+
+**Authority**
+
+The accepted OMI address and receipt-bound relation.
+
+Authority is not the rendered character, glyph, SVG, DOM element, barcode, matrix, or floating-point measurement.
+
+    authority = accepted o---o center
+    projection = visible/rendered face
+
+---
+
+### B
+
+**Base64 Pure Function Surface**
+
+A transport-facing carrier surface for compact function or payload representation.
+
+It does not define identity. It carries bytes or function selectors after an OMI address has already been formed.
+
+Canonical placement:
+
+    omi-<frame>/<control>/<scale>/<relation>/<unit>-imo?<payload>
+
+**Block B**
+
+The period-8 decimal orbit derived from the Delta law.
+
+    B = [0,1,3,6,9,8,6,3]
+
+It comes from:
+
+    1 / 73 = 0.01369863...
+
+The law has period 8. The smallest prime with decimal period 8 is 73. Therefore Block B is not chosen; it is recovered.
+
+**BOM / Bridge Order Marker**
+
+The 0x20 row pivot used to fold lower control rows into readable/operator rows.
+
+    x XOR 0x20
+
+Examples:
+
+    0x0D XOR 0x20 = 0x2D "-"
+    0x0E XOR 0x20 = 0x2E "."
+    0x0F XOR 0x20 = 0x2F "/"
+
+**Boundary**
+
+The 16th value of a 4-bit row.
+
+In the 15-of-16 row model:
+
+    0x0–0xE = fifteen earned terms
+    0xF     = boundary / Gnomon / Omicron marker
+
+**Bridge Row**
+
+The 0x20–0x2F row.
+
+It acts as the barycentric pivot and transition row between low control and readable/operator surfaces.
+
+**Buckyball Orientation Surface**
+
+The 60-state orientation surface derived from the 11-cell / L2(11) relation.
+
+    L2(11) / Z11 = 660 / 11 = 60
+
+This is not the 11-cell itself. It is the 60-coset orientation surface associated with the 11-cell identity shell.
+
+---
+
+### C
+
+**CAR**
+
+The source/head payload face in Omi-CONS.
+
+Mnemonic:
+
+    CAR = OR
+
+Meaning:
+
+    CAR admits source presence.
+    CAR carries the head.
+    CAR is what is carried.
+
+**Catalan Shell**
+
+The dual coordination shell to an Archimedean traversal shell.
+
+    Archimedean = traversal
+    Catalan     = chiral coordination
+
+**CDR**
+
+The continuation/tail payload face in Omi-CONS.
+
+Mnemonic:
+
+    CDR = XOR
+
+Meaning:
+
+    CDR carries differential continuation.
+    CDR is how the payload continues.
+
+**CID**
+
+The agreement/witness face in Omi-CONS.
+
+Mnemonic:
+
+    CID = XNOR
+
+Meaning:
+
+    CID witnesses lawful agreement between CAR and CDR.
+
+**Closure**
+
+The bounded completion of a seed into a stable relation.
+
+In OMI, closure is not just termination. It is a lawful fixed state under a declared transformation.
+
+**Codepoint**
+
+A symbolic position in a character space.
+
+In OMI, a codepoint is not automatically a character meaning. It is a position that may be rendered through an active LUT.
+
+**Cons**
+
+The fundamental dotted pair relation.
+
+    (a . b)
+
+In OMI:
+
+    CAR . CDR
+
+becomes:
+
+    source/head . continuation/tail
+
+**CONS.omi / CONS.imo**
+
+The source/runtime cons structure of OMI.
+
+    CONS.omi = source-side cons declaration
+    CONS.imo = runtime-side cons continuation
+
+**C0 Control Rows**
+
+The low control range:
+
+    0x00–0x1F
+
+Split:
+
+    0x00–0x0F = .omi side
+    0x10–0x1F = .imo side
+
+Relation:
+
+    imo = omi XOR 0x10
+    omi = imo XOR 0x10
+
+---
+
+### D
+
+**DataView**
+
+The canonical runtime byte interpretation surface for post-address payloads.
+
+Rule:
+
+    Base64URL carries bytes.
+    ArrayBuffer stores bytes.
+    DataView interprets bytes.
+    TypedArrays specialize bytes.
+    Receipt validates attachment.
+
+**Delta Law**
+
+The one transformer law:
+
+    Δ_C(x) = rotl(x,1) XOR rotl(x,3) XOR rotr(x,2) XOR C
+
+Its design properties:
+
+    rotations preserve bits
+    XOR is reversible
+    C breaks the zero fixed point
+    masking bounds the state
+
+The Delta law is the transformer. It does not know geometry. It only moves state.
+
+**Derived Character**
+
+A character produced from an earned row value through an active LUT.
+
+The character is not authority. It is a rendering.
+
+**Dot**
+
+The one instruction of Omi-Lisp and the cons relation.
+
+    .
+
+In Lisp form:
+
+    (a . b)
+
+In OMI:
+
+    o---o
+
+**Dotted Pair**
+
+The minimal pair structure.
+
+It is the root of:
+
+    list
+    tree
+    a-list
+    closure
+    stream
+    frame
+    receipt path
+
+**Dual**
+
+A geometry relation where one structure exchanges roles with another.
+
+Examples:
+
+    cube ↔ octahedron
+    dodecahedron ↔ icosahedron
+    vertex ↔ cell
+    edge ↔ face
+    omi ↔ imo
+
+---
+
+### E
+
+**Earned Position**
+
+A row value that becomes available through permutation, closure, or gauge construction.
+
+OMI does not begin by assigning character meanings. It earns positions first, then renders them.
+
+**Encode**
+
+One of the nine universal edges.
+
+    encode = project state into carrier form
+
+**Epistemic Selector**
+
+A selector for one of the four epistemic states:
+
+    11 = known known
+    10 = known unknown
+    01 = unknown known
+    00 = unknown unknown
+
+**Epistemology Row**
+
+The selector region that determines what kind of knowing is attached to a relation.
+
+In post-address form, epistemology is carried by Omi-CONS.
+
+**External Query Plane**
+
+The post-address ?---? surface.
+
+    omi-<frame>/<control>/<scale>/<relation>/<unit>-imo?<payload>
+
+This plane carries external payloads, DataView buffers, CAR/CDR/CID frames, worker scripts, matrices, or BLOBs.
+
+**External Witness Mask**
+
+A post-address mask proving a folded gauge result.
+
+Canonical example:
+
+    0xFFFFFF
+
+This is a saturated 24-bit Omi-Gauge witness surface, not the native OMI address.
+
+---
+
+### F
+
+**Fano Closure**
+
+The 7-bit bounded closure kernel tied to the Fano plane and Hamming(7,4) structure.
+
+It uses:
+
+    B7 = {0,1}^7
+    MASK7 = 0x7F
+
+**Fano Plane**
+
+The 7-point, 7-line incidence structure used by OMI as a minimal incidence scheduler.
+
+    point  = addressable identity position
+    line   = valid triplet relation
+    triple = selected closure
+
+**Fiber**
+
+A contextual rendering or interpretation layer.
+
+The same abstract value may render differently depending on the active fiber:
+
+    ASCII
+    Aegean
+    Braille
+    BCD
+    Unicode private-use
+    geometry
+    DOM
+    barcode
+    shader
+
+**Float / Floating Projection**
+
+A runtime measurement projection.
+
+Floating point may render, accelerate, or approximate, but it does not define identity.
+
+    floating point = projection
+    receipt = authority
+
+**Fold**
+
+A reversible relation between rows or surfaces.
+
+Example:
+
+    0x10–0x1F XOR 0x20 = 0x30–0x3F
+
+**Frame**
+
+A bounded OMI address or carrier context.
+
+Canonical address form:
+
+    omi-<frame>/<control>/<scale>/<relation>/<unit>-imo
+
+**Function Scale**
+
+A selected runtime interpretation scale from Omi-Nomogram.
+
+Examples:
+
+    logarithmic
+    square/root
+    cube/root
+    trigonometric
+    Pythagorean
+    sexagesimal
+    quadratic
+    LFSR period
+
+---
+
+### G
+
+**Gauge**
+
+A bounded table of row positions used to interpret OMI state.
+
+**Gauge Orbit**
+
+A row-cyclic interpretation of Omi-Gauge.
+
+The key visible orbit block is:
+
+    0x40–0x4F
+
+**Geometry Map**
+
+A LUT from abstract pointers to renderable geometries.
+
+Example:
+
+    𐄀 → point
+    𐄁 → line
+    𐄂 → triangle
+    𐄇 → tetrahedron
+    𐄈 → 5-cell
+    𐄋 → 24-cell
+    𐄎 → Hopf fiber
+
+The map is for rendering. It is not the transformer.
+
+**Gnomon**
+
+The orientation/shadow/pointer surface produced when a relation is measured against another.
+
+In algebraic form:
+
+    a² - b² = (a+b)(a-b)
+
+In OMI:
+
+    larger frame - smaller frame = bridge surface
+
+**Gnomon Boundary**
+
+The 0xF value in a 4-bit row when it acts as the 16th fold/separator.
+
+**Greek Numeral Overlay**
+
+A symbolic mnemonic layer using Greek numeral history.
+
+Examples:
+
+    ϛ = stigma = sixfold tick mnemonic
+    ϟ = koppa  = turning/q-gate mnemonic
+    ϡ = sampi  = high terminal carrier mnemonic
+
+This is a mnemonic overlay, not the machine authority.
+
+---
+
+### H
+
+**Handoff**
+
+A transition from symbolic pre-runtime derivation into runtime or external payload surface.
+
+Canonical sentinel:
+
+    0x7C
+
+**HNSW Projection**
+
+A runtime nearest-neighbor or distance measurement projection.
+
+HNSW navigates a relation after Omi-Nomogram and Omi-Gauge have selected and resolved the relation.
+
+It is not authority.
+
+**Hopf Terms**
+
+The 15 earned abstract terms of the local nibble row.
+
+    0x0–0xE = Hopf terms
+    0xF     = boundary
+
+They should be treated as pure row values first, not as fixed ASCII characters.
+
+---
+
+### I
+
+**Identity**
+
+A receipt-bound OMI relation.
+
+Identity is not the rendered character. Identity is the accepted address and lawful relation.
+
+**IMO**
+
+The runtime/closure side of OMI.
+
+Readable gate:
+
+    imo
+
+Compiled gate:
+
+    Ο = U+039F
+
+**Incidence**
+
+A valid relation selected by geometry, Fano/Horn closure, or scheduler rules.
+
+**Instantiate**
+
+The runtime action beneath Intent.
+
+    Intent → instantiate
+
+**Internal RPC Bridge**
+
+The surrogate-based bridge used for world-length payload split/rejoin.
+
+    0xD800–0xDBFF = high bridge half
+    0xDC00–0xDFFF = low bridge half
+
+**Invalidate**
+
+The runtime action beneath Interrupt.
+
+    Interrupt → invalidate
+
+---
+
+### J
+
+**Join**
+
+One of the nine universal edges.
+
+    join = bind worlds, frames, keys, or relations
+
+In Omi-CONS256:
+
+    bits 32–63 = JOIN()
+
+---
+
+### K
+
+**Ket Axis**
+
+The significant axis or payload direction used during XOR interpolation.
+
+Used in Omi-CAR and Omi-CDR profiles.
+
+**Known Known**
+
+The epistemic state:
+
+    11
+
+In high-order Omi-CONS256, the Omicron closure marker may act as a known-known acceptance bit.
+
+---
+
+### L
+
+**Lisp 1.5 Surface**
+
+The historical Lisp-like dot notation and association-list layer that Omi-Lisp uses as its minimal symbolic surface.
+
+**LUT**
+
+Lookup table.
+
+In OMI, the LUT renders abstract row positions into concrete forms.
+
+    row value → active fiber → rendered character/geometry
+
+The LUT is renderer-side.
+
+The transformer does not need it.
+
+---
+
+### M
+
+**Matrix**
+
+A relation field.
+
+In OMI:
+
+    Omi-Matrix = observation/relation field
+
+It instantiates the relations selected by Omi-Nomogram and resolved by Omi-Gauge.
+
+**Meta-Object**
+
+The high-order payload or object surface carried after identity.
+
+In Omi-CONS256:
+
+    bits 128–255 = META-OBJECT()
+
+**Mirror**
+
+A chiral reverse or paired relation.
+
+Example:
+
+    0xNM ↔ 0xMN
+
+**Monoid**
+
+The associative stream composition layer of Omi-Lisp.
+
+    omi::lisp : monoid (M, •)
+
+**Monster Rupture**
+
+The symbolic boundary where positional representation no longer contains the system and a larger symbol space must be earned.
+
+This is a conceptual rupture, not an ordinary numeric literal.
+
+---
+
+### N
+
+**Native OMI Gauge**
+
+The core bounded OMI gauge.
+
+    0x00–0x7F
+
+**Native OMI Frame**
+
+The 2¹⁶ core identity/address field.
+
+    2¹⁶ = native OMI frame/gauge field
+
+**Nomogram**
+
+A declarative alignment of scales.
+
+In OMI:
+
+    Omi-Nomogram = declarative runtime function-scale surface
+    Omi-SlideRule = operational/mechanical behavior of that surface
+
+**NULL**
+
+The beginning axis.
+
+NULL is not a digit string.
+
+    NULL != 1
+    NULL != 10
+    NULL != 1000
+
+NULL is the position from which representation breaks and symbols are earned.
+
+---
+
+### O
+
+**Ο**
+
+Uppercase Omicron.
+
+    Ο = U+039F
+
+Compiled closure gate.
+
+**ο**
+
+Lowercase omicron.
+
+    ο = U+03BF
+
+Compiled entry gate.
+
+**o---o**
+
+Minimal tangent / Omi-Point relation notation.
+
+**Omi-Alist**
+
+Association-list declaration surface.
+
+A stream of paired relations.
+
+**Omi-Bidi**
+
+Directionality and chirality steering surface.
+
+**Omi-CAR**
+
+Source/head payload view in Omi-CONS.
+
+**Omi-CDR**
+
+Continuation/tail payload view in Omi-CONS.
+
+**Omi-CID**
+
+Agreement/witness view in Omi-CONS.
+
+**Omi-CONS**
+
+The post-address data-formatting frame of allowed epistemology.
+
+Canonical compact form:
+
+    ?car:<OR>;cdr:<XOR>;cid:<XNOR>
+
+**Omi-CONS256**
+
+A 256-bit symbolic meta-object envelope.
+
+Canonical bands:
+
+    bits 0–19    = ENCODE()
+    bits 20–31   = DECODE()
+    bits 32–63   = JOIN()
+    bits 64–127  = COMPOSE()
+    bits 128–255 = META-OBJECT()
+
+**Omi-Compass**
+
+Agreement orientation face.
+
+It gives direction to a relation.
+
+**Omi-Dali**
+
+Unfolded hypercube lookup and subsurface matrix.
+
+**Omi-Form**
+
+Structural projection of an OMI object.
+
+**Omi-Gate**
+
+Neutral origin where payloads are located, replayed, and compared.
+
+**Omi-Glyph**
+
+Symbolic/glyph projection of an OMI object.
+
+**Omi-Gnomon**
+
+Orientation, shadow, pointer, and right-angle synchronization surface.
+
+**Omi-Gauge**
+
+The 64-lane spatial resolver.
+
+    64 × 64 × 16 = 65,536
+
+It resolves 16xy before 60x² is measured.
+
+**Omi-Hash**
+
+Digest identity check.
+
+A hash says bytes match.
+
+**Omi-Image**
+
+Package/carrier projection for universal edges.
+
+**Omi-Jab**
+
+Polychromatic/contextual carrier surface.
+
+**Omi-Lisp**
+
+The declarative dot-notation computation layer.
+
+It derives lawful computation from relations instead of defining variables imperatively.
+
+**Omi-Matrix**
+
+Observation/relation field.
+
+Instantiates relation matrices for rendering, geometry, and measurement.
+
+**Omi-Mesh**
+
+Relation-located network/field projection.
+
+**Omi-Nomogram**
+
+Declarative function-scale selector surface.
+
+Canonical row:
+
+    0x30–0x3F
+
+**Omi-Notation**
+
+The streamable, loggable a-list of pointer/reference tuples.
+
+**Omi-Plane Ceiling**
+
+The Unicode external ceiling sentinel:
+
+    Ωmax = U+10FFFF
+
+**Omi-Point**
+
+The smallest accepted relation between encoded states.
+
+    omi---imo
+    o---o
+
+**Omi-Receipt**
+
+Lawful relation witness.
+
+A receipt says the relation was resolved under OMI protocol, not merely that bytes match.
+
+**Omi-Ring**
+
+Spectral/circular orbit witness.
+
+Connects to 60x², sexagesimal degree, and circular measurement.
+
+**Omi-Shadow**
+
+Secondary projection tied back to a source rule.
+
+**Omi-SlideRule**
+
+Operational behavior of Omi-Nomogram.
+
+It describes how the selected scales align, fold, invert, and compute.
+
+**Omi-Tape**
+
+Sequential barcode/script carrier.
+
+**Omi-Torus**
+
+Gray-code / two-cube minimization surface.
+
+**Omi-Voxel**
+
+Tile-map / extrusion / architectural surface.
+
+**Omi-World**
+
+Environment or persistent world projection.
+
+**OMI-GPIO**
+
+Physical voltage/agreement transduction surface.
+
+**Omicron**
+
+The OMI gate concept.
+
+Readable:
+
+    omi ... imo
+
+Compiled:
+
+    ο ... Ο
+
+**Omicron Object Model**
+
+The full name of OMI.
+
+    OMI = Omicron Object Model
+
+**Ωmax**
+
+The Unicode ceiling sentinel:
+
+    U+10FFFF
+
+It does not replace ο or Ο.
+
+---
+
+### P
+
+**Path Plane**
+
+The slash descent surface:
+
+    /---/
+
+It belongs to internal identity descent.
+
+**Payload Plane**
+
+The query surface:
+
+    ?---?
+
+It belongs to external data attachment.
+
+**Period-Prime Anchor**
+
+The row value:
+
+    0x49 = 73
+
+in the 0x40–0x4F Omi-Gauge orbit block.
+
+**Pointer**
+
+A possible route or address-bearing relation.
+
+In OMI, a pointer may be nullable or unresolved until receipt.
+
+**Private Unicode Mirror**
+
+A safe Unicode private-use rendering of the OMI gauge.
+
+    0x00–0x7F → U+E000–U+E07F
+
+**Projection**
+
+A rendered face of authority.
+
+Projection may be visual, symbolic, geometric, audio, DOM, barcode, matrix, or payload.
+
+Projection is not authority.
+
+---
+
+### Q
+
+**Q(x,y)**
+
+The OMI quadratic stack:
+
+    Q(x,y) = 60x² + 16xy + 4y²
+
+Meaning:
+
+    4y²  = local control kernel
+    16xy = bridge/spatial resolver
+    60x² = orientation/world surface
+
+**Query Plane**
+
+The ?---? external payload plane.
+
+**Quasigroup**
+
+The algebraic recovery structure of Omi-Lisp.
+
+    (Q, ∗, \, /)
+
+Meaning:
+
+    ∗ = compose
+    / = recover from right/output side
+    \ = recover from left/input side
+
+---
+
+### R
+
+**Receipt**
+
+A lawful witness of accepted relation.
+
+Receipt is the final authority.
+
+**Reference**
+
+An accepted binding.
+
+Unlike a pointer, a reference is non-null after acceptance.
+
+**Render**
+
+To project an abstract value through a LUT into a visible or executable face.
+
+**Renderer**
+
+The component that knows the geometry map, glyph map, DOM map, shader map, or carrier map.
+
+The renderer does not define the transformer.
+
+**Row**
+
+A bounded group of positions in the OMI gauge.
+
+Examples:
+
+    0x00–0x0F = .omi control row
+    0x10–0x1F = .imo control row
+    0x20–0x2F = bridge row
+    0x30–0x3F = Omi-Nomogram row
+    0x40–0x4F = Omi-Gauge orbit block
+
+**RPC Bridge**
+
+The internal split/rejoin mechanism using surrogate structure.
+
+**Rupture**
+
+A symbolic break where the current representation cannot contain the next relation, so a new symbol or surface must be earned.
+
+---
+
+### S
+
+**Schläfli Surface**
+
+A geometry descriptor surface for regular polytope configuration.
+
+**Selector**
+
+A path or row value that chooses the active relation, function, epistemic state, or geometry.
+
+**Sexagesimal Gate**
+
+The 0x3C Omi-Nomogram slot.
+
+    0x3C = 60 decimal
+
+Used for circular degree, 60x² orientation, Omi-Ring, and Omi-Compass.
+
+**Significand Axis**
+
+The payload axis used in Omi-CAR/Omi-CDR interpolation.
+
+**SlideRule**
+
+The operational face of Omi-Nomogram.
+
+**Snub / Truncation**
+
+Geometry operations used as projection transformations.
+
+**Surrogate Band**
+
+The UTF-16 surrogate range:
+
+    0xD800–0xDFFF
+
+Used by OMI as internal RPC bridge math, not as public text.
+
+**Symbolic Authority**
+
+Identity based on exact symbolic position, row, relation, and receipt.
+
+Not floating point.
+
+Not rendered glyph.
+
+Not approximate coordinate.
+
+---
+
+### T
+
+**Transformer**
+
+The component that applies the Delta law.
+
+It knows:
+
+    bits
+    rotations
+    XOR
+    constant
+    mask
+
+It does not know:
+
+    geometry
+    glyphs
+    rendering
+    DOM
+    meaning
+
+**Tuple**
+
+An ordered payload.
+
+In Omi-Notation, tuples are carried in a replayable a-list stream.
+
+**Two-Cube**
+
+The full byte mirror relation:
+
+    0xNM ↔ 0xMN
+
+Formulas:
+
+    cell(N,M)   = (N << 4) | M
+    mirror(N,M) = (M << 4) | N
+    delta(N,M)  = cell(N,M) XOR mirror(N,M)
+
+**TypedArray**
+
+A specialized runtime view over bytes.
+
+TypedArrays are useful projections, but DataView is the canonical general interpreter.
+
+---
+
+### U
+
+**Universal Edges**
+
+The nine universal OMI edges:
+
+    rule
+    fact
+    closure
+    combinator
+    cons
+    join
+    compose
+    encode
+    decode
+
+All projection surfaces reduce to these edges.
+
+**Unicode Plane Surface**
+
+The external Unicode hierarchy used by OMI as carrier/plane context.
+
+    U+0000–U+10FFFF
+
+**U+10FFFF**
+
+The maximum Unicode codepoint.
+
+OMI name:
+
+    Ωmax
+
+**U+E000–U+E07F**
+
+The private-use mirror of OMI's native 0x00–0x7F gauge.
+
+---
+
+### V
+
+**Value**
+
+The invariant abstract row position.
+
+Example:
+
+    0x0
+
+is a value. Its character rendering depends on LUT/fiber.
+
+**VOID**
+
+The origin or non-active state, depending on active scale.
+
+In 15-of-16 tick language:
+
+    VOID is not part of the active orbit.
+
+---
+
+### W
+
+**World Length**
+
+The supplementary-plane length of an external/world projection.
+
+Surrogate bridge:
+
+    1024 × 1024 = 1,048,576 supplementary positions
+
+**Witness**
+
+A proof or receipt surface showing lawful attachment or relation.
+
+Example:
+
+    0xFFFFFF = saturated 24-bit Omi-Gauge witness mask
+
+---
+
+### X
+
+**XOR**
+
+The reversible differential operator used by the Delta law and Omi-CDR.
+
+    XOR = difference / transition / continuation
+
+**XNOR**
+
+The agreement/equality operator used by Omi-CID and dotted-pair equivalence.
+
+    XNOR = lawful agreement / equality witness
+
+---
+
+### Y
+
+**y / 4y²**
+
+The local control component of the OMI quadratic.
+
+    4y² = local tetrahedral/control kernel
+
+---
+
+### Z
+
+**Zero**
+
+OMI does not begin from ordinary numeric zero.
+
+It begins from NULL as axis and uses receipt-bound symbolic position.
+
+**0x3C**
+
+Sexagesimal gate.
+
+    0x3C = 60
+
+**0x3F**
+
+Omi-Nomogram LFSR/period/query gate.
+
+**0x40–0x4F**
+
+Omi-Gauge orbit block.
+
+Contains:
+
+    0x40 = 64 gauge threshold
+    0x49 = 73 period-prime anchor
+    0x4F = Omicron-facing closure mnemonic
+
+**0x7C**
+
+Handoff / pipe / runtime transition sentinel.
+
+**0xAA55**
+
+Acceptance seal.
+
+    before 0xAA55 = symbolic derivation
+    at 0xAA55     = executable acceptance
+    after 0xAA55  = operational runtime
+
+**0xFFFFFF**
+
+Saturated 24-bit Omi-Gauge external witness mask.
+
+---
+
+### Final Compact Glossary Canon
+
+    NULL is the axis.
+    Dot is the one relation.
+    Delta is the transformer.
+    Rows earn abstract values.
+    LUTs render values into characters or geometry.
+    Omi-Gauge resolves the 64-lane spatial field.
+    Omi-Nomogram selects the function scale.
+    Omi-Matrix instantiates relation fields.
+    Omi-Gnomon orients the result.
+    Surrogate RPC bridges world-length payloads.
+    Omi-CONS carries allowed epistemology through CAR, CDR, and CID.
+    Receipt accepts.
 
 Term: eBPF/XDP Signature Gate
 Definition: Kernel-space packet signature validator.

@@ -9,13 +9,21 @@ OMI Portal is a protocol runtime for turning addresses, packets, documents, cloc
 
 New here? See [OPEN_PORTAL.md](OPEN_PORTAL.md) for the shortest local and Docker walkthrough. Testing with someone over the internet? See [REMOTE_TESTING.md](REMOTE_TESTING.md).
 
-At the center of OMI is the **OMI address pointer**:
+At the center of OMI is the **OMI address pointer**.
+
+Native relational descent form:
 
 ```text
-omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<prefix>
+omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
 ```
 
-Each OMI pointer is an 8-segment, 128-bit reference frame. It can point to a packet, rule, service, memory slot, symbolic fact, visual node, clock state, or page boundary.
+Historical CIDR adapter form (compiler compatibility):
+
+```text
+omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<claim>
+```
+
+Each OMI frame is a gauge-stream cell with Omicron entry/exit gates. It can point to a packet, rule, service, memory slot, symbolic fact, visual node, clock state, or page boundary. The slash denotes relational descent, not CIDR prefix length.
 
 OMI is designed so that both humans and machines can ask:
 
@@ -83,49 +91,61 @@ In code, docs, CSS, and packets, this pointer should remain stable. It is not ju
 
 ## 3. The OMI Address Model
 
-### 3.1 Address Shape
+### 3.1 Native Grammatical Form
+
+The native OMI address uses relational descent:
 
 ```text
-omi-s0-s1-s2-s3-s4-s5-s6-s7/prefix
+omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+```
+
+Where:
+
+```text
+<frame>    = exact carrier identity
+<control>  = gauge row / machine scope
+<selector> = predicate, POS, synset, geometry lens
+<relation> = Horn-clause edge or incidence relation
+<unit>     = feature, slot, measurement, or receipt target
+```
+
+Hyphens delimit the frame body. Slashes walk the relational path.
+
+### 3.2 CIDR Adapter Form (Historical)
+
+For compiler and network compatibility, a CIDR-like adapter form is also supported:
+
+```text
+omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<claim>
 ```
 
 Each `sN` is a 16-bit hexadecimal segment:
 
 ```text
-s0 = segment 0
-s1 = segment 1
-s2 = segment 2
-s3 = segment 3
-s4 = segment 4
-s5 = segment 5
-s6 = segment 6
-s7 = segment 7
+s0–s7 = 8 segments × 16 bits = 128 bits
+/claim = CIDR claim boundary (adapter-only)
 ```
 
-Together:
+Common claim boundaries:
 
 ```text
-8 segments × 16 bits = 128 bits
+/48   canonical local runtime frame claim
+/80   rule-family boundary claim
+/96   gateway / mapped-prefix boundary claim
+/112  narrow rule/register boundary claim
+/128  exact object pointer claim
 ```
 
-The `/prefix` works like CIDR notation:
+The `/claim` is a CIDR claim boundary, not native OMI scope. Per Rules 0xAC–0xAE: the Omicron frame alone encodes identity. Prefixes and lenses do not create identity.
 
-```text
-/48   local canonical frame
-/80   rule-family boundary
-/96   gateway / mapped-prefix boundary
-/112  narrow rule/register boundary
-/128  exact object pointer
-```
-
-### 3.2 OMI Pointer Roles
+### 3.3 OMI Pointer Roles
 
 | Pointer Type   |            Example | Meaning                                  |
 | -------------- | -----------------: | ---------------------------------------- |
-| Exact object   |      `omi-.../128` | One exact state or rule                  |
+| Exact frame    |      `omi-.../128` | One exact gauge-stream state             |
 | Rule family    |      `omi-.../112` | A narrow invariant class                 |
-| Gateway prefix |       `omi-.../96` | Translation or embedding boundary        |
-| Local frame    |       `omi-.../48` | Canonical runtime frame                  |
+| Gateway claim  |       `omi-.../96` | Translation or embedding boundary claim  |
+| Local frame    |       `omi-.../48` | Canonical runtime frame claim            |
 | Visual target  | `[id$="-.../128"]` | CSSOM selector for a page/canvas element |
 
 ---
@@ -282,19 +302,25 @@ cluster signature tracking
 kernel-space filtering
 ```
 
-### 6.2 IPv6 Source Address Frame
+### 6.2 IPv6 Source Address Frame (Adapter)
 
-OMI can treat an IPv6 source address as the 128-bit instruction frame.
+OMI can treat an IPv6 source address as a 128-bit frame using the CIDR adapter layer.
 
 ```text
 IPv6 saddr
 → uint16[8]
-→ OMI frame
+→ OMI gauge frame
 → Q(S)=0 validation
 → Delta/Fano resolution
 ```
 
-The wire profile uses `profile.net.v0`, offset `0x16`, and the canonical genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`.
+The native OMI form uses relational descent:
+
+```text
+omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+```
+
+The wire profile uses `profile.net.v0`, offset `0x16`, and the canonical genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`. IPv6 addressing is an adapter surface — the native gauge is the factorial row gauge (1!–8!, alternating OMI/IMO chirality with 0x20 BOM pivot).
 
 ### 6.3 Factorial Replay Ring
 
@@ -309,6 +335,8 @@ Each slot stores a compact receipt:
 ```text
 provenance:16 | steps:8 | LL:8 | NN:16 | MM:16
 ```
+
+The ring is built on the factorial row gauge (1!–8!), where each row is a 2⁴ domain with alternating OMI/IMO chirality. The PPP escape grammar (0x2D escape → XOR 0x20) ensures stream-safe addressing without length prefixes.
 
 Use this when you need deterministic replay, bounded state history, or concurrency-safe receipt storage.
 

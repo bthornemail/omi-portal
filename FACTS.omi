@@ -6,11 +6,18 @@
 #
 # This file declares factual assignments for language-agnostic data
 # processing. Universal Part-of-Speech tags and morphological properties
-# are encoded directly into structural bit positions. All entries use
-# the single-notation omi-<8-hex>/<prefix> CIDR format.
+# are encoded directly into structural bit positions. Entries use the
+# historical CIDR adapter format for compiler compatibility.
 #
-# Grammar:
-#   <omi-address>/<prefix> FACT <assignment-value>
+# The native OMI form is relational descent:
+#
+#   omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+#
+# Adapter form used here:
+#
+#   <omi-address>/<claim> FACT <assignment-value>
+#
+# The <claim> is a CIDR claim boundary (adapter-only), not native OMI scope.
 
 # --- Section 1: Universal Part-of-Speech Hex Indices ---
 # Segment[3] — mapped directly via the fourth 16-bit block.

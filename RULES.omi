@@ -4,16 +4,22 @@
 # Specification Level: RFC2119 Coherent Substrate Invariants
 # ============================================================================
 #
-# This file encodes the strict mathematical constraints governing the 128-bit
-# IPv6-CIDR address space. Every row defines a mandatory architectural
-# behavior mapped to a specific 16-bit hex segment offset. All compilers,
-# Web Workers, and background threads evaluate these rules at bare-metal
-# speed using basic hyphen-only (-) splits with zero notation overhead.
+# This file encodes strict mathematical constraints for OMI gauge-stream
+# frames, using historical CIDR/adapter notation for compiler compatibility.
+# The native OMI grammar is relational descent:
 #
-# Grammar:
-#   <omi-address>/<prefix> MUST <invariant-name>
+#   omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
 #
-# The <prefix> is always /48 for local canonical frames.
+# This file uses the adapter form:
+#
+#   <omi-address>/<claim> MUST <invariant-name>
+#
+# The <claim> is a CIDR claim boundary (adapter-only), not native OMI scope.
+# Per Rule 0xAC-0xAE: prefixes and lenses do not create identity.
+# Every row defines a mandatory architectural behavior mapped to a specific
+# 16-bit hex segment offset. All compilers, Web Workers, and background
+# threads evaluate these rules at bare-metal speed using basic hyphen-only
+# (-) splits with zero notation overhead.
 
 # [Rule 0x01] Chiral and Cardinal Phase Segregation
 #   Segment[0] — MUST evaluate the first 16-bit block arithmetically.
