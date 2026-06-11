@@ -1,0 +1,2 @@
+omi-repair:car-cdr-cid-mismatch:car=0xaa55;cdr=0x55aa;cid=0x0000;repair-cid=0xffff;scope=0x7c00;input=omi-0000-0035/001c/003c/007c/0055-imo?car=aa55;cdr=55aa;cid=0000
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=0;repaired=1

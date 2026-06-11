@@ -34,6 +34,16 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make verify-omilog — OmiLog compiler + alignment + multiplex tests"
 	@echo "  make verify-oppid — OPPID principal-domain + GCD + witness tests"
 	@echo "  make verify-browser — Vite production build"
+	@echo "  make test-omi-pipe — Local POSIX pipe gate test vectors"
+	@echo "  make test-omi-pipe-network — All network transport vectors (stdin + nc + ncat + socat)"
+	@echo "  make test-omi-pipe-mcrsgsp — MCRSGSP carrier vectors (stdin baseline)"
+	@echo "  make test-omi-pipe-mcrsgsp-network — MCRSGSP carrier over network transports"
+	@echo "  make test-omi-pipe-mcrsgsp-reconstruction — MCRSGSP reconstruction vectors (stdin baseline)"
+	@echo "  make test-omi-pipe-mcrsgsp-reconstruction-network — MCRSGSP reconstruction over network transports"
+	@echo "  make test-omi-pipe-omi-acceptance — OMI acceptance vectors (stdin baseline)"
+	@echo "  make test-omi-pipe-omi-acceptance-network — OMI acceptance over network transports"
+	@echo "  make test-omi-pipe-causal-proof — OMI causal proof vectors (stdin baseline)"
+	@echo "  make test-omi-pipe-causal-proof-network — OMI causal proof over network transports"
 	@echo "  make verify-ebpf  — eBPF kernel gate (requires clang + bpftool)"
 	@echo ""
 	@echo "OMI OPERATIONAL PIPELINE:"
@@ -80,7 +90,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script
+verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -357,6 +367,7 @@ smoke: verify-safe
         docker-build docker-bake docker-push docker-stress softmmu-test run-all-virt-gates \
         release release-dry-run \
         benchmark-concurrency-stress benchmark-parallel-stress benchmark-stress-all \
+        build-omi-pipe test-omi-pipe \
         build-c99-core test-c99-core test-c99-core-guix \
         compile-ebpf-gate test-ebpf-pipeline \
         ratio-symmetry-test radix-context-test \
@@ -508,6 +519,129 @@ benchmark-parallel-stress:
 	node scripts/stress-parallel.js
 
 benchmark-stress-all: benchmark-concurrency-stress benchmark-parallel-stress
+
+# ============================================================================
+# OMI-PIPE POSIX STREAM GATE
+# ============================================================================
+
+.PHONY: build-omi-pipe test-omi-pipe test-omi-pipe-network test-omi-pipe-network-stdin test-omi-pipe-network-nc test-omi-pipe-network-ncat test-omi-pipe-network-socat test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-network test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-mcrsgsp-reconstruction-network test-omi-pipe-omi-acceptance test-omi-pipe-omi-acceptance-network test-omi-pipe-causal-proof test-omi-pipe-causal-proof-network
+
+build-omi-pipe:
+	@echo "[omi-pipe] Building POSIX stream gate..."
+	@mkdir -p bin
+	cc -std=c99 -Wall -Wextra -O2 src/pipe/omi-pipe.c -o bin/omi-pipe
+
+test-omi-pipe: build-omi-pipe
+	@echo "[omi-pipe] Running test vectors..."
+	@for f in test/pipe/*.txt; do \
+	  [ -f "$$f" ] || continue; \
+	  name=$$(basename "$$f" .txt); \
+	  bin/omi-pipe "$$f" >/tmp/omi-pipe-out.txt 2>/tmp/omi-pipe-err.txt; \
+	  rc=$$?; \
+	  nac=$$(grep -c 'accepted;' /tmp/omi-pipe-out.txt); \
+	  nrj=$$(grep -cE '^omi-reject:' /tmp/omi-pipe-err.txt); \
+	  nrp=$$(grep -cE '^omi-repair:' /tmp/omi-pipe-err.txt); \
+	  echo "  [$$name] accepted=$$nac rejects=$$nrj repairs=$$nrp exit=$$rc"; \
+	done
+
+test-omi-pipe-network-stdin: build-omi-pipe
+	@echo "[omi-pipe-network] Stdin baseline vectors..."
+	@for f in test/pipe-network/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-stdin-vector.sh "$$f" test/pipe-network/expected/ || exit 1; \
+	done
+
+test-omi-pipe-network-nc: build-omi-pipe
+	@echo "[omi-pipe-network] BusyBox nc transport vectors..."
+	@for f in test/pipe-network/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-busybox-nc-vector.sh "$$f" test/pipe-network/expected/ || exit 1; \
+	done
+
+test-omi-pipe-network-ncat: build-omi-pipe
+	@echo "[omi-pipe-network] ncat transport vectors..."
+	@for f in test/pipe-network/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-ncat-vector.sh "$$f" test/pipe-network/expected/ || exit 1; \
+	done
+
+test-omi-pipe-network-socat: build-omi-pipe
+	@echo "[omi-pipe-network] socat transport vectors..."
+	@for f in test/pipe-network/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-network/expected/ || exit 1; \
+	done
+
+test-omi-pipe-network: test-omi-pipe-network-stdin test-omi-pipe-network-nc test-omi-pipe-network-ncat test-omi-pipe-network-socat
+	@echo "[omi-pipe-network] All transport vectors passed"
+
+test-omi-pipe-mcrsgsp: build-omi-pipe
+	@echo "[omi-pipe-mcrsgsp] MCRSGSP carrier vectors (stdin)..."
+	@for f in test/pipe-mcrsgsp/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-mcrsgsp-stdin-vector.sh "$$f" test/pipe-mcrsgsp/expected/ || exit 1; \
+	done
+
+test-omi-pipe-mcrsgsp-network: test-omi-pipe-mcrsgsp
+	@echo "[omi-pipe-mcrsgsp-network] MCRSGSP carrier over network..."
+	@for f in test/pipe-mcrsgsp/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-busybox-nc-vector.sh "$$f" test/pipe-mcrsgsp/expected/; \
+	  scripts/pipe/run-ncat-vector.sh "$$f" test/pipe-mcrsgsp/expected/; \
+	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-mcrsgsp/expected/; \
+	done
+	@echo "[omi-pipe-mcrsgsp-network] All MCRSGSP carrier transport vectors passed"
+
+test-omi-pipe-mcrsgsp-reconstruction: build-omi-pipe
+	@echo "[omi-pipe-mcrsgsp-reconstruction] Running stdin vectors..."
+	@for f in test/pipe-mcrsgsp-reconstruction/frames/*.omi; do \
+	  name=$$(basename "$$f" .omi); \
+	  scripts/pipe/run-mcrsgsp-reconstruction-stdin-vector.sh "$$name" || exit 1; \
+	done
+
+test-omi-pipe-mcrsgsp-reconstruction-network: test-omi-pipe-mcrsgsp-reconstruction
+	@echo "[omi-pipe-mcrsgsp-reconstruction-network] MCRSGSP reconstruction over network..."
+	@for f in test/pipe-mcrsgsp-reconstruction/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-busybox-nc-vector.sh "$$f" test/pipe-mcrsgsp-reconstruction/expected/; \
+	  scripts/pipe/run-ncat-vector.sh "$$f" test/pipe-mcrsgsp-reconstruction/expected/; \
+	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-mcrsgsp-reconstruction/expected/; \
+	done
+	@echo "[omi-pipe-mcrsgsp-reconstruction-network] All MCRSGSP reconstruction transport vectors passed"
+
+test-omi-pipe-omi-acceptance: build-omi-pipe
+	@echo "[omi-pipe-omi-acceptance] Running stdin vectors..."
+	@for f in test/pipe-omi-acceptance/frames/*.omi; do \
+	  name=$$(basename "$$f" .omi); \
+	  scripts/pipe/run-omi-acceptance-stdin-vector.sh "$$name" || exit 1; \
+	done
+
+test-omi-pipe-omi-acceptance-network: test-omi-pipe-omi-acceptance
+	@echo "[omi-pipe-omi-acceptance-network] OMI acceptance over network..."
+	@for f in test/pipe-omi-acceptance/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-busybox-nc-vector.sh "$$f" test/pipe-omi-acceptance/expected/; \
+	  scripts/pipe/run-ncat-vector.sh "$$f" test/pipe-omi-acceptance/expected/; \
+	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-omi-acceptance/expected/; \
+	done
+	@echo "[omi-pipe-omi-acceptance-network] All OMI acceptance transport vectors passed"
+
+test-omi-pipe-causal-proof: build-omi-pipe
+	@echo "[omi-pipe-causal-proof] Running stdin vectors..."
+	@for f in test/pipe-causal-proof/frames/*.omi; do \
+	  name=$$(basename "$$f" .omi); \
+	  scripts/pipe/run-causal-proof-stdin-vector.sh "$$name" || exit 1; \
+	done
+
+test-omi-pipe-causal-proof-network: test-omi-pipe-causal-proof
+	@echo "[omi-pipe-causal-proof-network] OMI causal proof over network..."
+	@for f in test/pipe-causal-proof/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  scripts/pipe/run-busybox-nc-vector.sh "$$f" test/pipe-causal-proof/expected/; \
+	  scripts/pipe/run-ncat-vector.sh "$$f" test/pipe-causal-proof/expected/; \
+	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-causal-proof/expected/; \
+	done
+	@echo "[omi-pipe-causal-proof-network] All OMI causal proof transport vectors passed"
 
 build-c99-core:
 	@echo "[C99 Substrate] Compiling architecture mirror..."

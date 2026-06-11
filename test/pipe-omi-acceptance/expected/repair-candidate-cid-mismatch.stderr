@@ -1,0 +1,2 @@
+omi-repair:cid-mismatch;type=omi-accept-candidate;id=cid-bad;car=0x0001;cdr=0x4000;cid=0xffff;expected-cid=0x4001;scope=0x7c00;input=omi-0000-0035/001c/003f/007c/0055-imo?t=omi-accept-candidate;id=cid-bad;k=2;n=3;subset=0,1;candidate-root=0001;car=0001;cdr=4000;cid=ffff
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=0;repaired=1;candidates=0

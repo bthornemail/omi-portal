@@ -1,0 +1,2 @@
+omi-repair:car-cdr-cid-mismatch;type=mcrsgsp-frag;car=0xdead;cdr=0xbeef;cid=0x0000;repair-cid=0x6042;scope=0x7c00;input=omi-0000-0035/001c/003f/007c/aa55-imo?t=mcrsgsp-frag;id=abc123;idx=2;k=3;n=5;car=dead;cdr=beef;cid=0000
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=0;repaired=1

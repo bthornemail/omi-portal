@@ -1,0 +1,4 @@
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x0100;cdr=0x0200;cid=0x0300;type=mcrsgsp-frontier;id=frontier-test;vv=node1:1;peer=node1
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x4100;cdr=0x0100;cid=0x4000;type=mcrsgsp-frag;id=frontier-test;idx=0;k=2;n=3;vv=node1:2
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x4101;cdr=0x0101;cid=0x4000;type=mcrsgsp-frag;id=frontier-test;idx=1;k=2;n=3;vv=node1:3
+omi-receipt:candidate;type=mcrsgsp-reconstruction;id=frontier-test;k=2;n=3;subset=0,1;candidate-root=0x0001;scope=0x7c00

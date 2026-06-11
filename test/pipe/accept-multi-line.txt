@@ -1,0 +1,7 @@
+# omi-pipe test: multiline input with comments and valid frames
+# comment line
+omi-0000-0035/001c/003c/007c/0055-imo?car=aa55;cdr=55aa;cid=ffff
+# second valid frame with identity scale
+omi-0000-0035/001c/0030/007c/0055-imo?car=0001;cdr=0002;cid=0003
+# third valid frame with log scale
+omi-0000-0035/001c/0031/007c/0055-imo?car=0100;cdr=0200;cid=0300

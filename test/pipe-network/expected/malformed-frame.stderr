@@ -1,0 +1,2 @@
+omi-reject:parse-error;scope=0x7c00;line=1;input=not-a-valid-omi-frame
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0

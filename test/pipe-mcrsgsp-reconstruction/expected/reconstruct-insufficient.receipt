@@ -1,0 +1,2 @@
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x5000;cdr=0x1000;cid=0x4000;type=mcrsgsp-frag;id=short-test;idx=0;k=3;n=5;vv=nodeA:1
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x5002;cdr=0x1002;cid=0x4000;type=mcrsgsp-frag;id=short-test;idx=2;k=3;n=5;vv=nodeA:2

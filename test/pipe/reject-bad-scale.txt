@@ -1,0 +1,4 @@
+# omi-pipe test: rejected frame — scale outside 0x30-0x3F
+# scale=0x40 is an Omi-Gauge orbit row, not a nomogram function
+# relation=0x7c (pipe scope), unit=0x55
+omi-0000-0035/001c/0040/007c/0055-imo?car=aa55;cdr=55aa;cid=ffff

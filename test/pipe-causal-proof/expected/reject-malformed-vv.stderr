@@ -1,0 +1,2 @@
+omi-reject:malformed-version-vector;type=omi-accept-candidate;id=bad-vv;scope=0x7c00
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0;candidates=0

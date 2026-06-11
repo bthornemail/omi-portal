@@ -1,0 +1,4 @@
+# omi-pipe test: repair case — CID doesn't match CAR XOR CDR
+# car=aa55, cdr=55aa, cid=0000 (should be ffff)
+# repair hint: cid = aa55 ^ 55aa = ffff
+omi-0000-0035/001c/003c/007c/0055-imo?car=aa55;cdr=55aa;cid=0000

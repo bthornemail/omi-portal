@@ -1,0 +1,2 @@
+omi-reject:missing-codeword-id;type=mcrsgsp-frag;scope=0x7c00;input=omi-0000-0035/001c/003f/007c/aa55-imo?t=mcrsgsp-frag;idx=2;k=3;n=5;car=dead;cdr=beef;cid=6042
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0

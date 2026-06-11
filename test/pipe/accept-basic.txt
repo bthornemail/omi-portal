@@ -1,0 +1,19 @@
+# omi-pipe test: basic accepted frame
+# control=0x1c (row 1), scale=0x3c (sexagesimal-60), relation=0x7c (pipe scope)
+# unit=0x55 (seal nibble), car=aa55, cdr=55aa, cid=ffff (aa55^55aa=ffff)
+# gauge cell: row=1, x=0, y=0 → cell = (1<<12)|(0<<6)|0 = 0x1000
+# seal byte = (0x1000 & 0xFF) ^ 0x7c ^ 0x1c = 0x00 ^ 0x7c ^ 0x1c = 0x60
+# 0x60 & 0x55 = 0x40, not 0x55 → seal rejected
+# Need seal byte where (seal & 0x55) == 0x55 → seal must be 0x55, 0x55|0xAA, etc.
+# seal = (gauge_low ^ relation ^ control)
+# 0x55 = x ^ 0x7c ^ 0x1c → x = 0x55 ^ 0x7c ^ 0x1c = 0x55 ^ 0x60 = 0x35
+# So gauge_low must be 0x35, meaning gauge_cell & 0xFF = 0x35
+# gauge_cell = (1<<12)|(x<<6)|y = 0x1000 | (x<<6) | y
+# 0x1000 & 0xFF = 0x00, so gauge_low = (x<<6)|y (only if x<4 and y<64)
+# Actually: (1<<12) = 0x1000, bits 12-15. gauge_cell & 0xFF = ((x<<6) & 0xFF) | y
+# For this to be 0x35: ((x<<6) & 0xFF) | y = 0x35
+# x<<6 can be: 0x00, 0x40, 0x80, 0xC0 (x=0,1,2,3)
+# 0x35 | y must include the right bits. Let's try x=0, y=0x35: (0<<6)|0x35 = 0x35
+# seal = 0x35 ^ 0x7c ^ 0x1c = 0x35 ^ 0x60 = 0x55 ✓
+# So: frame_bytes[0]=0, frame_bytes[1]=0x35
+omi-0000-0035/001c/003c/007c/0055-imo?car=aa55;cdr=55aa;cid=ffff

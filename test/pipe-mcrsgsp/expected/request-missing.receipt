@@ -1,0 +1,1 @@
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x0000;cdr=0xbeef;cid=0xbeef;type=mcrsgsp-request;id=abc123;missing=0,1,4

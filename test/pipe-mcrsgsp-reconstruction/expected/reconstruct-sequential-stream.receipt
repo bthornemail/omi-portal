@@ -1,0 +1,4 @@
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x2000;cdr=0x4000;cid=0x6000;type=mcrsgsp-frag;id=stream-test;idx=0;k=3;n=5;vv=nodeA:1
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x2001;cdr=0x4001;cid=0x6000;type=mcrsgsp-frag;id=stream-test;idx=1;k=3;n=5;vv=nodeA:2
+omi-receipt:accepted;scope=0x7c00;accept-seal=0xaa55;seal-byte=0x55;gauge-cell=0x1035;nomogram=lfsr-period;nomogram-scale=0x3f;frame-bytes=2;control=0x1c;relation=0x7c;unit=0x55;car=0x2002;cdr=0x4002;cid=0x6000;type=mcrsgsp-frag;id=stream-test;idx=2;k=3;n=5;vv=nodeA:3
+omi-receipt:candidate;type=mcrsgsp-reconstruction;id=stream-test;k=3;n=5;subset=0,1,2;candidate-root=0x2003;scope=0x7c00
