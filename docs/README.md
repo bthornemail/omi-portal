@@ -16,8 +16,8 @@ Foundational orientation lives at [`../MANIFESTO.md`](../MANIFESTO.md). Canonica
 - [`02-data-link/OMI_IPV6_WIRE_PROFILE_v0.md`](02-data-link/OMI_IPV6_WIRE_PROFILE_v0.md) — IPv6 source address as OMI frame carrier
 
 ## 03 Network — Addressing & Routing
-- [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Normative OMI-CIDR grammar, operators, cons primitives, factorial lattice
-- [`03-network/canonical-addressing.md`](03-network/canonical-addressing.md) — 8-segment `/48` address grammar
+- [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Historical OMI-CIDR adapter grammar and implementation compatibility notes; native OMI identity is relational descent.
+- [`03-network/canonical-addressing.md`](03-network/canonical-addressing.md) — Adapter-era 8-segment claim grammar; not native OMI scope authority.
 - [`03-network/omi-distributed-protocol.md`](03-network/omi-distributed-protocol.md) — Sparse radix trie, subnet semantics, CSSOM prefix mirroring
 
 ## 04 Transport — Delivery & Propagation
@@ -39,7 +39,7 @@ Foundational orientation lives at [`../MANIFESTO.md`](../MANIFESTO.md). Canonica
 - [`../DOCTRINE.md`](../DOCTRINE.md) — Canonical doctrine: rewrite topology, strict architecture pipeline, lawful receipt flow
 - [`agreement-is-all-you-need.md`](agreement-is-all-you-need.md) — First Principle: collaboration/process protocol (agreement as compiler primitive)
 - [`omi-object-model.md`](omi-object-model.md) — Canonical framework: 8 browser surfaces, Lisp transformers, routing, distributed semantics
-- [`omi-ququart-interpretation-machine.md`](omi-ququart-interpretation-machine.md) — Ququart-structured interpretation register: source → notation → reading → receipt
+- [`omi-ququart-interpretation-machine.md`](omi-ququart-interpretation-machine.md) — Ququart-structured interpretation register: source -> notation -> reading -> receipt
 - [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Implementation substrate with RFC 2119 conformance requirements
 - [`omi-whitepaper.md`](omi-whitepaper.md) — Standalone first-principles specification
 - [`07-application/prolog-wordnet-aframe.md`](07-application/prolog-wordnet-aframe.md) — Prolog WordNet synset broker and A-Frame scene binding
@@ -59,10 +59,12 @@ Foundational orientation lives at [`../MANIFESTO.md`](../MANIFESTO.md). Canonica
 
 ---
 
-Generated substrate DOM ids and `data-omi-address` attributes use the hyphen-delimited 8-segment token form:
+Generated substrate DOM ids and `data-omi-address` attributes may use the historical hyphen-delimited 8-segment adapter token form:
 
 ```text
 omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
 ```
+
+Native OMI addressing remains relational descent; the 8-segment `/claim` form is an adapter/projection surface.
 
 CSSOM geometry selectors use id-prefix and id-substring selectors such as `[id^="omi-"]` and `[id*="-02d0-"]`.
