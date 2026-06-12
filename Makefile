@@ -48,6 +48,7 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make test-omi-pipe-rs-proof-network — OMI RS proof over network transports"
 	@echo "  make test-omi-pipe-gf256-rs-proof — OMI GF(256) RS proof vectors (stdin baseline)"
 	@echo "  make test-omi-pipe-gf256-rs-proof-network — OMI GF(256) RS proof over network transports"
+	@echo "  make test-omi-pipe-fragment-store — OMI stream-local fragment store vectors"
 	@echo "  make verify-ebpf  — eBPF kernel gate (requires clang + bpftool)"
 	@echo ""
 	@echo "OMI OPERATIONAL PIPELINE:"
@@ -94,7 +95,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof
+verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof test-omi-pipe-fragment-store
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -528,7 +529,7 @@ benchmark-stress-all: benchmark-concurrency-stress benchmark-parallel-stress
 # OMI-PIPE POSIX STREAM GATE
 # ============================================================================
 
-.PHONY: build-omi-pipe test-omi-pipe test-omi-pipe-network test-omi-pipe-network-stdin test-omi-pipe-network-nc test-omi-pipe-network-ncat test-omi-pipe-network-socat test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-network test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-mcrsgsp-reconstruction-network test-omi-pipe-omi-acceptance test-omi-pipe-omi-acceptance-network test-omi-pipe-causal-proof test-omi-pipe-causal-proof-network test-omi-pipe-rs-proof test-omi-pipe-rs-proof-network test-omi-pipe-gf256-rs-proof test-omi-pipe-gf256-rs-proof-network
+.PHONY: build-omi-pipe test-omi-pipe test-omi-pipe-network test-omi-pipe-network-stdin test-omi-pipe-network-nc test-omi-pipe-network-ncat test-omi-pipe-network-socat test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-network test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-mcrsgsp-reconstruction-network test-omi-pipe-omi-acceptance test-omi-pipe-omi-acceptance-network test-omi-pipe-causal-proof test-omi-pipe-causal-proof-network test-omi-pipe-rs-proof test-omi-pipe-rs-proof-network test-omi-pipe-gf256-rs-proof test-omi-pipe-gf256-rs-proof-network test-omi-pipe-fragment-store
 
 build-omi-pipe:
 	@echo "[omi-pipe] Building POSIX stream gate..."
@@ -685,6 +686,14 @@ test-omi-pipe-gf256-rs-proof-network: test-omi-pipe-gf256-rs-proof
 	  scripts/pipe/run-socat-vector.sh "$$f" test/pipe-gf256-rs-proof/expected/; \
 	done
 	@echo "[omi-pipe-gf256-rs-proof-network] All OMI GF(256) RS proof transport vectors passed"
+
+test-omi-pipe-fragment-store: build-omi-pipe
+	@echo "[omi-pipe-fragment-store] Stream-local fragment store vectors..."
+	@for f in test/pipe-fragment-store/frames/*.omi; do \
+	  [ -f "$$f" ] || continue; \
+	  name=$$(basename "$$f" .omi); \
+	  scripts/pipe/run-fragment-store-stdin-vector.sh "$$name" || exit 1; \
+	done
 
 build-c99-core:
 	@echo "[C99 Substrate] Compiling architecture mirror..."

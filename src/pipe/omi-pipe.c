@@ -25,6 +25,7 @@
 #define MAX_PROOF 256
 #define MAX_FRAG_ROOTS 64
 #define MAX_FRAGS_FIELD 512
+#define MAX_BASIS_FIELD 256
 #define RS_MODE_XOR "xor"
 #define RS_MODE_GF256 "gf256"
 #define GF256_POLY_DEFAULT "0x11d"
@@ -180,11 +181,14 @@ struct mcrsgsp_fields {
     int has_rs_mode;
     int has_gf_poly;
     int has_layout;
+    char basis[MAX_BASIS_FIELD];
+    int has_basis;
     char peer[MAX_PEER];
     char missing[MAX_MISSING];
     char subset[256];
     uint32_t candidate_root;
     int has_candidate_root;
+    int candidate_root_malformed;
 };
 
 struct vv_entry {
@@ -303,6 +307,12 @@ static int parse_query(const char *q,
                 mcrsgsp->layout[clen] = 0;
                 mcrsgsp->has_layout = 1;
             }
+            if (klen == 5 && strncmp(key, "basis", 5) == 0) {
+                int clen = vlen < MAX_BASIS_FIELD - 1 ? vlen : MAX_BASIS_FIELD - 1;
+                memcpy(mcrsgsp->basis, val, clen);
+                mcrsgsp->basis[clen] = 0;
+                mcrsgsp->has_basis = 1;
+            }
             if (klen == 4 && strncmp(key, "peer", 4) == 0) {
                 int clen = vlen < MAX_PEER - 1 ? vlen : MAX_PEER - 1;
                 memcpy(mcrsgsp->peer, val, clen);
@@ -319,9 +329,11 @@ static int parse_query(const char *q,
                 mcrsgsp->subset[clen] = 0;
             }
             if (klen == 14 && strncmp(key, "candidate-root", 14) == 0) {
-                int nibbles = vlen > 8 ? 8 : vlen;
-                parse_hex_n(val, nibbles, &mcrsgsp->candidate_root);
                 mcrsgsp->has_candidate_root = 1;
+                if (vlen <= 0 || vlen > 8 ||
+                    parse_hex_n(val, vlen, &mcrsgsp->candidate_root) < 0) {
+                    mcrsgsp->candidate_root_malformed = 1;
+                }
             }
         }
     }
@@ -540,6 +552,7 @@ struct reconstruction_slot {
     char id[MAX_ID];
     int  k;
     int  n;
+    struct fragment_roots roots;
     uint64_t seen_bitmask;
     int  count;
     uint32_t car_xor;
@@ -564,12 +577,24 @@ static struct reconstruction_slot *find_or_create_slot(const char *id, int k, in
     return s;
 }
 
+static struct reconstruction_slot *find_slot(const char *id, int k, int n) {
+    for (int i = 0; i < g_slot_count; i++) {
+        if (strcmp(g_slots[i].id, id) == 0 && g_slots[i].k == k && g_slots[i].n == n)
+            return &g_slots[i];
+    }
+    return NULL;
+}
+
 /* Update slot with a received fragment index and car value. Returns 1 if candidate threshold reached. */
 static int update_reconstruction(struct reconstruction_slot *s, int idx, uint32_t car) {
     if (idx < 0 || idx >= MAX_N) return 0;
     if (idx >= s->n) return 0;
     uint64_t bit = (uint64_t)1 << idx;
     if (s->seen_bitmask & bit) return 0;
+    if (idx < MAX_FRAG_ROOTS) {
+        s->roots.roots[idx] = car;
+        s->roots.present[idx] = 1;
+    }
     s->seen_bitmask |= bit;
     s->count++;
     s->car_xor ^= car;
@@ -985,11 +1010,12 @@ static uint8_t gf256_div(uint8_t a, uint8_t b) {
     return gf256_mul(a, gf256_inv(b));
 }
 
-static int rs_lagrange_eval0_byte(const int *indices,
-                                  const uint8_t *values,
-                                  int count,
-                                  int k,
-                                  uint8_t *out) {
+static int rs_lagrange_eval_byte_at(const int *indices,
+                                    const uint8_t *values,
+                                    int count,
+                                    int k,
+                                    uint8_t x_eval,
+                                    uint8_t *out) {
     if (k <= 0 || count < k) return -1;
     uint8_t acc = 0;
 
@@ -1004,7 +1030,7 @@ static int rs_lagrange_eval0_byte(const int *indices,
             uint8_t xj = (uint8_t)(indices[j] + 1);
             uint8_t diff = xi ^ xj;
             if (diff == 0) return -1;
-            num = gf256_mul(num, xj);
+            num = gf256_mul(num, x_eval ^ xj);
             den = gf256_mul(den, diff);
         }
         if (den == 0) return -1;
@@ -1015,29 +1041,40 @@ static int rs_lagrange_eval0_byte(const int *indices,
     return 0;
 }
 
-static int replay_gf256_root16(const struct fragment_roots *roots,
-                               const int *subset_indices,
-                               int subset_count,
-                               int k,
-                               uint32_t *out) {
+static int eval_gf256_root16_at(const struct fragment_roots *roots,
+                                const int *basis_indices,
+                                int basis_count,
+                                int k,
+                                uint8_t x_eval,
+                                uint32_t *out) {
     uint8_t high[MAX_FRAG_ROOTS];
     uint8_t low[MAX_FRAG_ROOTS];
 
-    if (subset_count < k || k > MAX_FRAG_ROOTS) return -1;
+    if (basis_count < k || k > MAX_FRAG_ROOTS) return -1;
 
     for (int i = 0; i < k; i++) {
-        uint32_t root = roots->roots[subset_indices[i]] & 0xffffu;
+        int idx = basis_indices[i];
+        if (idx < 0 || idx >= MAX_FRAG_ROOTS || !roots->present[idx]) return -1;
+        uint32_t root = roots->roots[idx] & 0xffffu;
         high[i] = (uint8_t)((root >> 8) & 0xff);
         low[i] = (uint8_t)(root & 0xff);
     }
 
     uint8_t replay_high = 0;
     uint8_t replay_low = 0;
-    if (rs_lagrange_eval0_byte(subset_indices, high, subset_count, k, &replay_high) < 0) return -1;
-    if (rs_lagrange_eval0_byte(subset_indices, low, subset_count, k, &replay_low) < 0) return -1;
+    if (rs_lagrange_eval_byte_at(basis_indices, high, basis_count, k, x_eval, &replay_high) < 0) return -1;
+    if (rs_lagrange_eval_byte_at(basis_indices, low, basis_count, k, x_eval, &replay_low) < 0) return -1;
 
     *out = ((uint32_t)replay_high << 8) | replay_low;
     return 0;
+}
+
+static int replay_gf256_root16(const struct fragment_roots *roots,
+                               const int *basis_indices,
+                               int basis_count,
+                               int k,
+                               uint32_t *out) {
+    return eval_gf256_root16_at(roots, basis_indices, basis_count, k, 0, out);
 }
 
 static enum pipe_state validate_xor_rs_proof(struct omi_frame *f,
@@ -1067,6 +1104,8 @@ static enum pipe_state validate_gf256_rs_proof(struct omi_frame *f,
                                                const struct fragment_roots *roots,
                                                uint64_t subset_mask,
                                                int subset_count,
+                                               const int *basis_indices,
+                                               int basis_count,
                                                char *diag, size_t diag_sz) {
     struct mcrsgsp_fields *m = &f->mcrsgsp;
     const char *gf_poly = m->has_gf_poly && m->gf_poly[0] ? m->gf_poly : GF256_POLY_DEFAULT;
@@ -1095,16 +1134,13 @@ static enum pipe_state validate_gf256_rs_proof(struct omi_frame *f,
         return PIPE_REJECT;
     }
 
-    int subset_indices[MAX_FRAG_ROOTS];
-    int collected = collect_subset_indices(subset_mask, m->n, subset_indices, MAX_FRAG_ROOTS);
-    if (collected < m->k) {
-        snprintf(diag, diag_sz, "rs-subset-less-than-k;type=%s;id=%s;k=%d;subset-count=%d",
-                 m->type, m->id, m->k, collected);
+    uint32_t actual = 0;
+    if (basis_count != m->k) {
+        snprintf(diag, diag_sz, "basis-count-mismatch;type=%s;id=%s;k=%d;basis-count=%d",
+                 m->type, m->id, m->k, basis_count);
         return PIPE_REJECT;
     }
-
-    uint32_t actual = 0;
-    if (replay_gf256_root16(roots, subset_indices, collected, m->k, &actual) < 0) {
+    if (replay_gf256_root16(roots, basis_indices, basis_count, m->k, &actual) < 0) {
         snprintf(diag, diag_sz, "gf256-zero-denominator;type=%s;id=%s", m->type, m->id);
         return PIPE_REJECT;
     }
@@ -1116,31 +1152,73 @@ static enum pipe_state validate_gf256_rs_proof(struct omi_frame *f,
         return PIPE_REJECT;
     }
 
+    uint64_t basis_mask = 0;
+    for (int i = 0; i < basis_count; i++) {
+        if (basis_indices[i] < 0 || basis_indices[i] >= MAX_FRAG_ROOTS) {
+            snprintf(diag, diag_sz, "basis-metadata-mismatch;type=%s;id=%s;k=%d",
+                     m->type, m->id, m->k);
+            return PIPE_REJECT;
+        }
+        basis_mask |= (uint64_t)1 << basis_indices[i];
+    }
+
+    for (int idx = 0; idx < m->n && idx < MAX_FRAG_ROOTS; idx++) {
+        uint64_t bit = (uint64_t)1 << idx;
+        if (!(subset_mask & bit) || (basis_mask & bit)) continue;
+
+        uint32_t expected = 0;
+        if (eval_gf256_root16_at(roots, basis_indices, basis_count, m->k,
+                                 (uint8_t)(idx + 1), &expected) < 0) {
+            snprintf(diag, diag_sz, "gf256-zero-denominator;type=%s;id=%s", m->type, m->id);
+            return PIPE_REJECT;
+        }
+        uint32_t root = roots->roots[idx] & 0xffffu;
+        if (root != expected) {
+            snprintf(diag, diag_sz,
+                     "gf256-extra-frag-inconsistent;type=%s;id=%s;idx=%d;expected=0x%04x;actual=0x%04x",
+                     m->type, m->id, idx, expected, root);
+            return PIPE_REJECT;
+        }
+    }
+
     return PIPE_OK;
 }
 
 static enum pipe_state validate_rs_proof(struct omi_frame *f,
                                          uint64_t subset_mask,
                                          int subset_count,
+                                         const int *basis_indices,
+                                         int basis_count,
                                          char *diag, size_t diag_sz) {
     struct mcrsgsp_fields *m = &f->mcrsgsp;
-    if (!m->has_rs_mode || m->rs_mode[0] == 0 || !m->has_frags || m->frags[0] == 0) {
+    if (!m->has_rs_mode || m->rs_mode[0] == 0) {
         snprintf(diag, diag_sz, "missing-rs-proof;type=%s;id=%s", m->type, m->id);
         return PIPE_REJECT;
     }
 
     struct fragment_roots roots;
-    char rs_diag[128];
-    if (parse_frag_roots(m->frags, m->n, &roots, rs_diag, sizeof(rs_diag)) < 0) {
-        snprintf(diag, diag_sz, "%s;type=%s;id=%s", rs_diag, m->type, m->id);
-        return PIPE_REJECT;
+    memset(&roots, 0, sizeof(roots));
+    if (m->has_frags && m->frags[0] != 0) {
+        char rs_diag[128];
+        if (parse_frag_roots(m->frags, m->n, &roots, rs_diag, sizeof(rs_diag)) < 0) {
+            snprintf(diag, diag_sz, "%s;type=%s;id=%s", rs_diag, m->type, m->id);
+            return PIPE_REJECT;
+        }
+    } else {
+        struct reconstruction_slot *slot = find_slot(m->id, m->k, m->n);
+        if (!slot) {
+            snprintf(diag, diag_sz, "missing-rs-proof;type=%s;id=%s", m->type, m->id);
+            return PIPE_REJECT;
+        }
+        roots = slot->roots;
     }
 
     if (strcmp(m->rs_mode, RS_MODE_XOR) == 0) {
         return validate_xor_rs_proof(f, &roots, subset_mask, diag, diag_sz);
     }
     if (strcmp(m->rs_mode, RS_MODE_GF256) == 0) {
-        return validate_gf256_rs_proof(f, &roots, subset_mask, subset_count, diag, diag_sz);
+        return validate_gf256_rs_proof(f, &roots, subset_mask, subset_count,
+                                       basis_indices, basis_count, diag, diag_sz);
     }
 
     snprintf(diag, diag_sz, "unsupported-rs-mode;type=%s;id=%s;rs=%s",
@@ -1187,6 +1265,8 @@ static enum pipe_state validate_omi_accept_candidate(struct omi_frame *f,
     /* 7 — subset sorted, unique, in-range */
     uint64_t submask = 0;
     int subcount = 0;
+    int basis_indices[MAX_FRAG_ROOTS];
+    int basis_count = 0;
     int prev_idx = -1;
     const char *sp = m->subset;
     while (*sp) {
@@ -1227,12 +1307,68 @@ static enum pipe_state validate_omi_accept_candidate(struct omi_frame *f,
         }
         return PIPE_REJECT;
     }
+
+    if (m->has_basis) {
+        uint64_t basis_mask = 0;
+        int basis_prev_idx = -1;
+        const char *bp = m->basis;
+        while (*bp) {
+            while (*bp == ' ' || *bp == ',') bp++;
+            if (!*bp) break;
+            char *end = NULL;
+            long v = strtol(bp, &end, 10);
+            if (end == bp || v < 0 || v >= m->n || v >= MAX_FRAG_ROOTS) {
+                snprintf(diag, diag_sz, "invalid-basis-idx;type=%s;id=%s", m->type, m->id);
+                return PIPE_REJECT;
+            }
+            if (v <= basis_prev_idx) {
+                snprintf(diag, diag_sz, "basis-not-sorted;type=%s;id=%s", m->type, m->id);
+                return PIPE_REJECT;
+            }
+            uint64_t bit = (uint64_t)1 << v;
+            if (basis_mask & bit) {
+                snprintf(diag, diag_sz, "basis-duplicate;type=%s;id=%s", m->type, m->id);
+                return PIPE_REJECT;
+            }
+            if (basis_count >= MAX_FRAG_ROOTS) {
+                snprintf(diag, diag_sz, "basis-metadata-mismatch;type=%s;id=%s;k=%d",
+                         m->type, m->id, m->k);
+                return PIPE_REJECT;
+            }
+            basis_mask |= bit;
+            basis_indices[basis_count++] = (int)v;
+            basis_prev_idx = (int)v;
+            bp = end;
+        }
+        if (basis_count < 1) {
+            snprintf(diag, diag_sz, "empty-basis;type=%s;id=%s", m->type, m->id);
+            return PIPE_REJECT;
+        }
+        if (basis_count != m->k || (basis_mask & ~submask) != 0) {
+            snprintf(diag, diag_sz, "basis-metadata-mismatch;type=%s;id=%s;k=%d",
+                     m->type, m->id, m->k);
+            return PIPE_REJECT;
+        }
+    } else {
+        int collected = collect_subset_indices(submask, m->n, basis_indices, MAX_FRAG_ROOTS);
+        if (collected < m->k) {
+            snprintf(diag, diag_sz, "basis-count-mismatch;type=%s;id=%s;k=%d;basis-count=%d",
+                     m->type, m->id, m->k, collected);
+            return PIPE_REJECT;
+        }
+        basis_count = m->k;
+    }
+
     /* 9 — candidate-root present */
     if (!m->has_candidate_root) {
         snprintf(diag, diag_sz, "missing-candidate-root;type=%s;id=%s", m->type, m->id);
         return PIPE_REJECT;
     }
-    enum pipe_state rs_st = validate_rs_proof(f, submask, subcount, diag, diag_sz);
+    if (m->candidate_root_malformed) {
+        snprintf(diag, diag_sz, "malformed-candidate-root;type=%s;id=%s", m->type, m->id);
+        return PIPE_REJECT;
+    }
+    enum pipe_state rs_st = validate_rs_proof(f, submask, subcount, basis_indices, basis_count, diag, diag_sz);
     if (rs_st != PIPE_OK) return rs_st;
 
     enum pipe_state causal_st = validate_causal_proof(f, diag, diag_sz);
@@ -1257,16 +1393,21 @@ static enum pipe_state validate_omi_accept_candidate(struct omi_frame *f,
 /* Emit acceptance receipt for a validated omi-accept-candidate */
 static void emit_acceptance_receipt(struct omi_frame *f) {
     struct mcrsgsp_fields *m = &f->mcrsgsp;
+    char basis_part[MAX_BASIS_FIELD + 16];
+    basis_part[0] = 0;
+    if (m->has_basis && m->basis[0]) {
+        snprintf(basis_part, sizeof(basis_part), ";basis=%s", m->basis);
+    }
     if (strcmp(m->rs_mode, RS_MODE_GF256) == 0) {
         const char *gf_poly = m->has_gf_poly && m->gf_poly[0] ? m->gf_poly : GF256_POLY_DEFAULT;
         const char *layout = m->has_layout && m->layout[0] ? m->layout : RS_LAYOUT_ROOT16;
-        printf("%s;type=%s;id=%s;k=%d;n=%d;subset=%s;candidate-root=0x%04x;rs=%s;gf=%s;layout=%s;rs-proof=replayed;vv=%s;causal=closed;scope=0x%04x;accept-seal=0x%04x\n",
+        printf("%s;type=%s;id=%s;k=%d;n=%d;subset=%s%s;candidate-root=0x%04x;rs=%s;gf=%s;layout=%s;rs-proof=replayed;vv=%s;causal=closed;scope=0x%04x;accept-seal=0x%04x\n",
                RECEIPT_OK, OMI_TYPE_ACCEPTED_CANDIDATE, m->id, m->k, m->n,
-               m->subset, m->candidate_root, m->rs_mode, gf_poly, layout, m->vv, PIPE_SCOPE, ACCEPT_SEAL);
+               m->subset, basis_part, m->candidate_root, m->rs_mode, gf_poly, layout, m->vv, PIPE_SCOPE, ACCEPT_SEAL);
     } else {
-        printf("%s;type=%s;id=%s;k=%d;n=%d;subset=%s;candidate-root=0x%04x;rs=%s;rs-proof=replayed;vv=%s;causal=closed;scope=0x%04x;accept-seal=0x%04x\n",
+        printf("%s;type=%s;id=%s;k=%d;n=%d;subset=%s%s;candidate-root=0x%04x;rs=%s;rs-proof=replayed;vv=%s;causal=closed;scope=0x%04x;accept-seal=0x%04x\n",
                RECEIPT_OK, OMI_TYPE_ACCEPTED_CANDIDATE, m->id, m->k, m->n,
-               m->subset, m->candidate_root, m->rs_mode, m->vv, PIPE_SCOPE, ACCEPT_SEAL);
+               m->subset, basis_part, m->candidate_root, m->rs_mode, m->vv, PIPE_SCOPE, ACCEPT_SEAL);
     }
     fflush(stdout);
 }

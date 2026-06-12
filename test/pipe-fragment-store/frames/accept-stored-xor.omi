@@ -1,0 +1,3 @@
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-xor;idx=0;k=2;n=3;vv=nodeA:1;car=2000;cdr=4000;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-xor;idx=1;k=2;n=3;vv=nodeA:2;car=2001;cdr=4001;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=omi-accept-candidate;id=stored-xor;k=2;n=3;subset=0,1;candidate-root=0001;rs=xor;vv=nodeA:3;requires=nodeA:2;proof=4000;car=0001;cdr=4000;cid=4001

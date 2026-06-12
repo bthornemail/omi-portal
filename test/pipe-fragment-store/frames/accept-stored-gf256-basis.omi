@@ -1,0 +1,5 @@
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-gf256;idx=0;k=3;n=5;vv=nodeA:1;car=2000;cdr=4000;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-gf256;idx=1;k=3;n=5;vv=nodeA:2;car=2001;cdr=4001;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-gf256;idx=2;k=3;n=5;vv=nodeA:3;car=2002;cdr=4002;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=mcrsgsp-frag;id=stored-gf256;idx=4;k=3;n=5;vv=nodeA:4;car=2014;cdr=4014;cid=6000
+omi-0000-0035/001c/003f/007c/0055-imo?t=omi-accept-candidate;id=stored-gf256;k=3;n=5;subset=0,1,2,4;basis=0,1,2;candidate-root=2003;rs=gf256;gf=0x11d;layout=root16;vv=nodeA:5;requires=nodeA:4;proof=4000;car=2003;cdr=4000;cid=6003

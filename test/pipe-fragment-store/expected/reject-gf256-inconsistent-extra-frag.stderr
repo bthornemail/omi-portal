@@ -1,0 +1,2 @@
+omi-reject:gf256-extra-frag-inconsistent;type=omi-accept-candidate;id=bad-extra-gf256;idx=4;expected=0x2014;actual=0x20ff;scope=0x7c00
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0;candidates=0
