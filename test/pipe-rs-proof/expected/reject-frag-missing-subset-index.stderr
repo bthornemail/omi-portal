@@ -1,0 +1,2 @@
+omi-reject:frag-missing-subset-index;type=omi-accept-candidate;id=missing-subfrag;idx=2;scope=0x7c00
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0;candidates=0

@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { copyFileSync, existsSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { defineConfig } from "vite";
 
 const CORE_HTML_ENTRYPOINTS = ["document.html", "bidi.html", "portal.html"];
@@ -54,7 +54,7 @@ export default defineConfig({
         for (const file of BUILD_HTML_ENTRYPOINTS) {
           const processed = resolve(__dirname, "dist/public", file);
           if (existsSync(processed)) {
-            copyFileSync(processed, resolve(__dirname, "dist", file));
+            writeFileSync(resolve(__dirname, "dist", file), readFileSync(processed));
           }
         }
         if (!BUILD_AFRAME) {

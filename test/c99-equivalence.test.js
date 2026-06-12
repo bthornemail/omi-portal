@@ -1,15 +1,15 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
-import { mkdirSync } from "node:fs";
+import { mkdtempSync } from "node:fs";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { OmiAxiomaticKernel } from "../src/index.js";
 import { OmiSexagesimalKernel } from "../src/omi/sexagesimal-kernel.js";
 
-const BIN = join(process.cwd(), ".cache", "test_omi_c99_equiv");
+const BIN = join(mkdtempSync(join(tmpdir(), "omi-c99-equivalence-")), "test_omi_c99_equiv");
 
 function compileC99() {
-  mkdirSync(join(process.cwd(), ".cache"), { recursive: true });
   const result = spawnSync("gcc", [
     "-O3",
     "-Wall",

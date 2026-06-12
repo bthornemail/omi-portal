@@ -1,0 +1,1 @@
+omi-receipt:accepted;type=omi-accepted-candidate;id=stream-test;k=3;n=5;subset=0,1,2;candidate-root=0x2003;rs=xor;rs-proof=replayed;vv=nodeA:3;causal=closed;scope=0x7c00;accept-seal=0xaa55

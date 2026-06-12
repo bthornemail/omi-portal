@@ -1,0 +1,1 @@
+omi-receipt:accepted;type=omi-accepted-candidate;id=gf256-basic-2of3;k=2;n=3;subset=0,1;candidate-root=0x20f4;rs=gf256;gf=0x11d;layout=root16;rs-proof=replayed;vv=nodeA:3;causal=closed;scope=0x7c00;accept-seal=0xaa55

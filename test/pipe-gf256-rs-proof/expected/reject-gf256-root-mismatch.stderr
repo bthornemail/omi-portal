@@ -1,0 +1,2 @@
+omi-reject:gf256-rs-proof-mismatch;type=omi-accept-candidate;id=gf256-root-mismatch;expected=0x2004;actual=0x2003;scope=0x7c00
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=1;repaired=0;candidates=0

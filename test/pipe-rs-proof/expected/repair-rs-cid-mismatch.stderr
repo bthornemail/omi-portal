@@ -1,0 +1,2 @@
+omi-repair:cid-mismatch;type=omi-accept-candidate;id=rs-cid-bad;car=0x0001;cdr=0x4000;cid=0xffff;expected-cid=0x4001;scope=0x7c00
+omi-pipe-summary;scope=0x7c00;accepted=0;rejected=0;repaired=1;candidates=0
