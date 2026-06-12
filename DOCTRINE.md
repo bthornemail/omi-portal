@@ -1,5 +1,7 @@
 # OMI Doctrine
 
+## Part I — Root Doctrine
+
 ## 1. Status
 
 This is the canonical root doctrine for OMI.
@@ -141,7 +143,7 @@ The object is not stored data. The object is the lawful transformation of a decl
 
 Traditional computing stores values and computes transformations.
 
-OMI stores transformations and computes values.
+OMI registers transformations and computes values.
 
 The binary source of truth remains fixed. Meaning emerges from the declared rewrite path through the register.
 
@@ -169,6 +171,14 @@ Level 3 is the topological boundary. Finite computational spaces are wheels with
 Level 4 is the protocol wire. Addressing is the execution of a path.
 
 Level 5 is the mathematical substrate. Specific lattices, gnomons, bridges, rings, selectors, and hyper-configurations are implementation choices. They can evolve without changing the doctrine.
+
+Part I is the root doctrine. It states the invariant collapse.
+
+Part II is the consequence layer. It explains how the doctrine unfolds into rewrite registers, rotation laws, projective closure, addressing, nomogram scales, pipe proofs, and receipts.
+
+Future implementations may revise Part II without changing Part I.
+
+## Part II — Doctrinal Consequences
 
 ## 7. Binary Sources of Truth
 
