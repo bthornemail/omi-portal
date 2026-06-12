@@ -100,7 +100,7 @@ rs=gf256;gf=0x11d;layout=root16;rs-proof=replayed
 The rewrite-register doctrine is now canonicalized in:
 
 ```text
-docs/omi-rewrite-register-doctrine.md
+DOCTRINE.md
 ```
 
 Core canon:

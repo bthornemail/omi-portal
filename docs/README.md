@@ -3,6 +3,8 @@
 Layer-organized index of the Omicron Object Model documentation framework.
 See [10-declaration/LAYERS.md](10-declaration/LAYERS.md) for the full cross-reference matrix and detailed layer classification.
 
+Foundational orientation lives at [`../MANIFESTO.md`](../MANIFESTO.md). Canonical doctrine lives at [`../DOCTRINE.md`](../DOCTRINE.md): OMI as rewrite topology rather than a database.
+
 ---
 
 ## 01 Physical — Hardware & Kernel Boundary
@@ -33,6 +35,8 @@ See [10-declaration/LAYERS.md](10-declaration/LAYERS.md) for the full cross-refe
 - [`06-presentation/codemirror-bidi-bridge.md`](06-presentation/codemirror-bidi-bridge.md) — CM6 BiDi transaction bridge and memory plane
 
 ## 07 Application — Protocols & Object Model
+- [`../MANIFESTO.md`](../MANIFESTO.md) — Foundational manifesto: notation as cipher, representation as interpretation, computation as rewrite
+- [`../DOCTRINE.md`](../DOCTRINE.md) — Canonical doctrine: rewrite topology, strict architecture pipeline, lawful receipt flow
 - [`agreement-is-all-you-need.md`](agreement-is-all-you-need.md) — First Principle: collaboration/process protocol (agreement as compiler primitive)
 - [`omi-object-model.md`](omi-object-model.md) — Canonical framework: 8 browser surfaces, Lisp transformers, routing, distributed semantics
 - [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Implementation substrate with RFC 2119 conformance requirements

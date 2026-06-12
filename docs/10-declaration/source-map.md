@@ -4,8 +4,9 @@ This file is now a historical source index. The original exploratory `dev-docs/`
 
 ## Current Canonical Sources
 
+- [OMI Manifesto](../../MANIFESTO.md): foundational orientation that OMI collapses representation and interpretation; notation is cipher and computation is rewrite of interpretation rather than mutation of data.
+- [OMI Doctrine](../../DOCTRINE.md): canonical doctrine for OMI as rewrite topology; separates the notation-cipher invariant from derived geometries and implementation substrates.
 - [OMI Object Model](../omi-object-model.md): top-level declaration of addressing, DOM/CSSOM/JSDOM surfaces, Lisp transformers, routing semantics, and memory layout.
-- [OMI Rewrite Register Doctrine](../omi-rewrite-register-doctrine.md): foundational addendum that OMI is not a database, but a versioned rewrite register preserving binary sources of truth as rewrite tables.
 - [OMI Core Spec](../03-network/omi-core-spec.md): implementation-facing substrate rules for pure OMI-CIDR ids, `data-omi-address`, and CSSOM selectors.
 - [Canonical Addressing](../03-network/canonical-addressing.md): current 8-segment `/48` address grammar.
 - [OMI File Format](../06-presentation/omi-file-format.md): binary `car` pre-header and printable dot-delimited `cdr` payload.

@@ -9,6 +9,8 @@ OMI Portal is a protocol runtime for turning addresses, packets, documents, cloc
 
 New here? See [OPEN_PORTAL.md](OPEN_PORTAL.md) for the shortest local and Docker walkthrough. Testing with someone over the internet? See [REMOTE_TESTING.md](REMOTE_TESTING.md).
 
+For the foundational orientation, read [MANIFESTO.md](MANIFESTO.md). For the canonical doctrine, read [DOCTRINE.md](DOCTRINE.md): notation as cipher, OMI as rewrite topology, and computation as lawful transformation of interpretation.
+
 At the center of OMI is the **OMI address pointer**.
 
 Native relational descent form:
@@ -695,6 +697,8 @@ node --test test/ebpf-pipeline.test.js
 
 ```text
 docs/        canonical rule and specification layers
+MANIFESTO.md foundational orientation: notation as cipher, cipher as notation
+DOCTRINE.md canonical doctrine: rewrite topology and lawful receipts
 src/omi/     core OMI kernels
 src/canvas/  JSON Canvas, Code16K, JABCode, page framing
 src/ebpf/    eBPF/XDP kernel programs

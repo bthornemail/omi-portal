@@ -190,7 +190,7 @@ test("Research assimilation: MCRSGSP provenance maps only to implemented distrib
 });
 
 test("Research assimilation: OMI doctrine keeps rewrite register boundary explicit", async () => {
-  const rewriteDoctrine = await readRepoFile("docs/omi-rewrite-register-doctrine.md");
+  const rewriteDoctrine = await readRepoFile("DOCTRINE.md");
   const sourceMap = await readRepoFile("docs/10-declaration/source-map.md");
 
   assert.match(rewriteDoctrine, /OMI is not a database\. It is a rewrite register\./);
@@ -202,5 +202,5 @@ test("Research assimilation: OMI doctrine keeps rewrite register boundary explic
   assert.match(rewriteDoctrine, /The scale does not store the result\. The scale declares how the result is read\./);
   assert.match(rewriteDoctrine, /control codes become transformation operators rather than textual characters/);
   assert.match(rewriteDoctrine, /OMI does not store data; it preserves versioned sources of truth as binary rewrite tables/);
-  assert.match(sourceMap, /OMI Rewrite Register Doctrine/);
+  assert.match(sourceMap, /OMI Doctrine/);
 });
