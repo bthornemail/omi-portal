@@ -44,7 +44,7 @@ export function connectDefaultSCGNN(nodes) {
       toNode: next.id,
       fromSide: prev.channel === "US" ? "left" : "right",
       toSide: next.channel === "FS" ? "right" : "left",
-      label: `${prev.channel}→${next.channel}`,
+      label: `${prev.channel}->${next.channel}`,
       color: next.executable ? "4" : "5"
     });
   }

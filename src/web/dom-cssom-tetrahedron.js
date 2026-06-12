@@ -18,14 +18,15 @@ export function makeDOMCSSOMTetrahedron(termCentroids = [], options = {}) {
     terms: termCentroids.map((c) => `${c.lemma}:${c.hash32}:${c.relationCount}`).sort()
   });
 
+  const minRelations = options.minRelations ?? 6;
   const centroid = {
     id: "dom-cssom-centroid",
     v: "omi.dom-cssom.centroid.v0",
     label: "DOM.CSSOM.WordNet/128",
     ipv6: toIPv6Centroid(centroidSeedText),
     ipv4: toIPv4HostRoute(centroidSeedText),
-    minRelations: options.minRelations ?? 6,
-    metric: cidrMetric(128, termCentroids.filter((c) => c.metric?.stable).length, 1),
+    minRelations,
+    metric: cidrMetric(128, termCentroids.filter((c) => c.metric?.stable).length, minRelations),
     stableTermCount: termCentroids.filter((c) => c.metric?.stable).length,
     totalTermCount: termCentroids.length
   };
