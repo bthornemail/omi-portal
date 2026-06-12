@@ -1,5 +1,35 @@
 # Changelog
 
+## Unreleased — OMI Pipe RS/GF256 Proof and Root Doctrine Alignment
+
+### Added
+- Canonical `DOCTRINE.md` root doctrine: OMI as notation/cipher collapse and versioned rewrite register.
+- Root document spine clarified: MANIFESTO → DOCTRINE → ONTOLOGY → POSTULATES → AXIOMS → DECLARATIONS → RULES/FACTS.
+- OMI Pipe RS proof replay modes:
+  - `rs=xor`
+  - `rs=gf256`
+- GF(256) root16 proof replay with `gf=0x11d`, `layout=root16`, and accepted receipt metadata.
+- Rewrite-register doctrine aligned with pipe receipt authority.
+
+### Changed
+- README now points new users to MANIFESTO for orientation and DOCTRINE for canonical protocol doctrine.
+- Native OMI grammar clarified as relational descent, with CIDR retained only as adapter compatibility.
+- Documentation surface boundary clarified:
+  - `o---o` defines doctrine.
+  - `omi-portal` proves doctrine.
+
+### Fixed
+- GVFS/SFTP build compatibility for OMI Pipe binary output.
+- Vite post-build HTML hoist compatibility on mounted workspaces.
+
+### Verified
+- `npm run build`
+- `make verify-safe`
+- `npm test`
+- OMI Pipe ladder through RS/GF256 proof targets
+
+---
+
 ## v0.2.0 (2026-05-31)
 
 ### Release
@@ -22,28 +52,6 @@
 - 644 tests passing, 0 failing; build transforms 166 modules
 
 ---
-
-# Changelog
-
-## v0.0.1 (2026-05-29)
-
-### Release
-- v0.0.1 — multi-arch: linux/amd64, linux/arm64, linux/arm/v7
-- Full CI pipeline: unit → build → QEMU cross-arch → smoke
-- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice
-- 324+ tests passing, 0 failing (initial release baseline)
-
-### Current State (v0.0.1, post-release additions)
-- 619 tests, 0 failures; build produces 166 modules
-- 4 execution targets: JS, C99, WASM, eBPF/XDP
-- 7 protocol layers: Physical → Transport → Geometric → Algebraic → Projective → Atomic → Telemetry
-- RULES.omi through rule 0x57; bidi.css 47 selector groups
-- Ring overwrite policy (OW-1 through OW-5); IPv6 wire profile (profile.net.v0)
-- WAN latency telemetry: SSE probe daemon port 8082, /wan-metrics, /wan-dashboard.html
-
----
-
-# Changelog
 
 ## v0.3.0 (2026-05-29) — Production Release Pipeline
 
@@ -79,17 +87,35 @@
 
 ---
 
+## v0.0.1 (2026-05-29)
+
+### Release
+- v0.0.1 — multi-arch: linux/amd64, linux/arm64, linux/arm/v7
+- Full CI pipeline: unit → build → QEMU cross-arch → smoke
+- OMI kernel: CIDR-v0, sexagesimal, inversion, lisp, lattice
+- 324+ tests passing, 0 failing (initial release baseline)
+
+### Post-release Additions
+- 619 tests, 0 failures; build produces 166 modules
+- 4 execution targets: JS, C99, WASM, eBPF/XDP
+- 7 protocol layers: Physical → Transport → Geometric → Algebraic → Projective → Atomic → Telemetry
+- RULES.omi through rule 0x57; bidi.css 47 selector groups
+- Ring overwrite policy (OW-1 through OW-5); IPv6 wire profile (profile.net.v0)
+- WAN latency telemetry: SSE probe daemon port 8082, /wan-metrics, /wan-dashboard.html
+
+---
+
 ## v1.5.0-chiral-release (2026-05-28) — Closed Core Runtime Milestone
 
-### Notation Engine (new)
+### Notation Engine
 - `src/omi/chiral-lexer.js` — symmetrical `omi-*` → `*-imo` tape validation
 - `src/omi/trigraph-preprocessor.js` — C11 `??-` trigraph mapping, polarity inversion
 - `src/omi/place-value-interpreter.js` — trigraph tally → polynomial degree 0–3
 
-### Browser Surface (changed)
+### Browser Surface
 - `public/bidi.html` — chiral notation stream surface with CSSOM selectors, dual-proxy SSE failover, 2.5D transform projection
 
-### Infrastructure (new)
+### Infrastructure
 - `Makefile` — compile/test/stage/boot-<arch> targets
 - `src/worker.js` — DOM.WebWorker 60Hz SAB ring clock
 - `src/server.js` — Node.js proxy with COOP/COEP
@@ -98,12 +124,12 @@
 - `docker-compose.yml` — multi-service deployment
 - `scripts/create-omi.sh` — workspace scaffolding
 
-### Projection & Routing (new)
+### Projection & Routing
 - `src/runtime/chiral-fifo-engine.js` — POSIX FIFO, FFT phase energy
 - `src/web/semantic-memory-broker.js` — Prolog+HNSW+polytope clock
 - `src/web/tri-tier-network.js` — 16-byte transit frame routing
 
-### Deployment (new)
+### Deployment
 - `scripts/omi-dual-proxy.js` — dual-stack central tunnel (74.208.190.29:8080)
 - `scripts/omi-sse-server.js` — zero-dep SSE edge proxy (69.48.202.32:8080)
 - `scripts/debian-bootstrap.sh` — UFW + nginx + systemd
