@@ -10,7 +10,7 @@
 **GitHub:** https://github.com/bthornemail
 **LinkedIn:** in/brian-thorne-5b8a96112
 
-**Status:** v1.0.0-RC1 Canonical Whitepaper
+**Status:** Canonical whitepaper for Q-frame validation and Q-xy projection
 **Date:** May 2026
 **Keywords:** OMI, Omicron Object Model, Binary Quadratic Form, Delta Law, topological consensus, symbolic encoding, Base36, 240-state bridge, Fano replay ring, meta-circular compiler, autonomous AI
 

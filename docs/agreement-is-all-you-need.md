@@ -2,6 +2,8 @@
 
 ## A Constructive Alignment Protocol for the Omi Object Model
 
+> **Doctrine alignment notice:** This document defines the First Principle and collaboration doctrine. Older examples that mention CIDR prefix specificity describe adapter-era claim reduction, not native identity. Native OMI identity is relational descent and Omicron-framed gauge closure.
+
 **Brian Thorne**
 Independent Researcher — Topological Consensus & Autonomous AI
 Universal Life Protocol

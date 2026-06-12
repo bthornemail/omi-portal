@@ -1,33 +1,85 @@
 # OMI Portal
 
-**v1.0.0-RC1 Consumer/Provider Edition**  
-**973 verified invariants · 170 production modules · eBPF/XDP · QEMU TYPE_CLOCK · Wallis–Neugebauer notation**
+OMI Portal is the implementation workspace for the Omicron Object Model: a protocol runtime for turning addresses, packets, documents, clocks, browser pages, and receipt streams into verifiable reference states.
 
-OMI Portal is a protocol runtime for turning addresses, packets, documents, clocks, and browser pages into **verifiable reference states**.
-
-## Open The Portal
-
-New here? See [OPEN_PORTAL.md](OPEN_PORTAL.md) for the shortest local and Docker walkthrough. Testing with someone over the internet? See [REMOTE_TESTING.md](REMOTE_TESTING.md).
-
-For the foundational orientation, read [MANIFESTO.md](MANIFESTO.md). For the canonical doctrine, read [DOCTRINE.md](DOCTRINE.md): notation as cipher, OMI as rewrite topology, and computation as lawful transformation of interpretation.
-
-At the center of OMI is the **OMI address pointer**.
-
-Native relational descent form:
+This repository is being prepared for outside protocol review. Treat the root doctrine, native gauge canon, and declarative roots as the shared authority:
 
 ```text
-omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+AGENTS.md
+-> DOCTRINE.md
+-> docs/omi-native-gauge-consolidated-canon.md
+-> POSTULATES.md -> AXIOMS.md -> DECLARATIONS.md
+-> RULES.omi / FACTS.omi / CLOSURES.omi / COMBINATORS.omi / CONS.omi
+-> source, tests, receipts, and browser projections
 ```
 
-Historical CIDR adapter form (compiler compatibility):
+`README.md` is the stable entrypoint, not the release ledger. Changing counts, release snapshots, and audit evidence belong in [CHANGELOG.md](CHANGELOG.md), [RELEASE_NOTES.md](RELEASE_NOTES.md), and [dev-docs/AUDIT.md](dev-docs/AUDIT.md).
+
+Use these gates to verify the current checkout:
+
+```text
+npm test
+npm run build
+make verify-safe
+make qemu-test           requires a Docker-authorized shell
+make docker-build        requires a Docker-authorized shell
+```
+
+## Start Here
+
+For a short local or Docker walkthrough, read [OPEN_PORTAL.md](OPEN_PORTAL.md).
+For remote reviewer testing, read [REMOTE_TESTING.md](REMOTE_TESTING.md).
+For terminology, read [GLOSSARY.md](GLOSSARY.md).
+
+Protocol reviewers should read in this order:
+
+1. [MANIFESTO.md](MANIFESTO.md) — why notation, representation, and interpretation collapse into one protocol surface.
+2. [DOCTRINE.md](DOCTRINE.md) — OMI as rewrite topology and lawful receipt flow.
+3. [docs/omi-native-gauge-consolidated-canon.md](docs/omi-native-gauge-consolidated-canon.md) — current native gauge, receipt, and CIDR-retirement canon.
+4. [docs/README.md](docs/README.md) — layer-organized map of the specification set.
+5. `RULES.omi` and `FACTS.omi` — normative obligations and implemented facts.
+
+## Current Rewrite Identity
+
+The native OMI identity is the binary rewrite cell:
+
+```text
+omi---imo
+```
+
+The slash path is where interpretation routing happens:
+
+```text
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
+```
+
+The slash path is not storage and not identity. It declares how to read the binary rewrite identity.
+
+Payload or stream attachment uses the query surface:
+
+```text
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>?<payload>
+```
+
+The current address root is:
+
+```text
+ffff-127-0-0-1
+canonical relational form: ffff-127--/48
+stream form: ο<ffff><127><0><0><1>Ο
+```
+
+Eight-segment forms still exist as adapter and compatibility tokens for IPv6, legacy DOM ids, compiler fixtures, and network tests:
 
 ```text
 omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<claim>
 ```
 
-Each OMI frame is a gauge-stream cell with Omicron entry/exit gates. It can point to a packet, rule, service, memory slot, symbolic fact, visual node, clock state, or page boundary. The slash denotes relational descent, not CIDR prefix length.
+In that adapter form, each segment is a 16-bit carrier word and `/claim` is a claim boundary. It does not create identity. Per Rules 0xAC-0xAE, identity is the Omicron rewrite cell; prefixes and lenses reduce claims or reader views.
 
-OMI is designed so that both humans and machines can ask:
+## What OMI Provides
+
+OMI is designed so humans and machines can ask:
 
 ```text
 What is this?
@@ -37,372 +89,47 @@ What runtime owns it?
 Can it be replayed, verified, or rejected?
 ```
 
----
-
-## 1. Why OMI Exists
-
-Most systems separate addresses, data, metadata, rules, logs, and UI state.
-
-OMI treats them as one addressable object:
+An OMI state is useful only when the chain is complete:
 
 ```text
-address → rule → runtime state → visual projection → audit trail
+pointer -> rule -> implementation -> test -> receipt/projection
 ```
 
-That means an OMI pointer can be used as:
+That chain lets a pointer act as:
 
-* a network frame
-* a memory receipt
-* a semantic reference
-* a JSON Canvas node ID
-* a CSS selector target
-* a cron/clock state
-* an eBPF packet signature anchor
-* a page-framing boundary
+- a network frame
+- a memory receipt
+- a semantic reference
+- a JSON Canvas node id
+- a CSSOM selector target
+- a QEMU clock state
+- an eBPF packet signature anchor
+- a page-framing boundary
+- an OmiPipe receipt
 
-The goal is not just to store data. The goal is to make every important state **referencable, inspectable, replayable, and rejectable**.
+## Omicron Frame And Chirality
 
----
-
-## 2. Quick Example: OMI Address as a Reference Pointer
-
-A canonical OMI pointer looks like:
+OMI uses Omicron as dataflow structure:
 
 ```text
-omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48
+Ο  upper Omicron, U+039F, cardinal boundary / gauge closure
+ο  lower omicron, U+03BF, chiral execution / local transition
+Ο-<car>-<cdr>  Omi cons pair
 ```
 
-You can read it as:
+Compiled `.imo` records wrap with `ο` as entry delimiter and `Ο` as exit delimiter. This mirrors the S1/S6 constants in the 128-bit wire frame and preserves lower/upper dataflow chirality.
+
+The bitwise cons transition is:
 
 ```text
-omi          protocol namespace
-0100         opening / local frame selector
-03bf         chiral delimiter / OMI structural marker
-7c00         boot / payload / current register field
-2b01         typed transition segment
-2f01         paired transition segment
-1434         free variable / payload segment
-039f         cardinal closure marker
-01ff         terminal closure / suffix field
-/48          prefix scope
+δ_C(x) = rotl(x,1) xor rotl(x,3) xor rotr(x,2) xor C
 ```
 
-In code, docs, CSS, and packets, this pointer should remain stable. It is not just a label. It is a compact structural reference.
+It is period-8 and feeds the sexagesimal logic clock.
 
----
+## Declarative Core
 
-## 3. The OMI Address Model
-
-### 3.1 Native Grammatical Form
-
-The native OMI address uses relational descent:
-
-```text
-omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
-```
-
-Where:
-
-```text
-<frame>    = exact carrier identity
-<control>  = gauge row / machine scope
-<selector> = predicate, POS, synset, geometry lens
-<relation> = Horn-clause edge or incidence relation
-<unit>     = feature, slot, measurement, or receipt target
-```
-
-Hyphens delimit the frame body. Slashes walk the relational path.
-
-### 3.2 CIDR Adapter Form (Historical)
-
-For compiler and network compatibility, a CIDR-like adapter form is also supported:
-
-```text
-omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<claim>
-```
-
-Each `sN` is a 16-bit hexadecimal segment:
-
-```text
-s0–s7 = 8 segments × 16 bits = 128 bits
-/claim = CIDR claim boundary (adapter-only)
-```
-
-Common claim boundaries:
-
-```text
-/48   canonical local runtime frame claim
-/80   rule-family boundary claim
-/96   gateway / mapped-prefix boundary claim
-/112  narrow rule/register boundary claim
-/128  exact object pointer claim
-```
-
-The `/claim` is a CIDR claim boundary, not native OMI scope. Per Rules 0xAC–0xAE: the Omicron frame alone encodes identity. Prefixes and lenses do not create identity.
-
-### 3.3 OMI Pointer Roles
-
-| Pointer Type   |            Example | Meaning                                  |
-| -------------- | -----------------: | ---------------------------------------- |
-| Exact frame    |      `omi-.../128` | One exact gauge-stream state             |
-| Rule family    |      `omi-.../112` | A narrow invariant class                 |
-| Gateway claim  |       `omi-.../96` | Translation or embedding boundary claim  |
-| Local frame    |       `omi-.../48` | Canonical runtime frame claim            |
-| Visual target  | `[id$="-.../128"]` | CSSOM selector for a page/canvas element |
-
----
-
-## 4. Consumer Guide: How to Use OMI
-
-A **consumer** is anyone reading, viewing, scanning, verifying, or interacting with OMI output.
-
-You do not need to understand every kernel to use OMI. You need to know three things:
-
-```text
-1. OMI pointers identify states.
-2. Rules explain why a state is valid.
-3. Tests/builds prove the implementation still agrees with the rules.
-```
-
-### 4.1 Reading an OMI Pointer
-
-Given:
-
-```text
-omi-0000-0000-0000-0000-0000-0000-00eb-0066/112
-```
-
-Read it as:
-
-```text
-This is an OMI rule/register pointer.
-The suffix 00eb-0066 identifies the eBPF/XDP link-layer parsing gate.
-The /112 scope means this is a narrow infrastructure rule boundary.
-```
-
-### 4.2 Reading OMI Visuals
-
-OMI pages and canvases use addresses as IDs:
-
-```html
-<svg id="omi-0000-0000-0000-0000-0000-0000-00eb-0066/112"></svg>
-```
-
-CSS can target that address directly:
-
-```css
-[id$="-00eb-0066/112"] {
-  stroke: #ffaa00;
-}
-```
-
-This means the visual layer is not arbitrary styling. It is a projection of the protocol rule space.
-
-### 4.3 Consumer Safety Rule
-
-Consumers should trust a state only when all three agree:
-
-```text
-OMI pointer exists
-→ rule exists
-→ test/build confirms it
-```
-
-For example, the current documentation baseline references a verified 973-invariant state and 170 production modules.
-
----
-
-## 5. Provider Guide: How to Publish OMI-Compatible State
-
-A **provider** is a service, runtime, page, node, VM, packet source, or application that emits OMI-addressed state.
-
-A provider should publish:
-
-```text
-1. OMI pointer
-2. Rule binding
-3. Validation behavior
-4. Runtime location
-5. Visual or telemetry projection
-```
-
-### 5.1 Provider Checklist
-
-For every new OMI subsystem, create:
-
-```text
-src/.../<kernel>.js           implementation
-test/<kernel>.test.js         regression tests
-docs/01-physical/FACTS.omi    rule pointer
-public/bidi.css               optional visual selector
-Makefile                      optional test target
-README.md / docs              human explanation
-```
-
-### 5.2 Provider Contract
-
-A provider MUST be able to answer:
-
-```text
-What OMI address identifies this subsystem?
-What does this address validate?
-What happens on success?
-What happens on failure?
-Where is the test?
-Where is the rule?
-Where is the visual/telemetry projection?
-```
-
-Example:
-
-```text
-Subsystem: eBPF/XDP signature gate
-Rule: 0x12D–0x12F
-Pointer: omi-0000-0000-0000-0000-0000-0000-00eb-0066/112
-Source: src/ebpf/ebpf-pipeline.bpf.c
-Test: test/ebpf-pipeline.test.js
-Output: BPF telemetry map + packet pass/drop
-```
-
-The eBPF pipeline and cluster signature gateway are documented as the current kernel-acceleration milestone, including a 64-bit Delta Law signature and telemetry-map bridge.
-
----
-
-## 6. Core Subsystems
-
-### 6.1 eBPF/XDP Packet Signature Gate
-
-OMI can compile a kernel-space packet gate that validates packet signatures before user-space receives them.
-
-```text
-Raw packet
-→ XDP hook
-→ Delta Law signature
-→ BPF telemetry map
-→ pass/drop decision
-```
-
-Reference pointer:
-
-```text
-omi-0000-0000-0000-0000-0000-0000-00eb-0066/112
-```
-
-Source:
-
-```text
-src/ebpf/ebpf-pipeline.bpf.c
-src/omi/cluster-packet-kernel.js
-```
-
-Use when you need:
-
-```text
-low-latency packet validation
-WAN telemetry
-cluster signature tracking
-kernel-space filtering
-```
-
-### 6.2 IPv6 Source Address Frame (Adapter)
-
-OMI can treat an IPv6 source address as a 128-bit frame using the CIDR adapter layer.
-
-```text
-IPv6 saddr
-→ uint16[8]
-→ OMI gauge frame
-→ Q(S)=0 validation
-→ Delta/Fano resolution
-```
-
-The native OMI form uses relational descent:
-
-```text
-omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
-```
-
-The wire profile uses `profile.net.v0`, offset `0x16`, and the canonical genesis address `0100:03bf:7c00:2b01:2f01:1434:039f:01ff`. IPv6 addressing is an adapter surface — the native gauge is the factorial row gauge (1!–8!, alternating OMI/IMO chirality with 0x20 BOM pivot).
-
-### 6.3 Factorial Replay Ring
-
-OMI uses a 5040-slot replay ring:
-
-```text
-5040 = 7!
-```
-
-Each slot stores a compact receipt:
-
-```text
-provenance:16 | steps:8 | LL:8 | NN:16 | MM:16
-```
-
-The ring is built on the factorial row gauge (1!–8!), where each row is a 2⁴ domain with alternating OMI/IMO chirality. The PPP escape grammar (0x2D escape → XOR 0x20) ensures stream-safe addressing without length prefixes.
-
-Use this when you need deterministic replay, bounded state history, or concurrency-safe receipt storage.
-
-### 6.4 Tetragrammaton Scheduler
-
-OMI schedules typed nodes over:
-
-```text
-7 Fano points
-12 regular divisors of 60
-Text / Link / Group / File node roles
-```
-
-Use this when you want time-sliced node evaluation that aligns with base-60 intervals.
-
-### 6.5 QEMU TYPE_CLOCK Model
-
-OMI models QEMU clock-tree state using:
-
-```text
-period integer
-2^-32 ns unit
-0 = gated / inactive
-```
-
-This lets the runtime represent emulated hardware clock state as an OMI-addressable object. The QEMU clock milestone explicitly maps `TYPE_CLOCK` periods, gated zero states, and Canvas preset outputs.
-
-### 6.6 Wallis–Neugebauer Notation
-
-OMI includes a notation kernel for positional base-60 structure:
-
-```text
-Wallis integer multiples
-Neugebauer fractional slots
-Hex-N to Hex-(N-1) encapsulation
-```
-
-The canonical rule text uses `Hex-N to Hex-(N-1)` and avoids leaking literal `-0x` notation into production selector grammar.
-
-### 6.7 Research Assimilation Gates
-
-Research drafts in `dev-docs/_temp/` are an inbox, not a canonical source. A draft graduates only when a small invariant is restated in canonical docs, grounded in `RULES.omi` / `FACTS.omi`, and covered by tests.
-
-The current promoted invariants are:
-
-```text
-240 = 2×5! = 15×16 = 6!/3
-slot5040 = fano7×720 + role3×240 + local240
-5! = hidden packet root
-4! = visible selector/fact projection surface
-8!..12! = interpretive envelopes around the same 128-bit frame
-```
-
-Symbolic character encoding is promoted only as a projection layer. Base36 uses the uppercase ASCII alphabet `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ` to display W=36 orbit offsets and fixed bridge values (`120=3C`, `240=6O`, `24=O`, `720=K0`, `5040=3W0`). Emoji carriers are grounded in the vendored Unicode emoji data files and carry deterministic RGB/base64/row/col canvas metadata. Neither carrier generates OMI law or replaces the 8-segment pointer.
-
-The quadratic boundary is normative: `Q_frame(S)=E_var+E_const` validates the 128-bit envelope, while `Q_xy(x,y)=60x^2+16xy+4y^2` projects decoded local coordinates into `local240`, `slot5040`, and visible geometry. Do not derive validity from projection.
-
-Color/clock research is treated as software visualization semantics. OMI may map clock, precision, and receipt state to deterministic JSON Canvas color fields, but optical-clock language is only an analogy unless a local source module and test prove the behavior.
-
-The MCRSGSP storage draft is applied as provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. MCRSGSP provides recoverable candidates; OMI decides accepted objects through validation, resolution, and receipt. Deployment and transport behavior remains aspirational unless it is wired to local tests.
-
-### 6.8 OMI Declarative Core
-
-The OMI Declarative Core is split into five canonical root files:
+The OMI Declarative Core has five root files:
 
 ```text
 RULES.omi declares normative invariants.
@@ -412,9 +139,7 @@ COMBINATORS.omi declares lawful composition operators.
 CONS.omi declares pairing, nesting, dot-notation, and palindromic meta-circular structures.
 ```
 
-Generated router seed configs live under `vectors/` and reduce through CONS. They are traversable proxy seeds for POS, Universal Features, and WordNet-Prolog bridge routes, not new root authority files.
-
-This split prevents logical bleeding: rules do not claim implementation, facts do not create obligations, closures do not invent operations, combinators do not authorize state, cons forms do not replace validation, and generated vector seeds do not replace POS graph or WordNet centroid authority.
+Generated router seed configs live under `vectors/`. They reduce through CONS and provide POS, Universal Feature, and WordNet-Prolog proxy routes. They are generated routing material, not new authority roots.
 
 ```text
 RULES declare.
@@ -425,338 +150,122 @@ CONS reduce.
 vectors/*.omi route through CONS.
 ```
 
----
-
-## 7. OMI Addressing as Reference Pointers
-
-### 7.1 Rules as Pointers
-
-Every rule should have a pointer:
+The document layer ordering is fixed:
 
 ```text
-omi-0000-0000-0000-0000-0000-0000-00eb-0066/112
+POSTULATES.md     construction
+AXIOMS.md         folding and transformation
+DECLARATIONS.md   derivation into FACTS.omi rows
 ```
 
-This says:
+## Implemented Runtime Surfaces
+
+The core implementation currently connects:
+
+- Omilog parser, reader, and `.omi` -> `.imo` compiler.
+- OPPID generator discipline and closure checks.
+- Router seeds for POS, Universal Features, and WordNet-Prolog bridges.
+- OmiPipe receipt ladder with network, MCRSGSP, causal, RS, and GF(256) proof layers.
+- Browser surfaces for portal, document inspection, BiDi/CodeMirror, CSSOM, JSON Canvas, and demo-only A-Frame.
+- WAN/live portal event path through NAT64 adapter, proxy connector, voxel stream, and portal binder.
+- Narrative/world model pipeline with persistent world state, gates, clocks, and motif extraction.
+- eBPF/XDP packet gate artifacts where local tooling permits.
+- QEMU and Docker verification gates where the shell has Docker authority.
+
+## Research Assimilation Boundaries
+
+Research drafts in `dev-docs/_temp/` are an inbox, not canonical authority. A draft graduates only when a small invariant is restated in canonical docs, grounded in `RULES.omi` / `FACTS.omi`, and covered by tests.
+
+Promoted invariants include:
 
 ```text
-The rule is addressable.
-The rule can be targeted by tests.
-The rule can be targeted by CSS.
-The rule can be referenced by docs.
-The rule can be emitted in telemetry.
+240 = 2×5! = 15×16 = 6!/3
+slot5040 = fano7×720 + role3×240 + local240
+5! = hidden packet root
+4! = visible selector/fact projection surface
+8!..12! = interpretive envelopes around the same 128-bit frame
 ```
 
-### 7.2 Runtime Objects as Pointers
-
-A runtime object should expose:
-
-```json
-{
-  "id": "omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48",
-  "type": "TypedOmiNode",
-  "state": "accepted",
-  "rule": "delta-orbital-lexer-invariant"
-}
-```
-
-### 7.3 Pages as Pointers
-
-An OMI page can use an iframe boundary:
-
-```html
-<iframe id="omi-64:ff9b::/96"></iframe>
-```
-
-This marks the page as NAT64-aware:
+Symbolic character encoding is projection-only. Base36 displays W=36 orbit offsets and fixed bridge readings:
 
 ```text
-64:ff9b::/96 = NAT64 well-known prefix
-first 96 bits = bridge prefix
-last 32 bits  = embedded IPv4 address
+120 = 3C
+240 = 6O
+24 = O
+720 = K0
+5040 = 3W0
 ```
 
-### 7.4 CSS as Pointer Resolution
+Emoji carriers are grounded in vendored Unicode emoji data and carry deterministic RGB/base64/row/col canvas metadata. They do not generate OMI law or replace `RULES.omi`, `FACTS.omi`, or native gauge identity.
 
-```css
-[id$="-03bf-0001-0000-039f/128"] {
-  stroke: #ffaa00;
-}
-```
-
-This means:
+The quadratic boundary is split:
 
 ```text
-When a page contains this OMI pointer,
-render it as the matching protocol state.
+Q_frame(S) validates the 128-bit OMI envelope.
+Q_xy(x,y) projects decoded state into geometry.
+Q_xy(x,y) = 60x² + 16xy + 4y²
 ```
 
----
+Symbols project the law. Symbols do not create the law.
 
-## 8. How to Install
+Color/clock research is deterministic software visualization. OMI may map clock, precision, and receipt state to JSON Canvas color fields, but optical-clock language is only an analogy unless a local source module and test prove the behavior.
+
+MCRSGSP is provenance for implemented distributed pieces: Reed-Solomon erasure coding, causal closure, version vectors, gossip propagation, fragment storage, and anti-entropy repair. MCRSGSP provides recoverable candidates. OMI decides accepted objects. Transport deployment and WAN behavior remain provisional unless wired to local tests.
+
+## Verification
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-For eBPF/XDP work, install a clang toolchain with BPF target support and Linux headers.
-
-Example requirement:
-
-```text
-clang 14+
-linux-headers matching host kernel
-bpftool optional for verifier/load checks
-```
-
----
-
-## 9. How to Build and Verify
-
-### 9.1 Compile eBPF Objects
+Run the primary gates:
 
 ```bash
-make compile-ebpf-gate
-```
-
-This should build:
-
-```text
-artifacts/ebpf/ebpf-pipeline.o
-artifacts/ebpf/delta_orbital_gate.o
-```
-
-`make verify-ebpf` requires the object and verifies its ELF shape. The general Node test suite skips only that ELF fixture when the artifact is absent, so browser-only and QEMU lanes do not need clang. The object lives outside `dist/` because Vite clears `dist/` on each browser build.
-
-### 9.2 Run Tests
-
-```bash
+make verify-docs
 npm test
-```
-
-Expected current baseline:
-
-```text
-973/973 passing
-0 failures
-```
-
-### 9.3 Build Production Bundle
-
-```bash
 npm run build
+make verify-safe
 ```
 
-Expected current baseline:
-
-```text
-166 code-split modules
-```
-
----
-
-## 10. How to Add a New OMI Kernel
-
-### Step 1 — Choose the Address
-
-Pick an unused rule pointer:
-
-```text
-omi-0000-0000-0000-0000-0000-0000-abcd-0001/112
-```
-
-### Step 2 — Add a Rule
-
-```text
-# [Rule 0xXYZ]: Human Readable Rule Name
-# Explain what must be true.
-omi-0000-0000-0000-0000-0000-0000-abcd-0001/112 MUST enforce-your-new-invariant
-```
-
-### Step 3 — Implement the Kernel
-
-```text
-src/omi/your-kernel.js
-```
-
-Suggested shape:
-
-```js
-export class OmiYourKernel {
-  evaluate(S, input) {
-    // 1. validate S
-    // 2. evaluate rule
-    // 3. return accepted/rejected state
-  }
-}
-```
-
-### Step 4 — Add Tests
-
-```text
-test/your-kernel.test.js
-```
-
-Minimum tests:
-
-```text
-valid frame accepted
-invalid frame rejected
-rule-specific success path
-rule-specific failure path
-```
-
-### Step 5 — Add CSS Selector
-
-```css
-[id$="-abcd-0001/112"] {
-  stroke: #ffaa00;
-}
-```
-
-### Step 6 — Add Documentation
-
-Document:
-
-```text
-what it is
-why it exists
-how consumers use it
-how providers emit it
-what pointer identifies it
-what tests verify it
-```
-
----
-
-## 11. Consumer Examples
-
-### 11.1 Verify a Pointer Exists
+Run optional host-dependent gates:
 
 ```bash
-grep "00eb-0066" docs/01-physical/FACTS.omi
+make verify-ebpf
+sg docker -c 'make qemu-test'
+sg docker -c 'make docker-build'
 ```
 
-### 11.2 Find Its Visual Rule
+`verify-ebpf` requires clang/BPF tooling and may fall back when kernel pinning is unavailable. Docker and QEMU gates require an active Docker-authorized shell and registered QEMU binfmt support.
 
-```bash
-grep "00eb-0066" public/bidi.css
-```
+## Review And Contribution Path
 
-### 11.3 Run Its Test
+For protocol review:
 
-```bash
-node --test test/ebpf-pipeline.test.js
-```
+1. Check the doctrine chain: `DOCTRINE.md`, native gauge canon, and the five declarative roots must agree.
+2. Check traceability: every strong claim should point to a rule, fact, implementation, test, or clearly marked prospectus.
+3. Check adapters: CIDR, IPv6, DOM ids, and CSS selectors are compatibility/projection surfaces unless a canonical rule says otherwise.
+4. Check runtime status: implemented, generated, demo-only, prospectus, and historical material must be labeled.
+5. Check verification: `make verify-docs`, `npm test`, `npm run build`, and `make verify-safe` should pass before publication.
 
----
+For implementation work, prefer reusable modules under `src/`, lightweight browser wiring in `public/`, and focused tests for parser, manifest, compiler, indexing, receipt, and deterministic projection changes.
 
-## 12. Provider Examples
-
-### 12.1 Emit a JSON Canvas Node
-
-```json
-{
-  "id": "omi-0000-0000-0000-0000-0000-0000-00eb-0066/112",
-  "type": "text",
-  "text": "eBPF/XDP packet parsing gate",
-  "x": 0,
-  "y": 0,
-  "width": 480,
-  "height": 160,
-  "color": "6"
-}
-```
-
-### 12.2 Emit a Telemetry Event
-
-```json
-{
-  "event": "omi.telemetry.packet",
-  "id": "omi-0000-0000-0000-0000-0000-0000-00eb-0066/112",
-  "accepted": true,
-  "signature": "0xa270ca70",
-  "slot": 1504
-}
-```
-
-### 12.3 Emit a DOM Element
-
-```html
-<section
-  id="omi-0000-0000-0000-0000-0000-0000-00eb-0066/112"
-  data-omi-role="xdp-ingress-gate"
-  color="6">
-  eBPF/XDP Gate
-</section>
-```
-
----
-
-## 13. Directory Map
+## Directory Map
 
 ```text
-docs/        canonical rule and specification layers
-MANIFESTO.md foundational orientation: notation as cipher, cipher as notation
-DOCTRINE.md canonical doctrine: rewrite topology and lawful receipts
-src/omi/     core OMI kernels
-src/canvas/  JSON Canvas, Code16K, JABCode, page framing
-src/ebpf/    eBPF/XDP kernel programs
-src/wan/     WAN telemetry and distributed runtime loops
-public/      browser surfaces and CSSOM selectors
-test/        regression tests
-prolog/      logic facts and symbolic inference support
-dev-docs/    deeper mathematical and developer onboarding docs
-dev-docs/_temp/ scratch research inbox; not canonical until promoted by docs/rules/tests
+docs/          canonical specification and layer documents
+dev-docs/      developer/reference indexes and audit ledger
+public/        browser surfaces
+src/           implementation modules
+test/          regression tests and fixtures
+vectors/       generated router seed configs
+vendor/        vendored reference material
 ```
 
-The project has also used a Tetragrammatron-style developer documentation map with SPO-named face folders and beginner/intermediate/expert README tiers.
+Protected boundaries:
 
----
-
-## 14. Glossary
-
-| Term           | Meaning                                                     |
-| -------------- | ----------------------------------------------------------- |
-| OMI pointer    | 128-bit address reference in `omi-.../prefix` form          |
-| `S`            | 8-segment instruction frame                                 |
-| `Q(S)=0`       | Branchless structural acceptance gate                       |
-| `Δ_C`          | Delta Law transition function                               |
-| Fano point     | One of seven projective selector positions                  |
-| TypedOmiNode   | Text, Link, Group, or File node in the Tetragrammaton model |
-| FACTS.omi      | Rule registry for OMI invariants                            |
-| CSSOM selector | Browser-side visual projection of an OMI pointer            |
-| SAB            | SharedArrayBuffer runtime memory                            |
-| XDP            | eBPF fast path for packet ingress                           |
-| NAT64          | IPv6-to-IPv4 bridge prefix, commonly `64:ff9b::/96`         |
-| TYPE_CLOCK     | QEMU clock object model for emulated period/gating state    |
-
----
-
-## 15. Current Release State
-
-```text
-Version: v1.0.0-RC1
-Tests: 973/973 passing
-Build: 170 modules
-Kernel path: eBPF/XDP enabled after make compile-ebpf-gate
-Addressing model: OMI pointer / IPv6-CIDR-style 128-bit frame
-Consumer model: read, scan, verify, route, visualize
-Provider model: emit pointer, bind rule, expose test, project state
-```
-
----
-
-## 16. Project Philosophy
-
-OMI is built around a simple idea:
-
-```text
-Every meaningful state should have an address.
-Every address should have a rule.
-Every rule should have a test.
-Every test should be replayable.
-Every replayable state should be visible.
-```
-
-That is why OMI uses address pointers everywhere: in packets, rules, CSS, Canvas nodes, telemetry, clocks, and documents.
+- Do not copy transcript material wholesale into canonical docs.
+- Do not rewrite `chat.history.html`.
+- Treat `dev-docs/_temp/` as research inbox material.
+- Treat demos as reference-only unless a root artifact is truly missing.

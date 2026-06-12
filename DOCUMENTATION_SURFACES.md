@@ -16,8 +16,8 @@ o---o      = abstract protocol / documentation / derivation surface
 Short doctrine:
 
 ```text
-o---o defines the doctrine.
-omi-portal proves the doctrine.
+o---o abstracts the doctrine.
+omi-portal proves and exercises the doctrine.
 ```
 
 ---
@@ -157,20 +157,29 @@ In `o---o`, this is protocol doctrine.
 
 In `omi-portal`, this is executable root material.
 
-The strict native address form is:
+The current strict native identity and route model is:
 
 ```text
-omi-<frame>/<claim>/@<lens>/@<selector>/@<overlay>-imo
+omi---imo
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
+ο<ffff><127><0><0><1>Ο
 ```
 
 Meaning:
 
 ```text
-frame = identity
-claim = CIDR claim reduction
-@ lens path = Horn-clause derivation route
--imo = closed derivation surface
+omi---imo = binary rewrite identity
+/---/ = routed interpretation path
+?---? = external payload or stream attachment
+frame = route boundary
+control = gauge row / machine scope
+scale = predicate, POS, synset, geometry, or reader scale
+relation = Horn-clause edge, incidence relation, or receipt path
+unit = feature, slot, measurement, or continuation
+ο / Ο = chiral entry and cardinal closure
 ```
+
+CIDR-like `/N` claims and `/@N` reader lenses are adapter/reduction surfaces. They do not create native identity.
 
 ---
 

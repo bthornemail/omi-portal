@@ -26,7 +26,7 @@ const f32 = new Float32Array(sab);
 
 `5040 * 8` bytes provides one 64-bit slot for every `7!` timeline tick. The first 8 bytes are the master tick register. Subsequent slots are read with dynamic little/big endian polarity from the BiDi controls.
 
-For descriptor pre-header state, pair this with the canonical `SharedArrayBuffer(128)` described in [Memory Layout](./memory-layout.md).
+For descriptor pre-header state, pair this with the canonical `SharedArrayBuffer(128)` described in [Memory Layout](../05-session/memory-layout.md).
 
 ## Runtime API
 

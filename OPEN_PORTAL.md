@@ -6,6 +6,10 @@ browser.
 Testing with someone over the internet? Use
 [REMOTE_TESTING.md](REMOTE_TESTING.md) after this local walkthrough.
 
+Protocol reviewers should read [README.md](README.md), [DOCTRINE.md](DOCTRINE.md),
+and [docs/omi-native-gauge-consolidated-canon.md](docs/omi-native-gauge-consolidated-canon.md)
+before treating any browser projection as authority.
+
 ## Prerequisites
 
 - Node.js and npm
@@ -70,6 +74,15 @@ OMI_PORT=8080 ./scripts/smoke.sh
 The smoke script starts the compose runtime, waits for the container health
 check, validates the COOP/COEP browser isolation headers, and then tears the
 compose runtime down.
+
+For a full source verification pass before publication review:
+
+```bash
+make verify-docs
+npm test
+npm run build
+make verify-safe
+```
 
 ## Troubleshooting
 

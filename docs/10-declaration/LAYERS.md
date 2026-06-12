@@ -1,6 +1,8 @@
 # OMI Protocol — Abstraction Layer Map
 
-Each document in the OMI framework is classified by its primary layer below. Documents spanning multiple layers note secondary assignments.
+Each document in the OMI framework is classified by primary layer. This map is for protocol reviewers and uses the current authority chain: root doctrine, native gauge canon, document-layer roots, and declarative `.omi` roots.
+
+CIDR, IPv6, 8-segment printable ids, DOM ids, and CSS selectors are adapter/projection surfaces unless explicitly promoted by current rules. Native identity is relational descent inside an Omicron-framed gauge.
 
 ---
 
@@ -28,13 +30,13 @@ Frame structure, segment encoding, wire format, Ethernet-offset alignment.
 
 ## 03 — Network
 
-IP addressing, CIDR containment, subnet routing, sparse radix trie.
+Adapter addressing, routing, distributed projection, and legacy compatibility.
 
 | Document | Primary Layer | Role |
 |---|---|---|
-| `03-network/omi-core-spec.md` | Network / Application | Normative OMI-CIDR address grammar, cons/car/cdr primitives, δ_C law, sexagesimal notation, factorial runtime lattice, browser projection rules |
-| `03-network/canonical-addressing.md` | Network | 8-segment hyphen-delimited `/48` address grammar with segment map |
-| `03-network/omi-distributed-protocol.md` | Network / Transport | Sparse radix trie over IPv6-style address components, subnet boundary semantics, CSSOM prefix mirroring, service-bus labeling (::1..::12) |
+| `03-network/canonical-addressing.md` | Network | Current address-root and adapter boundary summary; points native identity back to relational descent and Omicron closure |
+| `03-network/omi-core-spec.md` | Network / Application | Historical/adapter substrate for printable 8-segment ids, cons/car/cdr primitives, δ_C law, sexagesimal notation, factorial runtime lattice, and browser selector compatibility |
+| `03-network/omi-distributed-protocol.md` | Network / Transport | Distributed protocol prospectus; implemented only where local source and tests prove erasure coding, causal closure, gossip, storage, and anti-entropy behavior |
 
 ---
 
@@ -81,9 +83,9 @@ End-user protocols, object model, declarative framework, whitepaper.
 
 | Document | Primary Layer | Role |
 |---|---|---|
-| `omi-object-model.md` | Application / Surface | Canonical framework declaration: 8 browser surfaces, Lisp transformer model (cons/car/cdr), CIDR/IPv6 containment, FS/GS/RS/US routing, factorial lifecycle, distributed state semantics |
+| `omi-object-model.md` | Application / Surface | Canonical implementation framework: browser surfaces, Lisp transformer model (cons/car/cdr), adapter containment, routing, factorial lifecycle, distributed state semantics |
 | `03-network/omi-core-spec.md` | Network / Application | Normative implementation specification with RFC 2119 key words, MUST/SHOULD/MAY requirements, 10 conformance test categories |
-| `omi-whitepaper.md` | Application | Standalone first-principles specification (OMI-WP-v0.1): 6 axioms, OMI-CIDR addressing, cons semantics, delta law, sexagesimal layer, factorial lattice, conformance |
+| `omi-whitepaper.md` | Application | Historical first-principles whitepaper: adapter-era OMI-CIDR language retained for provenance and marked subordinate to native gauge canon |
 | `07-application/prolog-wordnet-aframe.md` | Application / Surface | Prolog WordNet fact broker on service bus ::3, Fano routing token syntax, A-Frame entity binding for 3D synset rendering |
 
 ---
@@ -133,7 +135,7 @@ Manifest, index, provenance, axioms.
 | `01-physical/EBPF_DELTA_ORBITAL_GATE_v0.md` | ● | ● | | | | | | | | |
 | `02-data-link/DELTA_ORBITAL_LEXER_ABI_v0.md` | | ● | | | | ○ | | | | |
 | `02-data-link/OMI_IPV6_WIRE_PROFILE_v0.md` | | ● | ○ | | | | | | | |
-| `03-network/omi-core-spec.md` | | | ● | | | | ○ | | | |
+| `03-network/omi-core-spec.md` | | | ○ | | | | ● | | | |
 | `03-network/canonical-addressing.md` | | | ● | | | | | | | |
 | `03-network/omi-distributed-protocol.md` | | | ● | ○ | | | | | | |
 | `04-transport/omi-protocol-sequencing.md` | | | | ○ | ● | | | | | |

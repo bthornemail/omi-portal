@@ -1593,17 +1593,20 @@ Canon:
 
 ---
 
-### B.5 /---/ Addressing Layer
+### B.5 /---/ Interpretation Routing Layer
 
-The /---/ section is the internal addressing path.
+The /---/ section is the routed interpretation path.
 
-Canonical OMI address:
+Canonical OMI identity and route:
 
-    omi-<frame>/<control>/<scale>/<relation>/<unit>-imo
+    omi---imo
+    omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
 
-The slash path belongs to identity descent.
+The slash path does not belong to identity. It declares how to read the identity.
 
-    /---/ = relational descent / address path
+    omi---imo = binary rewrite identity
+    /---/     = routed interpretation path
+    ?---?     = external payload or stream attachment
 
 This is where the 12 public agreement words become mnemonic selectors.
 

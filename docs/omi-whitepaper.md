@@ -2,8 +2,10 @@
 
 ## A First-Principles Specification for a Cons-Based, CIDR-Scoped, Sexagesimal Runtime Kernel
 
+> **Historical adapter notice:** This whitepaper preserves the earlier OMI-CIDR framing for provenance. Current native authority is `DOCTRINE.md`, `docs/omi-native-gauge-consolidated-canon.md`, and the root declarative documents. Read CIDR language here as adapter/historical unless a current rule in `RULES.omi` promotes it.
+
 **Author:** Brian Thorne
-**Status:** Standalone White Paper Draft
+**Status:** Historical / adapter-era white paper draft
 **Version:** OMI-WP-v0.1
 **Keywords:** Omicron Object Model, Omi, cons calculus, OMI-CIDR, sexagesimal notation, central inversion, delta law, SharedArrayBuffer, Lisp, zero-frame computation
 
@@ -15,12 +17,12 @@ The Omicron Object Model, abbreviated **Omi**, is a first-principles computation
 
 1. **Omicron as zero-frame operator**
 2. **Cons as the minimal object cell**
-3. **CIDR as address scope**
+3. **CIDR as adapter-era address claim**
 4. **Sexagesimal place value as runtime cadence**
 
 Omi defines a cons-like object calculus using the Unicode Omicron codepoints as its canonical machine operators. The uppercase Greek Omicron `Ο` (`U+039F`) is the **cardinal boundary operator**. The lowercase Greek omicron `ο` (`U+03BF`) is the **chiral execution operator**. Human-readable strings such as `omi-` and `-imo` are not the machine canon; they are programmer-safe aliases for systems that need ASCII-readable notation.
 
-The object model is addressed by **OMI-CIDR**, a 128-bit address grammar inspired by IPv6 prefix notation. The current implementation uses the ASCII-safe `omi-` prefix, eight hyphen-separated 16-bit hex fields, and CIDR prefix lengths such as `/48` and `/128`. A canonical local substrate frame is:
+The adapter-era object model was addressed by **OMI-CIDR**, a 128-bit address grammar inspired by IPv6 prefix notation. The current native model uses relational descent and Omicron-framed gauge closure; the ASCII-safe `omi-` prefix, eight hyphen-separated 16-bit hex fields, and claim lengths such as `/48` and `/128` remain compatibility forms. A historical local substrate frame is:
 
 ```text
 omi-ffff-0002-0000-000f-02d0-0036-0000-0000/48
@@ -138,7 +140,7 @@ cdr = payload, continuation, vector, body, or tail
 
 The object is not primarily a class, map, or record. It is a pair.
 
-### Axiom 3 — Addressing Is Scoped by CIDR
+### Historical Axiom 3 — Addressing Used CIDR Adapter Claims
 
 Omi objects live in a 128-bit address space modeled after CIDR prefix scoping.
 

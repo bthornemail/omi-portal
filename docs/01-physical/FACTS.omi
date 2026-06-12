@@ -401,7 +401,7 @@ omi-0000-0000-ffff-0000-0000-ffff-0000-0078/112 MUST route-onehundredtwenty-and-
 
 # [Rule 0xA6]: Archimedean Base Snubbed Truncation Verification
 # Geometric phase transformations crossing the 4D boundaries MUST execute Catalan verification sweeps,
-# using the native OMI-CIDR subnet boundaries to map snubbed truncations without float division taxes.
+# using adapter claim boundaries to map snubbed truncations without float division taxes.
 omi-ff00-03bf-ffff-2b00-2f00-ffff-039f-ffff/128 MUST verify-snubbed-polytope-truncation-by-cidr
 
 # ============================================================================

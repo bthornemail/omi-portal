@@ -1,4 +1,4 @@
-import { describe, it } from 'node:test';
+import { after, describe, it } from 'node:test';
 import assert from 'node:assert';
 import { PersistentWorldState } from '../src/world/persistent-world-state.js';
 import {
@@ -9,8 +9,11 @@ import {
   loadAndInsertNarrative
 } from '../src/narrative/narrative-document-pipeline.js';
 import { parseNarrativeDocument } from '../src/narrative/narrative-loader.js';
+import { createNarrativeFixture } from './narrative-fixture.js';
 
-const NARRATIVE_DIR = 'dev-docs/_temp/narrative/When Wisdom, Law, and the Tribe Sat Down Together';
+const narrativeFixture = createNarrativeFixture();
+after(() => narrativeFixture.cleanup());
+const NARRATIVE_DIR = narrativeFixture.dir;
 
 const SAMPLE_ARTICLE = `# **Article I**
 

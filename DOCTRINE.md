@@ -391,7 +391,7 @@ omi---imo
 Then the slash path declares how to read it:
 
 ```text
-omi---imo/<frame>/<control>/<scale>/<relation>/<unit>
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
 ```
 
 The slash path is not storage. It is interpretation routing.

@@ -33,29 +33,41 @@ telemetry
 
 ### OMI Pointer
 
-An **OMI pointer** is a relational gauge reference in canonical form:
+An **OMI pointer** starts from the binary rewrite identity:
 
 ```text
-omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+omi---imo
 ```
 
-The native grammar is relational descent, not CIDR prefix length:
+The slash path declares how to read that identity:
 
 ```text
-hyphens delimit the frame body
-slashes walk the relational path
-control rows define the machine scope
-rewrite tables resolve interpretation
-receipts accept the result
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
 ```
 
-A CIDR adapter form exists for network compatibility:
+Current root reference:
+
+```text
+address root: ffff-127-0-0-1
+canonical relational form: ffff-127--/48
+stream form: ο<ffff><127><0><0><1>Ο
+```
+
+The native grammar separates identity from route:
+
+```text
+omi---imo = binary rewrite identity
+/---/     = routed interpretation path
+?---?     = external payload or stream attachment
+```
+
+An eight-segment CIDR adapter form exists for network compatibility:
 
 ```text
 omi-<S0>-<S1>-<S2>-<S3>-<S4>-<S5>-<S6>-<S7>/<claim>
 ```
 
-Where each `S` segment is a 16-bit word, but the `/claim` is a CIDR claim boundary (adapter-only), not native OMI scope.
+Where each `S` segment is a 16-bit word, but the `/claim` is a CIDR claim boundary (adapter-only), not native OMI scope or identity.
 
 An OMI pointer can identify:
 
@@ -93,10 +105,10 @@ Example (CIDR adapter form):
 omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48
 ```
 
-Relational descent form:
+Routed interpretation form:
 
 ```text
-omi-<0100>/<03bf>/<7c00>/<2b01-2f01>/<1434-039f>-imo
+omi---imo/<0100>/<03bf>/<7c00>/<2b01-2f01>/<1434-039f>
 ```
 
 ### OMI Address Frame
@@ -109,10 +121,10 @@ Native form:
 ο <slot> Ο
 ```
 
-Relational descent form:
+Routed interpretation form:
 
 ```text
-omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+omi-<frame>-imo/<control>/<scale>/<relation>/<unit>
 ```
 
 The same frame can be treated as:
@@ -1130,8 +1142,8 @@ A **green baseline** is a fully passing test/build state.
 Example release baseline:
 
 ```text
-934/934 tests passing
-166 production modules built
+all required tests pass
+production build completes
 ```
 
 ### Rule Pointer
@@ -2288,7 +2300,7 @@ The slash descent surface:
 
     /---/
 
-It belongs to internal identity descent.
+It belongs to routed interpretation, not identity.
 
 **Payload Plane**
 

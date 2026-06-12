@@ -32,13 +32,20 @@ Earlier OMI used CIDR-like syntax to help separate address scopes:
 
 That was useful scaffolding, but it is no longer the native grammar.
 
-The native grammar is:
+The native identity is:
 
-    omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+    omi---imo
+
+The slash path declares how to read that identity:
+
+    omi-<frame>-imo/<control>/<selector>/<relation>/<unit>
 
 Where:
 
-    <frame>    = exact carrier identity
+    omi---imo  = binary rewrite identity
+    /---/      = routed interpretation path
+    ?---?      = external payload or stream attachment
+    <frame>    = route boundary
     <control>  = control row, gauge row, or runtime mode
     <selector> = predicate, POS class, synset, geometry selector, or lens
     <relation> = relational edge, Horn-clause segment, or incidence relation
@@ -46,9 +53,9 @@ Where:
 
 The slash path does not mean CIDR prefix length.
 
-It means relational descent.
+It means routed interpretation.
 
-- Hyphens define the frame body.
+- omi---imo anchors the binary rewrite identity.
 - Slashes walk the relational path.
 - Control rows define the machine scope.
 - Rewrite tables resolve interpretation.
@@ -616,9 +623,9 @@ Runtime space becomes regular-geometry configuration.
 
 The path:
 
-    omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+    omi-<frame>-imo/<control>/<selector>/<relation>/<unit>
 
-is a Horn-clause-like identity descent.
+is a Horn-clause-like interpretation route.
 
 It can be read:
 
@@ -1122,7 +1129,7 @@ The full corrected runtime stack is:
 3. Factorial row gauge (1!–8!, alternating OMI/IMO chirality)
 4. Omi-Nomogram function scale selector (prevents raw distance misreading)
 5. Regular geometry/configuration predicate layer
-6. Horn-clause identity descent
+6. Horn-clause interpretation route
 7. Fano/trigintaduonion incidence scheduler
 8. 11-cell / 60-state orientation shell
 9. Archimedean/Catalan coordination shell
@@ -1282,7 +1289,7 @@ It then derives stable regular-geometry predicates before measurement, using:
     16xy  cube/octahedron inverse-dual edge map
     60x²  icosahedron/dodecahedron inverse-dual cell map
 
-Horn clauses route the identity descent.
+Horn clauses route the interpretation path.
 
 Fano and trigintaduonion incidence schedules select valid closures.
 

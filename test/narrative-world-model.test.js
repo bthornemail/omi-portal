@@ -1,4 +1,4 @@
-import { describe, it } from 'node:test';
+import { after, describe, it } from 'node:test';
 import assert from 'node:assert';
 import {
   CANONICAL_ORDER, classifyDocument, parseNarrativeDocument,
@@ -9,6 +9,10 @@ import {
   lookupEmojiCarrier, resolveWorldEmoji, matchActorFromToken
 } from '../src/narrative/emoji-notation-map.js';
 import { PersistentWorldState } from '../src/world/persistent-world-state.js';
+import { createNarrativeFixture } from './narrative-fixture.js';
+
+const narrativeFixture = createNarrativeFixture();
+after(() => narrativeFixture.cleanup());
 
 const SAMPLE_ARTICLE = `# **Article I**
 
@@ -89,9 +93,7 @@ describe('Slice 1: Narrative World Model (0xA3)', () => {
     });
 
     it('loadNarrativeFromDisk loads actual narrative files', () => {
-      const docs = loadNarrativeFromDisk(
-        'dev-docs/_temp/narrative/When Wisdom, Law, and the Tribe Sat Down Together'
-      );
+      const docs = loadNarrativeFromDisk(narrativeFixture.dir);
       assert.ok(docs.length > 0);
       assert.ok(docs.some(d => d.section === 'prelude'));
       assert.ok(docs.some(d => d.section === 'article'));

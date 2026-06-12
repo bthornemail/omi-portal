@@ -2,6 +2,8 @@
 
 ## Normative Grammar and Invariants for the Omicron Object Model Kernel
 
+> **Adapter status:** This document is implementation-facing compatibility material for printable 8-segment ids, legacy OMI-CIDR parsing, DOM ids, and CSSOM selectors. Native OMI authority is relational descent with Omicron-framed gauge closure, as defined by `DOCTRINE.md`, `docs/omi-native-gauge-consolidated-canon.md`, and the root declarative files.
+
 **Specification ID:** OMI-CORE-v0
 **Version:** 0.1
 **Canonical root:** `Ο-ffff-127--/48`
@@ -30,7 +32,7 @@ A conforming implementation MUST treat the following two Unicode codepoints as t
 `Ο` (cardinal) MUST denote:
 
 - boundary establishment
-- subnet containment
+- adapter claim containment
 - scope closure
 - frame demarcation
 

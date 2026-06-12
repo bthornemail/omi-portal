@@ -474,12 +474,12 @@ Canonical delimiter planes:
 
     omi---imo = readable OMI object relation
     o---o     = minimal tangent / Omi-Point relation
-    /---/     = relational descent / identity path
+    /---/     = routed interpretation path
     ?---?     = external query / transferable payload plane
 
 Rule:
 
-    /---/ belongs to identity descent.
+    /---/ belongs to interpretation routing.
     ?---? belongs to post-identity payload attachment.
 
 The query plane carries:

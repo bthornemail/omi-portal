@@ -8,6 +8,13 @@ A postulate is a permitted construction. It states what may be drawn, extended, 
 
 This document sits between `ONTOLOGY.md` and `AXIOMS.md`.
 
+Current address boundary:
+
+```text
+native identity       relational descent inside Omicron-framed gauge closure
+adapter compatibility printable 8-segment /claim tokens for legacy rows, DOM ids, and network fixtures
+```
+
 ```text
 ONTOLOGY.md     explains what OMI is.
 POSTULATES.md   explains what OMI permits us to construct.
@@ -25,7 +32,7 @@ FACTS.omi       stores grounded declarations.
 
 Euclid begins by defining points, lines, and circles, then states what constructions are permitted.
 
-OMI begins with address pointers, clauses, masks, receipts, and projections.
+OMI begins with relational address pointers, clauses, masks, receipts, and projections.
 
 The equivalent OMI stack is:
 

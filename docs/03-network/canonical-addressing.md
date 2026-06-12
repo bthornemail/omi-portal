@@ -1,14 +1,16 @@
 # Canonical OMI Addressing
 
-OMI uses one browser-safe CIDR token shape for DOM ids, CSSOM selectors, JavaScript demux, and axiom-file rows:
+> **Current status:** Native OMI identity is `omi---imo`, the binary rewrite identity. The slash path `/---/` is routed interpretation. The browser-safe token shape below is an adapter form for DOM ids, CSSOM selectors, JavaScript demux, and historical axiom rows.
+
+OMI keeps one browser-safe adapter token shape for DOM ids, CSSOM selectors, JavaScript demux, and compatibility rows:
 
 ```text
-omi-<seg0>-<seg1>-<seg2>-<seg3>-<seg4>-<seg5>-<seg6>-<seg7>/<prefix>
+adapter-token: <seg0>-<seg1>-<seg2>-<seg3>-<seg4>-<seg5>-<seg6>-<seg7>/<claim>
 ```
 
-Each segment is a 4-digit lowercase hexadecimal field. The canonical GUI and axiom files use `/48` for local substrate frames.
+Each segment is a 4-digit lowercase hexadecimal field. GUI and compatibility rows use `/48` as an adapter claim for local substrate frames; it is not native identity and not the native slash route.
 
-## 8-Segment Map
+## Adapter Segment Map
 
 ```text
 [chiral] [bus] [inversion] [step/pos] [stride] [slot] [layer] [nil]

@@ -19,8 +19,8 @@ export class OmiQemuNbdMeshCoordinator {
 
   attachKernelNbd() {
     try {
-      execSync("sudo modprobe nbd max_part=8", { stdio: "pipe" });
-      execSync(`sudo qemu-nbd --connect=${this.nbdDevice} ${this.storageImg}`, { stdio: "pipe" });
+      execSync("sudo -n modprobe nbd max_part=8", { stdio: "pipe" });
+      execSync(`sudo -n qemu-nbd --connect=${this.nbdDevice} ${this.storageImg}`, { stdio: "pipe" });
     } catch (err) {
       throw new Error(`NBD attach failed: ${err.message}`);
     }
@@ -50,7 +50,7 @@ export class OmiQemuNbdMeshCoordinator {
 
   cleanMeshTopology() {
     try {
-      execSync(`sudo qemu-nbd --disconnect ${this.nbdDevice} > /dev/null 2>&1 || true`);
+      execSync(`sudo -n qemu-nbd --disconnect ${this.nbdDevice} > /dev/null 2>&1 || true`);
     } catch {
       /* idempotent cleanup */
     }

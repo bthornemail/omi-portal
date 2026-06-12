@@ -11,6 +11,10 @@ Remote testers inspect projected state.
 They do not accept or validate OMI state.
 ```
 
+The host operator validates doctrine, rules, tests, and receipts locally before
+sharing a projection. CIDR, IPv6, DOM ids, and CSS selectors are adapter or
+projection surfaces unless current canonical docs say otherwise.
+
 Run the production-style Docker portal for internet testing. Do not expose the
 Vite dev server directly to the public internet.
 

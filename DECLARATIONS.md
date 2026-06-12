@@ -4,6 +4,13 @@
 
 This document defines a repeatable template for deriving applied `FACTS.omi` rows from normative `RULES.omi` clauses.
 
+Current address boundary:
+
+```text
+native identity       relational descent inside Omicron-framed gauge closure
+adapter compatibility printable 8-segment /claim tokens for legacy rows, DOM ids, and network fixtures
+```
+
 The goal is to convert rule clauses into an executable state-transition table using:
 
 ```text

@@ -4,13 +4,13 @@ This prospectus extends the canonical OMI Object Model with distributed storage 
 
 ## Address And Projection Boundary
 
-OMI maps IPv6-style prefix containment onto the 8-segment pointer form:
+OMI maps IPv6-style prefix containment onto an 8-segment adapter token form:
 
 ```text
 omi-<s0>-<s1>-<s2>-<s3>-<s4>-<s5>-<s6>-<s7>/<prefix>
 ```
 
-For a fixed prefix length, subnets are disjoint or nested. Browser projection follows the same rule by using the pointer as an `id` and matching with id-based CSSOM selectors:
+For a fixed adapter prefix length, subnets are disjoint or nested. Browser projection follows the same rule by using the adapter token as an `id` and matching with id-based CSSOM selectors. Native identity remains `omi---imo`; `/---/` is routed interpretation.
 
 ```css
 [id^="omi-"] {}

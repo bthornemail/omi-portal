@@ -202,7 +202,7 @@ verify-production:
 .PHONY: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf verify-oppid-script
 
 verify-docs:
-	node --test test/docs-manifest.test.js test/research-assimilation.test.js
+	node --test test/docs-manifest.test.js test/research-assimilation.test.js test/docs-integrity.test.js
 
 verify-omilog:
 	node --test \
@@ -533,8 +533,10 @@ benchmark-stress-all: benchmark-concurrency-stress benchmark-parallel-stress
 build-omi-pipe:
 	@echo "[omi-pipe] Building POSIX stream gate..."
 	@mkdir -p bin
-	cc -std=c99 -Wall -Wextra -O2 src/pipe/omi-pipe.c -o /tmp/omi-pipe
-	cp /tmp/omi-pipe bin/omi-pipe
+	tmp_bin=$$(mktemp /tmp/omi-pipe-build-XXXXXX); \
+	cc -std=c99 -Wall -Wextra -O2 src/pipe/omi-pipe.c -o "$$tmp_bin"; \
+	cp "$$tmp_bin" bin/omi-pipe; \
+	rm -f "$$tmp_bin"
 	chmod +x bin/omi-pipe
 
 test-omi-pipe: build-omi-pipe

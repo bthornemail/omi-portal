@@ -2,9 +2,11 @@
 
 Date: 2026-06-12
 
-Branch: `omi-doctrine-root-consequences`
+Branch: `client-side-environment`
 
-HEAD: `60836c9 normalize changelog root spine entry`
+HEAD at re-audit: `c55fcfb Add OMI acceptance and rejection test cases for GF256 and RS proofs`
+
+Working tree: uncommitted blocker fixes for narrative fixtures, QEMU sudo prompts, and OmiPipe parallel build safety.
 
 Remote: `git@github.com:bthornemail/omi-portal.git`
 
@@ -12,22 +14,24 @@ Remote: `git@github.com:bthornemail/omi-portal.git`
 
 Verdict: partially coherent, leaning cohesive.
 
-The repository is no longer just a pile of related experiments. It has a real root-document spine, a five-root declarative substrate, broad test coverage, live browser surfaces, a working OMI Pipe receipt ladder, and rule/fact grounding for the main protocol machinery. The strongest evidence is that `npm test`, `npm run build`, `make verify-safe`, the pipe RS/GF256 targets, eBPF verification, and release dry-run all passed in this workspace.
+The repository is no longer just a pile of related experiments. It has a real root-document spine, a five-root declarative substrate, broad test coverage, live browser surfaces, a working OMI Pipe receipt ladder, and rule/fact grounding for the main protocol machinery. The strongest evidence is that `npm test`, `npm run build`, `make verify-safe`, the pipe RS/GF256 targets, eBPF verification, QEMU cross-arch tests, Docker buildx, and release dry-run all passed in this workspace or the current Docker-authorized shell.
 
-The repo is still partially coherent rather than fully coherent because several historical documents still present CIDR as native scope, multiple kernels are test-only implementation islands, Docker/QEMU gates are blocked for this user/environment, and a fixed `/tmp/omi-pipe` build output can race under parallel Make invocations.
+The repo is still partially coherent rather than fully coherent because several historical documents retain adapter-era CIDR wording, multiple kernels are test-only implementation islands, and Docker/QEMU access depends on operator shell state. The previous hard blockers around stale public entrypoint docs, untracked narrative disk fixtures, the shared `/tmp/omi-pipe` build binary, and an interactive QEMU sudo prompt have been fixed in the working tree.
 
-Main blockers:
+Resolved blockers and remaining weak areas:
 
 | Status | Area | Evidence | Required action |
 | --- | --- | --- | --- |
-| BLOCKER | Docker gates | `make docker-build` cannot access `/var/run/docker.sock`; user `main` is not in group `docker`, and passwordless sudo is unavailable. | Run from a docker-authorized shell or add `main` to `docker` group and start a new login session. |
-| BLOCKER | QEMU CI gate | `make qemu-test` starts, then `npm ci` fails on GVFS/SFTP symlink creation: `EIO: symlink ... node_modules/.bin/parser`. | Run QEMU CI from a native filesystem checkout, or adjust CI script/npm config for bin links on mounted workspaces. |
-| WEAK | Parallel pipe builds | Parallel `make test-omi-pipe*` calls share `/tmp/omi-pipe`; one concurrent baseline showed `exit=126`. Sequential rerun passed. | Use a PID-scoped temp binary in `build-omi-pipe`. |
-| WEAK | Doctrine consistency | Root doctrine is current, but older docs still say CIDR is native/scope authority. | Follow-up docs branch to mark old CIDR wording as adapter/historical. |
+| FIXED | Docker gates | `sg docker -c 'make docker-build'` passed. Buildx ran the cached QEMU test target and built the runtime targets for `linux/amd64` and `linux/arm64`. | Commit the fixture and QEMU prompt fixes before relying on this in CI/source archives. |
+| FIXED | QEMU CI gate | `sg docker -c 'make qemu-test'` passed end to end after replacing untracked narrative disk dependencies with generated fixtures and making QEMU NBD sudo calls non-interactive. | Keep Docker/QEMU execution in a Docker-authorized shell, or add a preflight that reports socket/group state. |
+| FIXED | Parallel pipe builds | `make -j8 test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof` passed after `build-omi-pipe` moved to a `mktemp` binary path. | None for the observed race; future work can revisit whether `bin/omi-pipe` should remain tracked. |
+| FIXED | Narrative disk fixtures | Disk-backed narrative tests now create a temporary 14-document fixture from `CANONICAL_ORDER`, so tracked source archives no longer depend on `dev-docs/_temp/narrative`. `make verify-narrative` passed. | Preserve `dev-docs/_temp/` as research input; do not make tests depend on it. |
+| FIXED | Publication docs freshness | `README.md` and `docs/README.md` have been rewritten in the working tree around the current doctrine path, native relational descent, and adapter-only CIDR. `README.md` now states it is the entrypoint, not the release ledger. | Commit the documentation rewrite and keep the new docs-integrity guard in `make verify-docs`. |
+| WEAK | Doctrine consistency | Root doctrine is current; older docs retain adapter-era CIDR wording with labels. | Continue prose-level cleanup, but do not downgrade files solely because they are historical when clearly labeled. |
 
-Publication readiness: code and docs are pushed on the current branch. The audit update itself is not published until this file is committed and pushed.
+Publication readiness: the previous audit is pushed. Current working tree has uncommitted blocker fixes and this audit update; publish only after deciding whether this branch should carry the current local implementation changes.
 
-Final answer: the repository is a cohesive OMI implementation with historical and experimental layers still visible. The core implementation is connected; the cleanup work is traceability and quarantine, not rescue.
+Final answer: the repository is a cohesive OMI implementation with historical and experimental layers still visible. The public entrypoint now routes reviewers through the current model; remaining cleanup is traceability, deeper prose cleanup, and quarantine of unlabeled legacy claims.
 
 ## Verified Root Spine
 
@@ -44,7 +48,7 @@ Final answer: the repository is a cohesive OMI implementation with historical an
 | `CLOSURES.omi` | Closure and boundedness declarations. | 7 records in OPPID coherence check. | CONNECTED |
 | `COMBINATORS.omi` | Lawful composition operators. | 8 records in OPPID coherence check. | CONNECTED |
 | `CONS.omi` | Pairing, lookup, RRGGBBAA monotonic routing. | 15 records in OPPID coherence check; router seed tests pass. | CONNECTED |
-| `README.md` | Consumer/provider entrypoint. | Links `OPEN_PORTAL.md`, `REMOTE_TESTING.md`, `MANIFESTO.md`, `DOCTRINE.md`; documents build/test surface. | CONNECTED |
+| `README.md` | Consumer/provider entrypoint. | Rewritten to route reviewers through doctrine, native gauge canon, docs index, rules/facts, and verification commands. It explicitly says changing release numbers belong in changelog/release/audit surfaces. | CONNECTED |
 | `CHANGELOG.md` | Release history. | Single heading, top Unreleased root-spine entry. | CONNECTED |
 | `DOCUMENTATION_SURFACES.md` | Boundary between `omi-portal` and `o---o`. | Preserves root ordering and surface boundary. | CONNECTED |
 | `AGENTS.md` | Repo-specific agent operating rules. | Present at root and matches current doctrine boundaries. | CONNECTED |
@@ -53,9 +57,43 @@ Final answer: the repository is a cohesive OMI implementation with historical an
 Root spine issues:
 
 - `DOCTRINE.md` correctly says OMI is not a database and registers transformations.
-- `README.md` now correctly says slash denotes relational descent, not CIDR prefix length.
-- Older docs still contain native-CIDR framing, especially `docs/omi-whitepaper.md`, `docs/03-network/omi-core-spec.md`, `docs/omi-notation.md`, `docs/agreement-is-all-you-need.md`, and parts of `AXIOMS.md`.
+- `README.md` has been rewritten as the reviewer entrypoint and no longer publishes stale release/test/module counters.
+- `docs/README.md` now routes reviewers to doctrine and native gauge canon before adapter-era implementation docs.
+- Older docs still contain adapter-era CIDR wording for provenance, especially `docs/omi-whitepaper.md`, `docs/03-network/omi-core-spec.md`, `docs/omi-notation.md`, `docs/agreement-is-all-you-need.md`, and parts of `AXIOMS.md`; these now carry authority-boundary notices or shared native-vs-adapter notes.
 - `MANIFESTO.md` uses database language only to contrast database semantics with OMI, not as authority.
+
+## Documentation Review Ledger
+
+Scope: root public docs, root doctrine docs, `docs/`, `dev-docs/README.md`, and this audit. Excluded from authority review: `dev-docs/_temp/`, `vendor/`, `node_modules/`, generated build output, and test fixture frames.
+
+Classification rule: historical material is allowed only when clearly labeled as adapter, legacy, deprecated compatibility, prior release, prospectus, or reference-only. Do not downgrade a file solely because it is historical; downgrade it when historical claims are presented as current doctrine.
+
+| Classification | Files / surfaces | Review rule |
+| --- | --- | --- |
+| ROOT AUTHORITY | `MANIFESTO.md`, `DOCTRINE.md`, `ONTOLOGY.md`, `POSTULATES.md`, `AXIOMS.md`, `DECLARATIONS.md`, `RULES.omi`, `FACTS.omi`, `CLOSURES.omi`, `COMBINATORS.omi`, `CONS.omi` | Must agree with native gauge canon and each other. |
+| PUBLIC ENTRYPOINT | `README.md`, `OPEN_PORTAL.md`, `REMOTE_TESTING.md`, `DOCUMENTATION_SURFACES.md`, `GLOSSARY.md` | Must teach the current model first and must not carry release-ledger numbers. |
+| CANONICAL SPEC / CURRENT | `docs/omi-native-gauge-consolidated-canon.md`, current OmiPipe, MCRSGSP, nomogram, gauge, object-model, and plane docs | Must separate implemented facts from prospectus claims. |
+| HISTORICAL / ADAPTER | CIDR-era specs, old whitepaper sections, legacy compatibility docs | Allowed when clearly labeled as adapter/historical/reference and not presented as current doctrine. |
+| RESEARCH / NON-AUTHORITY | `dev-docs/_temp/`, demos, chat transcripts, scratch notes | May inform future work, but does not authorize canonical claims. |
+
+| Surface | Reviewer role | Current status | Required condition before publication |
+| --- | --- | --- | --- |
+| `README.md` | Public reviewer entrypoint. | REWRITTEN in working tree: `omi---imo` identity, `/---/` routed interpretation, doctrine path, adapter-only CIDR, Omicron chirality, OmiPipe, narrative/world, QEMU/Docker status, and no release-ledger counts. | Keep free of stale release counters and native-CIDR phrasing. |
+| `docs/README.md` | Canonical docs navigation. | REWRITTEN in working tree: reviewer path starts with doctrine and native gauge canon; OMI-CIDR docs are labeled adapter/historical. | Keep current canon first; never route reviewers to adapter docs as native authority. |
+| `GLOSSARY.md` | Shared vocabulary. | UPDATED in working tree with `omi---imo` identity, `/---/` routed interpretation, current address root, adapter tokens, and projection-only carriers. | Keep native identity, adapter forms, routes, and projection-only carriers separated. |
+| `OPEN_PORTAL.md` | Local portal path. | UPDATED in working tree with reviewer doctrine path and full verification commands. | Keep operational steps accurate and separate browser projection from authority. |
+| `REMOTE_TESTING.md` | External tester path. | UPDATED in working tree with adapter/projection boundary. | Keep remote testers as observers, not validators. |
+| `DOCUMENTATION_SURFACES.md` | Repo boundary contract. | UPDATED in working tree: native identity corrected to `omi---imo`, slash route marked interpretation, claim/lens surfaces marked adapter/reduction. | Keep `omi-portal` as executable proof surface and `o---o` as abstract derivation surface. |
+| `POSTULATES.md`, `AXIOMS.md`, `DECLARATIONS.md` | Construction/fold/derivation roots. | UPDATED in working tree with shared native-vs-adapter address boundary. | Preserve layer order and prevent placeholder `omi-.../prefix` examples from becoming native doctrine. |
+| `docs/omi-whitepaper.md` | Historical first-principles whitepaper. | UPDATED in working tree with historical adapter notice and initial CIDR wording demoted. | Keep as provenance or rewrite fully under native gauge canon before presenting as current spec. |
+| `docs/03-network/omi-core-spec.md` | Legacy printable-id implementation substrate. | UPDATED in working tree with adapter status notice. | Use as compatibility substrate, not native grammar authority. |
+| `docs/03-network/canonical-addressing.md` | Address compatibility summary. | UPDATED in working tree to frame 8-segment form as adapter token shape, not native address identity. | Keep current root, `omi---imo`, and `/---/` route boundary visible. |
+| `docs/omi-notation.md` | `.omi` / `.imo` notation. | UPDATED in working tree with canon-alignment notice. | Keep notation canonical while treating CIDR/prefix language as adapter claim terminology. |
+| `docs/agreement-is-all-you-need.md` | First Principle and collaboration doctrine. | UPDATED in working tree with doctrine-alignment notice. | Keep agreement doctrine canonical; treat old scope examples as adapter-era. |
+| `docs/10-declaration/LAYERS.md` | Layer classification. | UPDATED in working tree: network layer now adapter/projection oriented; OMI-CIDR labels removed from authority rows. | Keep cross-reference labels synchronized with current canon. |
+| `docs/10-declaration/source-map.md` | Source/provenance map. | UPDATED in working tree: accurately describes `dev-docs/` as reference material; native gauge canon added. | Keep provenance accurate and prevent `_temp` from becoming authority. |
+| `docs/06-presentation/codemirror-bidi-bridge.md` | Presentation surface. | FIXED in working tree: broken `memory-layout.md` link corrected. | Maintain local link integrity. |
+| Documentation validation | Automated guardrail. | ADDED in working tree: `test/docs-integrity.test.js` checks local links, stale public phrasing, README release-ledger drift, doctrine conflicts, `omi---imo` identity, slash-path routing, and adapter-era authority labels. | `make verify-docs` must catch stale counters, broken local links, public native-CIDR regressions, slash-as-identity regressions, and unlabeled old authority language. |
 
 ## Code Connectivity Matrix
 
@@ -74,7 +112,7 @@ Root spine issues:
 | Legacy CIDR/Omicron kernels | `src/omi/omicron-kernel.js`, `src/addressing/cidr.js` | Historical adapter compatibility and docs | CIDR parser tests, pure IPv6 tests | DEPRECATED-COMPAT |
 | Math/protocol kernels | many `src/omi/*-kernel.js` files | Usually grounded by `RULES.omi`/`FACTS.omi` and research assimilation tests | Mostly direct one-file tests | WEAK |
 | eBPF gate | `src/ebpf/ebpf-pipeline.bpf.c`, `src/omi/ebpf/delta_orbital_gate.bpf.c` | Physical layer docs and eBPF tests | `make verify-ebpf` | CONNECTED |
-| Release/container tooling | `Dockerfile`, `docker-bake.hcl`, `.github/workflows/*`, `scripts/release.sh` | CHANGELOG/release docs | release dry-run passes; Docker local blocked | WEAK |
+| Release/container tooling | `Dockerfile`, `docker-bake.hcl`, `.github/workflows/*`, `scripts/release.sh` | CHANGELOG/release docs | release dry-run passes; `make qemu-test` and `make docker-build` pass via `sg docker` | CONNECTED |
 
 Inventory evidence:
 
@@ -110,19 +148,20 @@ No source file is confirmed dead. The following are candidates because the audit
 
 | Area | Evidence | Risk | Recommended action |
 | --- | --- | --- | --- |
-| Historical CIDR docs | `docs/omi-whitepaper.md` says "Addressing Is Scoped by CIDR"; `docs/03-network/omi-core-spec.md` still defines "OMI-CIDR Address Grammar". | New readers may treat CIDR as native identity instead of adapter compatibility. | Add historical/adapter warning banners or rewrite in a docs-only branch. |
+| Historical CIDR docs | Adapter-era CIDR wording remains in long specs, but top-of-file labels now mark the authority boundary. | Reviewers may still need the labels before reading old sections. | Continue a deeper prose rewrite after publication entrypoints are stable. |
+| Root README freshness | Public entrypoint rewritten around current verification, relational descent, `ffff-127--/48`, Omicron chirality, and adapter-only CIDR. | Regression risk if counters are manually reintroduced. | Covered by `test/docs-integrity.test.js`. |
+| Docs index freshness | Docs index rewritten to put doctrine and native gauge canon first and to label adapter-era implementation docs. | Regression risk if navigation labels drift. | Covered by `test/docs-integrity.test.js`. |
 | Math kernel islands | Many `src/omi/*-kernel.js` files are referenced only by their direct tests. | They are tested but not always connected to a runtime surface or Make target. | Add a generated traceability table mapping each kernel to rule/fact/docs/runtime. |
 | `SKILLS.md` | Present in root spine but weakly connected in docs/tests. | Role is unclear relative to AGENTS and plugin skills. | Define whether this is canonical operator docs or developer reference. |
-| Docker local gates | CI workflow uses GitHub actions to set up Docker; local Make assumes Docker socket access. | Local release confidence varies by user shell. | Add preflight that clearly reports docker group/socket status. |
-| QEMU local gate | `scripts/ci-test.sh qemu` runs `npm ci`, which fails on GVFS/SFTP symlinks. | Mounted workspaces cannot complete local QEMU gate. | Use native checkout for QEMU, or set a documented npm bin-link workaround. |
-| `build-omi-pipe` temp path | Links to `/tmp/omi-pipe` before copying into `bin/omi-pipe`. | Parallel builds can race. | Use `/tmp/omi-pipe-$$` or `mktemp`. |
+| Docker local gates | Direct `docker` access can depend on whether the shell picked up the refreshed `docker` group; `sg docker` was used for verified gates. | Local release confidence varies by shell and Docker socket state. | Add preflight that reports Docker socket, active group membership, Buildx builder, and QEMU binfmt status. |
+| QEMU local gate | QEMU tests can touch privileged NBD helpers; helper now uses `sudo -n`, so password prompts fail fast instead of hanging tests. | Root-only host integration remains environment-dependent. | Keep privileged host operations explicit and non-interactive in test paths. |
 
 ## Duplicate / Conflicting Concepts
 
 | Concept | Current state | Classification |
 | --- | --- | --- |
 | Database/store wording | Root doctrine uses database language as contrast. Older audit text had "OMI stores transformations"; current doctrine uses "registers transformations". | CONNECTED in doctrine; stale references should be avoided. |
-| CIDR native vs adapter | README and native gauge canon say slash path is not CIDR; older whitepaper/core spec/notation still present CIDR as scope grammar. | WEAK |
+| CIDR native vs adapter | README has some current adapter warnings but also stale `omi-.../prefix` and IPv6-CIDR release-summary language; older whitepaper/core spec/notation still present CIDR as scope grammar. | WEAK |
 | `0x03BF` / `0x039F` | Grounded in `RULES.omi`, `delta-orbital-lexer`, compiler tests, multiplex tests, and C/eBPF checks. | CONNECTED |
 | `0x5A3C` | Grounded in Delta Law tests, COMBINATORS, RULES, and WASM/C99 equivalence. | CONNECTED |
 | `0x11d` | GF256 proof uses primitive polynomial and rejects unsupported poly. | CONNECTED |
@@ -138,12 +177,12 @@ No source file is confirmed dead. The following are candidates because the audit
 | `npm test` | `node --test test/*.test.js` | PASS, 1,559 tests. | CONNECTED |
 | `npm run build` | Vite build, HTML hoist plugin | PASS, 162 modules transformed; large `document` chunk warning. | CONNECTED |
 | `make verify-safe` | Docs, compiler, router seeds, reader, OPPID, WAN, narrative, browser, pipe ladders | PASS. | CONNECTED |
-| `make test-omi-pipe` | Builds C pipe and runs baseline vectors | PASS sequential; parallel anomaly observed. | WEAK |
+| `make test-omi-pipe` | Builds C pipe and runs baseline vectors | PASS sequential and in parallel target batch after `mktemp` build output fix. | CONNECTED |
 | `make test-omi-pipe-rs-proof` | RS proof fixtures | PASS. | CONNECTED |
 | `make test-omi-pipe-gf256-rs-proof` | GF256 RS proof fixtures | PASS. | CONNECTED |
-| `make verify-ebpf` | Clang BPF build plus Node verifier tests | PASS; `bpftool` load unavailable but target handles fallback. | CONNECTED |
-| `make docker-build` | Docker buildx bake | FAIL environment-blocked: no Docker socket permission. | BLOCKER |
-| `make qemu-test` | QEMU setup, `scripts/ci-test.sh qemu` | FAIL environment-blocked: `npm ci` symlink EIO on GVFS/SFTP mount. | BLOCKER |
+| `make verify-ebpf` | Clang BPF build plus Node verifier tests | PASS; `bpftool` is installed, but program load into `/sys/fs/bpf` still falls back, likely permission/pinning related. | CONNECTED |
+| `make docker-build` | Docker buildx bake | PASS via `sg docker`; qemu-test target cached from successful run, runtime built for `linux/amd64` and `linux/arm64`. | CONNECTED |
+| `make qemu-test` | QEMU setup, `scripts/ci-test.sh qemu` | PASS via `sg docker`; local unit phase and buildx QEMU `linux/amd64` + `linux/arm64` test layers passed. | CONNECTED |
 | `make release-dry-run patch` | `scripts/release.sh --dry-run patch` | PASS, reports `v0.2.1`, no changes. | CONNECTED |
 
 Generated files:
@@ -156,7 +195,9 @@ Generated files:
 CI/local alignment:
 
 - GitHub CI uses `actions/setup-node`, `docker/setup-qemu-action`, and `docker/setup-buildx-action`; local Make expects equivalent Docker permissions and binfmt support.
-- Local `make qemu-test` calls `npm ci --ignore-scripts --omit=dev` inside `scripts/ci-test.sh`, which is not safe on this GVFS/SFTP checkout due symlink creation.
+- Docker socket and group state remain shell-dependent; verified Docker gates were run through `sg docker`.
+- Disk-backed narrative tests no longer depend on untracked `dev-docs/_temp/narrative` files; they generate tracked temporary fixtures at runtime.
+- QEMU NBD helper calls use `sudo -n` so non-root test environments do not hang at an interactive password prompt.
 
 ## Runtime Surface Map
 
@@ -197,21 +238,22 @@ Coverage gaps:
 - No explicit test for unsupported RS mode with otherwise valid fragments.
 - GF256 `subset_count > k` accepts extra roots but does not cross-check every k-combination on this branch.
 - Many math kernels are direct-test only; traceability to runtime surfaces is weak.
+- Narrative disk tests now cover disk loading through generated temporary fixtures rather than local research drafts.
 
 ## Required Fixes
 
-1. Fix local Docker authority for the operator account or document that Docker gates must run from a docker-authorized shell.
-2. Fix `make qemu-test` for GVFS/SFTP workspaces or document native-filesystem requirement.
-3. Make `build-omi-pipe` use a unique temporary binary path.
-4. Add doctrine consistency banners or rewrites for older CIDR-native docs.
-5. Add pipe hardening fixtures for malformed candidate-root, unsupported RS mode, duplicate GF256 fragment index, and explicit basis mismatch.
+1. Rewrite `README.md` and `docs/README.md` so the public entrypoints match the current verified baseline and adapter-only CIDR doctrine.
+2. Commit the narrative fixture, QEMU non-interactive sudo, and OmiPipe `mktemp` fixes now present in the working tree.
+3. Add doctrine consistency banners or rewrites for older CIDR-native docs.
+4. Add pipe hardening fixtures for malformed candidate-root, unsupported RS mode, duplicate GF256 fragment index, and explicit basis mismatch.
+5. Add a Docker/QEMU preflight that reports socket access, active group membership, Buildx builder, binfmt registration, and privileged-helper behavior.
 
 ## Recommended Follow-Up Branches
 
 | Branch | Purpose |
 | --- | --- |
+| `omi-public-entrypoint-refresh` | Rewrite the root README and docs index around current verification, relational descent, native Omicron framing, and adapter-only CIDR. |
 | `omi-audit-cidr-doc-alignment` | Mark older CIDR-native docs as historical/adapter or rewrite them under the new doctrine. |
-| `omi-pipe-parallel-build-safe` | Replace `/tmp/omi-pipe` with a PID-scoped or `mktemp` path. |
 | `omi-pipe-proof-hardening-fixtures` | Add malformed-root, unsupported RS mode, duplicate fragment index, and explicit basis mismatch fixtures. |
 | `omi-runtime-surface-traceability` | Generate or maintain a source-to-rule-to-test-to-surface matrix. |
 | `omi-local-docker-preflight` | Add Make preflight for Docker socket, Buildx builder, QEMU binfmt, and mounted-workspace npm symlink behavior. |
@@ -220,10 +262,10 @@ Coverage gaps:
 
 | Path/area | Why |
 | --- | --- |
-| `dev-docs/_temp/` | Research inbox; tests assert drafts are not canonical until promoted. |
+| `dev-docs/_temp/` | Research inbox; tests assert drafts are not canonical until promoted. Disk-backed tests now use generated fixtures instead of this local research material. |
 | `demos/` or demo-like historical surfaces | AGENTS says demos are reference-only snapshots unless a root artifact is missing. |
 | `public/aframe.html` | Demo-only but intentionally present and linked for local dev. |
-| `docs/omi-whitepaper.md`, `docs/03-network/omi-core-spec.md`, `docs/omi-notation.md` | Stale CIDR wording exists, but these need a docs-specific alignment pass, not opportunistic edits during audit. |
+| `README.md`, `docs/README.md`, `docs/omi-whitepaper.md`, `docs/03-network/omi-core-spec.md`, `docs/omi-notation.md` | Stale public-facing and CIDR wording exists, but these need a docs-specific alignment pass, not opportunistic edits during audit. |
 | `src/omi/omicron-kernel.js` and CIDR parser tests | Deprecated compatibility path remains necessary for historical adapter compatibility. |
 | `bin/omi-pipe` | Tracked artifact by current repo convention; source-only policy should be separate. |
 | `chat.history.html` | Explicitly protected by AGENTS. |
@@ -242,6 +284,6 @@ root doctrine
 -> browser projection or pipe receipt
 ```
 
-The strongest connected path is parser/compiler/reader -> OPPID -> router seeds -> pipe receipts -> browser projection. The weakest areas are older CIDR-era documents, local Docker/QEMU environment reproducibility, and source files that are tested but not visibly connected to a runtime surface.
+The strongest connected path is parser/compiler/reader -> OPPID -> router seeds -> pipe receipts -> browser projection. The weakest areas are the stale public README/docs index, older CIDR-era documents, Docker/QEMU preflight ergonomics, privileged host-operation boundaries, and source files that are tested but not visibly connected to a runtime surface.
 
 Answer: it is not merely a pile of related experiments. It is a cohesive implementation whose historical layers need traceability cleanup and doctrine-aligned labeling.

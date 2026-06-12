@@ -2,9 +2,11 @@
 
 A Protocol for Omicron-Based Palindromic Mnemonic Bitmasking Encapsulation Notation
 
-**Status:** Canonical / v1.0.0-RC1
+**Status:** Canonical notation layer; CIDR terms are adapter/claim vocabulary
 **Project:** Omi Object Model / Universal Life Protocol
 **Scope:** Omi-Notation, Omilog, `.omi` source, `.imo` object form, Omicron delimiters, palindromic mnemonic notation, bitmasking, Base36 projection, O-expressions, cons/alist bodies, and 128-bit OMI frame encapsulation.
+
+> **Canon alignment notice:** This notation document remains canonical for `.omi`/`.imo`, Omicron delimiters, O-expressions, and projection notation. Any CIDR or prefix language in this document is adapter/claim terminology only. Native identity is relational descent inside Omicron-framed gauge closure.
 
 ---
 

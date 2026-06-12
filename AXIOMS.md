@@ -4,13 +4,20 @@
 
 This document defines the origami-inspired axiom system for OMI.
 
+Current address boundary:
+
+```text
+native identity       relational descent inside Omicron-framed gauge closure
+adapter compatibility printable 8-segment /claim tokens for legacy rows, DOM ids, and network fixtures
+```
+
 `POSTULATES.md` defines what may be constructed.
 
 `AXIOMS.md` defines how constructed objects may be folded, reflected, complemented, aligned, resolved, and transformed.
 
 The model is inspired by the Huzita–Justin / Huzita–Hatori origami axioms: a fold is a legal transformation on a plane.
 
-In OMI, the plane is the 128-bit address surface.
+In OMI, the plane is the native gauge surface; 128-bit printable rows are adapter carriers unless a current rule promotes them.
 
 A fold is a legal transformation over:
 
