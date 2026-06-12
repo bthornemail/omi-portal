@@ -522,6 +522,14 @@ interpreted through nomogram scales
 accepted only by receipt
 ```
 
+Ququart canon:
+
+```text
+OMI does not compute by mutating the source. It computes by replaying a declared interpretation route until the receipt commitment is stable.
+```
+
+OMI is a ququart-style interpretation machine: a four-state register (source -> notation -> reading -> receipt) in which the source remains, the reading changes, and the receipt returns as the idempotent fixed point. It is not a quantum computer. The ket notation `|omi---imo>` names the closed interpretation boundary, not a physical quantum superposition.
+
 One-line canon:
 
 ```text

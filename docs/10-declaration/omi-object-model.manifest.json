@@ -26,8 +26,15 @@
       "path": "DOCTRINE.md",
       "role": "canonical OMI doctrine — rewrite topology, strict architecture pipeline, notation-cipher invariant, and lawful receipt flow",
       "canonicalStatus": "canonical",
-      "keyConcepts": ["doctrine", "rewrite topology", "notation as cipher", "rewrite surface", "projective closure", "Delta_C", "slash path", "lawful receipt"],
+      "keyConcepts": ["doctrine", "rewrite topology", "notation as cipher", "rewrite surface", "projective closure", "Delta_C", "slash path", "lawful receipt", "receipt replay stability", "ququart"],
       "sourceNotes": "Root doctrine separating OMI's invariant ontology from derived mathematics and implementation substrates. Replaces the former docs-layer rewrite-register doctrine path as the canonical doctrine file."
+    },
+    {
+      "path": "docs/omi-ququart-interpretation-machine.md",
+      "role": "canonical ququart interpretation machine reference — four-state structural register (source → notation → reading → receipt) for deterministic OMI interpretation",
+      "canonicalStatus": "canonical",
+      "keyConcepts": ["ququart", "interpretive ququart machine", "receipt replay stability", "source → notation → reading → receipt", "candidate reading", "ququart coordinate space", "bitboard", "mix64"],
+      "sourceNotes": "Defines the OMI ququart as a structural interpretive boundary, not a quantum mechanical system. Four-state deterministic register with receipt replay stability as the core invariant. Implementation anchor at src/omi/ququart-machine.ts."
     },
     {
       "path": "dev-docs/README.md",
@@ -457,6 +464,7 @@
       { "path": "MANIFESTO.md",                                            "primary": "application",  "secondary": ["declaration"] },
       { "path": "DOCTRINE.md",                                             "primary": "application",  "secondary": ["declaration"] },
       { "path": "docs/omi-object-model.md",                 "primary": "application",  "secondary": ["surface"] },
+      { "path": "docs/omi-ququart-interpretation-machine.md", "primary": "application",  "secondary": ["declaration"] },
       { "path": "docs/omi-whitepaper.md",                   "primary": "application",  "secondary": [] },
       { "path": "docs/07-application/prolog-wordnet-aframe.md",            "primary": "application",  "secondary": ["surface"] },
       { "path": "docs/08-surface/INDEX.md",                                "primary": "surface",      "secondary": [] },

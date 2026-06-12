@@ -577,6 +577,21 @@ The **factorial replay ring** is the 5040-slot memory ring.
 
 It records bounded OMI execution receipts.
 
+### Ququart
+
+A **ququart** (four-level register) is the structural interpretation unit of OMI.
+
+Unlike a quantum ququart (d=4 Hilbert space), the OMI ququart is a deterministic four-state boundary:
+
+```text
+|0> source     -- versioned binary truth
+|1> notation   -- declared reading surface
+|2> reading    -- active interpretation route
+|3> receipt    -- accepted fixed point
+```
+
+The ket notation `|omi---imo>` names the closed interpretation register itself, not a quantum superposition. OMI finite spaces appear as powers of four (4^2=16, 4^3=64, 4^4=256, 4^5=1024, 4^8=65536) because they are built from ququart-structured coordinates.
+
 ### Receipt
 
 A **receipt** is a packed 64-bit runtime proof record.
@@ -586,6 +601,16 @@ Canonical shape:
 ```text
 provenance:16 | steps:8 | LL:8 | NN:16 | MM:16
 ```
+
+### Receipt Replay Stability
+
+**Receipt Replay Stability** is the OMI invariant that replaying the same interpretation pipeline (same source, same notation, same reading, same operator) produces the same receipt commitment.
+
+```text
+same source + same notation + same reading + same result -> same receipt
+```
+
+The source remains unchanged. The reading rotates. The receipt is stable if replaying the declared route returns the identical receipt hash. This replaces the transactional database commit with a deterministic proof loop.
 
 ### Provenance
 

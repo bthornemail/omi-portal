@@ -39,6 +39,7 @@ Foundational orientation lives at [`../MANIFESTO.md`](../MANIFESTO.md). Canonica
 - [`../DOCTRINE.md`](../DOCTRINE.md) — Canonical doctrine: rewrite topology, strict architecture pipeline, lawful receipt flow
 - [`agreement-is-all-you-need.md`](agreement-is-all-you-need.md) — First Principle: collaboration/process protocol (agreement as compiler primitive)
 - [`omi-object-model.md`](omi-object-model.md) — Canonical framework: 8 browser surfaces, Lisp transformers, routing, distributed semantics
+- [`omi-ququart-interpretation-machine.md`](omi-ququart-interpretation-machine.md) — Ququart-structured interpretation register: source → notation → reading → receipt
 - [`03-network/omi-core-spec.md`](03-network/omi-core-spec.md) — Implementation substrate with RFC 2119 conformance requirements
 - [`omi-whitepaper.md`](omi-whitepaper.md) — Standalone first-principles specification
 - [`07-application/prolog-wordnet-aframe.md`](07-application/prolog-wordnet-aframe.md) — Prolog WordNet synset broker and A-Frame scene binding
