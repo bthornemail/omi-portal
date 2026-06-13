@@ -1,7 +1,8 @@
 import http from "node:http";
+import 'dotenv/config';
 
 const PORT = process.env.PORT || 8080;
-const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
+const CANONICAL_ROOT = process.env.CANONICAL_ROOT ||  "omi-ffff-127-0-0-1";
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

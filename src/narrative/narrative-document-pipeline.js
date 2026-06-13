@@ -1,5 +1,3 @@
-import { loadNarrativeFromDisk, loadNarrativeFromMap, CANONICAL_ORDER } from './narrative-loader.js';
-import { lookupEmojiCarrier, matchActorFromToken, EMOJI_BY_ACTOR } from './emoji-notation-map.js';
 import { PersistentWorldState } from '../world/persistent-world-state.js';
 
 const MOTIF_EMOJI = {
@@ -98,8 +96,4 @@ export function insertNarrativeIntoWorld(documents, world) {
   return { world, motifCount: allMotifs.size, documentCount: seenDocIds.size };
 }
 
-export function loadAndInsertNarrative(narrativeDir, world) {
-  const documents = loadNarrativeFromDisk(narrativeDir);
-  if (documents.length === 0) return { world, motifCount: 0, documentCount: 0 };
-  return insertNarrativeIntoWorld(documents, world || new PersistentWorldState());
-}
+

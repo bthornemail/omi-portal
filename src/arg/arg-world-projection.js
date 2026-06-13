@@ -63,10 +63,13 @@ export function findCandidateRoutes(topology, startId, endId) {
 export function assertNoMutation(topology) {
   for (const [id, node] of topology.nodes) {
     const original = BigInt(node.carrier);
+    const savedReceipt = node.receipt;
+    node.receipt = null;
     compileGenomeNode(node);
+    node.receipt = savedReceipt;
     const current = BigInt(node.carrier);
     if (original !== current) {
-      throw new Error(`Carrier mutation detected for node ${id}`);
+      throw new Error(`Carrier mutation detected for node ${id}: carrier altered outside receipt state`);
     }
   }
   return true;

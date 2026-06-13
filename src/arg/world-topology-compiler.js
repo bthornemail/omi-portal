@@ -35,6 +35,12 @@ export function compileWorldTopology(genomeNodes, edges) {
   };
 }
 
+let _synsetOverride = null;
+
+export function setSynsetOverride(fn) {
+  _synsetOverride = fn;
+}
+
 export function resolveMotifToEmoji(motif) {
   const map = {
     Gate: "\u{1F6AA}",
@@ -51,6 +57,10 @@ export function resolveMotifToEmoji(motif) {
 }
 
 export function resolveMotifToSynset(motif) {
+  if (_synsetOverride) {
+    const result = _synsetOverride(motif);
+    if (result) return result;
+  }
   const map = {
     Gate: { id: "07214215-n", lemma: "gate", pos: "n" },
     Logos: { id: "05987510-n", lemma: "logos", pos: "n" },

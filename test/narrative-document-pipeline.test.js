@@ -5,10 +5,9 @@ import {
   extractMotifsFromText,
   extractMotifsFromDocument,
   assignEmojiToMotif,
-  insertNarrativeIntoWorld,
-  loadAndInsertNarrative
+  insertNarrativeIntoWorld
 } from '../src/narrative/narrative-document-pipeline.js';
-import { parseNarrativeDocument } from '../src/narrative/narrative-loader.js';
+import { parseNarrativeDocument, loadAndInsertNarrative } from '../src/narrative/narrative-loader.js';
 
 const NARRATIVE_DIR = 'dev-docs/_temp/narrative/When Wisdom, Law, and the Tribe Sat Down Together';
 

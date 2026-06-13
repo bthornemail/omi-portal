@@ -4,7 +4,7 @@ Date: 2026-06-12
 
 Branch: `omi-doctrine-root-consequences`
 
-HEAD: `60836c9 normalize changelog root spine entry`
+HEAD at re-audit: `c55fcfb Add OMI acceptance and rejection test cases for GF256 and RS proofs`
 
 Remote: `git@github.com:bthornemail/omi-portal.git`
 
@@ -14,18 +14,18 @@ Verdict: partially coherent, leaning cohesive.
 
 The repository is no longer just a pile of related experiments. It has a real root-document spine, a five-root declarative substrate, broad test coverage, live browser surfaces, a working OMI Pipe receipt ladder, and rule/fact grounding for the main protocol machinery. The strongest evidence is that `npm test`, `npm run build`, `make verify-safe`, the pipe RS/GF256 targets, eBPF verification, and release dry-run all passed in this workspace.
 
-The repo is still partially coherent rather than fully coherent because several historical documents still present CIDR as native scope, multiple kernels are test-only implementation islands, Docker/QEMU gates are blocked for this user/environment, and a fixed `/tmp/omi-pipe` build output can race under parallel Make invocations.
+The repo is still partially coherent rather than fully coherent because several historical documents still present CIDR as native scope, multiple kernels are test-only implementation islands, Docker/QEMU gates fail in CI-style contexts because narrative fixtures are local but untracked, and a fixed `/tmp/omi-pipe` build output can race under parallel Make invocations.
 
 Main blockers:
 
 | Status | Area | Evidence | Required action |
 | --- | --- | --- | --- |
-| BLOCKER | Docker gates | `make docker-build` cannot access `/var/run/docker.sock`; user `main` is not in group `docker`, and passwordless sudo is unavailable. | Run from a docker-authorized shell or add `main` to `docker` group and start a new login session. |
-| BLOCKER | QEMU CI gate | `make qemu-test` starts, then `npm ci` fails on GVFS/SFTP symlink creation: `EIO: symlink ... node_modules/.bin/parser`. | Run QEMU CI from a native filesystem checkout, or adjust CI script/npm config for bin links on mounted workspaces. |
+| BLOCKER | Docker gates | After adding `main` to `docker`, `sg docker` can reach Docker, but not this GVFS repo. From a native `/tmp` archive of HEAD, `make docker-build` reaches Buildx and fails inside `qemu-test` because seven narrative disk tests cannot find documents. | Track or package the narrative fixtures, or make the disk-backed narrative tests fixture-independent in Docker/CI. |
+| BLOCKER | QEMU CI gate | From the native `/tmp` archive, `make qemu-test` runs `npm ci` and native tests, then fails seven narrative tests. `git ls-files 'dev-docs/_temp/narrative/*'` returns 0 while local `find` sees 14 files. | Add the narrative files to git, move them to tracked fixtures, or skip disk narrative tests unless fixtures are present. |
 | WEAK | Parallel pipe builds | Parallel `make test-omi-pipe*` calls share `/tmp/omi-pipe`; one concurrent baseline showed `exit=126`. Sequential rerun passed. | Use a PID-scoped temp binary in `build-omi-pipe`. |
 | WEAK | Doctrine consistency | Root doctrine is current, but older docs still say CIDR is native/scope authority. | Follow-up docs branch to mark old CIDR wording as adapter/historical. |
 
-Publication readiness: code and docs are pushed on the current branch. The audit update itself is not published until this file is committed and pushed.
+Publication readiness: the previous audit is pushed. Current local HEAD is ahead of origin by one user commit; this re-audit update should not be pushed without also deciding whether to publish that commit.
 
 Final answer: the repository is a cohesive OMI implementation with historical and experimental layers still visible. The core implementation is connected; the cleanup work is traceability and quarantine, not rescue.
 
@@ -113,8 +113,9 @@ No source file is confirmed dead. The following are candidates because the audit
 | Historical CIDR docs | `docs/omi-whitepaper.md` says "Addressing Is Scoped by CIDR"; `docs/03-network/omi-core-spec.md` still defines "OMI-CIDR Address Grammar". | New readers may treat CIDR as native identity instead of adapter compatibility. | Add historical/adapter warning banners or rewrite in a docs-only branch. |
 | Math kernel islands | Many `src/omi/*-kernel.js` files are referenced only by their direct tests. | They are tested but not always connected to a runtime surface or Make target. | Add a generated traceability table mapping each kernel to rule/fact/docs/runtime. |
 | `SKILLS.md` | Present in root spine but weakly connected in docs/tests. | Role is unclear relative to AGENTS and plugin skills. | Define whether this is canonical operator docs or developer reference. |
-| Docker local gates | CI workflow uses GitHub actions to set up Docker; local Make assumes Docker socket access. | Local release confidence varies by user shell. | Add preflight that clearly reports docker group/socket status. |
-| QEMU local gate | `scripts/ci-test.sh qemu` runs `npm ci`, which fails on GVFS/SFTP symlinks. | Mounted workspaces cannot complete local QEMU gate. | Use native checkout for QEMU, or set a documented npm bin-link workaround. |
+| Docker local gates | Current shell still lacks active `docker` group until a fresh login, while `sg docker` cannot read the GVFS repo. A native `/tmp` archive can reach Buildx. | Local release confidence varies by shell and filesystem. | Add preflight that reports Docker socket, active group membership, and GVFS/native checkout status. |
+| QEMU local gate | Mounted GVFS checkout fails `npm ci` symlink creation. Native archive avoids that, but fails narrative disk tests because narrative files are untracked. | Mounted workspaces and CI/archive contexts expose different failure modes. | Track/package narrative fixtures and document native-filesystem requirement for QEMU. |
+| Narrative disk fixtures | `find dev-docs/_temp/narrative -type f` finds 14 local files, but `git ls-files` finds 0. | `npm test` passes in this workspace but fails in archive/Docker/CI contexts that only include tracked files. | Move canonical narrative test fixtures under tracked `test/fixtures/` or track the required narrative files explicitly. |
 | `build-omi-pipe` temp path | Links to `/tmp/omi-pipe` before copying into `bin/omi-pipe`. | Parallel builds can race. | Use `/tmp/omi-pipe-$$` or `mktemp`. |
 
 ## Duplicate / Conflicting Concepts
@@ -141,9 +142,9 @@ No source file is confirmed dead. The following are candidates because the audit
 | `make test-omi-pipe` | Builds C pipe and runs baseline vectors | PASS sequential; parallel anomaly observed. | WEAK |
 | `make test-omi-pipe-rs-proof` | RS proof fixtures | PASS. | CONNECTED |
 | `make test-omi-pipe-gf256-rs-proof` | GF256 RS proof fixtures | PASS. | CONNECTED |
-| `make verify-ebpf` | Clang BPF build plus Node verifier tests | PASS; `bpftool` load unavailable but target handles fallback. | CONNECTED |
-| `make docker-build` | Docker buildx bake | FAIL environment-blocked: no Docker socket permission. | BLOCKER |
-| `make qemu-test` | QEMU setup, `scripts/ci-test.sh qemu` | FAIL environment-blocked: `npm ci` symlink EIO on GVFS/SFTP mount. | BLOCKER |
+| `make verify-ebpf` | Clang BPF build plus Node verifier tests | PASS; `bpftool` is installed, but program load into `/sys/fs/bpf` still falls back, likely permission/pinning related. | CONNECTED |
+| `make docker-build` | Docker buildx bake | FAIL in native `/tmp` archive after reaching Buildx: `qemu-test` target reports 7 narrative disk test failures due missing tracked narrative docs. | BLOCKER |
+| `make qemu-test` | QEMU setup, `scripts/ci-test.sh qemu` | FAIL in native `/tmp` archive: 1,551 pass, 7 fail, 1 skipped; failures are narrative disk fixture reads. GVFS checkout additionally fails `npm ci` symlink creation. | BLOCKER |
 | `make release-dry-run patch` | `scripts/release.sh --dry-run patch` | PASS, reports `v0.2.1`, no changes. | CONNECTED |
 
 Generated files:
@@ -157,6 +158,7 @@ CI/local alignment:
 
 - GitHub CI uses `actions/setup-node`, `docker/setup-qemu-action`, and `docker/setup-buildx-action`; local Make expects equivalent Docker permissions and binfmt support.
 - Local `make qemu-test` calls `npm ci --ignore-scripts --omit=dev` inside `scripts/ci-test.sh`, which is not safe on this GVFS/SFTP checkout due symlink creation.
+- Native filesystem reruns avoid the symlink failure but reveal a real tracked-context gap: disk-backed narrative tests depend on untracked `dev-docs/_temp/narrative` files.
 
 ## Runtime Surface Map
 
@@ -197,10 +199,11 @@ Coverage gaps:
 - No explicit test for unsupported RS mode with otherwise valid fragments.
 - GF256 `subset_count > k` accepts extra roots but does not cross-check every k-combination on this branch.
 - Many math kernels are direct-test only; traceability to runtime surfaces is weak.
+- Narrative disk tests depend on untracked local files, so they pass in the live mounted workspace but fail in archive/Docker/CI-style contexts.
 
 ## Required Fixes
 
-1. Fix local Docker authority for the operator account or document that Docker gates must run from a docker-authorized shell.
+1. Track or relocate the narrative disk fixtures used by `test/narrative-world-model.test.js` and `test/narrative-document-pipeline.test.js`.
 2. Fix `make qemu-test` for GVFS/SFTP workspaces or document native-filesystem requirement.
 3. Make `build-omi-pipe` use a unique temporary binary path.
 4. Add doctrine consistency banners or rewrites for older CIDR-native docs.
@@ -215,12 +218,13 @@ Coverage gaps:
 | `omi-pipe-proof-hardening-fixtures` | Add malformed-root, unsupported RS mode, duplicate fragment index, and explicit basis mismatch fixtures. |
 | `omi-runtime-surface-traceability` | Generate or maintain a source-to-rule-to-test-to-surface matrix. |
 | `omi-local-docker-preflight` | Add Make preflight for Docker socket, Buildx builder, QEMU binfmt, and mounted-workspace npm symlink behavior. |
+| `omi-track-narrative-fixtures` | Move required narrative disk fixtures into tracked test fixtures or commit the existing narrative files. |
 
 ## Do Not Touch Yet
 
 | Path/area | Why |
 | --- | --- |
-| `dev-docs/_temp/` | Research inbox; tests assert drafts are not canonical until promoted. |
+| `dev-docs/_temp/` | Research inbox; tests assert drafts are not canonical until promoted. Exception: current narrative disk tests already depend on local files here, so fixture handling needs a deliberate branch. |
 | `demos/` or demo-like historical surfaces | AGENTS says demos are reference-only snapshots unless a root artifact is missing. |
 | `public/aframe.html` | Demo-only but intentionally present and linked for local dev. |
 | `docs/omi-whitepaper.md`, `docs/03-network/omi-core-spec.md`, `docs/omi-notation.md` | Stale CIDR wording exists, but these need a docs-specific alignment pass, not opportunistic edits during audit. |
@@ -242,6 +246,6 @@ root doctrine
 -> browser projection or pipe receipt
 ```
 
-The strongest connected path is parser/compiler/reader -> OPPID -> router seeds -> pipe receipts -> browser projection. The weakest areas are older CIDR-era documents, local Docker/QEMU environment reproducibility, and source files that are tested but not visibly connected to a runtime surface.
+The strongest connected path is parser/compiler/reader -> OPPID -> router seeds -> pipe receipts -> browser projection. The weakest areas are older CIDR-era documents, local Docker/QEMU reproducibility, untracked narrative fixtures, and source files that are tested but not visibly connected to a runtime surface.
 
 Answer: it is not merely a pile of related experiments. It is a cohesive implementation whose historical layers need traceability cleanup and doctrine-aligned labeling.

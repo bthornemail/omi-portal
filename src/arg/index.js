@@ -6,3 +6,8 @@ export * from "./aframe-world-entity.js";
 export * from "./arg-interaction.js";
 export * from "./arg-receipts.js";
 export * from "./arg-route-activation.js";
+export * from "./narrative-series-loader.js";
+export * from "./narrative-movie-timeline.js";
+export * from "./narrative-scene-compiler.js";
+export * from "./arg-movie-player.js";
+export { setSynsetOverride } from "./world-topology-compiler.js";

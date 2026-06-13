@@ -47,7 +47,7 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Fold doc: `AXIOMS.md` (origami layer — how objects may be folded, reflected, transformed)
 - Derivation doc: `DECLARATIONS.md` (how RULES.omi clauses become FACTS.omi rows)
 - Manifest: `docs/10-declaration/omi-object-model.manifest.json`
-- GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`
+- GUI files: `public/document.html`, `public/aframe.html`, `public/bidi.html`, `public/inbox.html`, `public/arg.html`
 - Consolidated canon v0: `docs/omi-native-gauge-consolidated-canon.md` (final realignment: CIDR retired from native grammar, two-cube mirrors, factorial row gauge, PPP escape grammar, regular geometry predicates, Fano/trigintaduonion incidence, HNSW runtime measurement, 11-cell/buckyball shell, sexagesimal degree inspection)
 - CIDR kernel (historical adapter): `src/omi/omicron-kernel.js`
 - Sexagesimal kernel: `src/omi/sexagesimal-kernel.js`
@@ -143,7 +143,12 @@ The First Principle of the OMI Protocol is defined in `docs/agreement-is-all-you
 - Proxy event connector: `src/wan/proxy-event-connector.js` (`ProxyEventConnector` class, SSE subscription, reader integration)
 - Live voxel stream: `src/canvas/live-voxel-stream.js` (`LiveVoxelStream` class, Q_xy projection, TTL, voxel state diffs)
 - Live portal binder: `src/wan/live-portal-binder.js` (`OmiLivePortalBinder` class, EventSource SSE bridge, CustomEvent voxel dispatch)
-- Narrative loader: `src/narrative/narrative-loader.js` (14-document canonical order, disk/map loading, parsing)
+- Narrative base: `src/narrative/narrative-base.js` (CANONICAL_ORDER, classifyDocument, parseNarrativeDocument, loadNarrativeFromMap; no Node deps, browser-safe)
+- Narrative loader: `src/narrative/narrative-loader.js` (re-exports from narrative-base.js, adds loadNarrativeFromDisk with readFileSync)
+- Narrative series loader: `src/arg/narrative-series-loader.js` (loadNarrativeSeries, createSeriesContentMap, extractMotifs, MOTIF_KEYWORDS, getPhaseEmoji/Color)
+- Narrative movie timeline: `src/arg/narrative-movie-timeline.js` (createBeat, createScene, buildTimeline, findBeatsByMotif)
+- Narrative scene compiler: `src/arg/narrative-scene-compiler.js` (compileBeatToTopology, compileBeatToEntities, compileSceneToTopology)
+- ARG movie player: `src/arg/arg-movie-player.js` (ArgMoviePlayer class, play/pause/next/prev/seek/scrub, beat/scene callbacks)
 - Narrative document pipeline: `src/narrative/narrative-document-pipeline.js` (load → extract motifs → assign emoji → insert into PersistentWorldState; motif keywords/emoji maps; open Narrative Gate + Number vs Meaning tension)
 - Emoji notation map: `src/narrative/emoji-notation-map.js` (14 actor emoji carriers, UPOS emoji, keyword matching)
 - Persistent world state: `src/world/persistent-world-state.js` (`PersistentWorldState` class, tick/epoch, actor/relation/tension/gate lifecycle)
@@ -174,7 +179,7 @@ Run these before handing off implementation changes:
 ```bash
 make verify-safe          # primary: docs + Omilog + OPPID + build (non-eBPF, daily green)
 make verify-ebpf          # eBPF kernel gate (requires clang + bpftool)
-npm test                  # full test suite (1072+ tests)
+npm test                  # full test suite (1736+ tests)
 npm run build
 ```
 
