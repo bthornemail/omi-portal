@@ -29,10 +29,10 @@ export function compileGenomeNode(node) {
   const emoji = node.emoji || "";
 
   const selector = node.receipt !== null ? 1 : 0;
-  const path = seed.split("").reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) & 0x7FFFF, 0);
-  const idHash = seed.split("").reduce((h, c) => ((h << 5n) - h + BigInt(c.charCodeAt(0))) & 0xFFFFFFFFFFFFFFFFn, 0n);
-  const motifCode = motif ? BigInt(motif.charCodeAt(0) || 0) : 0n;
-  const emojiCode = emoji ? emoji.split("").reduce((h, c) => ((h << 5n) - h + BigInt(c.charCodeAt(0) || 0)) & 0xFFFFFFFFFFFFFFFFn, 0n) : 0n;
+  const path = Array.from(seed).reduce((h, c) => ((h << 5) - h + c.codePointAt(0)) & 0x7FFFF, 0);
+  const idHash = Array.from(seed).reduce((h, c) => ((h << 5n) - h + BigInt(c.codePointAt(0) || 0)) & 0xFFFFFFFFFFFFFFFFn, 0n);
+  const motifCode = motif ? BigInt(motif.codePointAt(0) || 0) : 0n;
+  const emojiCode = emoji ? Array.from(emoji).reduce((h, c) => ((h << 5n) - h + BigInt(c.codePointAt(0) || 0)) & 0xFFFFFFFFFFFFFFFFn, 0n) : 0n;
   const surface = (idHash ^ (motifCode << 40n) ^ (emojiCode << 80n)) & ((1n << 236n) - 1n);
 
   const word = packOWord({ selector, path, surface });

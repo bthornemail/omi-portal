@@ -185,4 +185,17 @@ describe("NEAT World Topology (ARG)", () => {
     assert(typeof path === "number" && path >= 0);
     assert(typeof surface === "bigint" && surface >= 0n);
   });
+
+  it("11. Multi-codepoint emoji sequences compile without breaking", () => {
+    const multiEmoji = "\u{1F9EC}\u{1F525}\u{1F91D}";
+    const node = createGenomeNode("tribe", "Tribe", multiEmoji, { id: "07983171-n", lemma: "tribe", pos: "n" });
+    compileGenomeNode(node);
+    const { selector, path, surface } = unpackOWord(node.carrier);
+    assert(selector >= 0);
+    assert(path >= 0);
+    assert(surface >= 0n);
+
+    const recompiled = compileGenomeNode(node);
+    assert.equal(recompiled, node.carrier, "Multi-codepoint emoji compilation is deterministic");
+  });
 });
