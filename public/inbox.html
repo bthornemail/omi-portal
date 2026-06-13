@@ -132,8 +132,10 @@
 import { compileTextToPOSSCGNN } from "../src/index.js";
 import { packOWord, unpackOWord, oWordToHex, formatOWord } from "../src/omi/o-bitboard.js";
 import { projectToOMI, projectToIMO } from "../src/omi/o-projector.js";
+import { getU8, getU16, getU32, getU64, lanes } from "../src/omi/omi-imo-lanes.js";
+import { packOFile, unpackOFile, oFileToBinary, oFileFromBinary } from "../src/omi/o-file-container.js";
 
-let state = { objects: [], receipts: [], selectedId: null };
+let state = { objects: [], receipts: [], selectedId: null, container: [] };
 let nextId = 1;
 
 function groupObjects() {
@@ -304,6 +306,19 @@ window.selectObject = function(id) {
           <div style="font-size:.72rem;color:var(--amber);margin:.2rem 0">→ .imo</div>
           <pre style="font-size:.65rem;max-height:80px">${escapeHtml(imo)}</pre>
         </div>
+        <div style="margin-top:.4rem;border-top:1px solid var(--line);padding-top:.4rem">
+          <h2>Lane Views</h2>
+          <div style="font-size:.7rem;display:grid;grid-template-columns:1fr 1fr;gap:.15rem .6rem">
+            <div style="color:var(--muted)">u64[0..3]</div>
+            <div style="font-family:monospace;color:var(--amber);text-align:right;word-break:break-all">${[0,1,2,3].map(i => `0x${BigInt(getU64(obj.oWord, i)).toString(16).padStart(16,'0')}`).join(' ')}</div>
+            <div style="color:var(--muted)">u32[0..7]</div>
+            <div style="font-family:monospace;color:var(--cyan);text-align:right;word-break:break-all">${lanes(obj.oWord, 32).map(v => `0x${v.toString(16).padStart(8,'0')}`).join(' ')}</div>
+            <div style="color:var(--muted)">u16[0..15]</div>
+            <div style="font-family:monospace;color:var(--green);text-align:right;word-break:break-all;font-size:.62rem">${lanes(obj.oWord, 16).map(v => `0x${v.toString(16).padStart(4,'0')}`).join(' ')}</div>
+            <div style="color:var(--muted)">u8[0..31]</div>
+            <div style="font-family:monospace;color:var(--purple);text-align:right;word-break:break-all;font-size:.58rem">${lanes(obj.oWord, 8).map(v => v.toString(16).padStart(2,'0')).join(' ')}</div>
+          </div>
+        </div>
         <div style="margin-top:.3rem">
           <button class="sm sec" onclick="event.stopPropagation();recompileOWord('${obj.id}')">Recompile</button>
           <button class="sm sec" onclick="event.stopPropagation();clearOWord('${obj.id}')">Clear</button>
@@ -322,7 +337,20 @@ window.selectObject = function(id) {
     ${oSection}
     <div style="margin-top:.5rem;border-top:1px solid var(--line);padding-top:.5rem">
       <button class="sm" onclick="event.stopPropagation();compileToOWord('${obj.id}')">Compile to .o</button>
+      <button class="sm sec" onclick="event.stopPropagation();addToContainer('${obj.id}')">Add to Container</button>
     </div>
+    ${state.container.length > 0 ? `
+    <div class="o-section" style="margin-top:.5rem;border-top:1px solid var(--line);padding-top:.5rem">
+      <h2>Container (${state.container.length} words)</h2>
+      <div class="field"><span>Word Count</span><span class="val">${state.container.length}</span></div>
+      <div class="field"><span>Total Bits</span><span class="val">${state.container.length * 256}</span></div>
+      <div style="margin-top:.3rem;display:flex;gap:.3rem;flex-wrap:wrap">
+        <button class="sm sec" onclick="event.stopPropagation();exportContainerHex()">Export .o Hex</button>
+        <button class="sm sec" onclick="event.stopPropagation();exportContainerBinary()">Export .o Binary</button>
+        <button class="sm sec" onclick="event.stopPropagation();clearContainer()">Clear</button>
+      </div>
+    </div>
+    ` : ''}
     <h2>Raw JSON</h2>
     <pre>${escapeHtml(json)}</pre>
   `;
@@ -426,6 +454,43 @@ window.clearOWord = function(id) {
   const obj = state.objects.find(o => o.id === id);
   if (obj) { obj.oWord = undefined; render(); selectObject(id); }
   showToast('Cleared .o carrier');
+};
+
+window.addToContainer = function(id) {
+  const obj = state.objects.find(o => o.id === id);
+  if (!obj || obj.oWord == null) { showToast('Compile to .o first', 'var(--red)'); return; }
+  state.container.push(obj.oWord);
+  render();
+  selectObject(id);
+  showToast(`Added word ${state.container.length} to container`);
+};
+
+window.exportContainerHex = function() {
+  if (state.container.length === 0) { showToast('Container is empty', 'var(--red)'); return; }
+  const text = packOFile(state.container);
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `omi-container-${Date.now()}.o`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast(`Exported ${state.container.length}-word .o container`);
+};
+
+window.exportContainerBinary = function() {
+  if (state.container.length === 0) { showToast('Container is empty', 'var(--red)'); return; }
+  const buf = oFileToBinary(state.container);
+  const blob = new Blob([buf], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `omi-container-${Date.now()}.ob`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast(`Exported ${state.container.length}-word binary .o container`);
+};
+
+window.clearContainer = function() {
+  state.container = [];
+  render();
+  showToast('Cleared container');
 };
 
 window.processInput = async function() {
