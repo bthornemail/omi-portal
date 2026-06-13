@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OMI ARG World — A-Frame Projection</title>
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#060b18;overflow:hidden;font-family:system-ui,sans-serif}
+    #info{
+      position:fixed;top:1rem;left:1rem;z-index:100;
+      background:rgba(6,11,24,.85);backdrop-filter:blur(8px);
+      border:1px solid #253152;border-radius:12px;
+      padding:.6rem 1rem;color:#eef2ff;font-size:.78rem;
+      max-width:300px;pointer-events:none;
+    }
+    #info .title{color:#5cf0ff;font-weight:700;font-size:.85rem}
+    #info .count{color:#8a9ad8;font-size:.7rem}
+    #legend{
+      position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+      z-index:100;display:flex;gap:1rem;
+      background:rgba(6,11,24,.8);backdrop-filter:blur(8px);
+      border:1px solid #253152;border-radius:999px;
+      padding:.4rem 1.2rem;font-size:.7rem;color:#8a9ad8;
+    }
+    #legend span{display:flex;align-items:center;gap:.3rem}
+    #legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  </style>
+</head>
+<body>
+  <div id="info">
+    <div class="title">&#127760; OMI ARG World</div>
+    <div class="count" id="entityCount">Loading...</div>
+  </div>
+
+  <div id="legend">
+    <span><span class="dot" style="background:#5cf0ff"></span> Motif</span>
+    <span><span class="dot" style="background:#8bffb5"></span> Receipted</span>
+    <span><span class="dot" style="background:#888"></span> Unresolved</span>
+  </div>
+
+  <a-scene background="color:#060b18" fog="type:linear;color:#060b18;near:12;far:28">
+    <a-entity id="camera" camera="fov:70" position="0 4 14" look-controls wasd-controls></a-entity>
+
+    <a-entity id="world-container" position="0 0 0">
+      <a-entity id="torus-ring"
+        geometry="primitive:torus;radius:9.6;tube:2.4;segmentsTubular:48;segmentsRadial:12"
+        material="color:#1a2748;metalness:0.2;roughness:0.8;transparent:true;opacity:0.3"
+        position="0 0 0">
+      </a-entity>
+
+      <a-entity id="entities"></a-entity>
+
+      <a-entity light="type:ambient;color:#446688;intensity:0.4"></a-entity>
+      <a-entity light="type:directional;color:#8bffb5;intensity:0.6" position="5 10 5"></a-entity>
+    </a-entity>
+
+    <a-sky color="#060b18"></a-sky>
+  </a-scene>
+
+  <script type="module">
+    import { compileTextToPOSSCGNN } from "../src/index.js";
+    import { packOWord } from "../src/omi/o-bitboard.js";
+    import { compileWorldTopology, resolveMotifToEmoji, resolveMotifToSynset } from "../src/arg/world-topology-compiler.js";
+    import { createGenomeNode, compileGenomeNode, createEdge, EDGE_TYPES } from "../src/arg/world-genome.js";
+    import { compileTopologyToScene } from "../src/arg/aframe-world-entity.js";
+
+    const DEFAULT_TEXT = `The Gate opens for the Logos, who measures by Number.
+    The Beast requires Wisdom. Wisdom unlocks the Gate.`;
+
+    async function init() {
+      const text = new URLSearchParams(location.search).get("text") || DEFAULT_TEXT;
+      document.getElementById("entityCount").textContent = `Projecting: "${text.slice(0, 30)}..."`;
+
+      const result = compileTextToPOSSCGNN(text);
+      const tokens = result.tokens || [];
+
+      const motifs = [
+        { id: "gate", motif: "Gate", keywords: ["gate", "opens"] },
+        { id: "logos", motif: "Logos", keywords: ["logos", "word", "meaning"] },
+        { id: "number", motif: "Number", keywords: ["number", "measure", "count"] },
+        { id: "beast", motif: "Beast", keywords: ["beast"] },
+        { id: "wisdom", motif: "Wisdom", keywords: ["wisdom", "wise"] }
+      ];
+
+      const detected = [];
+      for (const m of motifs) {
+        const lower = text.toLowerCase();
+        if (m.keywords.some(kw => lower.includes(kw))) {
+          detected.push(m);
+        }
+      }
+
+      const nodes = detected.map(m => {
+        const emoji = resolveMotifToEmoji(m.motif);
+        const synset = resolveMotifToSynset(m.motif);
+        const n = createGenomeNode(m.id, m.motif, emoji, synset);
+        compileGenomeNode(n);
+        return n;
+      });
+
+      const edges = [];
+      for (let i = 1; i < nodes.length; i++) {
+        edges.push(createEdge(nodes[i - 1].id, nodes[i].id, "hyp"));
+      }
+      if (nodes.length >= 3) {
+        edges.push(createEdge(nodes[nodes.length - 1].id, nodes[0].id, "mirrors"));
+      }
+
+      const topo = compileWorldTopology(nodes, edges);
+      const scene = compileTopologyToScene(topo);
+
+      document.getElementById("entityCount").textContent =
+        `${scene.entityCount} entities (${scene.receiptCount} receipted)`;
+
+      const container = document.getElementById("entities");
+      container.innerHTML = scene.html;
+    }
+
+    init().catch(err => {
+      document.getElementById("entityCount").textContent = `Error: ${err.message}`;
+    });
+  </script>
+</body>
+</html>
