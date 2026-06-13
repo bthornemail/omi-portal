@@ -72,4 +72,26 @@ describe("O-File Container (multiword .o serialization)", () => {
     const restored = unpackOFile(text);
     assert.deepEqual(restored, many);
   });
+
+  it("unpackOFile('') returns []", () => {
+    assert.deepEqual(unpackOFile(""), []);
+    assert.deepEqual(unpackOFile("  \n  "), []);
+  });
+
+  it("oFileFromBinary rejects non-multiple of 32 bytes", () => {
+    assert.throws(() => oFileFromBinary(new Uint8Array(1)), /not a multiple/);
+    assert.throws(() => oFileFromBinary(new Uint8Array(33)), /not a multiple/);
+  });
+
+  it("oFileFromBinary with empty buffer returns []", () => {
+    assert.deepEqual(oFileFromBinary(new Uint8Array(0)), []);
+  });
+
+  it("binary big-endian byte order is documented", () => {
+    const word = packOWord({ selector: 0, path: 0, surface: 0xFFn });
+    const buf = oFileToBinary([word]);
+    assert.equal(buf[31], 0xFF);
+    assert.equal(buf[30], 0x00);
+    assert.equal(buf[0], 0x00);
+  });
 });
