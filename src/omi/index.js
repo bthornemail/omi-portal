@@ -251,6 +251,12 @@ function parsePosFromLabel(label) {
   return match ? match[1] : "X";
 }
 
+export * from "./polybius-ququart-frame.js";
+export * from "./omi-torus-kmap.js";
+export * from "./upos-feature-tablets.js";
+export * from "./o-bitboard.js";
+export * from "./o-projector.js";
+
 function encodeBase64Url(value) {
   const input = String(value ?? "");
   if (typeof Buffer !== "undefined") {

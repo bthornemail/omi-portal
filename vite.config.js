@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { defineConfig } from "vite";
 
-const CORE_HTML_ENTRYPOINTS = ["document.html", "bidi.html", "portal.html"];
+const CORE_HTML_ENTRYPOINTS = ["document.html", "bidi.html", "portal.html", "inbox.html"];
 const DEMO_HTML_ENTRYPOINTS = ["aframe.html"];
 const DEV_HTML_ENTRYPOINTS = [...DEMO_HTML_ENTRYPOINTS, ...CORE_HTML_ENTRYPOINTS];
 const BUILD_AFRAME = process.env.OMI_BUILD_AFRAME === "1";
@@ -14,7 +14,8 @@ const buildInput = {
   main: resolve(__dirname, "index.html"),
   document: resolve(__dirname, "public/document.html"),
   bidi: resolve(__dirname, "public/bidi.html"),
-  portal: resolve(__dirname, "public/portal.html")
+  portal: resolve(__dirname, "public/portal.html"),
+  inbox: resolve(__dirname, "public/inbox.html")
 };
 
 if (BUILD_AFRAME) {
