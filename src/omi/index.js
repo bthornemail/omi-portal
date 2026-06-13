@@ -256,6 +256,9 @@ export * from "./omi-torus-kmap.js";
 export * from "./upos-feature-tablets.js";
 export * from "./o-bitboard.js";
 export * from "./o-projector.js";
+export * from "./omi-imo-lanes.js";
+export * from "./o-file-container.js";
+export * from "./o-chain-arithmetic.js";
 
 function encodeBase64Url(value) {
   const input = String(value ?? "");
