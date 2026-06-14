@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OMI Block Model — Precision Pages as Address Ontology</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #171b2e;
+      --panel2: #202640;
+      --ink: #f4f7ff;
+      --muted: #aeb7d2;
+      --line: #39415f;
+      --cyan: #6de8ff;
+      --green: #75f0a2;
+      --purple: #b98cff;
+      --amber: #ffd37a;
+      --red: #ff7d8a;
+      --white: #ffffff;
+      --code: #111525;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(109,232,255,0.10), transparent 34rem),
+        radial-gradient(circle at 92% 10%, rgba(185,140,255,0.13), transparent 32rem),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    header {
+      padding: 64px 7vw 40px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    h1 {
+      font-size: clamp(2.3rem, 7vw, 5rem);
+      line-height: .95;
+      margin: 14px 0 22px;
+      max-width: 1100px;
+    }
+    .subtitle {
+      max-width: 980px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    }
+    main { padding: 34px 7vw 80px; }
+    section { margin: 54px 0; }
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      margin: 0 0 16px;
+    }
+    h3 { margin: 0 0 12px; font-size: 1.2rem; }
+    p { margin: 0 0 14px; }
+    .grid { display: grid; gap: 18px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 900px) { .two, .three, .four { grid-template-columns: 1fr; } }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)), var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    }
+    .card.emphasis { border-color: rgba(109,232,255,.5); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: var(--muted);
+      font-size: .82rem;
+      margin: 0 8px 8px 0;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cyan { background: var(--cyan); } .green { background: var(--green); }
+    .purple { background: var(--purple); } .amber { background: var(--amber); }
+    .red { background: var(--red); }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      background: var(--code);
+      color: #dce7ff;
+      border-radius: 12px;
+    }
+    code { padding: 2px 6px; }
+    pre { padding: 16px; overflow: auto; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 12px 10px; text-align: left; vertical-align: top; }
+    th { color: var(--cyan); background: rgba(109,232,255,.06); }
+    tr:last-child td { border-bottom: 0; }
+    .rail {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 12px;
+      align-items: stretch;
+      margin: 12px 0;
+    }
+    @media (max-width: 700px) { .rail { grid-template-columns: 1fr; } }
+    .rail-label {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.025);
+    }
+    .bits {
+      display: flex;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      min-height: 56px;
+      background: rgba(255,255,255,.025);
+    }
+    .seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid rgba(255,255,255,.12);
+      padding: 8px;
+      font-size: .88rem;
+      text-align: center;
+      min-width: 64px;
+    }
+    .seg:last-child { border-right: 0; }
+    .sign { background: rgba(255,125,138,.22); flex: 1; }
+    .exp { background: rgba(255,211,122,.20); }
+    .frac { background: rgba(109,232,255,.16); }
+    .omi { background: rgba(117,240,162,.15); }
+    .anno {
+      border-left: 3px solid var(--purple);
+      padding: 10px 14px;
+      color: var(--muted);
+      background: rgba(185,140,255,.07);
+      border-radius: 0 12px 12px 0;
+      margin-top: 12px;
+    }
+    .rewrite {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .rewrite { grid-template-columns: 1fr; } .arrow { transform: rotate(90deg); justify-self: center; } }
+    .arrow { color: var(--cyan); font-size: 2rem; font-weight: 800; }
+    .callout {
+      border: 1px solid rgba(255,211,122,.45);
+      background: rgba(255,211,122,.08);
+      padding: 18px;
+      border-radius: 18px;
+    }
+    .small { color: var(--muted); font-size: .92rem; }
+    .footnotes { color: var(--muted); font-size: .88rem; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">OMI Block Model · precision-page rewrite</div>
+  <h1>From Floating-Point Pages to OMI Address Blocks</h1>
+  <p class="subtitle">
+    This page rewrites half precision, double precision, octuple precision, and block floating point as an analogy for the OMI block model. The source pages define real numerical formats; the OMI layer uses their field structure as a model for address, route, proof, clock, and shared-block semantics.
+  </p>
+</header>
+<main>
+  <section class="card emphasis">
+    <h2>Core analogy</h2>
+    <div class="rewrite">
+      <div>
+        <h3>Floating-point page model</h3>
+        <pre>sign | exponent | significand</pre>
+        <p class="small">A number is interpreted by sign, scale, and payload precision.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div>
+        <h3>OMI block model</h3>
+        <pre>polarity | route/scale | address payload</pre>
+        <p class="small">An OMI block is interpreted by complement polarity, envelope scale, and 128-bit address payload.</p>
+      </div>
+    </div>
+    <div class="anno">
+      <strong>Annotation:</strong> We are not claiming OMI is a floating-point number. We are borrowing the field logic: a compact binary object becomes meaningful only after a sign/polarity bit, a scale/exponent field, and a payload/significand field are interpreted together.
+    </div>
+  </section>
+
+  <section>
+    <h2>1. Source precision pages as structural models</h2>
+    <div class="grid four">
+      <div class="card">
+        <span class="tag"><span class="dot green"></span>Block FP</span>
+        <h3>Shared exponent</h3>
+        <p>Block floating point assigns a group of significands to one common exponent. Microscaling formats usually group many small elements with a shared scale.</p>
+        <div class="anno"><strong>OMI rewrite:</strong> a block of OMI pointers can share one route, clock, or provider envelope.</div>
+      </div>
+      <div class="card">
+        <span class="tag"><span class="dot cyan"></span>binary16</span>
+        <h3>Local header</h3>
+        <p>Half precision uses 16 bits: 1 sign bit, 5 exponent bits, and 11 bits of significand precision, with 10 explicitly stored.</p>
+        <div class="anno"><strong>OMI rewrite:</strong> local Omicron cell: polarity, small scale window, compact payload/selector rail.</div>
+      </div>
+      <div class="card">
+        <span class="tag"><span class="dot amber"></span>binary64</span>
+        <h3>Clock bridge</h3>
+        <p>Double precision uses 64 bits: 1 sign bit, 11 exponent bits, and 53 bits of significand precision, with 52 explicitly stored.</p>
+        <div class="anno"><strong>OMI rewrite:</strong> route/proof bridge: enough exponent width to model clock, envelope, and replay scale.</div>
+      </div>
+      <div class="card">
+        <span class="tag"><span class="dot purple"></span>binary256</span>
+        <h3>Macro envelope</h3>
+        <p>Octuple precision uses 256 bits: 1 sign bit, 19 exponent bits, and 237 bits of significand precision, with 236 explicitly stored.</p>
+        <div class="anno"><strong>OMI rewrite:</strong> macro-provider envelope: global error-correction, witness, and high-range state blanket.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. Field layouts rewritten as OMI rails</h2>
+    <div class="rail">
+      <div class="rail-label"><strong>binary16</strong><br>1 · 5 · 10 stored<br><span class="small">11 precision bits</span></div>
+      <div class="bits"><div class="seg sign">sign<br>1</div><div class="seg exp" style="flex:5">exponent<br>5</div><div class="seg frac" style="flex:10">fraction<br>10 stored / 11 precision</div></div>
+    </div>
+    <div class="rail">
+      <div class="rail-label"><strong>binary64</strong><br>1 · 11 · 52 stored<br><span class="small">53 precision bits</span></div>
+      <div class="bits"><div class="seg sign">sign<br>1</div><div class="seg exp" style="flex:11">exponent<br>11</div><div class="seg frac" style="flex:52">fraction<br>52 stored / 53 precision</div></div>
+    </div>
+    <div class="rail">
+      <div class="rail-label"><strong>binary256</strong><br>1 · 19 · 236 stored<br><span class="small">237 precision bits</span></div>
+      <div class="bits"><div class="seg sign">sign<br>1</div><div class="seg exp" style="flex:19">exponent<br>19</div><div class="seg frac" style="flex:236">fraction<br>236 stored / 237 precision</div></div>
+    </div>
+    <div class="rail">
+      <div class="rail-label"><strong>OMI block</strong><br>8 × 16-bit segments<br><span class="small">128-bit pointer</span></div>
+      <div class="bits"><div class="seg omi" style="flex:16">S0</div><div class="seg omi" style="flex:16">S1</div><div class="seg omi" style="flex:16">S2</div><div class="seg omi" style="flex:16">S3</div><div class="seg omi" style="flex:16">S4</div><div class="seg omi" style="flex:16">S5</div><div class="seg omi" style="flex:16">S6</div><div class="seg omi" style="flex:16">S7</div></div>
+    </div>
+    <div class="anno">
+      <strong>Derivation note:</strong> The floating-point pages show a repeated binary grammar: sign controls polarity, exponent controls scale, and significand carries payload precision. OMI rewrites that grammar into an address grammar: segment rails carry pointer structure, while derived envelopes supply route, declaration, proof, and clock scale.
+    </div>
+  </section>
+
+  <section>
+    <h2>3. The OMI block model</h2>
+    <div class="grid two">
+      <div class="card">
+        <h3>Physical block</h3>
+        <pre>omi-S0-S1-S2-S3-S4-S5-S6-S7/prefix</pre>
+        <p>The physical carrier is still 128 bits: eight 16-bit segments. This is the fixed wire frame.</p>
+      </div>
+      <div class="card">
+        <h3>Derived envelope</h3>
+        <pre>pointer128
++ route9
++ declaration10
++ witness11
++ phase12</pre>
+        <p>The higher factorial layers are not extra wire fields. They are deterministic interpretations wrapped around the same pointer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>4. Rewrite function</h2>
+    <p>The rewrite function turns source precision terminology into OMI block terminology.</p>
+    <table>
+      <thead><tr><th>Source term</th><th>OMI rewrite</th><th>Why this conclusion follows</th></tr></thead>
+      <tbody>
+        <tr><td>Sign bit</td><td>Polarity / complement rail</td><td>A sign bit switches positive/negative interpretation; OMI uses ones-complement and failure/complement surfaces as polarity folds.</td></tr>
+        <tr><td>Exponent</td><td>Scale / route / clock envelope</td><td>An exponent selects magnitude range; OMI route9, declaration10, witness11, and phase12 select interpretive range around a pointer.</td></tr>
+        <tr><td>Significand</td><td>Address payload / witness field</td><td>The significand carries precision detail; OMI S2/S5 payloads and the 128-bit pointer carry semantic detail.</td></tr>
+        <tr><td>Implicit leading bit</td><td>Implicit valid-envelope assumption</td><td>Floating formats assume a leading 1 for normal numbers; OMI assumes a valid structural envelope only after Q(S)=0.</td></tr>
+        <tr><td>Subnormal</td><td>Fallback / boundary state</td><td>Subnormal numbers preserve tiny values with reduced precision; OMI can preserve near-boundary states as warning, gated, or non-replay states.</td></tr>
+        <tr><td>NaN / infinity</td><td>Eviction / terminal rail</td><td>Special exponent patterns mark non-normal states; OMI special delimiters and failure surfaces mark non-ordinary states.</td></tr>
+        <tr><td>Shared exponent in BFP</td><td>Shared provider envelope</td><td>BFP reuses one exponent for a block; OMI can reuse one route/clock/provider envelope for a block of pointers.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>5. Three OMI precision pages</h2>
+    <div class="grid three">
+      <div class="card">
+        <h3>Half Page — Local Omicron</h3>
+        <pre>binary16
+1 sign
+5 exponent
+11 precision</pre>
+        <p><strong>OMI model:</strong> local instruction header, compact selector, emoji/POS feature rail, small visual state.</p>
+        <div class="anno">Use for: local lexical routing, color preset selection, compact S-P-O payload hints.</div>
+      </div>
+      <div class="card">
+        <h3>Double Page — Clock Bridge</h3>
+        <pre>binary64
+1 sign
+11 exponent
+53 precision</pre>
+        <p><strong>OMI model:</strong> bridge between local blocks and runtime clocks; stable enough for route, declaration, proof, and replay metadata.</p>
+        <div class="anno">Use for: HGV perceptron bridge, QEMU clock phase, WAN telemetry cadence, provider lane.</div>
+      </div>
+      <div class="card">
+        <h3>Octuple Page — Macro Envelope</h3>
+        <pre>binary256
+1 sign
+19 exponent
+237 precision</pre>
+        <p><strong>OMI model:</strong> macro-envelope for large-range witness, ECC-like protection, cross-provider proof blanket.</p>
+        <div class="anno">Use for: global proof envelope, high-range semantic witness, large provider topology, archival receipt.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>6. Block floating point becomes the OMI block provider model</h2>
+    <div class="rewrite">
+      <div>
+        <h3>BFP source idea</h3>
+        <pre>one exponent
+shared by k significands</pre>
+        <p>A group of values shares a scaling factor.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div>
+        <h3>OMI provider idea</h3>
+        <pre>one envelope
+shared by k OMI pointers</pre>
+        <p>A group of pointers shares a route, declaration, witness, or clock phase.</p>
+      </div>
+    </div>
+    <div class="anno">
+      <strong>Derivation note:</strong> This is the strongest source analogy. Block floating point proves that a block can preserve many local payloads while sharing one scaling context. OMI uses the same pattern: many 128-bit pointers can share one provider envelope, visual projection, telemetry cadence, or semantic route.
+    </div>
+  </section>
+
+  <section>
+    <h2>7. OMI page annotation model</h2>
+    <div class="grid two">
+      <div class="card">
+        <h3>Displayed block</h3>
+        <pre>&lt;section id="omi-.../112" color="6"&gt;
+  eBPF/XDP Gate
+&lt;/section&gt;</pre>
+        <p>The page shows the OMI pointer as a DOM-visible address.</p>
+      </div>
+      <div class="card">
+        <h3>Annotation block</h3>
+        <pre>source: binary64 exponent width
+rewrite: clock/provider envelope
+derived-by: exponent-as-scale analogy</pre>
+        <p>The annotation explains how the source field was rewritten into an OMI role.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="callout">
+    <h2>Final model</h2>
+    <pre>Floating-point page:
+  sign + exponent + significand
+
+OMI block page:
+  complement polarity + envelope scale + address payload
+
+Block-floating page:
+  shared exponent + many local significands
+
+OMI provider page:
+  shared route/clock/witness envelope + many local OMI pointers</pre>
+    <p>The purpose of this page is to make the analogy inspectable. The source formats give the field grammar; OMI rewrites that grammar into a protocol block model for pointers, rules, facts, proofs, clocks, and visible state.</p>
+  </section>
+
+  <section class="footnotes">
+    <h2>Source notes</h2>
+    <p>Based on the uploaded source pages for block floating point, half precision, double precision, and octuple precision. The OMI mapping is an analogy and design derivation, not a claim that OMI is numerically identical to IEEE floating-point arithmetic.</p>
+  </section>
+</main>
+</body>
+</html>

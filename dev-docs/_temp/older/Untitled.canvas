@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"id":"428b0bdcc929df61","x":-7,"y":-8,"width":250,"height":60,"type":"text","text":"Node\n"},
+		{"id":"3db99c9268ca9c1d","x":127,"y":-69,"width":250,"height":60,"type":"text","text":"IPv6 "}
+	],
+	"edges":[]
+}

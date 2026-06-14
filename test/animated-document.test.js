@@ -70,4 +70,45 @@ test("animated document emits semantic atoms with writable motion data", async (
   const route1 = node.tetragrammatron;
   const route2 = structuredClone(route1);
   assert.deepEqual(route1, route2, "tetragrammatron route is deterministic");
+
+  // Tetragrammatron geometry router assertions
+  assert.ok(doc.atoms.every((a) => a.tetragrammatronGeometry), "every atom has geometry route");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    return g.chart11 >= 0 && g.chart11 < 11;
+  }), "chart11 in 0..10");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    return g.baseQ >= 0 && g.baseQ < 4 && g.fiberQ >= 0 && g.fiberQ < 4;
+  }), "baseQ/fiberQ in 0..3");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    return g.local240 >= 0 && g.local240 < 240;
+  }), "geo local240 in 0..239");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    return g.slot5040 >= 0 && g.slot5040 < 5040;
+  }), "geo slot5040 in 0..5039");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    return typeof g.thrustDirection.a === "number" &&
+           typeof g.thrustDirection.b === "number" &&
+           typeof g.thrustDirection.c === "number";
+  }), "thrustDirection has a,b,c numbers");
+  assert.ok(doc.atoms.every((a) => a.tetragrammatronGeometry.receiptState === "candidate"), "geo receiptState is candidate");
+  assert.ok(doc.atoms.every((a) => {
+    const g = a.tetragrammatronGeometry;
+    const q = g.quaternionCandidate;
+    return typeof q.w === "number" && typeof q.x === "number" &&
+           typeof q.y === "number" && typeof q.z === "number";
+  }), "quaternionCandidate has w,x,y,z numbers");
+  assert.ok(doc.atoms.every((a) => a.tetragrammatronGeometry.polybius.origin === "o---o"), "geo polybius origin is o---o");
+  assert.match(doc.html, /data-qcell="\d,\d"/, "HTML has data-qcell");
+  assert.match(doc.html, /data-chart11="\d+"/, "HTML has data-chart11");
+  assert.match(doc.html, /data-thrust-a="/, "HTML has data-thrust-a");
+
+  // Geometry route is deterministic
+  const geo1 = doc.atoms[0].tetragrammatronGeometry;
+  const geo2 = structuredClone(geo1);
+  assert.deepEqual(geo1, geo2, "geometry route is deterministic");
 });

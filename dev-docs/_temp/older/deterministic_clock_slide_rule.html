@@ -1,0 +1,309 @@
+
+<style>
+@keyframes tick { 0%{opacity:1}50%{opacity:.5}100%{opacity:1} }
+@keyframes spin { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+.pulse { animation: tick 1s ease-in-out infinite; }
+</style>
+
+<h2 class="sr-only">Deterministic Clock Slide Rule — interactive state machine visualizing IP-notation tick/tock cycles, 4-bit CLA adder, and JSON Canvas node geometry</h2>
+
+<div style="display:flex;gap:16px;padding:1rem 0;flex-wrap:wrap">
+
+  <!-- LEFT: Clock face + controls -->
+  <div style="flex:0 0 260px">
+    <svg width="260" height="260" viewBox="0 0 260 260" id="clock-svg">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Outer ring: rot360 / IPv6 frame -->
+      <circle cx="130" cy="130" r="118" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+      <!-- 8 tock divisions (CIDR /1–/8) -->
+      <g id="tock-ring"></g>
+      <!-- Middle ring: rot240 / 240 points -->
+      <circle cx="130" cy="130" r="82" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+      <!-- Inner ring: rot60 -->
+      <circle cx="130" cy="130" r="52" fill="none" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
+      <!-- Center hub: 127.0.0.1 / ::8 -->
+      <circle cx="130" cy="130" r="22" fill="var(--color-background-secondary)" stroke="var(--color-border-primary)" stroke-width="0.5"/>
+      <text x="130" y="127" text-anchor="middle" style="font-size:8px;fill:var(--color-text-secondary);font-family:var(--font-mono)">127.0.0.1</text>
+      <text x="130" y="139" text-anchor="middle" style="font-size:8px;fill:var(--color-text-secondary);font-family:var(--font-mono)">::8</text>
+      <!-- Tick hand (rot360, IPv6) -->
+      <line id="hand-tick" x1="130" y1="130" x2="130" y2="18" stroke="#534AB7" stroke-width="2" stroke-linecap="round" marker-end="url(#arr2)"/>
+      <!-- Tock hand (rot240, IPv4) -->
+      <line id="hand-tock" x1="130" y1="130" x2="130" y2="54" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" marker-end="url(#arr2)"/>
+      <!-- CLA carry hand (rot60) -->
+      <line id="hand-carry" x1="130" y1="130" x2="130" y2="84" stroke="#854F0B" stroke-width="1" stroke-linecap="round" marker-end="url(#arr2)"/>
+      <!-- Ring labels -->
+      <text x="130" y="8" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">rot360 · IPv6</text>
+      <text x="130" y="243" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">8 tock options · /1–/8</text>
+    </svg>
+
+    <!-- Legend -->
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;font-size:12px;color:var(--color-text-secondary)">
+      <div style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:2px;background:#534AB7;display:inline-block"></span>tick · rot360 · IPv6 outer</div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:2px;background:#0F6E56;display:inline-block"></span>tock · rot240 · IPv4 inner</div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:1px;background:#854F0B;display:inline-block"></span>carry · rot60 · CLA out</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: State readouts -->
+  <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:10px">
+
+    <!-- Step counter -->
+    <div style="display:flex;align-items:center;gap:12px">
+      <button onclick="step(-1)" style="padding:4px 12px;font-size:13px">← prev</button>
+      <span style="font-size:13px;color:var(--color-text-secondary)">tick</span>
+      <span id="tick-val" style="font-size:20px;font-weight:500;font-family:var(--font-mono);min-width:60px">0</span>
+      <span style="font-size:13px;color:var(--color-text-secondary)">mod 5040</span>
+      <button onclick="step(1)" style="padding:4px 12px;font-size:13px">next →</button>
+      <button onclick="toggleAuto()" id="auto-btn" style="padding:4px 12px;font-size:13px">▶ run</button>
+    </div>
+
+    <!-- IP addresses -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">TICK · IPv6 (rot360)</div>
+        <div id="ip6-val" style="font-size:11px;font-family:var(--font-mono);color:var(--color-text-primary);word-break:break-all">2001:db8::8:0000</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">TOCK · IPv4 (rot240)</div>
+        <div id="ip4-val" style="font-size:13px;font-family:var(--font-mono);color:var(--color-text-primary)">0.0.0.0</div>
+      </div>
+    </div>
+
+    <!-- CLA adder display -->
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">4-bit CLA adder · A(n) rot15 · B(n) rot4 → S(n)</div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--color-text-secondary)">A=<span id="cla-a" style="font-family:var(--font-mono);color:var(--color-text-primary)">0000</span></span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">B=<span id="cla-b" style="font-family:var(--font-mono);color:var(--color-text-primary)">0000</span></span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">S=<span id="cla-s" style="font-family:var(--font-mono);color:var(--color-text-primary)">0000</span></span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">Cout=<span id="cla-cout" style="font-family:var(--font-mono);color:var(--color-text-primary)">0</span></span>
+      </div>
+    </div>
+
+    <!-- CIDR tock option -->
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">TOCK option (rot360 mod 8) → CIDR prefix</div>
+      <div id="cidr-val" style="font-size:13px;font-family:var(--font-mono);color:var(--color-text-primary)">a.0.0.0/1 · 128.0.0.0 · 2,147,483,648 addrs</div>
+    </div>
+
+    <!-- JSON canvas node frame -->
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">JSON canvas frame · top/bottom=IPv4 axis · left/right=IPv6 prefix</div>
+      <div id="canvas-frame" style="font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);line-height:1.6"></div>
+    </div>
+
+    <!-- rot cascade -->
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">7-tick cascade · BigInt rotation chain</div>
+      <div id="rot-chain" style="font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);line-height:1.7"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Patricia trie display -->
+<div style="margin-top:4px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+  <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">patricia trie path · base64 symbol keys · sparse radix addresses</div>
+  <div id="trie-path" style="font-size:11px;font-family:var(--font-mono);color:var(--color-text-primary);word-break:break-all;line-height:1.7"></div>
+</div>
+
+<script>
+const CIDR = [
+  {prefix:1, mask:"128.0.0.0",   addrs:"2,147,483,648", cls:"128 A"},
+  {prefix:2, mask:"192.0.0.0",   addrs:"1,073,741,824", cls:"64 A"},
+  {prefix:3, mask:"224.0.0.0",   addrs:"536,870,912",   cls:"32 A"},
+  {prefix:4, mask:"240.0.0.0",   addrs:"268,435,456",   cls:"16 A"},
+  {prefix:5, mask:"248.0.0.0",   addrs:"134,217,728",   cls:"8 A"},
+  {prefix:6, mask:"252.0.0.0",   addrs:"67,108,864",    cls:"4 A"},
+  {prefix:7, mask:"254.0.0.0",   addrs:"33,554,432",    cls:"2 A"},
+  {prefix:8, mask:"255.0.0.0",   addrs:"16,777,216",    cls:"256 B"}
+];
+
+const rot = (x, n, w) => {
+  const mask = (1n << w) - 1n;
+  const s = n % w;
+  return s === 0n ? (x & mask) : (((x << s) | (x >> (w - s))) & mask);
+};
+
+const rot4  = (x,n) => rot(x,n,4n);
+const rot7  = (x,n) => rot(x,n,7n);
+const rot15 = (x,n) => rot(x,n,15n);
+const rot16 = (x,n) => rot(x,n,16n);
+const rot60 = (x,n) => rot(x,n,60n);
+const rot120= (x,n) => rot(x,n,120n);
+const rot240= (x,n) => rot(x,n,240n);
+const rot360= (x,n) => rot(x,n,360n);
+
+function cla4(A, B, Cin) {
+  const bits = i => [((A>>i)&1), ((B>>i)&1)];
+  const P = [0,1,2,3].map(i => bits(i)[0]^bits(i)[1]);
+  const G = [0,1,2,3].map(i => bits(i)[0]&bits(i)[1]);
+  const g = Cin;
+  const C0 = G[0]|(P[0]&g);
+  const C1 = G[1]|(P[1]&G[0])|(P[1]&P[0]&g);
+  const C2 = G[2]|(P[2]&G[1])|(P[2]&P[1]&G[0])|(P[2]&P[1]&P[0]&g);
+  const C3 = G[3]|(P[3]&G[2])|(P[3]&P[2]&G[1])|(P[3]&P[2]&P[1]&G[0])|(P[3]&P[2]&P[1]&P[0]&g);
+  return {S:[P[0]^g, P[1]^C0, P[2]^C1, P[3]^C2], Cout:C3};
+}
+
+function toIPv4(n32) {
+  const n = Number(n32 & 0xFFFFFFFFn);
+  return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');
+}
+
+function toIPv6short(n) {
+  const h = n.toString(16).padStart(32,'0');
+  const segs = h.match(/.{4}/g);
+  return `2001:db8::8:${segs[6]}`;
+}
+
+function b64sym(str) {
+  try { return btoa(str).replace(/=/g,''); } catch(e) { return str; }
+}
+
+function computeState(tick) {
+  const t = BigInt(tick);
+  const m = t % 5040n;
+  const t1 = rot7(m, 1n);
+  const t2 = rot15(t1, 2n);
+  const t3 = rot60(t2, 3n);
+  const t4 = rot120(t3, 4n);
+  const t5 = rot240(t4, 5n);
+  const t6 = rot360(t5, 6n);
+  // rot720 via two rot360 steps
+  const t7 = rot360(rot360(t6, 7n), 7n);
+
+  const A = Number(rot4(t1,2n)^rot15(t1,3n)) & 0xF;
+  const B = Number(rot4(t2,1n)^rot16(t2,4n)) & 0xF;
+  const cla = cla4(A, B, 0);
+
+  const ip4Seg = Number((t5^127n)&127n);
+  const ip4 = `${ip4Seg}.${Number(t1&255n)}.${Number(t2&255n)}.1`;
+  const ip6 = toIPv6short(t6);
+
+  const cidr = CIDR[Number(t6 % 8n)];
+  const tockIPv4 = toIPv4(t5);
+
+  return {tick,m,t1,t2,t3,t4,t5,t6,t7,A,B,cla,ip4,ip6,cidr,tockIPv4,ip4Seg};
+}
+
+let currentTick = 0;
+let autoTimer = null;
+
+function render(s) {
+  document.getElementById('tick-val').textContent = s.tick + ' (' + s.m + ')';
+  document.getElementById('ip6-val').textContent = s.ip6;
+  document.getElementById('ip4-val').textContent = s.ip4 + '/' + s.cidr.prefix;
+  document.getElementById('cla-a').textContent = s.A.toString(2).padStart(4,'0');
+  document.getElementById('cla-b').textContent = s.B.toString(2).padStart(4,'0');
+  document.getElementById('cla-s').textContent = s.cla.S.join('');
+  document.getElementById('cla-cout').textContent = s.cla.Cout;
+  document.getElementById('cidr-val').textContent = `a.0.0.0/${s.cidr.prefix} · ${s.cidr.mask} · ${s.cidr.addrs} addrs`;
+
+  // Canvas frame
+  const cx = 500 + Number(s.t5 % 240n);
+  const cy = s.ip4Seg * 4;
+  const prefShift = Number(s.t6 % 8n) * 4;
+  document.getElementById('canvas-frame').innerHTML =
+    `centroid: 127.0.0.1 over ::8  x=${cx} y=${cy}<br>` +
+    `top:    0.0.0.0/8 [y-=${s.ip4Seg}]  →  node-top-ipv4<br>` +
+    `bottom: 127.0.0.1/8 [y+=${127-s.ip4Seg}]  →  node-bottom-ipv4<br>` +
+    `left:   ${s.ip6}/${s.cidr.prefix+4} [prefix+4]  →  /68 narrow<br>` +
+    `right:  ${s.ip6}/${s.cidr.prefix-4>0?s.cidr.prefix-4:s.cidr.prefix} [prefix-4]  →  /60 broad`;
+
+  // rot chain
+  document.getElementById('rot-chain').innerHTML =
+    `t1 rot7:  ${s.t1}<br>` +
+    `t2 rot15: ${s.t2}<br>` +
+    `t3 rot60: ${s.t3}<br>` +
+    `t4 rot120:${s.t4}<br>` +
+    `t5 rot240:${s.t5}  ← 240pts<br>` +
+    `t6 rot360:${s.t6}  ← 360°<br>` +
+    `t7 rot720:${s.t7}`;
+
+  // Trie path
+  const k1 = b64sym(s.ip6);
+  const k2 = b64sym(s.ip4);
+  const k3 = b64sym(s.tockIPv4);
+  document.getElementById('trie-path').innerHTML =
+    `::root [127.0.0.1/::8]<br>` +
+    `  ├─ tick [${s.ip6}]  key: Symbol.for("${k1}")<br>` +
+    `  │    ├─ rot360=${s.t6}  → codepoint frame<br>` +
+    `  │    └─ prefix /${s.cidr.prefix}  ${s.cidr.mask}<br>` +
+    `  └─ tock [${s.ip4}]  key: Symbol.for("${k2}")<br>` +
+    `       ├─ rot240=${s.t5}  → spatial frame<br>` +
+    `       └─ CLA sum [${s.cla.S.join('')}] cout=${s.cla.Cout}  leaf: Symbol.for("${k3}")`;
+
+  // Update clock hands
+  const tickDeg = Number(s.t6 % 360n);
+  const tockDeg = Number(s.t5 % 240n) * 1.5;
+  const carryDeg = Number(s.t3 % 60n) * 6;
+  setHand('hand-tick',  tickDeg,  118);
+  setHand('hand-tock',  tockDeg,  82);
+  setHand('hand-carry', carryDeg, 52);
+
+  // Update tock ring dots
+  drawTockRing(Number(s.t6 % 8n));
+}
+
+function setHand(id, deg, len) {
+  const rad = (deg - 90) * Math.PI / 180;
+  const x2 = 130 + (len - 14) * Math.cos(rad);
+  const y2 = 130 + (len - 14) * Math.sin(rad);
+  const el = document.getElementById(id);
+  el.setAttribute('x2', x2.toFixed(1));
+  el.setAttribute('y2', y2.toFixed(1));
+}
+
+function drawTockRing(activeIdx) {
+  const g = document.getElementById('tock-ring');
+  g.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    const deg = (i * 45 - 90) * Math.PI / 180;
+    const r = 103;
+    const x = 130 + r * Math.cos(deg);
+    const y = 130 + r * Math.sin(deg);
+    const isActive = i === activeIdx;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', x.toFixed(1));
+    circle.setAttribute('cy', y.toFixed(1));
+    circle.setAttribute('r', isActive ? '7' : '4');
+    circle.setAttribute('fill', isActive ? '#534AB7' : 'var(--color-border-secondary)');
+    circle.setAttribute('stroke', 'none');
+    g.appendChild(circle);
+    // label
+    const lx = 130 + (r + 14) * Math.cos(deg);
+    const ly = 130 + (r + 14) * Math.sin(deg);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', lx.toFixed(1));
+    txt.setAttribute('y', ly.toFixed(1));
+    txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('style',`font-size:8px;fill:${isActive?'#534AB7':'var(--color-text-tertiary)'}`);
+    txt.textContent = '/' + CIDR[i].prefix;
+    g.appendChild(txt);
+  }
+}
+
+function step(dir) {
+  currentTick = Math.max(0, currentTick + dir);
+  render(computeState(currentTick));
+}
+
+function toggleAuto() {
+  if (autoTimer) {
+    clearInterval(autoTimer);
+    autoTimer = null;
+    document.getElementById('auto-btn').textContent = '▶ run';
+  } else {
+    autoTimer = setInterval(() => { currentTick++; render(computeState(currentTick)); }, 200);
+    document.getElementById('auto-btn').textContent = '⏹ stop';
+  }
+}
+
+render(computeState(0));
+</script>

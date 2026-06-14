@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OMI Webbrowser Object Model Meta-Compiler</title>
+  <style>
+    :root{
+      --bg:#0b1020;--panel:#141a2f;--panel2:#1d2542;--ink:#f6f8ff;--muted:#aeb9d8;--line:#38435f;
+      --cyan:#69e9ff;--green:#75f0a2;--purple:#bb8cff;--amber:#ffd37a;--red:#ff788a;--blue:#86a8ff;
+      --code:#0a0f1f;--shadow:rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 12% 0%,rgba(105,233,255,.12),transparent 32rem),radial-gradient(circle at 90% 10%,rgba(187,140,255,.15),transparent 34rem),linear-gradient(180deg,#0b1020,#080b15 55%,#0b1020);color:var(--ink);line-height:1.55}
+    header{padding:64px 7vw 40px;border-bottom:1px solid var(--line)} main{padding:32px 7vw 80px} section{margin:44px 0}
+    .eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--cyan);font-size:.78rem;font-weight:800} h1{font-size:clamp(2.35rem,6.5vw,5.4rem);line-height:.92;margin:14px 0 18px;max-width:1180px} h2{font-size:clamp(1.55rem,3vw,2.55rem);margin:0 0 16px} h3{margin:0 0 12px;font-size:1.2rem} p{margin:0 0 14px}.subtitle{max-width:1050px;color:var(--muted);font-size:clamp(1.05rem,1.8vw,1.35rem)}
+    .grid{display:grid;gap:18px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.four{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:1000px){.two,.three,.four{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015)),var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 60px var(--shadow)}.card.emphasis{border-color:rgba(105,233,255,.55)}.card.good{border-color:rgba(117,240,162,.55)}.card.warn{border-color:rgba(255,211,122,.55)}.card.bad{border-color:rgba(255,120,138,.55)}
+    code,pre,textarea,input{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace} code{background:var(--code);padding:2px 6px;border-radius:8px} pre{background:var(--code);border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto;color:#dce7ff} textarea,input{background:#090e1c;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;width:100%} textarea{min-height:160px;resize:vertical}.small{color:var(--muted);font-size:.92rem}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+    table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:14px}th,td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top}th{color:var(--cyan);background:rgba(105,233,255,.06)}tr:last-child td{border-bottom:0}
+    .tag{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 10px;margin:0 8px 8px 0;color:var(--muted);font-size:.82rem}.dot{width:8px;height:8px;border-radius:50%;display:inline-block}.cyan{background:var(--cyan)}.green{background:var(--green)}.purple{background:var(--purple)}.amber{background:var(--amber)}.red{background:var(--red)}.blue{background:var(--blue)}
+    .bits{display:flex;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:54px;background:rgba(255,255,255,.025);margin:12px 0}.seg{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(255,255,255,.12);padding:8px;text-align:center;font-size:.85rem;min-width:56px}.seg:last-child{border-right:0}.sign{background:rgba(255,120,138,.22);flex:1}.exp{background:rgba(255,211,122,.20)}.frac{background:rgba(105,233,255,.16)}.omi{background:rgba(117,240,162,.15)}
+    .anno{border-left:3px solid var(--purple);padding:10px 14px;color:var(--muted);background:rgba(187,140,255,.07);border-radius:0 12px 12px 0;margin-top:12px}.callout{border:1px solid rgba(255,211,122,.45);background:rgba(255,211,122,.08);padding:18px;border-radius:18px}.arrow{font-size:2rem;color:var(--cyan);font-weight:900;text-align:center}.rewrite{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}@media(max-width:900px){.rewrite{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
+    button{appearance:none;border:0;border-radius:14px;padding:12px 16px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#07101d;font-weight:900;cursor:pointer;box-shadow:0 12px 30px rgba(105,233,255,.18)}button.secondary{background:#11182b;color:var(--ink);border:1px solid var(--line);box-shadow:none}button:active{transform:translateY(1px)}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
+
+    /* Flight computer modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(1,4,12,.82);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:22px;z-index:40}
+    .modal-backdrop.open{display:flex}
+    .flight-modal{width:min(1180px,96vw);max-height:92vh;overflow:auto;border:1px solid rgba(105,233,255,.48);border-radius:28px;background:radial-gradient(circle at 20% 0%,rgba(105,233,255,.13),transparent 24rem),linear-gradient(180deg,#11182d,#080d1b);box-shadow:0 28px 100px rgba(0,0,0,.65)}
+    .flight-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,15,31,.92);backdrop-filter:blur(10px);z-index:1}
+    .flight-title{font-weight:950;letter-spacing:.09em;text-transform:uppercase;color:var(--cyan)}
+    .flight-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;padding:18px}@media(max-width:980px){.flight-grid{grid-template-columns:1fr}}
+    .flight-panel{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:20px;padding:16px}
+    .instrument{min-height:430px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center}@media(max-width:760px){.instrument{grid-template-columns:1fr}}
+    .navball{display:block;width:min(380px,100%);margin:auto;border-radius:50%;filter:drop-shadow(0 20px 35px rgba(0,0,0,.38))}
+    .readout-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .fd-readout{background:#080d1b;border:1px solid var(--line);border-radius:14px;padding:10px;min-height:68px}
+    .fd-label{font-size:.72rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}.fd-value{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.1rem;font-weight:900;color:var(--ink);word-break:break-all}.fd-value.good{color:var(--green)}.fd-value.warn{color:var(--amber)}.fd-value.bad{color:var(--red)}
+    .fd-tape{height:12px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(255,120,138,.4),rgba(255,211,122,.35),rgba(117,240,162,.45),rgba(105,233,255,.45));position:relative;overflow:hidden}.fd-tape i{position:absolute;top:-3px;width:4px;height:18px;background:white;border-radius:2px;box-shadow:0 0 12px rgba(255,255,255,.5)}
+    .flight-code{font-size:.82rem;max-height:300px;overflow:auto}.close-x{background:#11182b;color:var(--ink);border:1px solid var(--line);box-shadow:none;padding:9px 12px}
+
+    .canvas{position:relative;min-height:360px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(105,233,255,.05),rgba(187,140,255,.04)),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 44px),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 44px);overflow:hidden;padding:18px}.node{position:absolute;width:220px;min-height:96px;border-radius:18px;border:1px solid var(--line);background:rgba(20,26,47,.95);padding:12px;box-shadow:0 18px 40px rgba(0,0,0,.32);transition:transform .35s ease, border-color .35s ease, background .35s ease}.node[data-color="5"]{border-color:var(--cyan);box-shadow:0 0 22px rgba(105,233,255,.16)}.node[data-color="6"]{border-color:var(--purple);box-shadow:0 0 22px rgba(187,140,255,.18)}.node[data-color="4"]{border-color:var(--green);box-shadow:0 0 22px rgba(117,240,162,.15)}.node[data-color="1"]{border-color:var(--red);box-shadow:0 0 22px rgba(255,120,138,.14)}.node-title{font-weight:850;margin-bottom:6px}.node-id{font-size:.7rem;color:var(--muted);word-break:break-all}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 7px;font-size:.72rem;color:var(--muted);margin:2px 4px 2px 0}.log{height:280px;overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:14px;padding:12px}.ok{color:var(--green)}.no{color:var(--red)}.mid{color:var(--amber)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">OMI Block Model · Webbrowser Meta-Compiler Package</div>
+  <h1>Webbrowser OMI Object Model Meta-Compiler</h1>
+  <p class="subtitle">A standalone page that packages the OMI precision-page analogy into an executable browser model: one-word OMI rewrite instructions, meta-memory bit-blips, shadow canvas addressing, RULES.omi / FACTS.omi lookup, replay receipts, and visible CSSOM projection.</p>
+</header>
+<main>
+  <section class="card emphasis">
+    <h2>What this page packages</h2>
+    <div class="rewrite">
+      <div>
+        <h3>Precision pages</h3>
+        <pre>sign | exponent | significand
+shared exponent + local values</pre>
+        <p class="small">Half, double, octuple, and block floating point provide the analogy.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div>
+        <h3>OMI browser compiler</h3>
+        <pre>polarity | envelope | address payload
+shared rule/fact + shadow canvas nodes</pre>
+        <p class="small">The page turns the analogy into an executable OMI block rewrite model.</p>
+      </div>
+    </div>
+    <div class="anno"><strong>Derived conclusion:</strong> block floating point shares one exponent across many local significands; OMI can share one rule/fact/provider envelope across many local canvas shadow nodes. The browser page becomes the inspectable projection surface.</div>
+  </section>
+
+  <section>
+    <h2>1. Source model → OMI rewrite model</h2>
+    <div class="grid four">
+      <div class="card"><span class="tag"><span class="dot green"></span>binary16</span><h3>Local Omicron header</h3><p>1 sign bit, 5 exponent bits, 11 significand precision bits. OMI rewrite: polarity, local scale, compact payload.</p><div class="bits"><div class="seg sign">S</div><div class="seg exp" style="flex:5">5-bit exp</div><div class="seg frac" style="flex:10">10 stored frac<br>11 precision</div></div></div>
+      <div class="card"><span class="tag"><span class="dot cyan"></span>binary64</span><h3>Clock/proof bridge</h3><p>1 sign, 11 exponent, 53 precision. OMI rewrite: route/proof/timing envelope around a local address.</p><div class="bits"><div class="seg sign">S</div><div class="seg exp" style="flex:11">11-bit exp</div><div class="seg frac" style="flex:20">52 stored frac<br>53 precision</div></div></div>
+      <div class="card"><span class="tag"><span class="dot purple"></span>binary256</span><h3>Macro provider envelope</h3><p>1 sign, 19 exponent, 237 precision. OMI rewrite: macro witness/ECC-style provider state.</p><div class="bits"><div class="seg sign">S</div><div class="seg exp" style="flex:7">19-bit exp</div><div class="seg frac" style="flex:20">236 stored frac<br>237 precision</div></div></div>
+      <div class="card"><span class="tag"><span class="dot amber"></span>BFP/MX</span><h3>Shared block scale</h3><p>One shared exponent/scale across a block. OMI rewrite: one shared rule/fact envelope across many shadow nodes.</p><div class="bits"><div class="seg exp" style="flex:4">shared scale</div><div class="seg frac" style="flex:6">value</div><div class="seg frac" style="flex:6">value</div><div class="seg frac" style="flex:6">value</div></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. One-word OMI rewrite instruction</h2>
+    <p>A rewrite instruction is just an OMI 128-bit address frame used as an operation word. It selects a source rule/fact, derives a shadow canvas pointer, mutates existing browser nodes, and emits a receipt.</p>
+    <pre>one-word OMI rewrite = 128-bit pointer + source rule/fact + shadow canvas address + projection rewrite + replay receipt</pre>
+    <table><thead><tr><th>Segment</th><th>Compiler role</th><th>Example</th></tr></thead><tbody>
+      <tr><td>S0</td><td>opcode / rewrite family</td><td><code>0069</code> one-word rewrite</td></tr>
+      <tr><td>S1</td><td>chiral delimiter or fold mode</td><td><code>03bf</code></td></tr>
+      <tr><td>S2</td><td>source rule high field</td><td><code>0000</code></td></tr>
+      <tr><td>S3</td><td>subject / canvas node family</td><td><code>ca55</code> canvas shadow</td></tr>
+      <tr><td>S4</td><td>predicate / rewrite operation</td><td><code>2b05</code></td></tr>
+      <tr><td>S5</td><td>object / visual payload</td><td><code>0068</code> qemu GUI lane source</td></tr>
+      <tr><td>S6</td><td>projection namespace</td><td><code>039f</code></td></tr>
+      <tr><td>S7</td><td>closure / receipt suffix</td><td><code>05ff</code></td></tr>
+    </tbody></table>
+  </section>
+
+  <section>
+    <h2>3. Live meta-compiler</h2>
+    <div class="grid two">
+      <div class="card">
+        <h3>Input one-word instruction</h3>
+        <input id="wordInput" value="omi-0069-03bf-0000-ca55-2b05-0068-039f-05ff/128" />
+        <div class="toolbar">
+          <button id="compileBtn">Compile rewrite</button>
+          <button id="demoBtn" class="secondary">Load QEMU lane demo</button>
+          <button id="blipBtn" class="secondary">Execute bit-blip</button>
+          <button id="flightBtn" class="secondary">Open flight computer</button>
+          <button id="clearBtn" class="secondary">Clear log</button>
+        </div>
+        <div class="anno"><strong>Compiler rule:</strong> the browser does not build a new object graph. It rewrites existing nodes by changing address-bearing attributes, CSS state, and replay receipts.</div>
+      </div>
+      <div class="card">
+        <h3>Decoded frame</h3>
+        <pre id="decoded">Press “Compile rewrite”.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Shadow canvas projection</h2>
+    <div id="shadowCanvas" class="canvas" aria-label="OMI shadow canvas">
+      <div class="node" id="omi-0000-0000-0000-0000-0000-0000-0068-0001/128" data-color="4" style="left:22px;top:26px"><div class="node-title">qemu-user lane · linux/amd64</div><div class="node-id">omi-0000-0000-0000-0000-0000-0000-0068-0001/128</div><span class="pill">FACT</span><span class="pill">static manifest</span></div>
+      <div class="node" id="omi-0000-0000-0000-0000-0000-0000-0068-0002/128" data-color="4" style="left:270px;top:126px"><div class="node-title">qemu-user lane · linux/arm64</div><div class="node-id">omi-0000-0000-0000-0000-0000-0000-0068-0002/128</div><span class="pill">FACT</span><span class="pill">static manifest</span></div>
+      <div class="node" id="omi-0000-0000-0000-0000-0000-0000-0000-0068/128" data-color="5" style="left:520px;top:72px"><div class="node-title">Rule 0x68 projection</div><div class="node-id">omi-0000-0000-0000-0000-0000-0000-0000-0068/128</div><span class="pill">RULE</span><span class="pill">GUI lanes</span></div>
+    </div>
+  </section>
+
+
+  <div id="flightModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="OMI flight computer modal">
+    <div class="flight-modal">
+      <div class="flight-head">
+        <div>
+          <div class="flight-title">OMI Flight Computer · Meta-Memory Rewrite Console</div>
+          <div class="small">One-word instruction guidance: address attitude, route vector, declaration mode, witness lock, phase clock, complement surface.</div>
+        </div>
+        <button id="flightClose" class="close-x">close</button>
+      </div>
+      <div class="flight-grid">
+        <div class="flight-panel instrument">
+          <svg id="flightSvg" class="navball" viewBox="0 0 400 400" aria-label="OMI navball">
+            <defs>
+              <radialGradient id="ballGrad" cx="45%" cy="30%" r="70%"><stop offset="0" stop-color="#243b6d"/><stop offset=".52" stop-color="#152042"/><stop offset="1" stop-color="#050814"/></radialGradient>
+              <marker id="fdArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9Z" fill="context-stroke"/></marker>
+            </defs>
+            <circle cx="200" cy="200" r="174" fill="url(#ballGrad)" stroke="#69e9ff" stroke-width="2" opacity=".95"/>
+            <circle cx="200" cy="200" r="126" fill="none" stroke="rgba(255,255,255,.12)"/>
+            <circle cx="200" cy="200" r="78" fill="none" stroke="rgba(255,255,255,.10)"/>
+            <line x1="26" y1="200" x2="374" y2="200" stroke="rgba(255,255,255,.18)"/>
+            <line x1="200" y1="26" x2="200" y2="374" stroke="rgba(255,255,255,.12)"/>
+            <g id="fdRot">
+              <path d="M74 246 C130 210 270 210 326 246" fill="none" stroke="#ffd37a" stroke-width="4" opacity=".85"/>
+              <path d="M74 154 C130 190 270 190 326 154" fill="none" stroke="#69e9ff" stroke-width="4" opacity=".85"/>
+              <line id="fdVector" x1="200" y1="200" x2="200" y2="66" stroke="#75f0a2" stroke-width="5" stroke-linecap="round" marker-end="url(#fdArrow)"/>
+            </g>
+            <circle id="fdTarget" cx="200" cy="200" r="13" fill="#bb8cff" stroke="#fff" stroke-width="2"/>
+            <text id="fdHeadingText" x="200" y="42" text-anchor="middle" fill="#f6f8ff" font-family="monospace" font-size="18" font-weight="900">HDG 000</text>
+            <text x="200" y="380" text-anchor="middle" fill="#aeb9d8" font-family="monospace" font-size="11">8! frame · 9!/10!/11!/12! envelope</text>
+          </svg>
+          <div>
+            <div class="readout-grid">
+              <div class="fd-readout"><div class="fd-label">Q(S) lock</div><div id="fdQ" class="fd-value">—</div></div>
+              <div class="fd-readout"><div class="fd-label">rewrite mode</div><div id="fdMode" class="fd-value">—</div></div>
+              <div class="fd-readout"><div class="fd-label">route9</div><div id="fdRoute" class="fd-value">—</div></div>
+              <div class="fd-readout"><div class="fd-label">declaration10</div><div id="fdDeclaration" class="fd-value">—</div></div>
+              <div class="fd-readout"><div class="fd-label">witness11</div><div id="fdWitness" class="fd-value">—</div></div>
+              <div class="fd-readout"><div class="fd-label">phase12</div><div id="fdPhase" class="fd-value">—</div></div>
+            </div>
+            <div style="margin-top:12px" class="fd-readout"><div class="fd-label">phase tape</div><div class="fd-tape"><i id="fdTapeNeedle" style="left:0%"></i></div></div>
+          </div>
+        </div>
+        <div class="flight-panel">
+          <h3>Flight plan: one-word rewrite</h3>
+          <pre id="fdPlan" class="flight-code">Compile a word to load the flight computer.</pre>
+          <h3 style="margin-top:14px">Annotated derivation</h3>
+          <pre id="fdDerivation" class="flight-code">The flight computer uses the compiled frame as a guidance state: Q(S) = integrity, route9 = route, declaration10 = mode, witness11 = lock, phase12 = clock.</pre>
+          <div class="toolbar">
+            <button id="fdExecuteBtn">Execute rewrite</button>
+            <button id="fdComplementBtn" class="secondary">Fold complement</button>
+            <button id="fdBlipBtn" class="secondary">Bit-blip trim</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <section class="grid two">
+    <div class="card">
+      <h2>5. Replay receipts</h2>
+      <pre id="receipts">No receipts yet.</pre>
+    </div>
+    <div class="card">
+      <h2>6. Compiler log</h2>
+      <div id="log" class="log"></div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="card">
+      <h2>Embedded RULES.omi shadow</h2>
+      <pre id="rulesText"># [Rule 0x68]: Static QEMU User-Mode GUI Lane Projection
+omi-0000-0000-0000-0000-0000-0000-0000-0068/128 MUST project-static-qemu-user-gui-lanes
+
+# [Rule 0x69]: One-Word OMI Rewrite Instruction
+omi-0000-0000-0000-0000-0000-0000-0000-0069/128 MUST execute-one-word-omi-rewrite
+
+# [Rule 0x6A]: Shadow Canvas Address Derivation
+omi-ca55-0000-0000-0000-0000-0000-0000-006a/128 MUST derive-shadow-canvas-addresses-from-rules
+
+# [Rule 0x6B]: Meta-Memory Rewrite Receipt
+omi-0000-0000-0000-0000-0000-0000-0000-006b/128 MUST emit-meta-memory-rewrite-receipts</pre>
+    </div>
+    <div class="card">
+      <h2>Embedded FACTS.omi shadow</h2>
+      <pre id="factsText">omi-0000-0000-0000-0000-0000-0000-0068-0001/128 FACT qemu-user-lane-linux-amd64
+omi-0000-0000-0000-0000-0000-0000-0068-0002/128 FACT qemu-user-lane-linux-arm64
+omi-0000-0000-0000-0000-0000-0000-0069-0001/128 FACT one-word-rewrite-instruction-enabled
+omi-ca55-0000-0000-0000-0000-0000-0068-0001/128 FACT shadow-canvas-qemu-user-lane-linux-amd64
+omi-ca55-0000-0000-0000-0000-0000-0068-0002/128 FACT shadow-canvas-qemu-user-lane-linux-arm64
+omi-0000-0000-0000-0000-0000-0000-006b-0001/128 FACT meta-memory-rewrite-receipt-enabled</pre>
+    </div>
+  </section>
+
+  <section class="card good">
+    <h2>7. Packaged browser API</h2>
+    <p>The page exposes <code>window.OmiRuntime</code>. Open DevTools and call these directly:</p>
+    <pre>OmiRuntime.compile("omi-0069-03bf-0000-ca55-2b05-0068-039f-05ff/128")
+OmiRuntime.bitBlip()
+OmiRuntime.onesComplement("omi-0000-0000-0000-0000-0000-0000-0000-0068/128")
+OmiRuntime.twosComplement("omi-0000-0000-0000-0000-0000-0000-0000-0068/128")</pre>
+  </section>
+
+  <section class="footnotes">
+    <h2>Source grounding</h2>
+    <p>This page uses the field layouts of binary16, binary64, binary256, and block floating point as an analogy only. The OMI compiler model is a rewrite/projection system over OMI pointers, not a replacement for IEEE 754 arithmetic.</p>
+  </section>
+</main>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const logEl = $('log');
+  const receiptsEl = $('receipts');
+  const decodedEl = $('decoded');
+  const wordInput = $('wordInput');
+  const receipts = [];
+
+  function log(msg, cls='') {
+    const div = document.createElement('div');
+    div.className = cls;
+    div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    logEl.prepend(div);
+  }
+
+  function rotl16(x,n){ return ((x << n) | (x >>> (16-n))) & 0xffff; }
+  function rotr16(x,n){ return ((x >>> n) | (x << (16-n))) & 0xffff; }
+  function deltaC(x,c=0x5a3c){ x &= 0xffff; return (rotl16(x,1) ^ rotl16(x,3) ^ rotr16(x,2) ^ c) & 0xffff; }
+  function hex4(n){ return (n & 0xffff).toString(16).padStart(4,'0'); }
+
+  function parseOmiPointer(str) {
+    const m = String(str).trim().toLowerCase().match(/^omi-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})\/(\d{1,3})$/);
+    if (!m) throw new Error('Invalid OMI pointer. Expected omi-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx/prefix');
+    const S = m.slice(1,9).map(x => parseInt(x,16));
+    const prefix = parseInt(m[9],10);
+    return { raw: str, S, prefix, pointer: `omi-${S.map(hex4).join('-')}/${prefix}` };
+  }
+
+  function quadratic(S){
+    const L0 = S[0] >>> 8, L3 = S[3] & 0xff, L4 = S[4] & 0xff, L7 = S[7] >>> 8;
+    const E_var = (L0-L3)**2 + (L3-L4)**2 + (L4-L7)**2;
+    const E_const = (S[0]&0xff)**2 + (S[1]-0x03bf)**2 + ((S[3]&0xff00)-0x2b00)**2 + ((S[4]&0xff00)-0x2f00)**2 + (S[6]-0x039f)**2 + ((S[7]&0xff)-0xff)**2;
+    return { Q:E_var+E_const, E_var, E_const, valid:E_var+E_const===0 };
+  }
+
+  function onesComplement(pointer){
+    const p = parseOmiPointer(pointer);
+    return `omi-${p.S.map(x => hex4(x ^ 0xffff)).join('-')}/${p.prefix}`;
+  }
+  function twosComplement(pointer){
+    const p = parseOmiPointer(pointer);
+    let carry = 1;
+    const out = p.S.slice().reverse().map(seg => {
+      const v = (seg ^ 0xffff) + carry;
+      carry = v > 0xffff ? 1 : 0;
+      return v & 0xffff;
+    }).reverse();
+    return `omi-${out.map(hex4).join('-')}/${p.prefix}`;
+  }
+
+  function deriveEnvelopes(S){
+    return {
+      route9: deltaC(S[2]) % 9,
+      declaration10: deltaC(S[3]) % 10,
+      witness11: deltaC(S[4]) % 11,
+      phase12: deltaC(S[5]) % 12
+    };
+  }
+
+  function lookupRule(frame){
+    const sourceSuffix = hex4(frame.S[5]);
+    if (sourceSuffix === '0068') return { id:'0x68', pointer:'omi-0000-0000-0000-0000-0000-0000-0000-0068/128', invariant:'project-static-qemu-user-gui-lanes' };
+    if (frame.S[0] === 0x0069) return { id:'0x69', pointer:'omi-0000-0000-0000-0000-0000-0000-0000-0069/128', invariant:'execute-one-word-omi-rewrite' };
+    return { id:'derived', pointer:frame.pointer, invariant:'ad-hoc-shadow-rewrite' };
+  }
+
+  function lookupFacts(rule){
+    if (rule.id === '0x68') return [
+      { pointer:'omi-0000-0000-0000-0000-0000-0000-0068-0001/128', name:'qemu-user-lane-linux-amd64' },
+      { pointer:'omi-0000-0000-0000-0000-0000-0000-0068-0002/128', name:'qemu-user-lane-linux-arm64' }
+    ];
+    return [{ pointer:'omi-0000-0000-0000-0000-0000-0000-0069-0001/128', name:'one-word-rewrite-instruction-enabled' }];
+  }
+
+  function deriveShadowPointer(fact){
+    const p = parseOmiPointer(fact.pointer);
+    const S = p.S.slice();
+    S[0] = 0xca55;
+    return `omi-${S.map(hex4).join('-')}/${p.prefix}`;
+  }
+
+  function packReceipt(frame, shadow, projection){
+    const steps = (deltaC(frame.S[2]) ^ deltaC(frame.S[5])) & 0xff;
+    const LL = (frame.S[0] >>> 8) & 0xff;
+    const NN = frame.S[2] & 0xffff;
+    const MM = frame.S[5] & 0xffff;
+    const provenance = 0x6b01;
+    return { packed:`0x${hex4(provenance)}${steps.toString(16).padStart(2,'0')}${LL.toString(16).padStart(2,'0')}${hex4(NN)}${hex4(MM)}`, provenance, steps, LL, NN, MM, shadow, projection };
+  }
+
+  function applyShadowRewrite(facts, envelopes){
+    const projections = [];
+    facts.forEach((fact, idx) => {
+      const src = document.getElementById(fact.pointer);
+      const shadow = deriveShadowPointer(fact);
+      let node = document.getElementById(shadow);
+      if (!node) {
+        node = document.createElement('div');
+        node.className = 'node';
+        node.id = shadow;
+        node.style.left = `${70 + idx*270}px`;
+        node.style.top = `${235 + (idx%2)*28}px`;
+        document.getElementById('shadowCanvas').appendChild(node);
+      }
+      const color = envelopes.declaration10 % 3 === 0 ? '6' : (envelopes.route9 % 2 === 0 ? '5' : '4');
+      node.dataset.color = color;
+      node.innerHTML = `<div class="node-title">shadow · ${fact.name}</div><div class="node-id">${shadow}</div><span class="pill">SHADOW</span><span class="pill">route9=${envelopes.route9}</span><span class="pill">role10=${envelopes.declaration10}</span>`;
+      node.style.transform = `translate3d(${envelopes.route9*3}px, ${envelopes.phase12*2}px, 0) rotateY(${envelopes.witness11*12}deg)`;
+      if (src) { src.dataset.color = '5'; src.style.transform = `translate3d(${idx*4}px, ${idx*2}px, 0)`; }
+      projections.push({ fact: fact.pointer, shadow, color });
+    });
+    return projections;
+  }
+
+  function compile(word){
+    const frame = parseOmiPointer(word);
+    const q = quadratic(frame.S);
+    const envelopes = deriveEnvelopes(frame.S);
+    const rule = lookupRule(frame);
+    const facts = lookupFacts(rule);
+    const projections = applyShadowRewrite(facts, envelopes);
+    const receipt = packReceipt(frame, projections.map(p=>p.shadow).join(','), projections.map(p=>p.color).join(','));
+    receipts.unshift(receipt);
+    receiptsEl.textContent = receipts.slice(0,8).map((r,i)=>`${i+1}. ${r.packed}\n   steps=${r.steps} LL=${r.LL} NN=${hex4(r.NN)} MM=${hex4(r.MM)}\n   shadow=${r.shadow}\n   projection=${r.projection}`).join('\n\n');
+    decodedEl.textContent = JSON.stringify({ pointer:frame.pointer, segments:frame.S.map(hex4), prefix:frame.prefix, quadratic:q, envelopes, rule, facts, projections, complement:{ ones:onesComplement(frame.pointer), twos:twosComplement(frame.pointer) }, receipt }, null, 2);
+    log(`compiled ${frame.pointer} → ${rule.invariant}`, q.valid ? 'ok' : 'mid');
+    if (!q.valid) log(`quadratic diagnostic Q=${q.Q} E_var=${q.E_var} E_const=${q.E_const}`, 'mid');
+    return { frame, q, envelopes, rule, facts, projections, receipt };
+  }
+
+  function bitBlip(){
+    [...document.querySelectorAll('.node')].forEach((node, i) => {
+      const current = parseInt(node.dataset.blip || '0',10);
+      const flipped = current ^ 1;
+      node.dataset.blip = String(flipped);
+      node.style.transform = `${node.style.transform || ''} rotateX(${flipped?8:0}deg) translateZ(${flipped?18:0}px)`;
+      if (flipped) node.dataset.color = node.dataset.color === '6' ? '5' : '6';
+    });
+    log('meta-memory bit-blip executed over shadow canvas', 'ok');
+  }
+
+
+
+  let lastCompileResult = null;
+  function renderFlightComputer(result){
+    if(!result) return;
+    const { q, envelopes, rule, facts, frame, projections, receipt } = result;
+    const heading = (envelopes.route9 * 40) % 360;
+    const roll = (envelopes.declaration10 - 5) * 9;
+    const pitch = (envelopes.witness11 - 5) * 8;
+    const targetX = 200 + (envelopes.route9 - 4) * 18;
+    const targetY = 200 + (envelopes.phase12 - 6) * 12;
+    $('fdRot').setAttribute('transform', `rotate(${roll} 200 200) translate(0 ${pitch})`);
+    $('fdTarget').setAttribute('cx', String(targetX));
+    $('fdTarget').setAttribute('cy', String(targetY));
+    $('fdHeadingText').textContent = `HDG ${String(heading).padStart(3,'0')}`;
+    $('fdTapeNeedle').style.left = `${Math.round((envelopes.phase12/11)*100)}%`;
+    $('fdQ').textContent = q.valid ? 'LOCK' : `WARN Q=${q.Q}`;
+    $('fdQ').className = `fd-value ${q.valid ? 'good' : 'warn'}`;
+    $('fdMode').textContent = rule.id;
+    $('fdRoute').textContent = String(envelopes.route9);
+    $('fdDeclaration').textContent = String(envelopes.declaration10);
+    $('fdWitness').textContent = String(envelopes.witness11);
+    $('fdPhase').textContent = String(envelopes.phase12);
+    $('fdPlan').textContent = [
+      `WORD       ${frame.pointer}`,
+      `RULE       ${rule.id} · ${rule.invariant}`,
+      `FACTS      ${facts.map(f=>f.name).join(', ')}`,
+      `SHADOW     ${projections.map(p=>p.shadow).join('\n           ')}`,
+      `RECEIPT    ${receipt.packed}`,
+      `ATTITUDE   heading=${heading} roll=${roll} pitch=${pitch}`,
+    ].join('\n');
+    $('fdDerivation').textContent = [
+      'Derivation:',
+      '1. The OMI word is a 128-bit instruction frame.',
+      `2. Quadratic lexer result: Q=${q.Q}, E_var=${q.E_var}, E_const=${q.E_const}.`,
+      `3. route9=${envelopes.route9} selects the flight route/gate envelope.`,
+      `4. declaration10=${envelopes.declaration10} selects the rewrite/declaration mode.`,
+      `5. witness11=${envelopes.witness11} acts as semantic/proof lock.`,
+      `6. phase12=${envelopes.phase12} acts as the base-60 provider/clock phase.`,
+      '7. Shadow canvas nodes are rewritten in place, then packed into a replay receipt.'
+    ].join('\n');
+  }
+
+  function openFlightComputer(){
+    try {
+      lastCompileResult = compile(wordInput.value);
+      renderFlightComputer(lastCompileResult);
+      $('flightModal').classList.add('open');
+      log('flight computer modal opened', 'ok');
+    } catch(e){ decodedEl.textContent = e.stack; log(e.message, 'no'); }
+  }
+  function closeFlightComputer(){ $('flightModal').classList.remove('open'); }
+
+  $('compileBtn').addEventListener('click', () => { try { lastCompileResult = compile(wordInput.value); renderFlightComputer(lastCompileResult); } catch(e){ decodedEl.textContent = e.stack; log(e.message, 'no'); } });
+  $('demoBtn').addEventListener('click', () => { wordInput.value = 'omi-0069-03bf-0000-ca55-2b05-0068-039f-05ff/128'; lastCompileResult = compile(wordInput.value); renderFlightComputer(lastCompileResult); });
+  $('flightBtn').addEventListener('click', openFlightComputer);
+  $('flightClose').addEventListener('click', closeFlightComputer);
+  $('flightModal').addEventListener('click', (e) => { if (e.target === $('flightModal')) closeFlightComputer(); });
+  $('fdExecuteBtn').addEventListener('click', () => { lastCompileResult = compile(wordInput.value); renderFlightComputer(lastCompileResult); });
+  $('fdComplementBtn').addEventListener('click', () => { wordInput.value = onesComplement(wordInput.value); lastCompileResult = compile(wordInput.value); renderFlightComputer(lastCompileResult); });
+  $('fdBlipBtn').addEventListener('click', () => { bitBlip(); if (lastCompileResult) renderFlightComputer(lastCompileResult); });
+
+  $('blipBtn').addEventListener('click', bitBlip);
+  $('clearBtn').addEventListener('click', () => { logEl.textContent=''; receipts.length=0; receiptsEl.textContent='No receipts yet.'; });
+
+  window.OmiRuntime = { compile, bitBlip, parseOmiPointer, quadratic, deltaC, onesComplement, twosComplement, deriveEnvelopes, openFlightComputer, renderFlightComputer };
+  log('OMI Webbrowser Object Model Meta-Compiler loaded', 'ok');
+})();
+</script>
+</body>
+</html>

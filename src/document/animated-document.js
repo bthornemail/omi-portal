@@ -7,6 +7,7 @@ import { makeDOMCSSOMTetrahedron, tetrahedronToJSONCanvas } from "../web/dom-css
 import { scoreNodeWithPolicy, makeTinyNEATPolicy } from "../neat/tinyneat-policy.js";
 import { makeOmiAddressForAtom } from "../omi/index.js";
 import { tetragrammatronRouteForNode } from "../omi/tetragrammatron-route-logger.js";
+import { tetragrammatronGeometryRoute } from "../omi/tetragrammatron-geometry-router.js";
 
 const CHANNEL_MOTION = Object.freeze({
   FS: { axis: "z", motion: "sink", color: "#38bdf8" },
@@ -91,6 +92,7 @@ export async function compileTextToAnimatedDocument(text, options = {}) {
   const atoms = compiled.nodes.map((node, index) => {
     const motion = motionForNode(node, index, signals[index]);
     const route = tetragrammatronRouteForNode(node, index, signals[index]);
+    const geo = tetragrammatronGeometryRoute(node, index);
     const baseAtom = {
       id: node.id,
       term: node.label.split(":").slice(1).join(":"),
@@ -107,6 +109,7 @@ export async function compileTextToAnimatedDocument(text, options = {}) {
       feature: node.feature,
       motion,
       tetragrammatron: route,
+      tetragrammatronGeometry: geo,
     };
     return {
       ...baseAtom,
@@ -166,6 +169,7 @@ export function animatedDocumentHTML(atoms) {
       `--dur:${m.duration}ms`,
       `--color:${m.color}`
     ].join(";");
+    const g = atom.tetragrammatronGeometry;
     const omiAttrs = atom.omi ? ` data-omi="${escapeHTML(atom.omi.address)}" data-omi-port-channel="${escapeHTML(atom.omi.portChannel)}" data-omi-pos-hex="${escapeHTML(atom.omi.posHex)}"` : "";
     const tetragrammatronAttrs = tq ? [
       `data-qphase="${escapeHTML(tq.qphase)}"`,
@@ -181,7 +185,19 @@ export function animatedDocumentHTML(atoms) {
       `data-polybius-y="${tq.polybius.y}"`,
       `data-receipt-state="${tq.receiptState}"`
     ].join(" ") : "";
-    return `<span class="term-atom" data-channel="${escapeHTML(atom.channel)}" data-cidr="${escapeHTML(atom.cidr)}"${omiAttrs}${tetragrammatronAttrs ? " " + tetragrammatronAttrs : ""} data-chirality="${escapeHTML(m.chirality)}" data-projection="${escapeHTML(m.projection)}" style="${style}">${escapeHTML(atom.term)}</span>`;
+    const geometryAttrs = g ? [
+      `data-qcell="${g.x},${g.y}"`,
+      `data-chart11="${g.chart11}"`,
+      `data-base-q="${g.baseQ}"`,
+      `data-fiber-q="${g.fiberQ}"`,
+      `data-qxy="${g.qxy}"`,
+      `data-thrust-a="${g.thrustDirection.a.toFixed(4)}"`,
+      `data-thrust-b="${g.thrustDirection.b.toFixed(4)}"`,
+      `data-thrust-c="${g.thrustDirection.c.toFixed(4)}"`,
+      `data-fiber-phase="${g.fiberPhase.toFixed(4)}"`,
+      `data-receipt-state="${g.receiptState}"`
+    ].join(" ") : "";
+    return `<span class="term-atom" data-channel="${escapeHTML(atom.channel)}" data-cidr="${escapeHTML(atom.cidr)}"${omiAttrs}${tetragrammatronAttrs ? " " + tetragrammatronAttrs : ""}${geometryAttrs ? " " + geometryAttrs : ""} data-chirality="${escapeHTML(m.chirality)}" data-projection="${escapeHTML(m.projection)}" style="${style}">${escapeHTML(atom.term)}</span>`;
   }).join(" ");
 }
 
