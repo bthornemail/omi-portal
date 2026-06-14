@@ -170,6 +170,73 @@ test("WAN dashboard loads static qemu-user lane manifest without launch controls
   assert.doesNotMatch(rawHtml, /docker buildx|make qemu-test|make docker/i);
 });
 
+test("Root-visible portal entrypoints expose deterministic projection boundaries", async () => {
+  const entrypoints = [
+    "index.html",
+    "public/portal.html",
+    "public/bidi.html",
+    "public/document.html",
+    "public/inbox.html",
+    "public/arg.html",
+    "public/wan-dashboard.html"
+  ];
+
+  for (const file of entrypoints) {
+    const rawHtml = await fs.readFile(join(process.cwd(), file), "utf8");
+    assert.ok(rawHtml.includes("data-omi"), `${file} missing data-omi projection handle`);
+    assert.ok(rawHtml.includes("data-imo"), `${file} missing data-imo projection handle`);
+    assert.ok(rawHtml.includes("<o") || rawHtml.includes("&lt;o&gt;"), `${file} missing <o> handle vocabulary`);
+    assert.ok(rawHtml.includes("<omi") || rawHtml.includes("&lt;omi&gt;"), `${file} missing <omi> handle vocabulary`);
+    assert.ok(rawHtml.includes("<imo") || rawHtml.includes("&lt;imo&gt;"), `${file} missing <imo> handle vocabulary`);
+    assert.ok(rawHtml.includes("DOM exposes projection"), `${file} missing DOM projection boundary`);
+    assert.ok(rawHtml.includes("Receipt accepts state"), `${file} missing receipt acceptance boundary`);
+  }
+});
+
+test("Projection carriers keep metadata inside query plane before Base36 socket", async () => {
+  const files = [
+    "index.html",
+    "public/portal.html",
+    "public/bidi.html",
+    "public/document.html",
+    "public/inbox.html",
+    "public/arg.html",
+    "public/wan-dashboard.html"
+  ];
+  const combined = (await Promise.all(files.map((file) => fs.readFile(join(process.cwd(), file), "utf8")))).join("\n");
+
+  assert.ok(combined.includes(";b=beta1;s={4,3}@3C@"));
+  assert.doesNotMatch(combined, /@3C@;b=/);
+});
+
+test("Portal deterministic projection panel exposes compiled frame targets", async () => {
+  const rawHtml = await fs.readFile(join(process.cwd(), "public", "portal.html"), "utf8");
+  for (const id of [
+    "projectionGauge",
+    "projectionSocket",
+    "projectionPayload",
+    "projectionQxy",
+    "projectionLocal240",
+    "projectionSlot5040",
+    "projectionReceipt"
+  ]) {
+    assert.ok(rawHtml.includes(id), `Missing projection field: ${id}`);
+  }
+  assert.ok(rawHtml.includes("SEALED_GAUGE"));
+  assert.ok(rawHtml.includes("data-receipt-candidate"));
+});
+
+test("BiDi keeps data-omi-address compatibility while adding projection handles", async () => {
+  const rawHtml = await fs.readFile(join(process.cwd(), "public", "bidi.html"), "utf8");
+  const rawJs = await fs.readFile(join(process.cwd(), "public", "bidi.js"), "utf8");
+
+  assert.ok(rawHtml.includes("data-omi-address"));
+  assert.ok(rawHtml.includes("data-omi=\"o---o/---/?"));
+  assert.ok(rawHtml.includes("data-imo=\"o---o/---/?receipt=candidate@3C@\""));
+  assert.ok(rawJs.includes("el.dataset.omi"));
+  assert.ok(rawJs.includes("querySelectorAll(\"[id^='omi-']\")"));
+});
+
 test("QEMU user manifest advertises only deterministic amd64 and arm64 visual lanes", async () => {
   const manifestPath = join(process.cwd(), "public", "qemu-user-manifest.json");
   const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));

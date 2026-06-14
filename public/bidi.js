@@ -128,6 +128,9 @@ class OmiFrontendPipelineBridge {
     if (el) {
       const idx = slot % 5040;
       Atomics.store(this.floatArray, idx, stride || 1.0);
+      el.dataset.omi = el.dataset.omi || `o---o/---/?v=${encodeURIComponent(raw)};l=${raw.length};h=${slot};b=beta1;s={4,3}@3C@`;
+      el.dataset.imo = el.dataset.imo || "o---o/---/?receipt=candidate@3C@";
+      el.dataset.receiptCandidate = "true";
       if (isInverted) {
         el.classList.add("chiral-inverted");
       } else {

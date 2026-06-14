@@ -260,6 +260,18 @@
       </div>
     </div>
 
+    <div class="card purple" data-omi="o---o/---/?v=portal;l=6;h=root;b=beta1;s={4,3}@3C@" data-imo="o---o/---/?receipt=candidate@3C@" data-receipt-candidate="true">
+      <div class="flex-between"><h2>⌘ deterministic projection</h2><span class="badge purple">DOM exposes · Receipt accepts</span></div>
+      <omi><imo><o id="projectionHandle" data-omi="o---o/---/?v=portal;l=6;h=root;b=beta1;s={4,3}@3C@" data-imo="o---o/---/?receipt=candidate@3C@">DOM exposes projection. Receipt accepts state.</o></imo></omi>
+      <div class="metric"><span>sealed gauge</span><span class="val" id="projectionGauge">—</span></div>
+      <div class="metric"><span>Base36 socket</span><span class="val" id="projectionSocket">—</span></div>
+      <div class="metric"><span>Base64 payload role</span><span class="val" id="projectionPayload">—</span></div>
+      <div class="metric"><span>Q_xy</span><span class="val" id="projectionQxy">—</span></div>
+      <div class="metric"><span>local240</span><span class="val" id="projectionLocal240">—</span></div>
+      <div class="metric"><span>slot5040</span><span class="val" id="projectionSlot5040">—</span></div>
+      <div class="metric"><span>receipt candidate</span><span class="val" id="projectionReceipt">—</span></div>
+    </div>
+
     <div class="card">
       <h2>📡 derived envelopes</h2>
       <div class="metric"><span>route9 (S₂%9+9)</span><span class="val" id="envRoute9">—</span></div>
@@ -429,6 +441,21 @@
     return {slot: fano7*derived.semanticSweep + role3*ACTIVE_BYTE_SURFACE + local240, fano7, role3, local240, local240_hidden, local240_visible};
   }
 
+  const SEALED_GAUGE = {FS:'0x0001AA55', GS:'0x0010AA55', RS:'0x0100AA55', US:'0x1000AA55'};
+
+  function base36Socket(value){
+    return (Math.abs(value) % 1296).toString(36).toUpperCase().padStart(2, '0');
+  }
+
+  function projectionCarrier(frame, slot, channel, socket=base36Socket(slot.slot)){
+    const payload = btoa(`${hex4(frame.S[2])}:${hex4(frame.S[5])}`).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');
+    return `o---o/---/?v=${payload};l=${payload.length};h=${hex4(frame.S[5])};b=beta1;s={4,3}@${socket}@`;
+  }
+
+  function projectionImo(q, socket){
+    return `o---o/---/?receipt=${q.valid ? 'candidate' : 'rejected'}@${socket}@`;
+  }
+
   // stepping digit
   function steppingDigit(idx){ return PERIOD_73[idx % PERIOD_73.length]; }
 
@@ -462,16 +489,25 @@
     torusGrid.innerHTML = '';
     blippedCells = new Set();
     const env = frame ? envelopes(frame.S) : {route9:4,decl10:5,witness11:6,phase12:3};
+    const slot = frame ? slot5040(frame) : {slot:0, local240:0};
+    const q = frame ? quadratic(frame.S) : {valid:false};
+    const socket = base36Socket(slot.slot);
+    const channel = ['FS','GS','RS','US'][env.decl10 % 4] || 'US';
     for(let i=0;i<16;i++){
       const x=i%4, y=Math.floor(i/4);
       const depth = (60*x*x + 16*x*y + 4*y*y) & 0xfff;
       const stepVal = PERIOD_73[(x+y)%8];
       const cell = document.createElement('div');
+      cell.id = `o-torus-${i}`;
       cell.className = 'torus-cell';
       cell.dataset.x = x;
       cell.dataset.y = y;
       cell.dataset.depth = depth;
       cell.dataset.blip = '0';
+      cell.dataset.omi = frame ? projectionCarrier(frame, {slot:slot.slot + i}, channel, socket) : `o---o/---/?v=torus;l=5;h=${hex4(depth)};b=beta1;s={4,3}@3C@`;
+      cell.dataset.imo = projectionImo(q, socket);
+      cell.dataset.omiChannel = channel;
+      cell.dataset.receiptCandidate = String(q.valid);
       cell.innerHTML = `<span class="hex">${hex4(depth)}</span><span class="depth">z=${depth} · ${stepVal}</span>`;
       cell.style.transform = `translateY(-${(depth/80)}px)`;
       cell.style.borderColor = stepVal===0 ? 'var(--cyan)' : stepVal===5 ? 'var(--red)' : 'var(--purple)';
@@ -591,6 +627,7 @@
       const channels = ['FS','GS','RS','US'];
       const channelMap = {FS:'file/frame',GS:'graph/group',RS:'relation/routing',US:'unit/text'};
       const activeChannel = channels[env.decl10 % 4];
+      const socket = base36Socket(slot.slot);
       $('factFS').textContent = activeChannel==='FS' ? '◉ active' : '○ idle';
       $('factGS').textContent = activeChannel==='GS' ? '◉ active' : '○ idle';
       $('factRS').textContent = activeChannel==='RS' ? '◉ active' : '○ idle';
@@ -599,6 +636,14 @@
       $('factGS').className = activeChannel==='GS' ? 'val' : '';
       $('factRS').className = activeChannel==='RS' ? 'val' : '';
       $('factUS').className = activeChannel==='US' ? 'val' : '';
+
+      $('projectionGauge').textContent = `${activeChannel} ${SEALED_GAUGE[activeChannel]}`;
+      $('projectionSocket').textContent = socket;
+      $('projectionPayload').textContent = `${activeChannel} / Base64 CDR`;
+      $('projectionQxy').textContent = `Q_${slot.local240 % 4}${Math.floor((slot.local240 % 16) / 4)}`;
+      $('projectionLocal240').textContent = `${slot.local240}`;
+      $('projectionSlot5040').textContent = `${slot.slot}`;
+      $('projectionReceipt').textContent = q.valid ? 'candidate; OMI still validates' : 'rejected by Q_frame';
 
       // Torus
       buildTorus(frame);

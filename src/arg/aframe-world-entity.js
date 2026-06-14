@@ -71,16 +71,36 @@ function round3(v) {
 
 function buildDataAttributes(node, carrierHex) {
   const attrs = {};
-  if (node.id) attrs["data-omi"] = node.id;
+  const socket = socketFromNode(node);
+  if (node.id) {
+    attrs["data-omi"] = projectionCarrier(node, socket);
+    attrs["data-omi-address"] = node.id;
+  }
+  attrs["data-imo"] = `o---o/---/?receipt=${node.receipt ? "accepted" : "candidate"}@${socket}@`;
+  attrs["data-receipt-candidate"] = node.receipt ? "false" : "true";
   if (carrierHex) attrs["data-o-word"] = carrierHex;
   if (node.motif) attrs["data-omo"] = node.motif;
   if (node.emoji) attrs["data-imi"] = node.emoji;
   if (node.synset) {
-    attrs["data-imo"] = node.synset.lemma;
+    attrs["data-imo-synset"] = node.synset.lemma;
     if (node.synset.id) attrs["data-synset"] = node.synset.id;
   }
   if (node.receipt !== null && node.receipt !== undefined) {
     attrs["data-receipt"] = "1";
   }
   return attrs;
+}
+
+function projectionCarrier(node, socket) {
+  const value = encodeURIComponent(node.id || node.motif || "arg-entity");
+  const label = node.motif || node.id || "";
+  const hash = node.synset?.id || node.id || "entity";
+  return `o---o/---/?v=${value};l=${label.length};h=${hash};b=beta1;s={4,3}@${socket}@`;
+}
+
+function socketFromNode(node) {
+  const seed = String(node.id || node.motif || "arg");
+  let value = 0;
+  for (let i = 0; i < seed.length; i += 1) value = (value + seed.charCodeAt(i)) % 1296;
+  return value.toString(36).toUpperCase().padStart(2, "0");
 }

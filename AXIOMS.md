@@ -756,3 +756,30 @@ and the Omicron frame alone for creation-step identity —
 prefixes are claim reductions, lenses are reader views,
 neither adds validity to the address.
 ```
+
+## Canon Gate Update — Fold Surface Authority
+
+`AXIOMS.md` remains the origami/fold note for OMI, but it is not an independent
+executable truth source. The current fold-surface bridge is defined in
+`PROJECTIONS.md`.
+
+Executable truth remains in:
+
+```text
+RULES.omi
+FACTS.omi
+CLOSURES.omi
+COMBINATORS.omi
+CONS.omi
+```
+
+A fold is now treated as a projection or candidate transformation:
+
+```text
+A fold may reflect, align, bisect, complement, or resolve a validated OMI surface.
+A fold may propose a repair.
+A fold may produce a candidate.
+A fold may not accept state.
+```
+
+Only a receipt accepts state.

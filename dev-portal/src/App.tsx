@@ -1,10 +1,17 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { parseAddress, ZERO_BASIS_ADDRESS } from './core/address';
 import { exportSnapshot, importSnapshot, downloadJson } from './core/exportImport';
 import { createRuntime, touch, type OmiRuntimeState } from './core/runtime';
 import { slide } from './core/nomogram';
+import { CidrMcrsgspPanel } from './components/CidrMcrsgspPanel';
+import { CombinatorialDesignViewer } from './components/CombinatorialDesignViewer';
+import { DeterministicClockMenu } from './components/DeterministicClockMenu';
 import { Inspector } from './components/Inspector';
+import { NarrativeProjectionPanel } from './components/NarrativeProjectionPanel';
 import { SpectralGrid } from './components/SpectralGrid';
+import { useNarrativePipeline } from './narrative/useNarrativePipeline';
+import { parseCidrMcrsgspFiles, summarizeCidrMcrsgspRecords, type CidrMcrsgspRecord, type CidrMcrsgspSummary } from './omi/cidrMcrsgspParser';
+import { loadCidrMcrsgspSources } from './omi/cidrMcrsgspSources';
 import './styles.css';
 
 export default function App() {
@@ -13,9 +20,34 @@ export default function App() {
   const [page, setPage] = useState(0);
   const [scale, setScale] = useState(0x3e);
   const [message, setMessage] = useState('Ready. Select a cell, export a snapshot, or import one.');
+  const [mcrsgspRecords, setMcrsgspRecords] = useState<CidrMcrsgspRecord[]>([]);
+  const [mcrsgspSummary, setMcrsgspSummary] = useState<CidrMcrsgspSummary | null>(null);
   const importRef = useRef<HTMLInputElement | null>(null);
+  const {
+    projectionState: narrative,
+    declarations,
+    playbackControls,
+    inspectedDeclaration,
+    lastCandidateId,
+    onInspectDeclaration,
+    onReceiptCandidate
+  } = useNarrativePipeline(setMessage);
 
   const nomogram = slide(scale, runtime.selected.cell || 1, runtime.deltaValue || 1);
+
+  useEffect(() => {
+    let alive = true;
+    parseCidrMcrsgspFiles(loadCidrMcrsgspSources())
+      .then((records) => {
+        if (!alive) return;
+        setMcrsgspRecords(records);
+        setMcrsgspSummary(summarizeCidrMcrsgspRecords(records));
+      })
+      .catch((error: Error) => setMessage(`CIDR MCRSGSP parser failed: ${error.message}`));
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   async function onExport() {
     const snapshot = await exportSnapshot(runtime.rootAddress, runtime.bitboard, runtime.rewrites);
@@ -66,6 +98,52 @@ export default function App() {
         <p><code>scale {`0x${scale.toString(16).toUpperCase()}`}</code> — {nomogram.label}</p>
         <p><code>{nomogram.expression}</code> = <strong>{String(nomogram.value)}</strong></p>
       </section>
+
+      <section
+        className="panel narrative-bridge"
+        data-omi="o---o/---/?v=narrative;l=4;h=design;b=beta1;s={4,3}@3C@"
+        data-imo="o---o/---/?receipt=candidate@3C@"
+        data-phase={narrative.beat?.phase ?? 'loading'}
+        data-beat={narrative.ready ? String(narrative.beatIndex + 1) : '0'}
+        data-motif={narrative.beat?.motifs?.join('|') ?? ''}
+      >
+        <div>
+          <p className="eyebrow">Narrative Pipeline Bridge</p>
+          <h2>{narrative.beat?.phaseEmoji ?? ''} {narrative.beat?.motifs?.join(' · ') || 'Loading narrative projection'}</h2>
+          <p>{narrative.beat?.caption?.slice(0, 180) ?? 'Canonical narrative series is being projected into the dev portal viewer.'}</p>
+        </div>
+        <div className="narrative-actions">
+          <button type="button" onClick={() => playbackControls.stepBeat(-1)}>Prev beat</button>
+          <button type="button" className="primary-action" onClick={playbackControls.togglePlayback}>
+            {narrative.playing ? 'Pause' : 'Play'}
+          </button>
+          <button type="button" onClick={() => playbackControls.stepBeat(1)}>Next beat</button>
+        </div>
+        <div className="narrative-meta">
+          <span>beat {narrative.ready ? narrative.beatIndex + 1 : 0}/{narrative.beatCount}</span>
+          <span>tick {narrative.tick}</span>
+          <span>epoch {narrative.epoch}</span>
+          <span>topology {narrative.topologyNodeCount}</span>
+          <span>receipts {narrative.receiptCount}</span>
+        </div>
+      </section>
+
+      <CombinatorialDesignViewer projectionState={narrative} />
+
+      <DeterministicClockMenu
+        projectionState={narrative}
+        playbackControls={playbackControls}
+      />
+
+      <NarrativeProjectionPanel
+        declarations={declarations}
+        inspectedDeclarationId={inspectedDeclaration?.id}
+        latestCandidateId={lastCandidateId}
+        onInspectDeclaration={onInspectDeclaration}
+        onReceiptCandidate={onReceiptCandidate}
+      />
+
+      <CidrMcrsgspPanel records={mcrsgspRecords} summary={mcrsgspSummary} />
 
       <section className="panel code-notes">
         <h2>Model boundary</h2>

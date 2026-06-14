@@ -814,9 +814,21 @@
       return objects.find((object) => object.id === activeId) || objects[0];
     }
 
+    function projectionCarrier(object) {
+      const value = encodeURIComponent(object.raw || object.id);
+      const length = String(object.title || "").length;
+      const hash = object.id;
+      return `o---o/---/?v=${value};l=${length};h=${hash};b=beta1;s={4,3}@3C@`;
+    }
+
+    function projectionImo(object) {
+      const status = object.status.toLowerCase().replaceAll(" ", "-");
+      return `o---o/---/?receipt=${status}@3C@`;
+    }
+
     function renderList() {
       list.innerHTML = objects.map((object) => `
-        <button class="object-card ${object.id === activeId ? "active" : ""}" data-object="${object.id}">
+        <button id="o-${object.id}" class="object-card ${object.id === activeId ? "active" : ""}" data-object="${object.id}" data-omi="${projectionCarrier(object)}" data-imo="${projectionImo(object)}" data-omi-channel="US" data-receipt-candidate="${object.status !== "Accepted"}">
           <span class="card-line">
             <span>
               <span class="card-title">${object.title}</span>
@@ -876,6 +888,7 @@
           <article class="object-view">
             <h2>${object.title}</h2>
             <div class="subtle">${object.type} - ${object.source}</div>
+            <omi><imo><o id="projection-${object.id}" data-omi="${projectionCarrier(object)}" data-imo="${projectionImo(object)}">DOM exposes projection. Receipt accepts state.</o></imo></omi>
             <div class="field-list">${fields}</div>
           </article>
           ${renderTrust(object)}
@@ -962,8 +975,11 @@
           <h2>Advanced</h2>
           <div class="field-list">
             <div class="field"><span>Frame</span><code>${object.raw}</code></div>
+            <div class="field"><span>data-omi</span><code>${projectionCarrier(object)}</code></div>
+            <div class="field"><span>data-imo</span><code>${projectionImo(object)}</code></div>
+            <div class="field"><span>Handles</span><strong>id data-omi data-imo &lt;o&gt; &lt;omi&gt; &lt;imo&gt;</strong></div>
             <div class="field"><span>Storage</span><strong>Recovered candidate, pending OMI acceptance checks</strong></div>
-            <div class="field"><span>Boundary</span><strong>Availability is not acceptance</strong></div>
+            <div class="field"><span>Boundary</span><strong>DOM exposes projection. Receipt accepts state. Availability is not acceptance</strong></div>
           </div>
         </div>
       `;

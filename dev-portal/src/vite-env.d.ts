@@ -1,7 +1,11 @@
 /// <reference types="vite/client" />
 
-declare namespace JSX {
-  interface IntrinsicElements {
-    'omi-gate': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { 'data-address'?: string };
+import type { DetailedHTMLProps, HTMLAttributes } from 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'omi-gate': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & { 'data-address'?: string };
+    }
   }
 }

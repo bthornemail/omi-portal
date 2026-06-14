@@ -22,7 +22,7 @@ export function delta(value: number, constant: number, width = 16): number {
 }
 
 export const BLOCK_B = [0, 1, 3, 6, 9, 8, 6, 3] as const;
-export const BLOCK_B_WIDTH = BLOCK_B.reduce((a, b) => a + b, 0); // 36
+export const BLOCK_B_WIDTH = BLOCK_B.reduce<number>((a, b) => a + b, 0); // 36
 
 export function orbitOffset(position: number): { orbit: number; offset: number } {
   const orbit = Math.floor(position / BLOCK_B_WIDTH);

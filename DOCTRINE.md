@@ -535,3 +535,56 @@ One-line canon:
 ```text
 OMI does not store data; it preserves versioned sources of truth as binary rewrite tables, then uses Omicron identity, slash-path routing, BiDi interpretation, and Omi-Nomogram scales to produce lawful receipts.
 ```
+
+## 23. Canon Gate Update
+
+The guiding canon gates are:
+
+```text
+ONTOLOGY.md
+DOCTRINE.md
+MANIFESTO.md
+PROJECTIONS.md
+GLOSSARY.md
+```
+
+They orient the project; they do not replace executable truth.
+
+The executable truth gates are:
+
+```text
+RULES.omi       declares
+FACTS.omi       grounds
+CLOSURES.omi    seals
+COMBINATORS.omi composes
+CONS.omi        reduces
+```
+
+OMI's current doctrine boundary is:
+
+```text
+Q_frame validates.
+Base36 indexes only after validation.
+Q_xy projects.
+DOM exposes.
+Receipt accepts.
+```
+
+The compact Cons256 QuQuart expression is:
+
+```text
+o---o/---/?v=<base64url>;l=<length>;h=<hash>@<base36-ref>@
+```
+
+Its four gauge surfaces are:
+
+```text
+o---o  establishes object identity as a cons surrogate
+/---/  routes local memory reference paths
+?      opens payload claims
+@...@  indexes payload/reference sockets through Base36
+```
+
+Base64 carries bytes. Base36 names validated orbit positions. A projection may
+be visible, a payload may be attached, and a socket may resolve, but only a
+receipt accepts state.

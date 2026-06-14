@@ -49,6 +49,13 @@ test("DOM/CSSOM registry filters by OMI prefix and atom routing keys", async () 
   assert.deepEqual(filterDOMCSSOMAtoms(registry, { cidr: atom.cidr }), [atom]);
   assert.deepEqual(filterDOMCSSOMAtoms(registry, { centroid: atom.centroid }), [atom]);
   assert.ok(filterDOMCSSOMAtoms(registry, { synsetCell }).includes(atom));
+  assert.ok(filterDOMCSSOMAtoms(registry, { dataOmi: atom.omi.address }).includes(atom));
+  assert.ok(filterDOMCSSOMAtoms(registry, { dataImo: "receipt=candidate" }).includes(atom));
+
+  atom.omi.dataAttributes["data-omi"] = "o---o/---/?v=atom;l=4;h=test;b=beta1;s={4,3}@3C@";
+  assert.ok(filterDOMCSSOMAtoms(registry, { betti: "beta1" }).includes(atom));
+  assert.ok(filterDOMCSSOMAtoms(registry, { schlafli: "{4,3}" }).includes(atom));
+  assert.ok(filterDOMCSSOMAtoms(registry, { socket: "3C" }).includes(atom));
 });
 
 test("DOM/CSSOM details and attributes expose canonical OMI metadata", async () => {
@@ -64,8 +71,11 @@ test("DOM/CSSOM details and attributes expose canonical OMI metadata", async () 
   assert.equal(details.omiAddress, atom.omi.address);
   assert.equal(details.selector, atom.omi.selector);
   assert.equal(details.posHex, atom.omi.posHex);
+  assert.match(details.dataImo, /receipt=candidate/);
+  assert.equal(details.projectionBoundary, "DOM exposes projection. Receipt accepts state.");
   assert.equal(details.tetrahedron.vertices.length, 4);
   assert.equal(writes.get("data-omi"), atom.omi.address);
+  assert.match(writes.get("data-imo"), /receipt=candidate/);
   assert.equal(writes.get("data-omi-graph-channel"), atom.channel);
   assert.match(writes.get("data-omi-synset-cells"), /S\d/);
 });

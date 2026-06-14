@@ -279,6 +279,21 @@
         <label>Centroid
           <input id="filter-centroid" placeholder="2001:db8:.../128" spellcheck="false">
         </label>
+        <label>data-omi
+          <input id="filter-data-omi" placeholder="o---o or omi-" spellcheck="false">
+        </label>
+        <label>data-imo
+          <input id="filter-data-imo" placeholder="receipt=candidate" spellcheck="false">
+        </label>
+        <label>Betti
+          <input id="filter-betti" placeholder="beta1" spellcheck="false">
+        </label>
+        <label>Schlafli
+          <input id="filter-schlafli" placeholder="{4,3}" spellcheck="false">
+        </label>
+        <label>Socket
+          <input id="filter-socket" placeholder="3C" spellcheck="false">
+        </label>
       </div>
 
       <div class="metric-grid">
@@ -299,7 +314,7 @@
       <div class="stage-head">
         <div>
           <h1>Animated Semantic Document</h1>
-          <p>Each term is a writable DOM atom with `data-omi` attributes and CSSOM-routable OMI port metadata.</p>
+          <p>Each term is a writable DOM atom with `data-omi` attributes and CSSOM-routable OMI port metadata. DOM exposes projection. Receipt accepts state.</p>
         </div>
         <div class="row">
           <a href="/bidi.html">BiDi CM6</a>
@@ -347,7 +362,12 @@
       pos: document.getElementById("filter-pos"),
       cell: document.getElementById("filter-cell"),
       cidr: document.getElementById("filter-cidr"),
-      centroid: document.getElementById("filter-centroid")
+      centroid: document.getElementById("filter-centroid"),
+      dataOmi: document.getElementById("filter-data-omi"),
+      dataImo: document.getElementById("filter-data-imo"),
+      betti: document.getElementById("filter-betti"),
+      schlafli: document.getElementById("filter-schlafli"),
+      socket: document.getElementById("filter-socket")
     };
     const metric = {
       total: document.getElementById("metric-total"),
@@ -369,7 +389,12 @@
         posHex: filters.pos.value,
         synsetCell: filters.cell.value,
         cidr: filters.cidr.value,
-        centroid: filters.centroid.value
+        centroid: filters.centroid.value,
+        dataOmi: filters.dataOmi.value,
+        dataImo: filters.dataImo.value,
+        betti: filters.betti.value,
+        schlafli: filters.schlafli.value,
+        socket: filters.socket.value
       };
     }
 
@@ -420,6 +445,13 @@
         ["Graph", details.graphChannel],
         ["CIDR", details.cidr],
         ["Centroid", details.centroid],
+        ["data-omi", details.dataOmi],
+        ["data-imo", details.dataImo],
+        ["Betti", details.bettiSelector || "-"],
+        ["Schlafli", details.schlafliSelector || "-"],
+        ["Socket", details.socket || "-"],
+        ["Boundary", details.projectionBoundary],
+        ["Handles", "id data-omi data-imo <o> <omi> <imo>"],
         ["Relations", `${details.relationCount} ${details.stable ? "stable" : "unstable"}`],
         ["Cells", details.activeSynsetCells.join(" ") || "-"]
       ];

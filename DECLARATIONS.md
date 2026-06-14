@@ -691,3 +691,41 @@ Therefore:
 ```text
 derived fact = rule clause + state transition + bitboard + bitblip + proof path
 ```
+
+## Canon Gate Update — Declaration Surface Authority
+
+`DECLARATIONS.md` remains the derivation note for how rule clauses become fact
+rows, but it is not an independent executable truth source. The current
+declaration projection bridge is defined in `PROJECTIONS.md`.
+
+Executable truth remains role-separated:
+
+```text
+RULES.omi       declares obligations and invariants
+FACTS.omi       grounds observed or configured state
+CLOSURES.omi    seals accepted forms
+COMBINATORS.omi composes lawful operations
+CONS.omi        reduces structures into executable cons/f-expression surfaces
+```
+
+Compiled mirrors and pure carriers preserve the same separation:
+
+```text
+RULES.imo / rules.o
+FACTS.imo / facts.o
+CLOSURES.imo / closures.o
+COMBINATORS.imo / combinators.o
+CONS.imo / cons.o
+```
+
+A declaration is a surface claim:
+
+```text
+A declaration states a proposed relation.
+A rule obligates.
+A fact grounds.
+A closure seals.
+A combinator composes.
+CONS reduces.
+A receipt accepts.
+```

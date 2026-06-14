@@ -770,3 +770,112 @@ The CSSOM, JSON Canvas, telemetry stream, or optical page frame projects the pro
 Therefore:
 
 > **OMI turns addresses into executable, replayable, visible ontology.**
+
+## 22. Canon Gate Update
+
+OMI treats an object as a validated rewrite surface, not as stored data. An
+object is not authoritative because it appears in the DOM, a graph, a file, or
+a notation. It becomes authoritative only when its carrier validates and its
+interpretation is accepted by receipt.
+
+The current ontological order is:
+
+```text
+1. Guiding principles       -> ONTOLOGY / DOCTRINE / MANIFESTO / PROJECTIONS / GLOSSARY
+2. Executable declarations  -> RULES / FACTS / CLOSURES / COMBINATORS / CONS
+3. Compiled mirrors         -> .imo
+4. Pure function carriers   -> .o
+5. Projection surfaces      -> DOM / CSSOM / JSON Canvas / A-Frame / barcode / emoji
+```
+
+The compact OMI object relation is:
+
+```text
+|OMI---IMO> = o---o/---/?v=<base64url>;l=<length>;h=<hash>@<base36-ref>@
+```
+
+Meaning:
+
+| Surface | Role |
+|---|---|
+| `o---o` | object / Cons256 surrogate / local memory reference |
+| `/---/` | local memory reference path |
+| `?` | local memory reference query payload plane |
+| `v=...` | Base64URL payload |
+| `l=...` | payload length |
+| `h=...` | payload hash |
+| `@...@` | Base36 local memory reference socket |
+
+Validation precedes projection:
+
+```text
+Q_frame(S) validates the carrier.
+Base36 responds only after validation.
+Q_xy(x,y) projects local state.
+DOM exposes the accepted projection.
+Receipt accepts.
+```
+
+Minimum projection assertions:
+
+```text
+Q(0,0) = 0
+Q(3,3) = 720
+Q(x,y) is integer for x,y in 0..3
+Q(x,y)/6 lies within 0..120 for x,y in 0..3
+Q(x,y)/6 may be rational unless explicitly quantized
+Q(x,y) mod 240 ranges within 0..239
+local240 = Q(x,y) mod 240
+slot5040 = fano7×720 + role3×240 + local240
+slot5040 ranges within 0..5039
+symbolic projection does not authorize invalid OMI state
+```
+
+## 23. Betti and Schläfli Addressing Boundary
+
+Betti numbers and Schläfli symbols are addressing vocabulary in OMI. They do
+not force literal topology, quantum physics, or complex geometry into the DOM.
+
+OMI-Mirror is slice mode:
+
+```text
+ψ(frame, path, socket, receipt) -> one projected state
+```
+
+OMI-Matrix is group mode:
+
+```text
+matrix(frame, path pattern, socket region) -> accepted group of slices
+```
+
+Betti-style indices describe group selection:
+
+```text
+β0 = connected component selector
+β1 = cycle / gap / hole selector
+β2 = enclosed surface selector
+β3 = volume / capsule selector
+```
+
+Schläfli-style indices describe regular adjacency and stride:
+
+```text
+{p,q} = p local positions per face, q faces around a selector
+{p,q} -> group stride rule over validated slices
+```
+
+These selectors operate inside the address walk, not above it:
+
+```text
+Q_frame validates the carrier.
+nibble-walk selects the local region.
+Base36 indexes the socket.
+Q_xy projects the coordinate.
+OMI-Mirror ψ instantiates one slice.
+OMI-Matrix targets a group of slices.
+DOM exposes the accepted projection.
+```
+
+They add no new DOM handles and no new authority. Betti and Schläfli metadata
+may be carried in existing projection strings, but state remains accepted only
+by validation and receipt.

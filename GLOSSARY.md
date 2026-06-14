@@ -2707,3 +2707,73 @@ Failure behavior: XDP_DROP
 Consumer use: trust packet state before user-space allocation
 Provider use: emit signed cluster packets and telemetry counters
 ```
+
+## Canon Gate Glossary Addendum
+
+**Accepted Projection**
+
+A projection whose underlying carrier has validated and whose interpretation has
+been accepted by receipt.
+
+**Base36**
+
+The 36-symbol reference alphabet used to name orbit positions and local memory
+sockets after frame validation. Base36 indexes; it does not validate.
+
+**Base64URL**
+
+The byte-safe payload carrier used in the query plane:
+
+```text
+?v=<base64url>;l=<length>;h=<hash>
+```
+
+**Cons256**
+
+A 256-bit cons-like carrier surface. Its compact notation is:
+
+```text
+o---o/---/?v=<base64url>;l=<length>;h=<hash>@<base36-ref>@
+```
+
+**DOM Projection Handle**
+
+One of six DOM handles:
+
+```text
+id
+data-omi
+data-imo
+<o>
+<omi>
+<imo>
+```
+
+**Q_frame**
+
+The frame validator. It answers whether the carrier envelope is lawful.
+
+**Q_xy**
+
+The coordinate projection form:
+
+```text
+Q(x,y) = 60x² + 16xy + 4y²
+```
+
+It answers where a lawful state projects.
+
+**QuQuart**
+
+The four-surface OMI proposition and projection model used to map local state
+into FS/GS/RS/US roles.
+
+**PROJECTIONS.md**
+
+The canon gate for how accepted truth becomes visible. It defines projection,
+fold, DOM, query, and socket visibility rules; it does not define truth.
+
+**Validation Before Projection**
+
+Base36, DOM, emoji, barcode, and other symbolic carriers may respond only after
+frame validation. They do not authorize state.

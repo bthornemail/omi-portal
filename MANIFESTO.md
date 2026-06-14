@@ -623,3 +623,58 @@ Lisp collapsed program and object. POSIX collapsed storage and communication. OM
 ```text
 OMI is notation as cipher and cipher as notation.
 ```
+
+## Canon Gate Update
+
+OMI begins with one claim:
+
+```text
+Computation is not the mutation of data.
+Computation is the lawful transformation of interpretation.
+```
+
+The guiding gates are:
+
+```text
+ONTOLOGY.md
+DOCTRINE.md
+MANIFESTO.md
+PROJECTIONS.md
+GLOSSARY.md
+```
+
+Truth must be declared, grounded, sealed, composed, reduced, compiled, tested,
+and receipted:
+
+```text
+RULES.omi       declare
+FACTS.omi       ground
+CLOSURES.omi    seal
+COMBINATORS.omi compose
+CONS.omi        reduce
+```
+
+The compact local memory expression is:
+
+```text
+|OMI---IMO> = o---o/---/?v=<base64url>;l=<length>;h=<hash>@<base36-ref>@
+```
+
+Base64 carries bytes. Base36 names positions. Base36 must not authorize state;
+it responds after the frame validates.
+
+Final gate statement:
+
+```text
+Rules declare.
+Facts ground.
+Closures seal.
+Combinators compose.
+CONS reduces.
+Gauge rows compute.
+Q_frame validates.
+Base36 indexes.
+Q_xy projects.
+Receipts accept.
+DOM displays.
+```

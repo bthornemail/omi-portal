@@ -45,6 +45,7 @@
 <body>
 <div class="dashboard">
   <h1>⟨WAN⟩ <span>Latency</span> Telemetry</h1>
+  <omi><imo><o id="wan-projection-boundary" data-omi="o---o/---/?v=wan;l=3;h=dashboard;b=beta1;s={4,3}@3C@" data-imo="o---o/---/?receipt=candidate@3C@">DOM exposes projection. Receipt accepts state.</o></imo></omi>
 
   <svg id="wan-svg" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
     <line x1="100" y1="80" x2="500" y2="80" stroke="#00ffcc44" stroke-width="1" stroke-dasharray="4,4"/>
@@ -115,6 +116,12 @@ const verifyHistory = [];
 const maxSparkBars = 60;
 
 function $(id) { return document.getElementById(id); }
+
+function laneProjectionCarrier(lane) {
+  const value = encodeURIComponent(lane.omiAddress || lane.platform || "qemu");
+  const hash = lane.arch || lane.canvasPresetColorId || "lane";
+  return `o---o/---/?v=${value};l=${value.length};h=${hash};b=beta1;s={4,3}@3C@`;
+}
 
 function setMetric(id, val, cls) {
   const el = $(id);
@@ -255,6 +262,9 @@ function renderQemuUserManifest(manifest) {
     return `
       <div class="qemu-lane"
            id="${lane.omiAddress}"
+           data-omi="${laneProjectionCarrier(lane)}"
+           data-imo="o---o/---/?receipt=candidate@3C@"
+           data-receipt-candidate="true"
            data-qemu-arch="${lane.arch}"
            data-platform="${lane.platform}"
            color="${lane.canvasPresetColorId}">

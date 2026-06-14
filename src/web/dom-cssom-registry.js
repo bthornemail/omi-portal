@@ -40,8 +40,15 @@ export function filterDOMCSSOMAtoms(registry, filters = {}) {
   const cidr = clean(filters.cidr);
   const centroid = clean(filters.centroid);
   const synsetCell = clean(filters.synsetCell);
+  const dataOmi = clean(filters.dataOmi);
+  const dataImo = clean(filters.dataImo);
+  const betti = clean(filters.betti);
+  const schlafli = clean(filters.schlafli);
+  const socket = clean(filters.socket);
 
   return atoms.filter((atom) => {
+    const dataAttributes = projectionDataAttributes(atom);
+    const projection = projectionSelectors(dataAttributes["data-omi"]);
     if (omiPrefix && !atom.omi?.address?.startsWith(omiPrefix)) return false;
     if (graphChannel && atom.channel !== graphChannel) return false;
     if (omiPortChannel && atom.omi?.portChannel !== omiPortChannel) return false;
@@ -49,6 +56,11 @@ export function filterDOMCSSOMAtoms(registry, filters = {}) {
     if (cidr && (atom.cidr || atom.address) !== cidr) return false;
     if (centroid && atom.centroid !== centroid) return false;
     if (synsetCell && !activeSynsetCells(atom).includes(synsetCell)) return false;
+    if (dataOmi && !dataAttributes["data-omi"]?.includes(dataOmi)) return false;
+    if (dataImo && !dataAttributes["data-imo"]?.includes(dataImo)) return false;
+    if (betti && projection.betti !== betti) return false;
+    if (schlafli && projection.schlafli !== schlafli) return false;
+    if (socket && projection.socket !== socket) return false;
     return true;
   });
 }
@@ -56,6 +68,8 @@ export function filterDOMCSSOMAtoms(registry, filters = {}) {
 export function atomToDOMCSSOMDetails(atom, context = {}) {
   if (!atom) return null;
   const activeCells = activeSynsetCells(atom);
+  const dataAttributes = projectionDataAttributes(atom);
+  const projection = projectionSelectors(dataAttributes["data-omi"]);
   return {
     id: atom.id,
     term: atom.term,
@@ -73,7 +87,13 @@ export function atomToDOMCSSOMDetails(atom, context = {}) {
     stable: atom.stable ?? atom.wordnet?.metric?.stable ?? false,
     relationCount: atom.relationCount ?? atom.wordnet?.relationCount ?? 0,
     activeSynsetCells: activeCells,
-    dataAttributes: atom.omi?.dataAttributes || {},
+    dataOmi: dataAttributes["data-omi"],
+    dataImo: dataAttributes["data-imo"],
+    bettiSelector: projection.betti,
+    schlafliSelector: projection.schlafli,
+    socket: projection.socket,
+    projectionBoundary: "DOM exposes projection. Receipt accepts state.",
+    dataAttributes,
     tetrahedron: {
       centroid: context.tetrahedron?.centroid?.ipv6,
       vertices: (context.tetrahedron?.vertices || []).map((vertex) => ({
@@ -90,7 +110,7 @@ export function atomToDOMCSSOMDetails(atom, context = {}) {
 export function applyDOMCSSOMAttributes(element, atom) {
   if (!element || !atom) return element;
   const attributes = {
-    ...(atom.omi?.dataAttributes || {}),
+    ...projectionDataAttributes(atom),
     "data-omi-atom-id": atom.id,
     "data-omi-graph-channel": atom.channel,
     "data-omi-cidr": atom.cidr || atom.address || "",
@@ -106,6 +126,32 @@ export function applyDOMCSSOMAttributes(element, atom) {
 
 function clean(value) {
   return String(value ?? "").trim();
+}
+
+function projectionDataAttributes(atom) {
+  const attributes = { ...(atom?.omi?.dataAttributes || {}) };
+  if (!attributes["data-omi"] && atom?.omi?.address) attributes["data-omi"] = atom.omi.address;
+  if (!attributes["data-imo"]) {
+    const socket = socketFromAtom(atom);
+    attributes["data-imo"] = `o---o/---/?receipt=candidate@${socket}@`;
+  }
+  return attributes;
+}
+
+function projectionSelectors(dataOmi = "") {
+  const text = String(dataOmi);
+  return {
+    betti: text.match(/[?;]b=([^;@]+)/)?.[1] || "",
+    schlafli: text.match(/[?;]s=([^;@]+)/)?.[1] || "",
+    socket: text.match(/@([^@]+)@/)?.[1] || ""
+  };
+}
+
+function socketFromAtom(atom) {
+  const seed = `${atom?.id || ""}${atom?.omi?.address || ""}`;
+  let value = 0;
+  for (let i = 0; i < seed.length; i += 1) value = (value + seed.charCodeAt(i)) % 1296;
+  return value.toString(36).toUpperCase().padStart(2, "0");
 }
 
 function activeSynsetCells(atom) {

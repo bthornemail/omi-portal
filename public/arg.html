@@ -89,6 +89,7 @@
       <div class="beat-info" id="beatInfo">0 / 0</div>
     </div>
     <div class="wordnet-badge" id="wordnetBadge">wordnet: loading...</div>
+    <omi><imo><o id="arg-projection-boundary" data-omi="o---o/---/?v=arg;l=3;h=movie;b=beta1;s={4,3}@3C@" data-imo="o---o/---/?receipt=candidate@3C@">DOM exposes projection. Receipt accepts state.</o></imo></omi>
   </div>
 
   <div id="controls">
@@ -507,7 +508,7 @@
 
       document.querySelector("a-scene").addEventListener("click", (e) => {
         const target = e.detail?.intersection?.object?.el || e.target;
-        const omiId = target?.getAttribute?.("data-omi");
+        const omiId = target?.getAttribute?.("data-omi-address") || target?.getAttribute?.("data-omi");
         if (omiId && topo) selectEntity(omiId);
       });
 

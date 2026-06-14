@@ -313,7 +313,7 @@
 <body>
     <div class="hud">
       <h1>ChiralCanvas Tetrahedron</h1>
-      <p>FS, GS, RS, and US are rendered as addressable A-Frame entities. The rear panel is a live canvas texture of the 5040 Smith matrix.</p>
+      <p>FS, GS, RS, and US are rendered as addressable A-Frame entities. DOM exposes projection. Receipt accepts state.</p>
       <div class="meta" id="hud-meta"></div>
       <div class="cell" id="polytope-hud" style="margin-top:8px; font-size:11px">tick=0<br>720p=0 120b=0<br>24c=0 6f=0 2e=0</div>
     </div>
@@ -868,6 +868,8 @@
         for (const [name, value] of Object.entries(item.routingFrame.dataAttributes)) {
           entity.setAttribute(name, value);
         }
+        entity.setAttribute("data-imo", "o---o/---/?receipt=candidate@3C@");
+        entity.setAttribute("data-receipt-candidate", "true");
         entity.setAttribute("data-wn-operator", item.operator);
         entity.setAttribute("data-synset-id", item.target.id);
         entity.setAttribute("data-omi-centroid", item.centroid.ipv6);

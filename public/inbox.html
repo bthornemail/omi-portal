@@ -151,6 +151,18 @@ function groupObjects() {
   return g;
 }
 
+function projectionCarrier(obj) {
+  const source = encodeURIComponent(obj.address || obj.id || obj.label || "object");
+  const length = String(obj.label || obj.text || "").length;
+  const hash = obj.hash || obj.id || "candidate";
+  return `o---o/---/?v=${source};l=${length};h=${hash};b=beta1;s={4,3}@3C@`;
+}
+
+function projectionImo(obj) {
+  const receipt = obj.accepted ? "accepted" : obj.rejected ? "rejected" : "candidate";
+  return `o---o/---/?receipt=${receipt}@3C@`;
+}
+
 function render() {
   const groups = groupObjects();
   const cardsEl = document.getElementById('cardsView');
@@ -184,9 +196,12 @@ function render() {
     for (const obj of groups[key]) {
       const sel = obj.id === state.selectedId ? 'selected' : '';
       const acc = obj.accepted ? 'accepted' : obj.rejected ? 'rejected' : '';
-      html += `<div class="card ${sel} ${acc}" data-id="${obj.id}" onclick="selectObject('${obj.id}')">
+      const dataOmi = projectionCarrier(obj);
+      const dataImo = projectionImo(obj);
+      html += `<div id="o-inbox-${obj.id}" class="card ${sel} ${acc}" data-id="${obj.id}" data-omi="${escapeHtml(dataOmi)}" data-imo="${escapeHtml(dataImo)}" data-omi-channel="${escapeHtml(obj.channel || 'US')}" data-receipt-candidate="${!obj.accepted && !obj.rejected}" onclick="selectObject('${obj.id}')">
         <div class="title">${escapeHtml(obj.label || obj.text || 'object')}</div>
         <div class="subtitle">${obj.address || ''} <span class="tag ${color}">${obj.channel || 'US'}</span></div>
+        <div class="subtitle">DOM exposes projection. Receipt accepts state.</div>
         <div class="actions">
           <button class="sec sm" onclick="event.stopPropagation();openObject('${obj.id}')">Open</button>
           <button class="sec sm" onclick="event.stopPropagation();editObject('${obj.id}')">Edit</button>
@@ -231,7 +246,7 @@ function renderCanvas() {
     const x = chX[obj.channel] || pad + (i % cols) * spacingX;
     const y = pad + Math.floor(i / cols) * spacingY;
     const colors = { US: 'var(--cyan)', GS: 'var(--purple)', RS: 'var(--amber)', FS: 'var(--green)' };
-    html += `<div class="canvas-node" style="left:${x}px;top:${y}px;border-color:${colors[obj.channel] || '#555'};background:rgba(0,0,0,.7)" data-id="${obj.id}">
+    html += `<div id="o-canvas-${obj.id}" class="canvas-node" style="left:${x}px;top:${y}px;border-color:${colors[obj.channel] || '#555'};background:rgba(0,0,0,.7)" data-id="${obj.id}" data-omi="${escapeHtml(projectionCarrier(obj))}" data-imo="${escapeHtml(projectionImo(obj))}" data-omi-channel="${escapeHtml(obj.channel || 'US')}" data-receipt-candidate="${!obj.accepted && !obj.rejected}">
       ${escapeHtml((obj.label || obj.text || '?').slice(0, 20))}
     </div>`;
   }
@@ -288,6 +303,8 @@ window.selectObject = function(id) {
   const da = obj.dataAttributes || {};
   const parts = obj.parts || {};
   const hasOWord = obj.oWord != null;
+  const dataOmi = projectionCarrier(obj);
+  const dataImo = projectionImo(obj);
   let oSection = '';
   if (hasOWord) {
     const fmt = formatOWord(obj.oWord);
@@ -330,6 +347,11 @@ window.selectObject = function(id) {
     <div class="field"><span>Channel</span><span class="val">${obj.channel || '—'}</span></div>
     <div class="field"><span>POS</span><span class="val">${obj.pos || '—'}</span></div>
     <div class="field"><span>Status</span><span class="val">${obj.accepted ? 'Accepted' : obj.rejected ? 'Rejected' : 'Pending'}</span></div>
+    <omi><imo><o id="projection-inbox-${obj.id}" data-omi="${escapeHtml(dataOmi)}" data-imo="${escapeHtml(dataImo)}">DOM exposes projection. Receipt accepts state.</o></imo></omi>
+    <div class="field"><span>data-omi</span><span class="val" style="font-size:.62rem">${escapeHtml(dataOmi)}</span></div>
+    <div class="field"><span>data-imo</span><span class="val" style="font-size:.62rem">${escapeHtml(dataImo)}</span></div>
+    <div class="field"><span>Handles</span><span class="val">id data-omi data-imo &lt;o&gt; &lt;omi&gt; &lt;imo&gt;</span></div>
+    <div class="field"><span>Boundary</span><span class="val">DOM exposes projection. Receipt accepts state.</span></div>
     ${obj.posHex ? `<div class="field"><span>POS Hex</span><span class="val">${obj.posHex}</span></div>` : ''}
     ${obj.selector ? `<div class="field"><span>Selector</span><span class="val">${obj.selector}</span></div>` : ''}
     ${Object.keys(da).length ? `<h2>data-omi Attributes</h2>${Object.entries(da).map(([k,v]) => `<div class="field"><span>${escapeHtml(k)}</span><span class="val" style="font-size:.68rem">${escapeHtml(v)}</span></div>`).join('')}` : ''}
