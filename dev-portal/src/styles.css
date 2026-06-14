@@ -1476,6 +1476,47 @@ pre { overflow: auto; background: #020617; border-radius: 14px; padding: 16px; }
   line-height: 1.5;
 }
 
+/* Modem input textarea */
+.tq-modem-input {
+  width: 100%;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  background: var(--bg-card, #111);
+  color: var(--fg, #eee);
+  border: 1px solid var(--border, #333);
+  border-radius: 4px;
+  padding: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+  white-space: pre;
+  overflow: auto;
+}
+.tq-modem-input:focus {
+  outline: none;
+  border-color: #f472b6;
+}
+/* Modem pre-formatted output */
+.tq-modem-pre {
+  width: 100%;
+  background: #020617;
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 10px;
+  padding: 12px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre;
+  color: #b8c4dc;
+}
+/* Demod table */
+.tq-demod-table th {
+  color: #8790ae;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
 @media (max-width: 860px) {
   .tq-slider-grid { grid-template-columns: 1fr; }
   .tq-two-col { grid-template-columns: 1fr; }

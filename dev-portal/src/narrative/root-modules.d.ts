@@ -78,3 +78,5 @@ declare module '../../../src/world/world-interaction-gate.js' {
 declare module '../../../src/narrative/narrative-document-pipeline.js' {
   export function insertNarrativeIntoWorld(documents: Array<Record<string, unknown>>, world: unknown): unknown;
 }
+
+

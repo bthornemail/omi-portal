@@ -18,15 +18,18 @@ test('eBPF Pipeline: object output matches verifier structural specifications', 
 });
 
 test('eBPF Pipeline: user-space mirror matches the kernel-space Delta Law calculation', (t) => {
-  const mockSaddrLow = 0x12345678n;
+  const mockSaddrLow = 0x12345678;
+  const rotl32 = (x, r) => ((x << r) | (x >>> (32 - r))) >>> 0;
+  const rotr32 = (x, r) => ((x >>> r) | (x << (32 - r))) >>> 0;
 
-  const rotl1 = ((mockSaddrLow << 1n) | (mockSaddrLow >> 63n)) & 0xFFFFFFFFFFFFFFFFn;
-  const rotl3 = ((mockSaddrLow << 3n) | (mockSaddrLow >> 61n)) & 0xFFFFFFFFFFFFFFFFn;
-  const rotr2 = ((mockSaddrLow >> 2n) | (mockSaddrLow << 62n)) & 0xFFFFFFFFFFFFFFFFn;
+  const expectedSignature = (
+    rotl32(mockSaddrLow, 1) ^
+    rotl32(mockSaddrLow, 3) ^
+    rotr32(mockSaddrLow, 2) ^
+    0x1337C0DE
+  ) >>> 0;
 
-  const expectedSignature = rotl1 ^ rotl3 ^ rotr2 ^ 0x1337C0DEn;
-
-  assert.ok(expectedSignature > 0n);
+  assert.ok(expectedSignature > 0);
   assert.equal(expectedSignature.toString(16), "a270ca70");
 });
 

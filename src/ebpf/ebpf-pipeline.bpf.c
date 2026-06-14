@@ -5,6 +5,14 @@
 #include <linux/ipv6.h>
 #include <bpf/bpf_helpers.h>
 
+static __always_inline __u32 rotl32(__u32 x, int r) {
+    return (x << r) | (x >> (32 - r));
+}
+
+static __always_inline __u32 rotr32(__u32 x, int r) {
+    return (x >> r) | (x << (32 - r));
+}
+
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __type(key, __u32);
@@ -28,13 +36,13 @@ int omi_ingress_signature_gate(struct xdp_md *ctx) {
     if ((void *)(ip6 + 1) > data_end)
         return XDP_PASS;
 
-    __u64 saddr_low = ip6->saddr.s6_addr32[3];
+    __u32 saddr_low = __builtin_bswap32(ip6->saddr.s6_addr32[3]);
 
-    __u64 rotl1 = (saddr_low << 1) | (saddr_low >> 63);
-    __u64 rotl3 = (saddr_low << 3) | (saddr_low >> 61);
-    __u64 rotr2 = (saddr_low >> 2) | (saddr_low << 62);
-
-    __u64 expected_signature = rotl1 ^ rotl3 ^ rotr2 ^ 0x1337C0DE;
+    __u32 expected_signature =
+        rotl32(saddr_low, 1) ^
+        rotl32(saddr_low, 3) ^
+        rotr32(saddr_low, 2) ^
+        0x1337C0DEu;
 
     __u32 *payload_sig = (void *)(ip6 + 1);
     if ((void *)(payload_sig + 1) > data_end)

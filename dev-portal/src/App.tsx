@@ -22,6 +22,7 @@ import { parseNginx, summarizeNginxBlocks, type NginxBlock } from './omi/nginxPa
 import { InfrastructurePanel } from './components/InfrastructurePanel';
 import { NetworkingLiteratePanel } from './components/NetworkingLiteratePanel';
 import { TetragrammatronQuQuartPanel } from './components/TetragrammatronQuQuartPanel';
+import { TetragrammatronModemPanel } from './components/TetragrammatronModemPanel';
 import { parseNetworkingDoc, NETWORKING_DOCS } from './omi/networkingDocParser';
 import { useInfraRunner } from './narrative/useInfraRunner';
 import type { NetworkingDocCell } from './narrative/narrativeTypes';
@@ -260,6 +261,7 @@ export default function App() {
       />
 
       <TetragrammatronQuQuartPanel />
+      <TetragrammatronModemPanel />
 
       <section className="panel code-notes">
         <h2>Model boundary</h2>

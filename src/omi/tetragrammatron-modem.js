@@ -226,6 +226,8 @@ export function modemRoundTripToGeometryReceipts(testOutput, options = {}) {
       chart11: geometry.chart11,
       baseQ: geometry.baseQ,
       fiberQ: geometry.fiberQ,
+      fano7: geometry.fano7,
+      role3: geometry.role3,
       local240: geometry.local240,
       slot5040: geometry.slot5040,
       receiptState: frame.event.status === "passed" ? "accepted" : "candidate",
