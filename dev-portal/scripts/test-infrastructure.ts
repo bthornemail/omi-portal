@@ -1,12 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import type { VisualLiterateCell } from '../src/narrative/narrativeTypes';
 import { parseMakefile, summarizeTargets, PIPELINE_LABELS } from '../src/omi/makefileParser';
 import { parseDockerfiles, summarizeDockerfileStages } from '../src/omi/dockerfileParser';
 import { parseCompose, summarizeComposeServices } from '../src/omi/composeParser';
 import { parseBake, summarizeBakeTargets } from '../src/omi/bakeParser';
 import { parseNginx, summarizeNginxBlocks } from '../src/omi/nginxParser';
-import { parseNetworkingDoc, NETWORKING_DOCS, summarizeNetworkingCells } from '../src/omi/networkingDocParser';
+import { parseNetworkingDoc, NETWORKING_DOCS } from '../src/omi/networkingDocParser';
 
 const ROOT = resolve(import.meta.dirname, '../../');
 
@@ -143,25 +142,23 @@ async function run() {
   }
 
   // ── Networking Docs ──────────────────────────────────────
-  const allNetworkingCells: VisualLiterateCell[] = [];
+  const allNetworkingCells: Awaited<ReturnType<typeof parseNetworkingDoc>>[number][] = [];
   for (const doc of NETWORKING_DOCS) {
     const text = readFileSync(resolve(ROOT, doc.path), 'utf-8');
-    allNetworkingCells.push(...parseNetworkingDoc(text, doc.path));
+    allNetworkingCells.push(...parseNetworkingDoc(text, doc.path, 0));
   }
-  const netSummary = summarizeNetworkingCells(allNetworkingCells);
 
   console.log(`\n=== Networking Docs ===`);
-  console.log(`  ${netSummary.total} sections across ${NETWORKING_DOCS.length} files`);
-  console.log(`  by grade: ${JSON.stringify(netSummary.byGrade)}`);
+  console.log(`  ${allNetworkingCells.length} sections across ${NETWORKING_DOCS.length} files`);
 
   if (allNetworkingCells.length < 20) {
     console.error(`FAIL: expected 20+ networking cells, got ${allNetworkingCells.length}`);
     pass = false;
   }
 
-  const netGrades = new Set(allNetworkingCells.map((c) => c.grade));
-  if (!netGrades.has('production') && !netGrades.has('pipeline')) {
-    console.error(`FAIL: expected production or pipeline grade in networking cells`);
+  const netLayers = new Set(allNetworkingCells.map((c) => c.layer));
+  if (netLayers.size < 3) {
+    console.error(`FAIL: expected 3+ networking layers, got ${netLayers.size}`);
     pass = false;
   }
 

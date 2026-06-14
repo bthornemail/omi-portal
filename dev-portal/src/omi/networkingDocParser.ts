@@ -1,142 +1,123 @@
-import { composeOmiCarrier, receiptCandidateImo } from './omiCarrier';
-import type { VisualLiterateCell } from '../narrative/narrativeTypes';
+import type { NetworkingDocCell, NetworkLayer } from '../narrative/narrativeTypes';
 
-export type NetworkingDoc = {
-  path: string;
-  title: string;
-  sections: { heading: string; level: number; content: string; lineNumber: number }[];
+type RawSection = {
+  heading: string;
+  level: number;
+  content: string;
+  lineNumber: number;
 };
 
-function parseMarkdownSections(text: string): { heading: string; level: number; content: string; lineNumber: number }[] {
+function parseMarkdownSections(text: string): RawSection[] {
   const lines = text.split(/\r?\n/);
-  const sections: { heading: string; level: number; content: string; lineNumber: number }[] = [];
-  let currentSection: { heading: string; level: number; content: string[]; startLine: number } | null = null;
+  const sections: RawSection[] = [];
+  let current: { heading: string; level: number; content: string[]; startLine: number } | null = null;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
-    if (headingMatch) {
-      if (currentSection) {
-        sections.push({
-          heading: currentSection.heading,
-          level: currentSection.level,
-          content: currentSection.content.join('\n').trim(),
-          lineNumber: currentSection.startLine
-        });
+    const m = line.match(/^(#{1,6})\s+(.+)$/);
+    if (m) {
+      if (current) {
+        sections.push({ heading: current.heading, level: current.level, content: current.content.join('\n').trim(), lineNumber: current.startLine });
       }
-      currentSection = {
-        heading: headingMatch[2],
-        level: headingMatch[1].length,
-        content: [],
-        startLine: i + 1
-      };
-      continue;
-    }
-    if (currentSection) {
-      currentSection.content.push(line);
+      current = { heading: m[2], level: m[1].length, content: [], startLine: i + 1 };
+    } else if (current) {
+      current.content.push(line);
     }
   }
 
-  if (currentSection) {
-    sections.push({
-      heading: currentSection.heading,
-      level: currentSection.level,
-      content: currentSection.content.join('\n').trim(),
-      lineNumber: currentSection.startLine
-    });
+  if (current) {
+    sections.push({ heading: current.heading, level: current.level, content: current.content.join('\n').trim(), lineNumber: current.startLine });
   }
 
   return sections;
 }
 
-function extractCodeRefs(content: string): { path: string; kind: VisualLiterateCell['sourceRefs'][0]['kind'] }[] {
-  const refs: { path: string; kind: VisualLiterateCell['sourceRefs'][0]['kind'] }[] = [];
-  const jsMatch = content.match(/`src\/[a-z./-]+\.js`/g);
-  if (jsMatch) {
-    for (const m of jsMatch) {
-      refs.push({ path: m.replace(/`/g, ''), kind: 'js' });
-    }
-  }
-  const testMatch = content.match(/`test\/[a-z./-]+\.test\.js`/g);
-  if (testMatch) {
-    for (const m of testMatch) {
-      refs.push({ path: m.replace(/`/g, ''), kind: 'test' });
-    }
+function extractJsRefs(content: string): { path: string; kind: 'js' | 'test' }[] {
+  const refs: { path: string; kind: 'js' | 'test' }[] = [];
+  for (const m of content.match(/`(?:src\/[a-z./-]+\.js|test\/[a-z./-]+\.test\.js)`/gi) || []) {
+    const p = m.replace(/`/g, '');
+    refs.push({ path: p, kind: p.startsWith('test/') ? 'test' : 'js' });
   }
   return refs;
-}
-
-function extractCommand(content: string): string | undefined {
-  const makeMatch = content.match(/`make\s+([a-z][a-z0-9._-]+)`/);
-  if (makeMatch) return makeMatch[1];
-  const nodeMatch = content.match(/`node\s+([^`]+)`/);
-  if (nodeMatch) return nodeMatch[1];
-  return undefined;
 }
 
 function docIdFromPath(path: string): string {
   return path.replace(/^docs\//, '').replace(/\.md$/, '').replace(/\//g, '-');
 }
 
-export function parseNetworkingDoc(text: string, path: string): VisualLiterateCell[] {
+function classifyLayer(path: string): NetworkLayer {
+  if (path.includes('omi-core-spec')) return 'core';
+  if (path.includes('canonical-addressing')) return 'addressing';
+  if (path.includes('omi-distributed-protocol')) return 'distributed';
+  if (path.includes('omi-protocol-sequencing')) return 'transport';
+  if (path.includes('memory-layout') || path.includes('RING_OVERWRITE')) return 'memory';
+  if (path.includes('prolog-wordnet-aframe')) return 'application';
+  return 'core';
+}
+
+function makeDataOmi(docId: string, heading: string, layer: NetworkLayer): string {
+  const tag = heading.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 24) || 'section';
+  return `${layer}/${docId}/${tag}`;
+}
+
+function makeDataImo(docId: string, sectionIdx: number): string {
+  return `imo:${docId}@${sectionIdx}`;
+}
+
+export function parseNetworkingDoc(text: string, path: string, index: number): NetworkingDocCell[] {
   const sections = parseMarkdownSections(text);
   const title = sections.length > 0 ? sections[0].heading : path;
   const docId = docIdFromPath(path);
-
-  const cells: VisualLiterateCell[] = [];
+  const layer = classifyLayer(path);
+  const cells: NetworkingDocCell[] = [];
+  let sectionIdx = 0;
 
   for (const section of sections) {
     if (section.level === 1) continue;
+    sectionIdx++;
 
-    const refs = extractCodeRefs(section.content);
-    const command = extractCommand(section.content);
-    const grade = determineGrade(section.heading, section.content);
-
-    const cellId = `${docId}:${section.lineNumber}`;
-    const carrierValue = `${docId}/${section.heading.slice(0, 24)}`;
+    const refs = extractJsRefs(section.content);
+    const excerpt = section.content.slice(0, 240) + (section.content.length > 240 ? '…' : '');
 
     cells.push({
-      id: `net:${cellId}`,
+      id: `net:${docId}:${sectionIdx}`,
       title: section.heading,
-      grade,
-      explanation: section.content.slice(0, 200) + (section.content.length > 200 ? '…' : ''),
-      sourceRefs: refs.length > 0
-        ? refs
-        : [{ path, kind: 'md' }],
-      command,
-      projection: {
-        dataOmi: composeOmiCarrier(`net:${carrierValue}`, carrierValue.length + 4, docId),
-        dataImo: receiptCandidateImo(),
-        receiptState: 'candidate'
-      }
+      sourcePath: path,
+      section: section.heading,
+      layer,
+      explanation: excerpt,
+      sourceRefs: refs.length > 0 ? refs : [{ path, kind: 'md' }],
+      dataOmi: makeDataOmi(docId, section.heading, layer),
+      dataImo: makeDataImo(docId, sectionIdx),
+      receiptState: 'candidate'
     });
   }
 
   return cells;
 }
 
-function determineGrade(heading: string, _content: string): VisualLiterateCell['grade'] {
-  const h = heading.toLowerCase();
-  if (h.includes('specification') || h.includes('normative')) return 'production';
-  if (h.includes('prospectus') || h.includes('aspirational')) return 'verify';
-  if (h.includes('pipeline') || h.includes('sequencer')) return 'pipeline';
-  if (h.includes('recommended') || h.includes('layout')) return 'consumer';
-  return 'dev';
+export interface DocDesc {
+  path: string;
+  title: string;
+  layer: NetworkLayer;
 }
 
-export const NETWORKING_DOCS: { path: string; description: string }[] = [
-  { path: 'docs/03-network/omi-core-spec.md', description: 'OMI-CORE-v0: operators, address grammar, delta law, cons cells, sexagesimal notation, factorial lattice' },
-  { path: 'docs/03-network/canonical-addressing.md', description: '8-segment address map, DOM/CSSOM id conventions, local context root' },
-  { path: 'docs/03-network/omi-distributed-protocol.md', description: 'MCRSGSP, erasure coding, fragment gossip, causal closure, anti-entropy repair' },
-  { path: 'docs/04-transport/omi-protocol-sequencing.md', description: '4-phase pipeline: ingestion, memory mapping, WebRTC routing, GPU acceleration' },
-  { path: 'docs/05-session/memory-layout.md', description: 'ArrayBuffer/SharedArrayBuffer tiers, pre-header, 5040-cycle history' },
-  { path: 'docs/07-application/prolog-wordnet-aframe.md', description: 'WordNet broker, service bus ::3, Fano tokens, A-Frame binding' }
+export const NETWORKING_DOCS: DocDesc[] = [
+  { path: 'docs/03-network/omi-core-spec.md', title: 'OMI-CORE-v0 Specification', layer: 'core' },
+  { path: 'docs/03-network/canonical-addressing.md', title: 'Canonical Addressing', layer: 'addressing' },
+  { path: 'docs/03-network/omi-distributed-protocol.md', title: 'Distributed Protocol', layer: 'distributed' },
+  { path: 'docs/04-transport/omi-protocol-sequencing.md', title: 'Protocol Sequencing', layer: 'transport' },
+  { path: 'docs/05-session/memory-layout.md', title: 'Memory Layout', layer: 'memory' },
+  { path: 'docs/05-session/RING_OVERWRITE_POLICY_v0.md', title: 'Ring Overwrite Policy v0', layer: 'memory' },
+  { path: 'docs/07-application/prolog-wordnet-aframe.md', title: 'WordNet / A-Frame Application', layer: 'application' }
 ];
 
-export function summarizeNetworkingCells(cells: VisualLiterateCell[]) {
-  const byGrade: Record<string, number> = {};
+export function summarizeNetworkingCells(cells: NetworkingDocCell[]) {
+  const byLayer: Record<string, number> = {};
+  const byDoc: Record<string, number> = {};
   for (const c of cells) {
-    byGrade[c.grade] = (byGrade[c.grade] || 0) + 1;
+    byLayer[c.layer] = (byLayer[c.layer] || 0) + 1;
+    byDoc[c.sourcePath] = (byDoc[c.sourcePath] || 0) + 1;
   }
-  return { total: cells.length, byGrade };
+  return { total: cells.length, byLayer, byDoc };
 }

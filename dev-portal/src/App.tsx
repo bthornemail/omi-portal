@@ -20,8 +20,11 @@ import { parseCompose, summarizeComposeServices, type ComposeService } from './o
 import { parseBake, summarizeBakeTargets, type BakeTarget } from './omi/bakeParser';
 import { parseNginx, summarizeNginxBlocks, type NginxBlock } from './omi/nginxParser';
 import { InfrastructurePanel } from './components/InfrastructurePanel';
-import { parseNetworkingDoc, NETWORKING_DOCS, summarizeNetworkingCells } from './omi/networkingDocParser';
-import type { VisualLiterateCell } from './narrative/narrativeTypes';
+import { NetworkingLiteratePanel } from './components/NetworkingLiteratePanel';
+import { TetragrammatronQuQuartPanel } from './components/TetragrammatronQuQuartPanel';
+import { parseNetworkingDoc, NETWORKING_DOCS } from './omi/networkingDocParser';
+import { useInfraRunner } from './narrative/useInfraRunner';
+import type { NetworkingDocCell } from './narrative/narrativeTypes';
 import './styles.css';
 
 export default function App() {
@@ -39,7 +42,9 @@ export default function App() {
   const [composeServices, setComposeServices] = useState<ComposeService[]>([]);
   const [bakeTargets, setBakeTargets] = useState<BakeTarget[]>([]);
   const [nginxBlocks, setNginxBlocks] = useState<NginxBlock[]>([]);
-  const [networkingCells, setNetworkingCells] = useState<VisualLiterateCell[]>([]);
+  const [networkingCells, setNetworkingCells] = useState<NetworkingDocCell[]>([]);
+  const [activeLayer, setActiveLayer] = useState<string | null>(null);
+  const { runTarget, getRun } = useInfraRunner();
   const importRef = useRef<HTMLInputElement | null>(null);
   const {
     projectionState: narrative,
@@ -120,21 +125,24 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    let alive = true;
     Promise.allSettled(
-      NETWORKING_DOCS.map((doc) =>
+      NETWORKING_DOCS.map((doc, i) =>
         fetch(`/${doc.path}`)
           .then((r) => r.text())
-          .then((text) => ({ path: doc.path, text }))
+          .then((text) => ({ path: doc.path, text, index: i }))
       )
     ).then((results) => {
-      const cells: VisualLiterateCell[] = [];
+      if (!alive) return;
+      const cells: NetworkingDocCell[] = [];
       for (const result of results) {
         if (result.status === 'fulfilled') {
-          cells.push(...parseNetworkingDoc(result.value.text, result.value.path));
+          cells.push(...parseNetworkingDoc(result.value.text, result.value.path, result.value.index));
         }
       }
       setNetworkingCells(cells);
     });
+    return () => { alive = false; };
   }, []);
 
   async function onExport() {
@@ -240,8 +248,18 @@ export default function App() {
         composeServices={composeServices}
         bakeTargets={bakeTargets}
         nginxBlocks={nginxBlocks}
-        networkingCells={networkingCells}
+        onRunTarget={runTarget}
+        getRun={getRun}
       />
+
+      <NetworkingLiteratePanel
+        cells={networkingCells}
+        loaded={networkingCells.length > 0}
+        activeLayer={activeLayer}
+        onSetLayer={setActiveLayer}
+      />
+
+      <TetragrammatronQuQuartPanel />
 
       <section className="panel code-notes">
         <h2>Model boundary</h2>

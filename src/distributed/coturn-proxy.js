@@ -21,11 +21,18 @@ export class CoTURNProxy {
     this.realm = options.realm || "omi";
     this.secret = options.secret || (typeof process !== "undefined" && process.env.COTURN_SECRET) || "dev-secret";
     this.ttl = options.ttl || 3600;
+    this._now = options.now || (() => Date.now());
+    this._nonce = options.nonce || (async () => {
+      const cryptoObj = typeof window !== "undefined" ? window.crypto : (await import("node:crypto")).webcrypto;
+      const buf = new Uint8Array(4);
+      cryptoObj.getRandomValues(buf);
+      return Array.from(buf).map((b) => b.toString(16).padStart(2, "0")).join("");
+    });
   }
 
   async generateCredentials(username) {
-    const user = username || `omi-${Date.now()}-${await randomHex(4)}`;
-    const timestamp = Math.floor(Date.now() / 1000) + this.ttl;
+    const user = username || `omi-${this._now()}-${await this._nonce()}`;
+    const timestamp = Math.floor(this._now() / 1000) + this.ttl;
     const name = `${timestamp}:${user}`;
     const password = await hmacSha1(this.secret, name);
     return { username: name, password, ttl: this.ttl, realm: this.realm };
@@ -35,7 +42,7 @@ export class CoTURNProxy {
     const parts = username.split(":");
     if (parts.length !== 2) return false;
     const timestamp = parseInt(parts[0], 10);
-    if (isNaN(timestamp) || timestamp < Math.floor(Date.now() / 1000)) return false;
+    if (isNaN(timestamp) || timestamp < Math.floor(this._now() / 1000)) return false;
     const expected = await hmacSha1(this.secret, username);
     return expected === password;
   }

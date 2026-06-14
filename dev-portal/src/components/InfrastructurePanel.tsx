@@ -1,14 +1,12 @@
 import { useMemo, useState } from 'react';
 import { composeOmiCarrier, receiptCandidateImo } from '../omi/omiCarrier';
-import {
-  PIPELINE_LABELS,
-  type MakeTarget
-} from '../omi/makefileParser';
+import { type MakeTarget, PIPELINE_LABELS } from '../omi/makefileParser';
+import { isTargetRunnable } from '../omi/infraRunner';
 import type { DockerfileStage } from '../omi/dockerfileParser';
 import type { ComposeService } from '../omi/composeParser';
 import type { BakeTarget } from '../omi/bakeParser';
 import type { NginxBlock } from '../omi/nginxParser';
-import type { VisualLiterateCell } from '../narrative/narrativeTypes';
+import type { InfraRunRecord } from '../narrative/narrativeTypes';
 
 type InfrastructurePanelProps = {
   makeTargets: MakeTarget[];
@@ -16,7 +14,8 @@ type InfrastructurePanelProps = {
   composeServices: ComposeService[];
   bakeTargets: BakeTarget[];
   nginxBlocks: NginxBlock[];
-  networkingCells?: VisualLiterateCell[];
+  onRunTarget?: (target: string) => void;
+  getRun?: (target: string) => { record: InfraRunRecord; active: boolean } | undefined;
 };
 
 const GROUP_COLORS: Record<string, string> = {
@@ -36,9 +35,10 @@ export function InfrastructurePanel({
   composeServices,
   bakeTargets,
   nginxBlocks,
-  networkingCells = []
+  onRunTarget,
+  getRun
 }: InfrastructurePanelProps) {
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'grades' | 'docker' | 'compose' | 'bake' | 'nginx' | 'network'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'grades' | 'docker' | 'compose' | 'bake' | 'nginx'>('pipeline');
 
   const gradeTargets = useMemo(
     () => makeTargets.filter((t) => t.group === 'grade'),
@@ -61,7 +61,7 @@ export function InfrastructurePanel({
           <h2>Infrastructure Projection</h2>
         </div>
         <span className="design-status">
-          {makeTargets.length} targets · {dockerStages.length} stages · {composeServices.length} services · {bakeTargets.length} bake · {networkingCells.length} net
+          {makeTargets.length} targets · {dockerStages.length} stages · {composeServices.length} services · {bakeTargets.length} bake · {nginxBlocks.length} nginx
         </span>
       </div>
       <p className="boundary-copy">
@@ -69,7 +69,7 @@ export function InfrastructurePanel({
       </p>
 
       <div className="infra-tabs">
-        {(['pipeline', 'grades', 'docker', 'compose', 'bake', 'nginx', 'network'] as const).map((tab) => (
+        {(['pipeline', 'grades', 'docker', 'compose', 'bake', 'nginx'] as const).map((tab) => (
           <button
             key={tab}
             className={`infra-tab ${activeTab === tab ? 'active' : ''}`}
@@ -81,7 +81,6 @@ export function InfrastructurePanel({
             {tab === 'compose' && 'Compose'}
             {tab === 'bake' && 'Bake'}
             {tab === 'nginx' && 'Nginx'}
-            {tab === 'network' && 'Network'}
           </button>
         ))}
       </div>
@@ -112,7 +111,7 @@ export function InfrastructurePanel({
           </h3>
           <div className="infra-grid">
             {gradeTargets.map((t) => (
-              <InfraCard key={t.name} item={t} groupColors={GROUP_COLORS} />
+              <InfraCard key={t.name} item={t} groupColors={GROUP_COLORS} onRunTarget={onRunTarget} getRun={getRun} />
             ))}
           </div>
 
@@ -122,7 +121,7 @@ export function InfrastructurePanel({
           </h3>
           <div className="infra-tight-grid">
             {verifyTargets.map((t) => (
-              <InfraCard key={t.name} item={t} groupColors={GROUP_COLORS} compact />
+              <InfraCard key={t.name} item={t} groupColors={GROUP_COLORS} compact onRunTarget={onRunTarget} getRun={getRun} />
             ))}
           </div>
         </div>
@@ -253,55 +252,35 @@ export function InfrastructurePanel({
           </div>
         </div>
       )}
-
-      {activeTab === 'network' && (
-        <div className="infra-section">
-          <h3 className="infra-section-title">
-            OMI Network Protocol Stack
-            <span className="infra-badge">{networkingCells.length} sections</span>
-          </h3>
-          <div className="network-doc-list">
-            {networkingCells.map((cell) => (
-              <div
-                key={cell.id}
-                className="network-cell"
-                data-omi={cell.projection.dataOmi}
-                data-imo={cell.projection.dataImo}
-                data-grade={cell.grade}
-              >
-                <div className="network-cell-header">
-                  <span className={`network-grade-tag grade-${cell.grade}`}>{cell.grade}</span>
-                  <strong className="network-cell-title">{cell.title}</strong>
-                </div>
-                <p className="network-cell-explain">{cell.explanation}</p>
-                <div className="network-cell-meta">
-                  {cell.sourceRefs.map((ref, i) => (
-                    <code key={i} className="network-src-ref">{ref.path}</code>
-                  ))}
-                  {cell.command && (
-                    <code className="network-command">make {cell.command}</code>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </section>
   );
 }
 
-function InfraCard({ item, groupColors, compact }: {
-  item: { name: string; description?: string; group: string; dependencies: string[]; command?: string };
+function InfraCard({ item, groupColors, compact, onRunTarget, getRun }: {
+  item: { name: string; description?: string; group: string; dependencies: string[] };
   groupColors: Record<string, string>;
   compact?: boolean;
+  onRunTarget?: (target: string) => void;
+  getRun?: (target: string) => { record: InfraRunRecord; active: boolean } | undefined;
 }) {
   const color = groupColors[item.group] || '#6b7280';
+  const runnable = isTargetRunnable(item.name);
+  const run = getRun?.(item.name);
+
+  const statusColor = run
+    ? run.record.status === 'passed' ? '#44d9a2'
+      : run.record.status === 'failed' ? '#ef4444'
+      : run.record.status === 'running' ? '#f59e0b'
+      : run.record.status === 'candidate' ? '#93c5fd'
+      : '#6b7280'
+    : undefined;
+
   return (
     <div
       className={`infra-card ${compact ? 'infra-card-compact' : ''}`}
-      style={{ borderLeftColor: color }}
+      style={{ borderLeftColor: run ? (statusColor ?? color) : color }}
       data-group={item.group}
+      data-run-status={run?.record.status ?? 'idle'}
     >
       <div className="infra-card-header">
         <strong>{item.name}</strong>
@@ -312,15 +291,43 @@ function InfraCard({ item, groupColors, compact }: {
       {item.description && (
         <p className="infra-card-desc">{item.description}</p>
       )}
-      {item.command && (
-        <code className="infra-card-command">{item.command}</code>
-      )}
+      <div className="infra-card-actions">
+        <code className="infra-card-command">make {item.name}</code>
+        {run && (
+          <span className="infra-run-status" style={{ color: statusColor }}>
+            {run.record.status === 'running' ? '··· running' : run.record.status}
+          </span>
+        )}
+        {runnable && onRunTarget && !run?.active && (
+          <button
+            className="infra-run-btn"
+            onClick={() => onRunTarget(item.name)}
+          >
+            Run
+          </button>
+        )}
+        {run?.active && (
+          <span className="infra-run-spinner">⏳</span>
+        )}
+      </div>
       {item.dependencies.length > 0 && !compact && (
         <div className="infra-card-deps">
           {item.dependencies.map((dep) => (
             <span key={dep} className="infra-dep-tag">{dep}</span>
           ))}
         </div>
+      )}
+      {run && run.record.stdout.length > 0 && (
+        <details className="infra-run-log">
+          <summary>stdout ({run.record.stdout.length} lines)</summary>
+          <pre>{run.record.stdout.join('\n')}</pre>
+        </details>
+      )}
+      {run && run.record.stderr.length > 0 && (
+        <details className="infra-run-log infra-run-log-err">
+          <summary>stderr ({run.record.stderr.length} lines)</summary>
+          <pre>{run.record.stderr.join('\n')}</pre>
+        </details>
       )}
     </div>
   );

@@ -11,7 +11,9 @@
     "test:narrative": "tsx scripts/test-narrative-pipeline.ts",
     "test:cidr-mcrsgsp": "tsx scripts/test-cidr-mcrsgsp.ts",
     "test:cons-assembly": "tsx scripts/test-cons-assembly.ts",
-    "test:infrastructure": "tsx scripts/test-infrastructure.ts"
+    "test:infrastructure": "tsx scripts/test-infrastructure.ts",
+    "test:networking-docs": "tsx scripts/test-networking-docs.ts",
+    "test:tetragrammatron": "tsx scripts/test-tetragrammatron-ququart.ts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

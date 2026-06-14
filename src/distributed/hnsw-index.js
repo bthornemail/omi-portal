@@ -19,11 +19,9 @@ export function l2Distance(a, b) {
   return Math.sqrt(s);
 }
 
-const DEFAULT_ML = 1 / Math.LN2;
+import { deterministicLayerAssignment } from "../core/deterministic-utils.js";
 
-function layerAssignment(levelMult, M) {
-  return Math.floor(-Math.log(Math.random()) * levelMult * M);
-}
+const DEFAULT_ML = 1 / Math.LN2;
 
 export class HNSWIndex {
   constructor(options = {}) {
@@ -73,7 +71,7 @@ export class HNSWIndex {
     const nodeId = id ?? `v${this._nodes.size}`;
     if (this._nodes.has(nodeId)) throw new Error(`Node ${nodeId} already exists in index`);
 
-    const level = layerAssignment(1, this.M);
+    const level = deterministicLayerAssignment(nodeId, vector, this.M);
     const node = { id: nodeId, vector, level, connections: new Map() };
     for (let l = 0; l <= level; l++) node.connections.set(l, []);
     this._nodes.set(nodeId, node);

@@ -1,6 +1,7 @@
 import { createVersionVector, vvIncrement, vvMerge, vvCompare } from "./version-vector.js";
 import { createFragmentStore } from "./fragment-store.js";
 import { fragmentKey } from "./causal-closure.js";
+import { deterministicPeerOrder } from "../core/deterministic-utils.js";
 
 export class GossipNode {
   constructor(nodeId, options = {}) {
@@ -8,6 +9,8 @@ export class GossipNode {
     this.store = options.store || createFragmentStore();
     this.peers = new Map();
     this.fanout = options.fanout || 4;
+    this._round = 0;
+    this._seed = options.seed || 0;
     this._inventory = new Set();
     this._frontier = {};
   }
@@ -78,8 +81,9 @@ export class GossipNode {
   async gossipRound() {
     const peerIds = [...this.peers.keys()];
     if (peerIds.length === 0) return { sent: 0, received: 0 };
-    const shuffled = peerIds.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, Math.min(this.fanout, shuffled.length));
+    const ordered = deterministicPeerOrder(peerIds, this._round, this._seed);
+    this._round++;
+    const selected = ordered.slice(0, Math.min(this.fanout, ordered.length));
     let totalSent = 0;
     let totalReceived = 0;
     for (const peerId of selected) {

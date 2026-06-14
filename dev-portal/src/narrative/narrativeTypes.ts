@@ -80,6 +80,43 @@ export type VisualLiterateCell = {
   };
 };
 
+export type NetworkLayer =
+  | "core"
+  | "addressing"
+  | "distributed"
+  | "transport"
+  | "memory"
+  | "application";
+
+export type NetworkingDocCell = {
+  id: string;
+  title: string;
+  sourcePath: string;
+  section: string;
+  layer: NetworkLayer;
+  explanation: string;
+  sourceRefs: { path: string; kind: "md" | "js" | "test" }[];
+  dataOmi: string;
+  dataImo: string;
+  receiptState: ReceiptState;
+};
+
+export type InfraRunStatus = "idle" | "candidate" | "running" | "passed" | "failed";
+
+export type InfraRunRecord = {
+  id: string;
+  target: string;
+  command: string;
+  status: InfraRunStatus;
+  startedAt?: number;
+  finishedAt?: number;
+  stdout: string[];
+  stderr: string[];
+  exitCode?: number;
+  dataOmi: string;
+  dataImo: string;
+};
+
 export type InfrastructureProjection = {
   id: string;
   kind:

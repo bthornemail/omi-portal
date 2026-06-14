@@ -1,12 +1,13 @@
 const CANONICAL_ROOT = "omi-ffff-127-0-0-1";
 
 export class OmiChiralFifoEngine {
-  constructor(sharedArrayBuffer) {
+  constructor(sharedArrayBuffer, options = {}) {
     if (!sharedArrayBuffer || sharedArrayBuffer.byteLength < 5040 * 8) {
       throw new TypeError("OmiChiralFifoEngine requires a SharedArrayBuffer of at least 40320 bytes");
     }
     this.sab = sharedArrayBuffer;
     this.view = new DataView(this.sab);
+    this._tick = options.tick !== undefined ? options.tick : 0;
     this.PIPE_PATH_LEFT = "/tmp/omi-bus/chiral_left.fifo";
     this.PIPE_PATH_RIGHT = "/tmp/omi-bus/chiral_right.fifo";
     this.fs = null;
@@ -38,8 +39,8 @@ export class OmiChiralFifoEngine {
     }
   }
 
-  static construct(sharedArrayBuffer) {
-    const engine = new OmiChiralFifoEngine(sharedArrayBuffer);
+  static construct(sharedArrayBuffer, options = {}) {
+    const engine = new OmiChiralFifoEngine(sharedArrayBuffer, options);
     engine.initNamedPipes().catch(() => {});
     return engine;
   }
@@ -60,8 +61,9 @@ export class OmiChiralFifoEngine {
     const shapeTag = isLeftChiral ? "archimedean-snub" : "catalan-dual";
     const id = `${CANONICAL_ROOT}-${opHex}-${shapeTag}-slot${targetSlotIndex}`;
 
+    this._tick = (this._tick + 1) >>> 0;
     return this.cons(
-      { id, targetSlotIndex, isLeftChiral, timestamp: Date.now() },
+      { id, targetSlotIndex, isLeftChiral, tick: this._tick },
       new Float64Array([finalChiralValue])
     );
   }
