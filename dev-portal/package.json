@@ -13,7 +13,8 @@
     "test:cons-assembly": "tsx scripts/test-cons-assembly.ts",
     "test:infrastructure": "tsx scripts/test-infrastructure.ts",
     "test:networking-docs": "tsx scripts/test-networking-docs.ts",
-    "test:tetragrammatron": "tsx scripts/test-tetragrammatron-ququart.ts"
+    "test:tetragrammatron": "tsx scripts/test-tetragrammatron-ququart.ts && tsx scripts/test-omi-surfaces.tsx",
+    "test:omi-surfaces": "tsx scripts/test-omi-surfaces.tsx"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

@@ -1517,8 +1517,63 @@ pre { overflow: auto; background: #020617; border-radius: 14px; padding: 16px; }
   letter-spacing: .06em;
 }
 
+.omi-projection-faces {
+  margin-top: 12px;
+}
+
+.omi-surface-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.omi-surface {
+  min-height: 84px;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(15, 23, 42, .64);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.omi-surface-title {
+  color: #94a3b8;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.omi-surface span,
+.omi-surface code {
+  overflow-wrap: anywhere;
+}
+
+.omi-surface code {
+  color: #b8c4dc;
+  font-size: 11px;
+}
+
+.omi-worker-surface {
+  margin-top: 8px;
+  min-height: auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.omi-worker-state {
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+}
+
 @media (max-width: 860px) {
   .tq-slider-grid { grid-template-columns: 1fr; }
   .tq-two-col { grid-template-columns: 1fr; }
   .tq-space-triad { grid-template-columns: 1fr; }
+  .omi-surface-grid { grid-template-columns: 1fr; }
 }

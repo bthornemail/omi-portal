@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 // @ts-expect-error — root JS module
 import { modemRoundTripToGeometryReceipts, modemFrameToOWord, packModemFramesToOFile, oWordToModemFrame, unpackOFileToModemFrames } from '../../../src/omi/tetragrammatron-modem.js';
 // @ts-expect-error — root JS module
@@ -10,6 +10,8 @@ import {
   DEFAULT_SAMPLE,
   type ModemFrame,
 } from '../omi/tetragrammatronModemParser';
+import { deriveOmiCarrierHash, modemFrameToOmiCarrier } from '../omi/omiSurfaceCarrier';
+import { OmiForm, OmiGlyph, OmiGnomon, OmiMatrix, OmiPortal, OmiWorkerSurface, OmiWorld } from './omi-surfaces';
 
 type Tab = 'omi' | 'geometry' | 'oword' | 'ofile' | 'demod' | 'receipt';
 
@@ -17,6 +19,8 @@ export function TetragrammatronModemPanel() {
   const [state, setState] = useState(createInitialModemState);
   const [tab, setTab] = useState<Tab>('receipt');
   const [importedState, setImportedState] = useState<{ text: string; frames: Record<string, unknown>[]; activeFrame: number } | null>(null);
+  const [carrierHash, setCarrierHash] = useState('');
+  const [workerEvent, setWorkerEvent] = useState<Record<string, unknown> | null>(null);
   const importRef = useRef<HTMLInputElement | null>(null);
 
   const runPipeline = useCallback((input: string) => {
@@ -80,6 +84,27 @@ export function TetragrammatronModemPanel() {
   const oWordData = oWord ? unpackOWord(oWord) : null;
   const oFile = state.result ? packModemFramesToOFile(state.result.frames) : '';
   const decoded = oWord ? oWordToModemFrame(oWord) : null;
+  const activeCarrier = useMemo(() => {
+    if (!frame || !oWordHex) return null;
+    return modemFrameToOmiCarrier({
+      frame,
+      oWordHex,
+      oFile,
+      surface: 'matrix',
+      hash: carrierHash || undefined,
+    });
+  }, [carrierHash, frame, oFile, oWordHex]);
+
+  useEffect(() => {
+    let alive = true;
+    setCarrierHash('');
+    if (!frame || !oWordHex) return () => { alive = false; };
+    const carrier = modemFrameToOmiCarrier({ frame, oWordHex, oFile, surface: 'matrix' });
+    deriveOmiCarrierHash(carrier)
+      .then((hash) => { if (alive) setCarrierHash(hash); })
+      .catch(() => { if (alive) setCarrierHash(''); });
+    return () => { alive = false; };
+  }, [frame, oFile, oWordHex]);
 
   return (
     <section
@@ -435,6 +460,50 @@ export function TetragrammatronModemPanel() {
                 Each line is a 256-bit omi---imo carrier word (64 hex chars).
                 Readable proof → carrier → geometry → receipt.
               </p>
+            </div>
+          )}
+
+          {activeCarrier && frame && (
+            <div className="tq-input-section omi-projection-faces">
+              <div className="tq-mode-toggle">
+                <span className="tq-mode-label">Projection Faces</span>
+                <span className="tq-slider-val">{activeCarrier.receiptState}</span>
+              </div>
+              <div className="omi-surface-grid">
+                <OmiForm carrier={{ ...activeCarrier, surface: 'form' }}>
+                  <span>slot {frame.slot5040 ?? '—'}</span>
+                  <code>local240 {frame.local240 ?? '—'}</code>
+                </OmiForm>
+                <OmiGlyph carrier={{ ...activeCarrier, surface: 'glyph' }}>
+                  <span>{frame.event.status}</span>
+                  <code>{frame.event.name.slice(0, 48)}</code>
+                </OmiGlyph>
+                <OmiMatrix carrier={{ ...activeCarrier, surface: 'matrix' }}>
+                  <span>Q{frame.baseQ ?? '—'} / F{frame.fiberQ ?? '—'}</span>
+                  <code>{frame.qxy ?? '—'}</code>
+                </OmiMatrix>
+                <OmiGnomon carrier={{ ...activeCarrier, surface: 'gnomon' }}>
+                  <span>chart {frame.chart11 ?? '—'}</span>
+                  <code>{String(frame.polybius?.cell ?? '—')}</code>
+                </OmiGnomon>
+                <OmiPortal carrier={{ ...activeCarrier, surface: 'portal' }}>
+                  <span>{frame.address.slice(0, 28)}…</span>
+                  <code>{activeCarrier.hash?.slice(0, 16) || 'hash pending'}</code>
+                </OmiPortal>
+                <OmiWorld carrier={{ ...activeCarrier, surface: 'world' }}>
+                  <span>fano {frame.fano7 ?? '—'} role {frame.role3 ?? '—'}</span>
+                  <code>{activeCarrier.oWord?.slice(0, 18)}…</code>
+                </OmiWorld>
+              </div>
+              <OmiWorkerSurface
+                carrier={activeCarrier}
+                onEvent={(event) => setWorkerEvent(event as unknown as Record<string, unknown>)}
+              />
+              {workerEvent && (
+                <div className="tq-arch-line sep">
+                  worker event: <code>{String(workerEvent.type)}:{String(workerEvent.carrierId)}</code>
+                </div>
+              )}
             </div>
           )}
         </>
