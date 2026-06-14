@@ -8,6 +8,16 @@ Current implementation: five-factor CONS/RRGGBBAA router
 
 This document records the Tetragrammatron Meta-Memory Automaton as it exists in the current repository. It is not a new canonical root. It is a reference bridge from the conceptual automaton language to the actual code paths, declarations, generated vectors, and verification gates.
 
+Related reference:
+
+```text
+polyharmonic-governor-axis.md
+```
+
+That document names the five-factor interpretation layer as the
+**Tetragrammatron Polyharmonic Governor**. It is a reference synthesis only and
+does not add a sixth root or runtime API.
+
 The current implementation uses five canonical OMI factors:
 
 ```text
@@ -59,6 +69,10 @@ src/omilog/triad-dispatch.js
   evaluateTriadDispatch()
   deriveTriadDispatch()
   auditConsTriadDispatch()
+
+src/omi/tetragrammatron-polyharmonic-governor.js
+  exports reference-only clocks, offsets, governors, and lookup helpers
+  does not validate frames, accept receipts, or alter compiler lowering
 
 scripts/generate-router-seeds.js
   writes vectors/pos.omi
@@ -167,13 +181,16 @@ Doctrine:
 
 The hidden `5! = 120` ladder is the five canonical declaration set:
 
-| Factor | Source | Compiled | Keyword | Role |
-| --- | --- | --- | --- | --- |
-| 1 | `RULES.omi` | `RULES.imo` | `MUST` | normative obligations |
-| 2 | `FACTS.omi` | `FACTS.imo` | `FACT` | grounded implementation facts |
-| 3 | `CLOSURES.omi` | `CLOSURES.imo` | `CLOSE` | sealed boundaries |
-| 4 | `COMBINATORS.omi` | `COMBINATORS.imo` | `COMBINE` | lawful composition |
-| 5 | `CONS.omi` | `CONS.imo` | `CONS` | structural reduction and lookup |
+| Factor | Source | Compiled | Keyword | Role | Governor | Exponent |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 1 | `RULES.omi` | `RULES.imo` | `MUST` | normative obligations | Geometric / Genesis | `p=0` |
+| 2 | `FACTS.omi` | `FACTS.imo` | `FACT` | grounded implementation facts | Harmonic | `p=-1` |
+| 3 | `CLOSURES.omi` | `CLOSURES.imo` | `CLOSE` | sealed boundaries | Arithmetic | `p=1` |
+| 4 | `COMBINATORS.omi` | `COMBINATORS.imo` | `COMBINE` | lawful composition | Quadratic | `p=2` |
+| 5 | `CONS.omi` | `CONS.imo` | `CONS` | structural reduction and lookup | Cubic / Qubic | `p=3` |
+
+The factor order remains the existing compiler/document order. The governor
+exponents describe interpretation roles; they do not reorder source authority.
 
 The compiler keyword map in `src/omilog/omi-imo-compiler.js` currently lowers:
 
@@ -190,7 +207,47 @@ The parser keyword set in `src/omi/omi-parser.js` does not include `TEST`.
 
 ---
 
-## 5. CONS as Monotonic Meta-Memory
+## 5. Polyharmonic Governor Axis
+
+The hidden `5!` ladder can also be read as the
+**Tetragrammatron Polyharmonic Governor**.
+
+This does not change the implementation. It names the interpretive role of the
+five existing roots:
+
+```text
+FACTS       p=-1  harmonic inverse ground
+RULES       p=0   geometric Genesis pivot
+CLOSURES    p=1   arithmetic sequential seal
+COMBINATORS p=2   quadratic relational composition
+CONS        p=3   cubic object projection
+```
+
+FACTS and CONS are inverse projections in the circular model:
+
+```text
+FACTS <-> CONS
+```
+
+RULES form the equality pivot between inverse ground and forward object
+projection. CLOSURES provide monotone sequence. COMBINATORS provide the
+quadratic bridge. CONS gives the accepted relation runtime body.
+
+The governor axis is read through four visible offsets:
+
+```text
+0x0001
+0x0010
+0x0100
+0x1000
+```
+
+These offsets correspond to the visible ququart lanes. They do not replace the
+five roots. The fifth governor is the hidden Genesis equality frame.
+
+---
+
+## 6. CONS as Monotonic Meta-Memory
 
 `CONS.omi` is the canonical monotonic RRGGBBAA lookup table for upper-reader routing. The current table begins at:
 
@@ -235,7 +292,7 @@ test/router-seeds.test.js
 
 ---
 
-## 6. Canonical 8-Segment Router Address Packing
+## 7. Canonical 8-Segment Router Address Packing
 
 The current router/pre-boot address form is:
 
@@ -290,7 +347,7 @@ omi-0000-03bf-7c00-ff00-0000-0025-039f-7dff/128
 
 ---
 
-## 7. Generated Router Seeds Under vectors/
+## 8. Generated Router Seeds Under vectors/
 
 The generated router seed configs are:
 
@@ -335,7 +392,7 @@ RRGGBBAA
 
 ---
 
-## 8. Lower and Upper Plane Boundary
+## 9. Lower and Upper Plane Boundary
 
 The lower plane is structural:
 
@@ -384,7 +441,7 @@ WordNet synset centroid authority
 
 ---
 
-## 9. Five-Factor Distribution of Test Meaning
+## 10. Five-Factor Distribution of Test Meaning
 
 Test-vector meaning is distributed through the five factors:
 
@@ -415,7 +472,7 @@ CONS makes it replayable.
 
 ---
 
-## 10. Triad Dispatch Secondary Index
+## 11. Triad Dispatch Secondary Index
 
 Triad Dispatch is now implemented as an opt-in compiler-side metadata pass. It is not the primary lookup authority.
 
@@ -478,7 +535,7 @@ Triad Dispatch does not reorder CONS primary RRGGBBAA keys.
 
 ---
 
-## 11. Implemented Rule Range
+## 12. Implemented Rule Range
 
 The current repository implements five router rules:
 
@@ -508,7 +565,7 @@ The triad dispatch extension uses:
 
 ---
 
-## 12. Verification Criteria
+## 13. Verification Criteria
 
 The current verification surface is:
 
@@ -546,7 +603,7 @@ npm run build
 
 ---
 
-## 13. Final Implementation Synthesis
+## 14. Final Implementation Synthesis
 
 The Tetragrammatron Meta-Memory Automaton bridges Atomic Kernel Delta Logic and Cosmic Orbit Recovery through the hidden 5! ladder.
 

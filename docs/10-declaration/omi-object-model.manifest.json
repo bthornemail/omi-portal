@@ -37,11 +37,11 @@
       "sourceNotes": "Defines the OMI ququart as a structural interpretive boundary, not a quantum mechanical system. Four-state deterministic register with receipt replay stability as the core invariant. Implementation anchor at src/omi/ququart-machine.ts."
     },
     {
-      "path": "dev-docs/README.md",
-      "role": "Tetragrammatron developer documentation — 12-face triakis tetrahedron face guide (11 protocol + CLA + GC)",
+      "path": "dev-docs/tetragrammatron-polyharmonic-governor/README.md",
+      "role": "Tetragrammatron polyharmonic governor developer documentation — 12-face triakis tetrahedron face guide and reference folder landing page",
       "canonicalStatus": "canonical",
-      "keyConcepts": ["tetragrammatron", "triakis tetrahedron", "12 protocol faces", "beginner-to-expert progression", "face map", "SPO folder naming", "carry lookahead adder"],
-      "sourceNotes": "Developer documentation suite organizing the entire OMI protocol into 12-face triakis tetrahedron (11 SPO-named protocol layers + CLA substrate + _temp GC inbox). Each face README covers what/how/extend for beginner through expert developers."
+      "keyConcepts": ["tetragrammatron", "polyharmonic governor", "triakis tetrahedron", "12 protocol faces", "face map", "SPO folder naming", "carry lookahead adder"],
+      "sourceNotes": "Developer documentation folder organizing the Tetragrammatron reference artifacts, CLA substrate, and polyharmonic governor interpretation while keeping dev-docs/_temp as provenance rather than canonical transcript content."
     },
     {
       "path": "dev-docs/AUDIT.md",
@@ -51,25 +51,32 @@
       "sourceNotes": "Snapshot audit of the local branch state, validation results, known publication blocker, and recommended next actions after the RS/GF256 proof milestone."
     },
     {
-      "path": "dev-docs/tetragrammatron.canvas",
+      "path": "dev-docs/tetragrammatron-polyharmonic-governor/tetragrammatron.canvas",
       "role": "JSON Canvas v1.0 layout of the 4-bit carry lookahead adder — 3 nodes (Step 0/Step 1/Outputs) + 2 edges",
       "canonicalStatus": "canonical",
       "keyConcepts": ["carry lookahead adder", "CLA", "generate/propagate", "JSON Canvas", "node color presets", "gate delays"],
       "sourceNotes": "Visual substrate for the Tetragrammatron Explorer. Nodes use integer color presets 2 (amber), 3 (yellow), 5 (cyan). Edges use preset 4 (green) and 5 (cyan)."
     },
     {
-      "path": "dev-docs/index.html",
+      "path": "dev-docs/tetragrammatron-polyharmonic-governor/index.html",
       "role": "Tetragrammatron Explorer canvas — interactive 4-bit CLA simulation and live gate delay viewer",
       "canonicalStatus": "reference",
       "keyConcepts": ["CSSOM dataset selectors", "live CLA simulation", "gate delay analysis", "random test harness", "COOP/COEP"],
       "sourceNotes": "Standalone browser UI for exploring the carry lookahead adder substrate. Renders JSON Canvas nodes via dataset attributes and runs real-time 4-bit CLA on user-supplied inputs."
     },
     {
-      "path": "dev-docs/tetragrammatron-meta-memory-automaton.md",
+      "path": "dev-docs/tetragrammatron-polyharmonic-governor/tetragrammatron-meta-memory-automaton.md",
       "role": "implementation-facing Tetragrammatron meta-memory automaton reference for the five-factor CONS/RRGGBBAA router",
       "canonicalStatus": "reference",
       "keyConcepts": ["Tetragrammatron", "meta-memory automaton", "five canonical OMI factors", "CONS RRGGBBAA lookup", "vectors router seeds", "Triad Dispatch", "actual code anchors"],
       "sourceNotes": "Filed reference document mapping the conceptual hidden 5! bridge to implemented modules, generated vectors, Triad Dispatch, tests, Makefile targets, and Rules/Facts 0xCB-0xD3. It is reference provenance, not a new canonical root."
+    },
+    {
+      "path": "dev-docs/tetragrammatron-polyharmonic-governor/polyharmonic-governor-axis.md",
+      "role": "reference synthesis of the Tetragrammatron polyharmonic governor axis — three clocks, four offsets, five governor modes",
+      "canonicalStatus": "reference",
+      "keyConcepts": ["polyharmonic governor", "Atomic Logic Clock", "Spectral Observer Clock", "Cosmic Orbit Clock", "FS/GS/RS/US offsets", "FACTS and CONS inverse projections", "Genesis equality pivot"],
+      "sourceNotes": "Concise implementation-orientation summary distilled from the research conversation without copying transcript content wholesale. Documents the reference-layer interpretation of FACTS, RULES, CLOSURES, COMBINATORS, and CONS as governor modes."
     },
     {
       "path": "src/omi/bijective-cube-kernel.js",

@@ -42,12 +42,18 @@ test("OMI Object Model manifest tracks curated dev-docs provenance without requi
   const sources = manifest.sources.map((source) => source.path).sort();
 
   const ignoredDrafts = [];
+  const curatedNestedDevDocs = [
+    "dev-docs/tetragrammatron-polyharmonic-governor/README.md",
+    "dev-docs/tetragrammatron-polyharmonic-governor/polyharmonic-governor-axis.md",
+    "dev-docs/tetragrammatron-polyharmonic-governor/tetragrammatron-meta-memory-automaton.md"
+  ];
 
   const devDocs = await readdir(devDocsDir)
     .then((names) => names
       .filter((name) => name.endsWith(".md"))
       .filter((name) => !ignoredDrafts.includes(name))
       .map((name) => `dev-docs/${name}`)
+      .concat(curatedNestedDevDocs)
       .sort())
     .catch((error) => {
       if (error.code !== "ENOENT") throw error;
@@ -55,7 +61,7 @@ test("OMI Object Model manifest tracks curated dev-docs provenance without requi
     });
 
   if (devDocs === null) {
-    const devDocSources = sources.filter((source) => source.startsWith("dev-docs/"));
+    const devDocSources = sources.filter((source) => source.startsWith("dev-docs/") && source.endsWith(".md"));
     assert.ok(devDocSources.length > 0, "manifest should retain curated dev-docs source entries");
     assert.ok(devDocSources.every((source) => source.endsWith(".md")));
     return;

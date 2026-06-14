@@ -84,7 +84,7 @@ test('CLA 16-bit: 0x1234 + 0x5678 + 1 = 0x68AD with Cout=0', () => {
 });
 
 test('CLA JSON Canvas: tetragrammatron.canvas schema registers standard single-digit presets', () => {
-  const filePath = join(process.cwd(), 'dev-docs/tetragrammatron.canvas');
+  const filePath = join(process.cwd(), 'dev-docs/tetragrammatron-polyharmonic-governor/tetragrammatron.canvas');
   const raw = readFileSync(filePath, 'utf8');
   const canvas = JSON.parse(raw);
 
@@ -99,7 +99,7 @@ test('CLA JSON Canvas: tetragrammatron.canvas schema registers standard single-d
 });
 
 test('CLA JSON Canvas: edge topology connects step0 → step1 → outputs', () => {
-  const filePath = join(process.cwd(), 'dev-docs/tetragrammatron.canvas');
+  const filePath = join(process.cwd(), 'dev-docs/tetragrammatron-polyharmonic-governor/tetragrammatron.canvas');
   const raw = readFileSync(filePath, 'utf8');
   const canvas = JSON.parse(raw);
 

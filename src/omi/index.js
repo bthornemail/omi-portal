@@ -261,6 +261,7 @@ export * from "./o-file-container.js";
 export * from "./o-chain-arithmetic.js";
 export * from "./tetragrammatron-meta-memory.js";
 export * from "./tetragrammatron-worker-runtime.js";
+export * from "./tetragrammatron-polyharmonic-governor.js";
 
 function encodeBase64Url(value) {
   const input = String(value ?? "");
