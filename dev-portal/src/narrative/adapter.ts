@@ -44,10 +44,19 @@ function getRawNarrativeModules() {
   });
 }
 
-export function loadCanonicalNarrativeRawTexts(modules = getRawNarrativeModules()) {
+function indexModulesByDocId(modules: Record<string, unknown>) {
+  const index: Record<string, string> = {};
+  for (const [key, value] of Object.entries(modules)) {
+    const match = key.match(/(?:^|\/)((?:PRELUDE\/|EPILOUGE\/)?[^/]+\.md)$/);
+    if (match && typeof value === 'string') index[match[1]] = value;
+  }
+  return index;
+}
+
+export function loadCanonicalNarrativeRawTexts(modules: Record<string, unknown> = getRawNarrativeModules()) {
+  const byDocId = indexModulesByDocId(modules);
   return CANONICAL_NARRATIVE_ORDER.map((docId) => {
-    const key = `../../../vendor/narrative-series/${docId}`;
-    const text = modules[key];
+    const text = byDocId[docId];
     if (typeof text !== 'string') {
       throw new Error(`Missing canonical narrative document: ${docId}`);
     }

@@ -9,7 +9,9 @@
     "preview": "vite preview --host 0.0.0.0",
     "test:algorithms": "tsx scripts/test-algorithms.ts",
     "test:narrative": "tsx scripts/test-narrative-pipeline.ts",
-    "test:cidr-mcrsgsp": "tsx scripts/test-cidr-mcrsgsp.ts"
+    "test:cidr-mcrsgsp": "tsx scripts/test-cidr-mcrsgsp.ts",
+    "test:cons-assembly": "tsx scripts/test-cons-assembly.ts",
+    "test:infrastructure": "tsx scripts/test-infrastructure.ts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

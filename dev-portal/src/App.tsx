@@ -4,6 +4,7 @@ import { exportSnapshot, importSnapshot, downloadJson } from './core/exportImpor
 import { createRuntime, touch, type OmiRuntimeState } from './core/runtime';
 import { slide } from './core/nomogram';
 import { CidrMcrsgspPanel } from './components/CidrMcrsgspPanel';
+import { ConsAssemblyPanel } from './components/ConsAssemblyPanel';
 import { CombinatorialDesignViewer } from './components/CombinatorialDesignViewer';
 import { DeterministicClockMenu } from './components/DeterministicClockMenu';
 import { Inspector } from './components/Inspector';
@@ -12,6 +13,15 @@ import { SpectralGrid } from './components/SpectralGrid';
 import { useNarrativePipeline } from './narrative/useNarrativePipeline';
 import { parseCidrMcrsgspFiles, summarizeCidrMcrsgspRecords, type CidrMcrsgspRecord, type CidrMcrsgspSummary } from './omi/cidrMcrsgspParser';
 import { loadCidrMcrsgspSources } from './omi/cidrMcrsgspSources';
+import { assembleFactRuleCons, summarizeConsAssembly, type OmiConsAssembly, type ConsAssemblySummary } from './omi/consAssembly';
+import { parseMakefile, summarizeTargets, type MakeTarget } from './omi/makefileParser';
+import { parseDockerfiles, summarizeDockerfileStages, type DockerfileStage } from './omi/dockerfileParser';
+import { parseCompose, summarizeComposeServices, type ComposeService } from './omi/composeParser';
+import { parseBake, summarizeBakeTargets, type BakeTarget } from './omi/bakeParser';
+import { parseNginx, summarizeNginxBlocks, type NginxBlock } from './omi/nginxParser';
+import { InfrastructurePanel } from './components/InfrastructurePanel';
+import { parseNetworkingDoc, NETWORKING_DOCS, summarizeNetworkingCells } from './omi/networkingDocParser';
+import type { VisualLiterateCell } from './narrative/narrativeTypes';
 import './styles.css';
 
 export default function App() {
@@ -22,6 +32,14 @@ export default function App() {
   const [message, setMessage] = useState('Ready. Select a cell, export a snapshot, or import one.');
   const [mcrsgspRecords, setMcrsgspRecords] = useState<CidrMcrsgspRecord[]>([]);
   const [mcrsgspSummary, setMcrsgspSummary] = useState<CidrMcrsgspSummary | null>(null);
+  const [consAssemblies, setConsAssemblies] = useState<OmiConsAssembly[]>([]);
+  const [consSummary, setConsSummary] = useState<ConsAssemblySummary | null>(null);
+  const [makeTargets, setMakeTargets] = useState<MakeTarget[]>([]);
+  const [dockerStages, setDockerStages] = useState<DockerfileStage[]>([]);
+  const [composeServices, setComposeServices] = useState<ComposeService[]>([]);
+  const [bakeTargets, setBakeTargets] = useState<BakeTarget[]>([]);
+  const [nginxBlocks, setNginxBlocks] = useState<NginxBlock[]>([]);
+  const [networkingCells, setNetworkingCells] = useState<VisualLiterateCell[]>([]);
   const importRef = useRef<HTMLInputElement | null>(null);
   const {
     projectionState: narrative,
@@ -47,6 +65,76 @@ export default function App() {
     return () => {
       alive = false;
     };
+  }, []);
+
+  useEffect(() => {
+    if (mcrsgspRecords.length === 0) return;
+    const assemblies = assembleFactRuleCons(mcrsgspRecords);
+    setConsAssemblies(assemblies);
+    setConsSummary(summarizeConsAssembly(assemblies));
+  }, [mcrsgspRecords]);
+
+  useEffect(() => {
+    fetch('/Makefile')
+      .then((r) => r.text())
+      .then((text) => setMakeTargets(parseMakefile(text)))
+      .catch(() => setMessage('Makefile not available via HTTP; infrastructure panel will be empty'));
+  }, []);
+
+  useEffect(() => {
+    const files = ['Dockerfile', 'Dockerfile.test', 'Dockerfile.stress', 'Dockerfile.qemu'];
+    Promise.allSettled(
+      files.map((f) => fetch(`/${f}`).then((r) => r.text()).then((text) => ({ fileName: f, text })))
+    ).then((results) => {
+      const ok = results
+        .filter((r) => r.status === 'fulfilled')
+        .map((r) => (r as PromiseFulfilledResult<{ fileName: string; text: string }>).value);
+      if (ok.length > 0) setDockerStages(parseDockerfiles(ok));
+    });
+  }, []);
+
+  useEffect(() => {
+    const files = ['docker-compose.yml', '../../../docker-compose.load.yml'];
+    Promise.allSettled(
+      files.map((f) => fetch(f).then((r) => r.text()).then((text) => ({ fileName: f.replace(/^.*\//, ''), text })))
+    ).then((results) => {
+      const ok = results
+        .filter((r) => r.status === 'fulfilled')
+        .map((r) => (r as PromiseFulfilledResult<{ fileName: string; text: string }>).value);
+      if (ok.length > 0) setComposeServices(ok.flatMap((o) => parseCompose(o.text, o.fileName)));
+    });
+  }, []);
+
+  useEffect(() => {
+    fetch('/docker-bake.hcl')
+      .then((r) => r.text())
+      .then((text) => setBakeTargets(parseBake(text, 'docker-bake.hcl')))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch('/nginx.conf')
+      .then((r) => r.text())
+      .then((text) => setNginxBlocks(parseNginx(text, 'nginx.conf')))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    Promise.allSettled(
+      NETWORKING_DOCS.map((doc) =>
+        fetch(`/${doc.path}`)
+          .then((r) => r.text())
+          .then((text) => ({ path: doc.path, text }))
+      )
+    ).then((results) => {
+      const cells: VisualLiterateCell[] = [];
+      for (const result of results) {
+        if (result.status === 'fulfilled') {
+          cells.push(...parseNetworkingDoc(result.value.text, result.value.path));
+        }
+      }
+      setNetworkingCells(cells);
+    });
   }, []);
 
   async function onExport() {
@@ -144,6 +232,16 @@ export default function App() {
       />
 
       <CidrMcrsgspPanel records={mcrsgspRecords} summary={mcrsgspSummary} />
+      <ConsAssemblyPanel assemblies={consAssemblies} summary={consSummary} />
+
+      <InfrastructurePanel
+        makeTargets={makeTargets}
+        dockerStages={dockerStages}
+        composeServices={composeServices}
+        bakeTargets={bakeTargets}
+        nginxBlocks={nginxBlocks}
+        networkingCells={networkingCells}
+      />
 
       <section className="panel code-notes">
         <h2>Model boundary</h2>

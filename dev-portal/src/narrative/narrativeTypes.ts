@@ -54,3 +54,46 @@ export type NarrativeProjectionState = {
   topologyNodeCount: number;
   activeDesign: DesignId;
 };
+
+export type VisualLiterateCell = {
+  id: string;
+  title: string;
+  grade: "dev" | "consumer" | "production" | "verify" | "pipeline";
+  stage?: string;
+  explanation: string;
+  sourceRefs: {
+    path: string;
+    kind: "md" | "omi" | "imo" | "o" | "ts" | "js" | "c" | "test" | "make";
+  }[];
+  command?: string;
+  projection: {
+    dataOmi: string;
+    dataImo: string;
+    gauge?: GaugeName;
+    receiptState: ReceiptState;
+  };
+  result?: {
+    status: "idle" | "running" | "passed" | "failed";
+    stdout?: string;
+    stderr?: string;
+    receipt?: string;
+  };
+};
+
+export type InfrastructureProjection = {
+  id: string;
+  kind:
+    | "make-target"
+    | "docker-stage"
+    | "compose-service"
+    | "bake-target"
+    | "nginx-block";
+  sourceFile: string;
+  name: string;
+  description?: string;
+  command?: string;
+  dependencies: string[];
+  dataOmi: string;
+  dataImo: string;
+  receiptState: ReceiptState;
+};
