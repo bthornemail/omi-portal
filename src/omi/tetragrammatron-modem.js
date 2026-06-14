@@ -1,6 +1,8 @@
 import { fnv1a32 } from "../core/deterministic-utils.js";
 import { parseOmiDocument } from "../omi/omi-parser.js";
-import { tetragrammatronGeometryRoute, computeQxy } from "../omi/tetragrammatron-geometry-router.js";
+import { tetragrammatronGeometryRoute } from "../omi/tetragrammatron-geometry-router.js";
+import { packOWord, unpackOWord } from "../omi/o-bitboard.js";
+import { packOFile, unpackOFile } from "../omi/o-file-container.js";
 
 // ── Types (JSDoc) ──────────────────────────────────────────────
 
@@ -244,4 +246,160 @@ export function modemRoundTripToGeometryReceipts(testOutput, options = {}) {
       candidate: receiptFrames.filter((f) => f.receiptState === "candidate").length,
     },
   };
+}
+
+// ── .o word bit-field constants ────────────────────────────────
+// path (19 bits):
+//   [baseQ:2][fiberQ:2][chart11:4][fano7:3][role3:2][reserved:6]
+// surface (236 bits):
+//   [status:2][receiptState:2][durationMs:16][local240:8][slot5040:13]
+//   [idHash:32][nameHash:32][reserved:131]
+
+const PATH_BASEQ_SHIFT = 0;
+const PATH_BASEQ_BITS = 2;
+const PATH_FIBERQ_SHIFT = 2;
+const PATH_FIBERQ_BITS = 2;
+const PATH_CHART11_SHIFT = 4;
+const PATH_CHART11_BITS = 4;
+const PATH_FANO7_SHIFT = 8;
+const PATH_FANO7_BITS = 3;
+const PATH_ROLE3_SHIFT = 11;
+const PATH_ROLE3_BITS = 2;
+
+const SURF_STATUS_SHIFT = 0;
+const SURF_STATUS_BITS = 2;
+const SURF_RCPT_SHIFT = 2;
+const SURF_RCPT_BITS = 2;
+const SURF_DURMS_SHIFT = 4;
+const SURF_DURMS_BITS = 16;
+const SURF_LOCAL240_SHIFT = 20;
+const SURF_LOCAL240_BITS = 8;
+const SURF_SLOT5040_SHIFT = 28;
+const SURF_SLOT5040_BITS = 13;
+const SURF_IDHASH_SHIFT = 41;
+const SURF_IDHASH_BITS = 32;
+const SURF_NAMEHASH_SHIFT = 73;
+const SURF_NAMEHASH_BITS = 32;
+
+function statusToCode(status) {
+  switch (status) {
+    case "passed":     return 0;
+    case "failed":     return 1;
+    case "running":    return 2;
+    default:           return 3;
+  }
+}
+
+function codeToStatus(code) {
+  switch (code) {
+    case 0:  return "passed";
+    case 1:  return "failed";
+    case 2:  return "running";
+    default: return "candidate";
+  }
+}
+
+function rcptToCode(state) {
+  switch (state) {
+    case "accepted":   return 1;
+    case "rejected":   return 2;
+    default:           return 0;
+  }
+}
+
+function codeToRcpt(code) {
+  switch (code) {
+    case 1:  return "accepted";
+    case 2:  return "rejected";
+    default: return "candidate";
+  }
+}
+
+function packModemPath(frame) {
+  let path = 0;
+  path |= (frame.baseQ & ((1 << PATH_BASEQ_BITS) - 1)) << PATH_BASEQ_SHIFT;
+  path |= (frame.fiberQ & ((1 << PATH_FIBERQ_BITS) - 1)) << PATH_FIBERQ_SHIFT;
+  path |= (frame.chart11 & ((1 << PATH_CHART11_BITS) - 1)) << PATH_CHART11_SHIFT;
+  path |= (frame.fano7 & ((1 << PATH_FANO7_BITS) - 1)) << PATH_FANO7_SHIFT;
+  path |= (frame.role3 & ((1 << PATH_ROLE3_BITS) - 1)) << PATH_ROLE3_SHIFT;
+  return path;
+}
+
+function unpackModemPath(path) {
+  const mask = (n) => (1 << n) - 1;
+  return {
+    baseQ:  (path >> PATH_BASEQ_SHIFT)   & mask(PATH_BASEQ_BITS),
+    fiberQ: (path >> PATH_FIBERQ_SHIFT)  & mask(PATH_FIBERQ_BITS),
+    chart11: (path >> PATH_CHART11_SHIFT) & mask(PATH_CHART11_BITS),
+    fano7:  (path >> PATH_FANO7_SHIFT)   & mask(PATH_FANO7_BITS),
+    role3:  (path >> PATH_ROLE3_SHIFT)   & mask(PATH_ROLE3_BITS),
+  };
+}
+
+function packModemSurface(frame) {
+  let surf = 0n;
+  const toInt = (v) => Math.round(Number(v) || 0);
+  const setField = (shift, bits, value) => {
+    const mask = (1n << BigInt(bits)) - 1n;
+    surf |= (BigInt(toInt(value)) & mask) << BigInt(shift);
+  };
+  setField(SURF_STATUS_SHIFT, SURF_STATUS_BITS, statusToCode(frame.event.status));
+  setField(SURF_RCPT_SHIFT, SURF_RCPT_BITS, rcptToCode(frame.receiptState));
+  setField(SURF_DURMS_SHIFT, SURF_DURMS_BITS, frame.event.durationMs ?? 0);
+  setField(SURF_LOCAL240_SHIFT, SURF_LOCAL240_BITS, frame.local240);
+  setField(SURF_SLOT5040_SHIFT, SURF_SLOT5040_BITS, frame.slot5040);
+  setField(SURF_IDHASH_SHIFT, SURF_IDHASH_BITS, fnv1a32(frame.event.id));
+  setField(SURF_NAMEHASH_SHIFT, SURF_NAMEHASH_BITS, fnv1a32(frame.event.name));
+  return surf;
+}
+
+// ── modemFrameToOWord ───────────────────────────────────────────
+
+export function modemFrameToOWord(frame) {
+  const selector = 0;
+  const path = packModemPath(frame);
+  const surface = packModemSurface(frame);
+  return packOWord({ selector, path, surface });
+}
+
+// ── oWordToModemFrame ───────────────────────────────────────────
+
+export function oWordToModemFrame(word) {
+  const { selector, path, surface } = unpackOWord(word);
+  const pathFields = unpackModemPath(path);
+
+  const getField = (shift, bits) => Number((surface >> BigInt(shift)) & ((1n << BigInt(bits)) - 1n));
+
+  const status = codeToStatus(getField(SURF_STATUS_SHIFT, SURF_STATUS_BITS));
+  const receiptState = codeToRcpt(getField(SURF_RCPT_SHIFT, SURF_RCPT_BITS));
+  const durationMs = getField(SURF_DURMS_SHIFT, SURF_DURMS_BITS);
+  const local240 = getField(SURF_LOCAL240_SHIFT, SURF_LOCAL240_BITS);
+  const slot5040 = getField(SURF_SLOT5040_SHIFT, SURF_SLOT5040_BITS);
+  const idHash = getField(SURF_IDHASH_SHIFT, SURF_IDHASH_BITS);
+  const nameHash = getField(SURF_NAMEHASH_SHIFT, SURF_NAMEHASH_BITS);
+
+  return {
+    selector,
+    ...pathFields,
+    status,
+    receiptState,
+    durationMs: durationMs || undefined,
+    local240,
+    slot5040,
+    idHash: idHash.toString(36),
+    nameHash: nameHash.toString(36),
+    wordHex: word.toString(16).padStart(64, "0"),
+  };
+}
+
+// ── packModemFramesToOFile / unpackOFileToModemFrames ───────────
+
+export function packModemFramesToOFile(frames) {
+  const words = frames.map(modemFrameToOWord);
+  return packOFile(words);
+}
+
+export function unpackOFileToModemFrames(text) {
+  const words = unpackOFile(text);
+  return words.map(oWordToModemFrame);
 }

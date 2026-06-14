@@ -6,7 +6,12 @@ import {
   demodulateOmiRecord,
   modemRoundTripTestOutput,
   modemRoundTripToGeometryReceipts,
+  modemFrameToOWord,
+  oWordToModemFrame,
+  packModemFramesToOFile,
+  unpackOFileToModemFrames,
 } from "../src/omi/tetragrammatron-modem.js";
+import { formatOWord } from "../src/omi/o-bitboard.js";
 import { parseOmiDocument } from "../src/omi/omi-parser.js";
 
 const SAMPLE_OUTPUT = [
@@ -365,5 +370,165 @@ describe("modemRoundTripToGeometryReceipts", () => {
     const result = modemRoundTripToGeometryReceipts("");
     assert.equal(result.eventCount, 0);
     assert.deepEqual(result.frames, []);
+  });
+});
+
+describe("modemFrameToOWord", () => {
+  it("packs a frame into a valid 256-bit word", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const frame = result.frames.find((f) => f.event.status === "passed");
+    assert.ok(frame, "found a passed frame");
+    const word = modemFrameToOWord(frame);
+    const fmt = formatOWord(word);
+    assert.equal(fmt.selector, 0);
+    assert.equal(fmt.bits.length, 256);
+    assert.ok(fmt.path >= 0, "path is non-negative");
+    assert.ok(fmt.path < (1 << 19), "path fits in 19 bits");
+  });
+
+  it("selector is 0 for modem frames", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const { selector } = formatOWord(word);
+      assert.equal(selector, 0);
+    }
+  });
+
+  it("path encodes baseQ/fiberQ/chart11/fano7/role3", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const { path } = formatOWord(word);
+      const expectedPath =
+        (f.baseQ << 0) |
+        (f.fiberQ << 2) |
+        (f.chart11 << 4) |
+        (f.fano7 << 8) |
+        (f.role3 << 11);
+      assert.equal(path, expectedPath);
+    }
+  });
+
+  it("surface encodes status / receiptState / slot5040", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const { surface } = formatOWord(word);
+      const statusCode = f.event.status === "passed" ? 0 : f.event.status === "failed" ? 1 : 2;
+      const rcptCode = f.receiptState === "accepted" ? 1 : f.receiptState === "rejected" ? 2 : 0;
+      assert.equal(Number((surface >> 0n) & 0x3n), statusCode, "status bits");
+      assert.equal(Number((surface >> 2n) & 0x3n), rcptCode, "receipt bits");
+      assert.equal(Number((surface >> 28n) & 0x1FFFn), f.slot5040, "slot5040 bits");
+    }
+  });
+
+  it("is deterministic for same frame", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const w1 = modemFrameToOWord(f);
+      const w2 = modemFrameToOWord(f);
+      assert.equal(w1, w2);
+    }
+  });
+});
+
+describe("oWordToModemFrame", () => {
+  it("round-trips status, local240, slot5040 for all frames", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const decoded = oWordToModemFrame(word);
+      assert.equal(decoded.status, f.event.status);
+      assert.equal(decoded.local240, f.local240);
+      assert.equal(decoded.slot5040, f.slot5040);
+    }
+  });
+
+  it("reports wordHex", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const word = modemFrameToOWord(result.frames[0]);
+    const decoded = oWordToModemFrame(word);
+    assert.ok(typeof decoded.wordHex === "string");
+    assert.equal(decoded.wordHex.length, 64);
+    assert.ok(/^[0-9a-f]+$/.test(decoded.wordHex));
+  });
+
+  it("decodes geometry coordinates from path", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const decoded = oWordToModemFrame(word);
+      assert.equal(decoded.baseQ, f.baseQ);
+      assert.equal(decoded.fiberQ, f.fiberQ);
+      assert.equal(decoded.chart11, f.chart11);
+      assert.equal(decoded.fano7, f.fano7);
+      assert.equal(decoded.role3, f.role3);
+    }
+  });
+
+  it("selector is 0", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      const word = modemFrameToOWord(f);
+      const decoded = oWordToModemFrame(word);
+      assert.equal(decoded.selector, 0);
+    }
+  });
+});
+
+describe("packModemFramesToOFile", () => {
+  it("produces one hex line per frame", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const text = packModemFramesToOFile(result.frames);
+    const lines = text.trim().split("\n");
+    assert.equal(lines.length, result.eventCount);
+    for (const line of lines) {
+      assert.equal(line.length, 64);
+      assert.ok(/^[0-9a-f]{64}$/.test(line));
+    }
+  });
+
+  it("handles single frame", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const text = packModemFramesToOFile([result.frames[0]]);
+    const lines = text.trim().split("\n");
+    assert.equal(lines.length, 1);
+    assert.equal(lines[0].length, 64);
+  });
+});
+
+describe("unpackOFileToModemFrames", () => {
+  it("round-trips with packModemFramesToOFile", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const text = packModemFramesToOFile(result.frames);
+    const decoded = unpackOFileToModemFrames(text);
+    assert.equal(decoded.length, result.eventCount);
+    for (let i = 0; i < decoded.length; i++) {
+      const d = decoded[i];
+      const f = result.frames[i];
+      assert.equal(d.status, f.event.status);
+      assert.equal(d.local240, f.local240);
+      assert.equal(d.slot5040, f.slot5040);
+      assert.equal(d.baseQ, f.baseQ);
+      assert.equal(d.fiberQ, f.fiberQ);
+      assert.equal(d.chart11, f.chart11);
+      assert.equal(d.selector, 0);
+    }
+  });
+
+  it("is deterministic", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const text1 = packModemFramesToOFile(result.frames);
+    const text2 = packModemFramesToOFile(result.frames);
+    assert.equal(text1, text2);
+    const d1 = unpackOFileToModemFrames(text1);
+    const d2 = unpackOFileToModemFrames(text2);
+    assert.deepEqual(d1, d2);
+  });
+
+  it("handles empty text gracefully", () => {
+    const decoded = unpackOFileToModemFrames("");
+    assert.deepEqual(decoded, []);
   });
 });
