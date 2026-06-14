@@ -3,19 +3,19 @@ export const TETRAGRAMMATRON_DESCRIPTOR_BYTES = TETRAGRAMMATRON_DESCRIPTOR_CELLS
 export const TETRAGRAMMATRON_HISTORY_SLOTS = 5040;
 export const TETRAGRAMMATRON_HISTORY_BYTES = TETRAGRAMMATRON_HISTORY_SLOTS * 8;
 
-export const TETRAGRAMMATRON_DESCRIPTOR = Object.freeze({
+export const TETRA_DESCRIPTOR = Object.freeze({
   ROOT: 0x00,
-  PROTOCOL_VERSION: 0x01,
+  VERSION: 0x01,
   WORKER_COUNT: 0x02,
   LITTLE_ENDIAN: 0x03,
-  ACTIVE_BACKEND_ID: 0x04,
-  ACTIVE_QUQUART_PHASE: 0x05,
-  ACTIVE_POLYBIUS_ROW: 0x06,
-  ACTIVE_POLYBIUS_COL: 0x07,
+  ACTIVE_BACKEND: 0x04,
+  ACTIVE_PHASE: 0x05,
+  POLYBIUS_ROW: 0x06,
+  POLYBIUS_COL: 0x07,
 
-  STATUS_WORD: 0x08,
-  PAYLOAD_VIEW_MODE: 0x09,
-  CURRENT_CURSOR: 0x0A,
+  STATUS: 0x08,
+  PAYLOAD_VIEW: 0x09,
+  CURSOR: 0x0A,
   CLAIMED_SLOT: 0x0B,
   WRITE_LOCK: 0x0C,
   READ_LOCK: 0x0D,
@@ -23,15 +23,29 @@ export const TETRAGRAMMATRON_DESCRIPTOR = Object.freeze({
   RECEIPT_STATE: 0x0F,
 
   PROMOTE_BOUNDARY: 0x10,
-  HARD_RESET_BOUNDARY: 0x11,
+  RESET_BOUNDARY: 0x11,
   LOCAL240: 0x12,
   SLOT5040: 0x13,
   CHART11: 0x14,
-  BASEQ: 0x15,
-  FIBERQ: 0x16,
+  BASE_Q: 0x15,
+  FIBER_Q: 0x16,
   FANO7: 0x17,
   ROLE3: 0x18,
+});
 
+export const TETRAGRAMMATRON_DESCRIPTOR = Object.freeze({
+  ...TETRA_DESCRIPTOR,
+  PROTOCOL_VERSION: TETRA_DESCRIPTOR.VERSION,
+  ACTIVE_BACKEND_ID: TETRA_DESCRIPTOR.ACTIVE_BACKEND,
+  ACTIVE_QUQUART_PHASE: TETRA_DESCRIPTOR.ACTIVE_PHASE,
+  ACTIVE_POLYBIUS_ROW: TETRA_DESCRIPTOR.POLYBIUS_ROW,
+  ACTIVE_POLYBIUS_COL: TETRA_DESCRIPTOR.POLYBIUS_COL,
+  STATUS_WORD: TETRA_DESCRIPTOR.STATUS,
+  PAYLOAD_VIEW_MODE: TETRA_DESCRIPTOR.PAYLOAD_VIEW,
+  CURRENT_CURSOR: TETRA_DESCRIPTOR.CURSOR,
+  HARD_RESET_BOUNDARY: TETRA_DESCRIPTOR.RESET_BOUNDARY,
+  BASEQ: TETRA_DESCRIPTOR.BASE_Q,
+  FIBERQ: TETRA_DESCRIPTOR.FIBER_Q,
   WORKER_LANES_START: 0x20,
   WORKER_LANES_END: 0x2F,
   BACKEND_LANES_START: 0x30,
@@ -40,7 +54,7 @@ export const TETRAGRAMMATRON_DESCRIPTOR = Object.freeze({
 
 export const TETRAGRAMMATRON_DESCRIPTOR_LABELS = Object.freeze(
   Object.fromEntries(
-    Object.entries(TETRAGRAMMATRON_DESCRIPTOR)
+    Object.entries(TETRA_DESCRIPTOR)
       .filter(([, value]) => Number.isInteger(value))
       .map(([label, value]) => [value, label.toLowerCase()])
   )
@@ -114,16 +128,16 @@ export function createTetragrammatronMemory(options = {}) {
 }
 
 function initializeDescriptor(i32, options) {
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.ROOT, Number(options.root ?? 0));
+  Atomics.store(i32, TETRA_DESCRIPTOR.ROOT, Number(options.root ?? 0));
   Atomics.store(
     i32,
-    TETRAGRAMMATRON_DESCRIPTOR.PROTOCOL_VERSION,
+    TETRA_DESCRIPTOR.VERSION,
     Number(options.protocolVersion ?? DEFAULT_PROTOCOL_VERSION)
   );
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.WORKER_COUNT, Number(options.workerCount ?? 0));
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.LITTLE_ENDIAN, LITTLE_ENDIAN_FLAG);
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.PROMOTE_BOUNDARY, PROMOTE_BOUNDARY);
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.HARD_RESET_BOUNDARY, HARD_RESET_BOUNDARY);
+  Atomics.store(i32, TETRA_DESCRIPTOR.WORKER_COUNT, Number(options.workerCount ?? 0));
+  Atomics.store(i32, TETRA_DESCRIPTOR.LITTLE_ENDIAN, LITTLE_ENDIAN_FLAG);
+  Atomics.store(i32, TETRA_DESCRIPTOR.PROMOTE_BOUNDARY, PROMOTE_BOUNDARY);
+  Atomics.store(i32, TETRA_DESCRIPTOR.RESET_BOUNDARY, HARD_RESET_BOUNDARY);
 }
 
 export function readDescriptor(target, index) {
@@ -141,11 +155,11 @@ export function writeDescriptor(target, index, value) {
 
 export function claimTetragrammatronSlot(target, workerId = 0) {
   const i32 = descriptorView(target);
-  const rawSlot = Atomics.add(i32, TETRAGRAMMATRON_DESCRIPTOR.CURRENT_CURSOR, 1);
+  const rawSlot = Atomics.add(i32, TETRA_DESCRIPTOR.CURSOR, 1);
   const slot = normalizeHistorySlot(rawSlot);
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.CLAIMED_SLOT, slot);
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.ACTIVE_BACKEND_ID, Number(workerId) | 0);
-  Atomics.store(i32, TETRAGRAMMATRON_DESCRIPTOR.SLOT5040, slot);
+  Atomics.store(i32, TETRA_DESCRIPTOR.CLAIMED_SLOT, slot);
+  Atomics.store(i32, TETRA_DESCRIPTOR.ACTIVE_BACKEND, Number(workerId) | 0);
+  Atomics.store(i32, TETRA_DESCRIPTOR.SLOT5040, slot);
   return slot;
 }
 
@@ -172,27 +186,30 @@ export function snapshotTetragrammatronMemory(target, options = {}) {
       ? target
       : memory.history64;
 
-  const descriptor = {};
-  for (let i = 0; i < TETRAGRAMMATRON_DESCRIPTOR_CELLS; i++) {
-    const label = TETRAGRAMMATRON_DESCRIPTOR_LABELS[i] ?? `cell_${i.toString(16).padStart(2, "0")}`;
-    descriptor[label] = Atomics.load(memory.i32, i);
-  }
+  const descriptors = Array.from(
+    { length: TETRAGRAMMATRON_DESCRIPTOR_CELLS },
+    (_, i) => Atomics.load(memory.i32, i)
+  );
 
   const receiptSlots = options.receiptSlots ?? [
-    Atomics.load(memory.i32, TETRAGRAMMATRON_DESCRIPTOR.CLAIMED_SLOT),
+    Atomics.load(memory.i32, TETRA_DESCRIPTOR.CLAIMED_SLOT),
   ];
-  const receipts = {};
+  const receipts = [];
   if (history64) {
     for (const rawSlot of receiptSlots) {
       const slot = normalizeHistorySlot(rawSlot);
-      receipts[slot] = Atomics.load(history64, slot).toString();
+      receipts.push({ slot, value: Atomics.load(history64, slot).toString() });
     }
   }
 
   return {
     descriptorBytes: TETRAGRAMMATRON_DESCRIPTOR_BYTES,
     historyBytes: TETRAGRAMMATRON_HISTORY_BYTES,
-    descriptor,
+    descriptors,
+    cursor: descriptors[TETRA_DESCRIPTOR.CURSOR],
+    claimedSlot: descriptors[TETRA_DESCRIPTOR.CLAIMED_SLOT],
+    slot5040: descriptors[TETRA_DESCRIPTOR.SLOT5040],
+    local240: descriptors[TETRA_DESCRIPTOR.LOCAL240],
     receipts,
   };
 }

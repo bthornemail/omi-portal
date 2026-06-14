@@ -3,6 +3,13 @@ import { parseOmiDocument } from "../omi/omi-parser.js";
 import { tetragrammatronGeometryRoute } from "../omi/tetragrammatron-geometry-router.js";
 import { packOWord, unpackOWord } from "../omi/o-bitboard.js";
 import { packOFile, unpackOFile } from "../omi/o-file-container.js";
+import {
+  TETRA_DESCRIPTOR,
+  claimTetragrammatronSlot,
+  snapshotTetragrammatronMemory,
+  writeDescriptor,
+  writeTetragrammatronReceipt,
+} from "../omi/tetragrammatron-meta-memory.js";
 
 // ── Types (JSDoc) ──────────────────────────────────────────────
 
@@ -309,6 +316,10 @@ function rcptToCode(state) {
   }
 }
 
+function codeOrZero(value) {
+  return Math.round(Number(value) || 0);
+}
+
 function codeToRcpt(code) {
   switch (code) {
     case 1:  return "accepted";
@@ -362,6 +373,44 @@ export function modemFrameToOWord(frame) {
   const path = packModemPath(frame);
   const surface = packModemSurface(frame);
   return packOWord({ selector, path, surface });
+}
+
+// ── modemFrameToMemory / memoryToModemSnapshot ─────────────────
+
+export function modemFrameToMemory(memory, frame, options = {}) {
+  const word = modemFrameToOWord(frame);
+  const targetSlot = codeOrZero(frame.slot5040);
+  const workerId = codeOrZero(options.workerId ?? frame.baseQ ?? 0);
+
+  writeDescriptor(memory, TETRA_DESCRIPTOR.STATUS, statusToCode(frame.event.status));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.PAYLOAD_VIEW, 0);
+  writeDescriptor(memory, TETRA_DESCRIPTOR.RECEIPT_STATE, rcptToCode(frame.receiptState));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.ACTIVE_PHASE, codeOrZero(frame.baseQ));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.POLYBIUS_ROW, codeOrZero(frame.polybius?.row));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.POLYBIUS_COL, codeOrZero(frame.polybius?.col));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.LOCAL240, codeOrZero(frame.local240));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.SLOT5040, targetSlot);
+  writeDescriptor(memory, TETRA_DESCRIPTOR.CHART11, codeOrZero(frame.chart11));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.BASE_Q, codeOrZero(frame.baseQ));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.FIBER_Q, codeOrZero(frame.fiberQ));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.FANO7, codeOrZero(frame.fano7));
+  writeDescriptor(memory, TETRA_DESCRIPTOR.ROLE3, codeOrZero(frame.role3));
+
+  writeDescriptor(memory, TETRA_DESCRIPTOR.CURSOR, targetSlot);
+  const claimedSlot = claimTetragrammatronSlot(memory, workerId);
+  const receipt64 = BigInt.asIntN(64, word & ((1n << 64n) - 1n));
+  writeTetragrammatronReceipt(memory, claimedSlot, receipt64);
+
+  return {
+    claimedSlot,
+    receipt64,
+    wordHex: word.toString(16).padStart(64, "0"),
+    snapshot: memoryToModemSnapshot(memory, { receiptSlots: [claimedSlot] }),
+  };
+}
+
+export function memoryToModemSnapshot(memory, options = {}) {
+  return snapshotTetragrammatronMemory(memory, options);
 }
 
 // ── oWordToModemFrame ───────────────────────────────────────────

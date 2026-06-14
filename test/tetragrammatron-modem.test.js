@@ -7,12 +7,19 @@ import {
   modemRoundTripTestOutput,
   modemRoundTripToGeometryReceipts,
   modemFrameToOWord,
+  modemFrameToMemory,
+  memoryToModemSnapshot,
   oWordToModemFrame,
   packModemFramesToOFile,
   unpackOFileToModemFrames,
 } from "../src/omi/tetragrammatron-modem.js";
 import { formatOWord } from "../src/omi/o-bitboard.js";
 import { parseOmiDocument } from "../src/omi/omi-parser.js";
+import {
+  TETRA_DESCRIPTOR,
+  createTetragrammatronMemory,
+  readTetragrammatronReceipt,
+} from "../src/omi/tetragrammatron-meta-memory.js";
 
 const SAMPLE_OUTPUT = [
   "▶ Hopf fibration",
@@ -474,6 +481,64 @@ describe("oWordToModemFrame", () => {
       const decoded = oWordToModemFrame(word);
       assert.equal(decoded.selector, 0);
     }
+  });
+});
+
+describe("modemFrameToMemory", () => {
+  it("writes frame route and status into descriptor memory", () => {
+    const memory = createTetragrammatronMemory();
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const frame = result.frames.find((f) => f.event.status === "passed");
+
+    const write = modemFrameToMemory(memory, frame, { workerId: 12 });
+    const snapshot = memoryToModemSnapshot(memory, { receiptSlots: [write.claimedSlot] });
+
+    assert.equal(write.claimedSlot, frame.slot5040);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.STATUS], 0);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.RECEIPT_STATE], 1);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.ACTIVE_BACKEND], 12);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.ACTIVE_PHASE], frame.baseQ);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.POLYBIUS_ROW], frame.polybius.row);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.POLYBIUS_COL], frame.polybius.col);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.LOCAL240], frame.local240);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.SLOT5040], frame.slot5040);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.CHART11], frame.chart11);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.BASE_Q], frame.baseQ);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.FIBER_Q], frame.fiberQ);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.FANO7], frame.fano7);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.ROLE3], frame.role3);
+  });
+
+  it("writes the low 64 bits of the .o word as the history receipt", () => {
+    const memory = createTetragrammatronMemory();
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const frame = result.frames[0];
+    const word = modemFrameToOWord(frame);
+    const expectedReceipt = BigInt.asIntN(64, word & ((1n << 64n) - 1n));
+
+    const write = modemFrameToMemory(memory, frame);
+
+    assert.equal(write.receipt64, expectedReceipt);
+    assert.equal(readTetragrammatronReceipt(memory, frame.slot5040), expectedReceipt);
+    assert.deepEqual(write.snapshot.receipts, [
+      { slot: frame.slot5040, value: expectedReceipt.toString() },
+    ]);
+    assert.doesNotThrow(() => JSON.stringify(write.snapshot));
+  });
+
+  it("memoryToModemSnapshot is JSON-safe for explicit receipt slots", () => {
+    const memory = createTetragrammatronMemory();
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const frame = result.frames.find((f) => f.event.status === "failed");
+    const write = modemFrameToMemory(memory, frame, { workerId: 2 });
+
+    const snapshot = memoryToModemSnapshot(memory, { receiptSlots: [write.claimedSlot] });
+
+    assert.equal(snapshot.claimedSlot, frame.slot5040);
+    assert.equal(snapshot.cursor, frame.slot5040 + 1);
+    assert.equal(snapshot.receipts.length, 1);
+    assert.equal(typeof snapshot.receipts[0].value, "string");
+    assert.doesNotThrow(() => JSON.stringify(snapshot));
   });
 });
 

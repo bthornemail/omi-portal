@@ -5,6 +5,7 @@ export const DEFAULT_SSE_ENDPOINT = '/stream';
 export const VOXEL_BATCH_EVENT = 'voxel:batch';
 export const VOXEL_UPDATE_EVENT = 'voxel:update';
 export const VOXEL_REMOVE_EVENT = 'voxel:remove';
+export const TETRAGRAMMATRON_BACKEND_EVENT = 'tetragrammatron:backend-event';
 
 export class OmiLivePortalBinder {
   #connector;
@@ -29,6 +30,13 @@ export class OmiLivePortalBinder {
   get voxelStream() { return this.#voxelStream; }
   get eventCount() { return this.#connector.eventCount; }
   get voxelCount() { return this.#voxelStream.voxelCount; }
+
+  ingestBackendEvent(event) {
+    if (!event || event.type !== 'tetragrammatron-backend-event') return null;
+    this.#dispatchDomEvent(TETRAGRAMMATRON_BACKEND_EVENT, event);
+    const batch = this.#voxelStream.ingest([event]);
+    return batch;
+  }
 
   initializeLiveBinding(sseEndpointUrl) {
     if (this.connected) return;

@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  TETRA_DESCRIPTOR,
   TETRAGRAMMATRON_DESCRIPTOR,
   TETRAGRAMMATRON_DESCRIPTOR_BYTES,
   TETRAGRAMMATRON_DESCRIPTOR_CELLS,
@@ -36,6 +37,15 @@ describe("Tetragrammatron meta-memory: construction", () => {
     assert.equal(readDescriptor(memory, TETRAGRAMMATRON_DESCRIPTOR.LITTLE_ENDIAN), 1);
     assert.equal(readDescriptor(memory, TETRAGRAMMATRON_DESCRIPTOR.PROMOTE_BOUNDARY), 720);
     assert.equal(readDescriptor(memory, TETRAGRAMMATRON_DESCRIPTOR.HARD_RESET_BOUNDARY), 5040);
+  });
+
+  it("exposes frozen compact descriptor slot constants", () => {
+    assert.equal(Object.isFrozen(TETRA_DESCRIPTOR), true);
+    assert.equal(TETRA_DESCRIPTOR.VERSION, 0x01);
+    assert.equal(TETRA_DESCRIPTOR.CURSOR, 0x0A);
+    assert.equal(TETRA_DESCRIPTOR.ACTIVE_BACKEND, 0x04);
+    assert.equal(TETRA_DESCRIPTOR.BASE_Q, 0x15);
+    assert.equal(TETRAGRAMMATRON_DESCRIPTOR.PROTOCOL_VERSION, TETRA_DESCRIPTOR.VERSION);
   });
 
   it("can wrap caller-provided SharedArrayBuffers", () => {
@@ -122,9 +132,14 @@ describe("Tetragrammatron meta-memory: snapshots", () => {
 
     assert.equal(snapshot.descriptorBytes, TETRAGRAMMATRON_DESCRIPTOR_BYTES);
     assert.equal(snapshot.historyBytes, TETRAGRAMMATRON_HISTORY_BYTES);
-    assert.equal(snapshot.descriptor.protocol_version, 1);
-    assert.equal(snapshot.descriptor.active_backend_id, 11);
-    assert.equal(snapshot.receipts[slot], "123456789");
+    assert.equal(snapshot.descriptors.length, TETRAGRAMMATRON_DESCRIPTOR_CELLS);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.VERSION], 1);
+    assert.equal(snapshot.descriptors[TETRA_DESCRIPTOR.ACTIVE_BACKEND], 11);
+    assert.equal(snapshot.cursor, 1);
+    assert.equal(snapshot.claimedSlot, slot);
+    assert.equal(snapshot.slot5040, slot);
+    assert.equal(snapshot.local240, 0);
+    assert.deepEqual(snapshot.receipts, [{ slot, value: "123456789" }]);
     assert.doesNotThrow(() => JSON.stringify(snapshot));
   });
 
@@ -135,6 +150,9 @@ describe("Tetragrammatron meta-memory: snapshots", () => {
 
     const snapshot = snapshotTetragrammatronMemory(memory, { receiptSlots: [5, 6] });
 
-    assert.deepEqual(snapshot.receipts, { 5: "55", 6: "66" });
+    assert.deepEqual(snapshot.receipts, [
+      { slot: 5, value: "55" },
+      { slot: 6, value: "66" },
+    ]);
   });
 });

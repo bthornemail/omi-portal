@@ -17,6 +17,7 @@
     "preview:document": "vite preview --host 0.0.0.0 --open /document.html",
     "test": "node --test test/*.test.js",
     "tetragrammatron:modem": "node scripts/tetragrammatron-modem.js",
+    "tetragrammatron:live-proof": "node scripts/tetragrammatron-live-proof.js",
     "demo": "node examples/node-demo.js",
     "bundle:wink-browserify": "browserify examples/browserify-entry.cjs -o public/wink-bundle.js",
     "demo:wordnet": "node examples/wordnet-demo.js",

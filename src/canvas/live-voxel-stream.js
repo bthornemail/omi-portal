@@ -41,6 +41,39 @@ export function addressToQxy(address) {
   return null;
 }
 
+function operatorForBackendEvent(rec) {
+  if (rec.operator) return rec.operator;
+  if (rec.receiptState === 'accepted') return '=';
+  if (rec.receiptState === 'rejected') return '!';
+  return '+';
+}
+
+function projectRecord(rec) {
+  if (rec?.type === 'tetragrammatron-backend-event' && rec.route) {
+    const x = Number(rec.route.baseQ ?? rec.route.phase ?? 0) % 7;
+    const y = Number(rec.route.fiberQ ?? 0) % 16;
+    return {
+      x,
+      y,
+      operator: operatorForBackendEvent(rec),
+      address: `tetragrammatron-${rec.slot ?? rec.route.slot5040 ?? 0}-${rec.route.local240 ?? 0}-${y}/48`,
+      backendEvent: rec,
+    };
+  }
+
+  const address = rec?.sourceAddress || rec?.address;
+  if (!address) return null;
+  const qxy = addressToQxy(address);
+  if (!qxy) return null;
+  return {
+    x: qxy.x,
+    y: qxy.y,
+    operator: rec.operator,
+    address,
+    backendEvent: null,
+  };
+}
+
 export class LiveVoxelStream {
   #options;
   #voxelState;
@@ -89,17 +122,14 @@ export class LiveVoxelStream {
     const now = Date.now();
 
     for (const rec of parsedRecords) {
-      const address = rec.sourceAddress || rec.address;
-      if (!address) continue;
+      const projection = projectRecord(rec);
+      if (!projection) continue;
 
-      const qxy = addressToQxy(address);
-      if (!qxy) continue;
-
-      const { x, y } = qxy;
+      const { x, y, address } = projection;
       const q = omiQuadraticProject(x, y);
       const depth = omiRootDepth(x, y);
       const local240 = omiLocal240(x, y);
-      const color = operatorToColor(rec.operator);
+      const color = operatorToColor(projection.operator);
 
       const voxelKey = `${x}:${y}`;
       const existing = this.#voxelState.get(voxelKey);
@@ -110,10 +140,11 @@ export class LiveVoxelStream {
         depth,
         q,
         local240,
-        operator: rec.operator,
+        operator: projection.operator,
         address,
         color,
-        lastSeen: now
+        lastSeen: now,
+        backendEvent: projection.backendEvent,
       };
 
       this.#voxelState.set(voxelKey, voxelData);
@@ -123,10 +154,8 @@ export class LiveVoxelStream {
     const activeKeys = new Set(
       (parsedRecords || [])
         .map(r => {
-          const addr = r.sourceAddress || r.address;
-          if (!addr) return null;
-          const qxy = addressToQxy(addr);
-          return qxy ? `${qxy.x}:${qxy.y}` : null;
+          const projection = projectRecord(r);
+          return projection ? `${projection.x}:${projection.y}` : null;
         })
         .filter(Boolean)
     );

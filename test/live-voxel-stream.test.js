@@ -91,6 +91,35 @@ describe('OMI Portal: Live Voxel Stream (0xA1)', () => {
       assert.strictEqual(state.length, 2);
       assert.ok(state[0].x <= state[1].x);
     });
+
+    it('ingests Tetragrammatron backend events through route coordinates', () => {
+      const stream = new LiveVoxelStream();
+      const event = {
+        type: 'tetragrammatron-backend-event',
+        slot: 241,
+        receipt: '123456789',
+        receiptState: 'accepted',
+        status: 'passed',
+        route: {
+          baseQ: 2,
+          fiberQ: 3,
+          local240: 44,
+          slot5040: 241,
+          chart11: 5,
+          fano7: 0,
+          role3: 1,
+        },
+      };
+
+      const batch = stream.ingest([event]);
+      const voxel = stream.getVoxel(2, 3);
+
+      assert.strictEqual(batch.updates.length, 1);
+      assert.ok(voxel);
+      assert.strictEqual(voxel.operator, '=');
+      assert.strictEqual(voxel.address, 'tetragrammatron-241-44-3/48');
+      assert.strictEqual(voxel.backendEvent, event);
+    });
   });
 
   describe('LiveVoxelStream — event system', () => {

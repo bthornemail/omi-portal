@@ -260,6 +260,7 @@ export * from "./omi-imo-lanes.js";
 export * from "./o-file-container.js";
 export * from "./o-chain-arithmetic.js";
 export * from "./tetragrammatron-meta-memory.js";
+export * from "./tetragrammatron-worker-runtime.js";
 
 function encodeBase64Url(value) {
   const input = String(value ?? "");
