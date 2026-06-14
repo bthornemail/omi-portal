@@ -1,5 +1,6 @@
 import { fnv1a32 } from "../core/deterministic-utils.js";
 import { parseOmiDocument } from "../omi/omi-parser.js";
+import { tetragrammatronGeometryRoute, computeQxy } from "../omi/tetragrammatron-geometry-router.js";
 
 // ── Types (JSDoc) ──────────────────────────────────────────────
 
@@ -166,5 +167,81 @@ export function modemRoundTripTestOutput(testOutput, options = {}) {
   return {
     eventCount: events.length,
     frames,
+  };
+}
+
+// ── Status → geometry channel mapping ──────────────────────────
+
+const STATUS_TO_CHANNEL = Object.freeze({
+  passed:  "US",
+  failed:  "RS",
+  running: "GS",
+  skipped: "FS",
+  todo:    "FS",
+});
+
+function statusToChannel(status) {
+  return STATUS_TO_CHANNEL[status] ?? "FS";
+}
+
+function statusToStability(status) {
+  switch (status) {
+    case "passed":  return 1;
+    case "failed":  return 0;
+    case "running": return 0.5;
+    default:        return 0.25;
+  }
+}
+
+function nodeFromEvent(event, index) {
+  return {
+    channel: statusToChannel(event.status),
+    id: event.id,
+    label: event.name,
+    controlCode: event.durationMs != null ? Math.round(event.durationMs) & 0xFF : index & 0xFF,
+    wordnet: {
+      relationCount: index,
+      metric: { stability: statusToStability(event.status) },
+      cells: { canonical: event.suite ?? "" },
+    },
+  };
+}
+
+// ── Integrate modem frames with geometry routing ───────────────
+
+export function modemRoundTripToGeometryReceipts(testOutput, options = {}) {
+  const { eventCount, frames } = modemRoundTripTestOutput(testOutput, options);
+
+  const receiptFrames = frames.map((frame, index) => {
+    const node = nodeFromEvent(frame.event, index);
+    const geometry = tetragrammatronGeometryRoute(node, index);
+
+    return {
+      ...frame,
+      node,
+      geometry,
+      qphase: `Q${geometry.baseQ}`,
+      chart11: geometry.chart11,
+      baseQ: geometry.baseQ,
+      fiberQ: geometry.fiberQ,
+      local240: geometry.local240,
+      slot5040: geometry.slot5040,
+      receiptState: frame.event.status === "passed" ? "accepted" : "candidate",
+      qxy: geometry.qxy,
+      thrustDirection: geometry.thrustDirection,
+      polybius: geometry.polybius,
+    };
+  });
+
+  return {
+    eventCount,
+    frames: receiptFrames,
+    summary: {
+      passed: receiptFrames.filter((f) => f.event.status === "passed").length,
+      failed: receiptFrames.filter((f) => f.event.status === "failed").length,
+      running: receiptFrames.filter((f) => f.event.status === "running").length,
+      accepted: receiptFrames.filter((f) => f.receiptState === "accepted").length,
+      candidate: receiptFrames.filter((f) => f.receiptState === "candidate").length,
+    },
   };
 }

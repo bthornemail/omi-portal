@@ -5,6 +5,7 @@ import {
   modulateTestEventToOmi,
   demodulateOmiRecord,
   modemRoundTripTestOutput,
+  modemRoundTripToGeometryReceipts,
 } from "../src/omi/tetragrammatron-modem.js";
 import { parseOmiDocument } from "../src/omi/omi-parser.js";
 
@@ -270,5 +271,99 @@ describe("integration with existing parser", () => {
       assert.ok(f.address.startsWith("omi-"), "address starts with omi-");
       assert.ok(f.address.endsWith("/128"), "address ends with /128");
     }
+  });
+});
+
+describe("modemRoundTripToGeometryReceipts", () => {
+  it("enriches each frame with geometry fields", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    assert.ok(result.eventCount > 0);
+    assert.equal(result.eventCount, result.frames.length);
+    for (const f of result.frames) {
+      assert.ok(f.geometry, "geometry attached");
+      assert.ok(typeof f.qphase === "string", f.qphase);
+      assert.ok(typeof f.chart11 === "number", "chart11 is number");
+      assert.ok(f.chart11 >= 0 && f.chart11 < 11, "chart11 in 0..10");
+      assert.ok(typeof f.baseQ === "number", "baseQ is number");
+      assert.ok(f.baseQ >= 0 && f.baseQ < 4, "baseQ in 0..3");
+      assert.ok(typeof f.fiberQ === "number", "fiberQ is number");
+      assert.ok(f.fiberQ >= 0 && f.fiberQ < 4, "fiberQ in 0..3");
+      assert.ok(typeof f.local240 === "number", "local240 is number");
+      assert.ok(f.local240 >= 0 && f.local240 < 240, "local240 in 0..239");
+      assert.ok(typeof f.slot5040 === "number", "slot5040 is number");
+      assert.ok(f.slot5040 >= 0 && f.slot5040 < 5040, "slot5040 in 0..5039");
+      assert.ok(typeof f.receiptState === "string", "receiptState is string");
+    }
+  });
+
+  it("maps passed events to US channel + accepted receipt", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      if (f.event.status === "passed") {
+        assert.equal(f.node.channel, "US");
+        assert.equal(f.receiptState, "accepted");
+      }
+    }
+  });
+
+  it("maps failed events to RS channel + candidate receipt", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      if (f.event.status === "failed") {
+        assert.equal(f.node.channel, "RS");
+        assert.equal(f.receiptState, "candidate");
+      }
+    }
+  });
+
+  it("maps running events to GS channel", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      if (f.event.status === "running") {
+        assert.equal(f.node.channel, "GS");
+      }
+    }
+  });
+
+  it("provides summary counts", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    assert.ok(typeof result.summary.passed === "number");
+    assert.ok(typeof result.summary.failed === "number");
+    assert.ok(typeof result.summary.running === "number");
+    assert.ok(typeof result.summary.accepted === "number");
+    assert.ok(typeof result.summary.candidate === "number");
+    assert.ok(result.summary.passed > 0);
+    assert.equal(result.summary.failed, 1);
+    assert.equal(result.summary.running, 2);
+    assert.ok(result.summary.accepted > 0);
+    assert.ok(result.summary.candidate > 0);
+  });
+
+  it("is deterministic for same input", () => {
+    const r1 = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    const r2 = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    assert.equal(r1.eventCount, r2.eventCount);
+    for (let i = 0; i < r1.eventCount; i++) {
+      assert.equal(r1.frames[i].slot5040, r2.frames[i].slot5040);
+      assert.equal(r1.frames[i].omi, r2.frames[i].omi);
+    }
+  });
+
+  it("thrustDirection and polybius are present on geometry frames", () => {
+    const result = modemRoundTripToGeometryReceipts(SAMPLE_OUTPUT);
+    for (const f of result.frames) {
+      if (f.receiptState === "accepted") {
+        assert.ok(f.thrustDirection, "thrustDirection on accepted");
+        assert.ok(typeof f.thrustDirection.a === "number", "thrust.a");
+        assert.ok(typeof f.thrustDirection.b === "number", "thrust.b");
+        assert.ok(typeof f.thrustDirection.c === "number", "thrust.c");
+      }
+    }
+  });
+
+  it("handles empty input", () => {
+    const result = modemRoundTripToGeometryReceipts("");
+    assert.equal(result.eventCount, 0);
+    assert.deepEqual(result.frames, []);
   });
 });
