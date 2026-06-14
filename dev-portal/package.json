@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
+    "@omi/surfaces": "file:../packages/omi-surfaces",
     "react": "latest",
     "react-dom": "latest",
     "three": "latest",

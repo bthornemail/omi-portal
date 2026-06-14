@@ -90,11 +90,11 @@ export function createOmiCarrier(input: OmiCarrierInput): OmiCarrier {
   };
 }
 
-export function omiCarrierDataAttributes(carrier: OmiCarrier, surface = carrier.surface) {
+export function omiCarrierDataAttributes(carrier: OmiCarrier, surface = carrier.surface, imo?: string) {
   const normalizedSurface = normalizeOmiSurfaceName(surface);
   const attrs: Record<string, string> = {
     'data-omi': carrier.address,
-    'data-imo': `o---o/---/?receipt=${carrier.receiptState}@3C@`,
+    'data-imo': imo || `o---o/---/?receipt=${carrier.receiptState}@3C@`,
     'data-omi-surface': normalizedSurface,
     'data-receipt-state': carrier.receiptState,
     'data-o-word': carrier.oWord || '',

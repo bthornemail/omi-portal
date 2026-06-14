@@ -44,8 +44,8 @@ EXPOSE 80
 
 LABEL org.opencontainers.image.title="OMI Portal"
 LABEL org.opencontainers.image.description="Omicron Object Model — CIDR-v0 browser projection surface"
-LABEL org.opencontainers.image.url="https://github.com/anomalyco/omi-portal"
-LABEL org.opencontainers.image.source="https://github.com/anomalyco/omi-portal"
+LABEL org.opencontainers.image.url="https://github.com/bthornemail/omi-portal"
+LABEL org.opencontainers.image.source="https://github.com/bthornemail/omi-portal"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL omi.service-bus="::1..::8"
 LABEL omi.context-root="ffff-127--/48"

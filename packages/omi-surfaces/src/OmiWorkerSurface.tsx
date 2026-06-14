@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import type { OmiCarrier } from '../../omi/omiSurfaceCarrier';
-import { createAcceptedOmiWorker, type OmiWorkerHandle } from '../../omi/omiWorkerCarrier';
+import type { OmiCarrier } from './carrier';
+import { createAcceptedOmiWorker, type OmiWorkerHandle } from './worker';
 import { OmiSurface } from './OmiSurface';
 
 export type OmiWorkerEvent = {

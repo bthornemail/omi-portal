@@ -1,4 +1,4 @@
-import { base64ToBytes, type OmiCarrier } from './omiSurfaceCarrier';
+import { base64ToBytes, type OmiCarrier } from './carrier';
 
 export type OmiWorkerHandle = {
   worker: Worker;
@@ -7,7 +7,10 @@ export type OmiWorkerHandle = {
   revoke: () => void;
 };
 
-export function base64ToWorker(carrier: Pick<OmiCarrier, 'base64' | 'mime'>, options: WorkerOptions = { type: 'module' }): OmiWorkerHandle {
+export function base64ToWorker(
+  carrier: Pick<OmiCarrier, 'base64' | 'mime'>,
+  options: WorkerOptions = { type: 'module' },
+): OmiWorkerHandle {
   const bytes = base64ToBytes(carrier.base64);
   const blobBytes = new Uint8Array(bytes);
   const blob = new Blob([blobBytes], { type: carrier.mime || 'application/javascript' });
@@ -21,7 +24,10 @@ export function base64ToWorker(carrier: Pick<OmiCarrier, 'base64' | 'mime'>, opt
   };
 }
 
-export function createAcceptedOmiWorker(carrier: OmiCarrier, options: WorkerOptions = { type: 'module' }): OmiWorkerHandle {
+export function createAcceptedOmiWorker(
+  carrier: OmiCarrier,
+  options: WorkerOptions = { type: 'module' },
+): OmiWorkerHandle {
   if (carrier.receiptState !== 'accepted') {
     throw new Error('Cannot execute unaccepted OMI carrier');
   }

@@ -7,11 +7,13 @@ import {
   createOmiCarrier,
   deriveOmiCarrierHash,
   modemFrameToOmiCarrier,
+  OmiGnomon,
   OmiMatrix,
   OmiSurface,
+  OmiWorkerSurface,
   omiCarrierDataAttributes,
   textToBase64,
-} from '@omi/surfaces';
+} from '../src';
 
 async function run() {
   const base64 = textToBase64('omi surface carrier');
@@ -47,18 +49,33 @@ async function run() {
   const surfaceHtml = renderToStaticMarkup(
     <OmiSurface carrier={carrier} surface="matrix">
       <span>matrix</span>
-    </OmiSurface>
+    </OmiSurface>,
   );
   assert.match(surfaceHtml, /data-omi-surface="matrix"/);
   assert.match(surfaceHtml, /data-receipt-state="candidate"/);
 
+  const directHtml = renderToStaticMarkup(
+    <OmiGnomon
+      address="o---o/---/?v=gnomon;l=6;h=axis;b=beta1;s={4,3}@3C@"
+      receiptState="candidate"
+    >
+      Orientation axis
+    </OmiGnomon>,
+  );
+  assert.match(directHtml, /data-omi-surface="gnomon"/);
+  assert.match(directHtml, /data-omi="o---o\/---\/\?v=gnomon;l=6;h=axis;b=beta1;s=\{4,3\}@3C@"/);
+
   const namedHtml = renderToStaticMarkup(
     <OmiMatrix carrier={carrier}>
       <span>named</span>
-    </OmiMatrix>
+    </OmiMatrix>,
   );
   assert.match(namedHtml, /Omi-Matrix/);
   assert.match(namedHtml, /data-omi-surface="matrix"/);
+
+  const workerHtml = renderToStaticMarkup(<OmiWorkerSurface carrier={carrier} />);
+  assert.match(workerHtml, /disabled=""/);
+  assert.match(workerHtml, /Activate OMI Worker/);
 
   const frameCarrier = modemFrameToOmiCarrier({
     frame: {
@@ -75,7 +92,7 @@ async function run() {
   assert.equal(frameCarrier.oWord, 'abcd'.repeat(16));
   assert.equal(new TextDecoder().decode(base64ToBytes(frameCarrier.base64)), 'abcd'.repeat(16));
 
-  console.log('PASS: omi-surfaces');
+  console.log('PASS: @omi/surfaces');
 }
 
 run().catch((err) => {

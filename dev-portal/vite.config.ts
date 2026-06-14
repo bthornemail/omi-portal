@@ -4,6 +4,12 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+    alias: {
+      '@omi/surfaces': fileURLToPath(new URL('../packages/omi-surfaces/src/index.ts', import.meta.url))
+    }
+  },
   server: {
     port: 5173,
     proxy: {

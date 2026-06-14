@@ -10,8 +10,17 @@ import {
   DEFAULT_SAMPLE,
   type ModemFrame,
 } from '../omi/tetragrammatronModemParser';
-import { deriveOmiCarrierHash, modemFrameToOmiCarrier } from '../omi/omiSurfaceCarrier';
-import { OmiForm, OmiGlyph, OmiGnomon, OmiMatrix, OmiPortal, OmiWorkerSurface, OmiWorld } from './omi-surfaces';
+import {
+  deriveOmiCarrierHash,
+  modemFrameToOmiCarrier,
+  OmiForm,
+  OmiGlyph,
+  OmiGnomon,
+  OmiMatrix,
+  OmiPortal,
+  OmiWorkerSurface,
+  OmiWorld,
+} from '@omi/surfaces';
 
 type Tab = 'omi' | 'geometry' | 'oword' | 'ofile' | 'demod' | 'receipt';
 
