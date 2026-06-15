@@ -42,6 +42,17 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
       assert.deepEqual(readOExpression('false'), { type: 'atom', value: 'false' });
     });
 
+    it('preserves dotted atoms for declaration identifiers', () => {
+      assert.deepEqual(
+        readOExpression('raw-binary-lattice.integration.v0'),
+        { type: 'atom', value: 'raw-binary-lattice.integration.v0' }
+      );
+      assert.deepEqual(
+        readOExpression('.omi/runtime'),
+        { type: 'atom', value: '.omi/runtime' }
+      );
+    });
+
     it('returns null for empty input', () => {
       assert.strictEqual(readOExpression(''), null);
       assert.strictEqual(readOExpression('   '), null);
@@ -136,6 +147,12 @@ describe('OMI Portal: O-Expression Stream Reader (0x9F)', () => {
       const expr = readOExpression('(a . (b c))');
       assert.strictEqual(expr.type, 'pair');
       assert.strictEqual(expr.cdr.type, 'list');
+    });
+
+    it('keeps dotted atoms inside lists distinct from isolated pair dots', () => {
+      const expr = readOExpression('(root addr128.v0 .omi/runtime)');
+      assert.strictEqual(expr.type, 'list');
+      assert.deepEqual(expr.items.map((item) => item.value), ['root', 'addr128.v0', '.omi/runtime']);
     });
   });
 

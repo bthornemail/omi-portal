@@ -9,6 +9,8 @@ import {
   projectEmmcSlot,
 } from "./omi-emmc-layout.js";
 import { governorPlaneForRoot, EMMC_POLYHARMONIC_PLANES } from "./omi-emmc-polyharmonic-governor.js";
+import { extractGaugeLane, decodeSelector } from "./omi-ged-event-selector.js";
+import { sealedGauge, GAUGE } from "../omi/sealed-gauge-word.js";
 
 export const GED_DIMENSION_LABELS = Object.freeze({
   FACTS: "inverse-ground",
@@ -78,5 +80,16 @@ export function resolveGedGauge({
     polynomial: clockRecord.polynomial,
     partition: clockRecord.partition,
     bandRange: bandRecord.range,
+  });
+}
+
+export function resolveGedSelectorGauge(selector) {
+  const gaugeLane = extractGaugeLane(selector);
+  if (!gaugeLane) return null;
+  return Object.freeze({
+    selectorBits: decodeSelector(selector),
+    gaugeLane,
+    gaugeToken: GAUGE[gaugeLane].token,
+    sealedGaugeWord: sealedGauge(gaugeLane),
   });
 }

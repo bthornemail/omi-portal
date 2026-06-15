@@ -16,8 +16,10 @@ itself.
 
 | Artifact | Role |
 | --- | --- |
+| [`index.md`](index.md) | Navigation outline and concept map for the tetragrammatron folder. |
 | [`polyharmonic-governor-axis.md`](polyharmonic-governor-axis.md) | Concise synthesis of the three clocks, four offsets, and five governor modes. |
 | [`tetragrammatron-meta-memory-automaton.md`](tetragrammatron-meta-memory-automaton.md) | Implementation-facing bridge from the hidden 5! automaton to current code, generated vectors, and verification gates. |
+| [`configuration-witness-ladder.md`](configuration-witness-ladder.md) | Incidence architecture of the binary quadratic form: Miquel, Möbius, Möbius–Kantor, Klein witnesses; QuQuart sieve; Perles warning; 11-cell overseer. |
 | [`tetragrammatron.canvas`](tetragrammatron.canvas) | JSON Canvas layout for the 4-bit carry lookahead adder substrate. |
 | [`index.html`](index.html) | Standalone Tetragrammatron Explorer for the interactive 4-bit CLA simulation. |
 

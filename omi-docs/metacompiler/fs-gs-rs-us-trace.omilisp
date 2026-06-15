@@ -1,0 +1,8 @@
+((FS . app.declaration-first-metacompiler)
+  ((GS . identity)
+    ((RS . app)
+      ((US . class) . protocol-pathway)
+      ((US . authority) . declaration-first)))
+  ((GS . control)
+    ((RS . header8)
+      ((US . slots) . (NUL ESC FS GS RS US input-byte current-state)))))

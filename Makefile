@@ -18,6 +18,9 @@
 
 .PHONY: help dev consumer production verify verify-safe pipeline release
 
+CC ?= cc
+OMI_METACOMPILER ?= .cache/omi-metacompiler
+
 help: ## Display the canonical operational target glossary map
 	@echo "OMI Makefile — Grade Router"
 	@echo ""
@@ -53,6 +56,8 @@ help: ## Display the canonical operational target glossary map
 	@echo "OMI OPERATIONAL PIPELINE:"
 	@echo "  make pipeline     — 13-step execution doctrine (diagnostic)"
 	@echo "  make compile-imo  — Lower .omi declarations to .imo objects"
+	@echo "  make build-omi-metacompiler — Build declaration-first OMI metacompiler"
+	@echo "  make omi-docs-proof — Prove declaration control-tape artifacts"
 	@echo "  make generate-router-seeds — Generate vectors/*.omi proxy seed configs"
 	@echo "  make audit-cons-triad-dispatch — Audit CONS RRGGBBAA triad lanes"
 	@echo ""
@@ -88,7 +93,7 @@ help: ## Display the canonical operational target glossary map
 # GRADE ENTRYPOINTS
 # ============================================================================
 
-.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence generate-router-seeds compile-router-seeds verify-router-seeds audit-cons-triad-dispatch
+.PHONY: dev consumer production verify verify-safe pipeline release release-manifest verify-reader verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence generate-router-seeds compile-router-seeds verify-router-seeds audit-cons-triad-dispatch build-omi-metacompiler omi-docs-proof
 
 dev: verify-safe build-dev
 
@@ -98,7 +103,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof emmc-proof
+verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof omi-docs-proof emmc-proof
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -198,6 +203,15 @@ build-production:
 
 verify-production:
 	npm test
+
+build-omi-metacompiler:
+	@echo "[omi-metacompiler] building declaration-first control-tape compiler..."
+	@mkdir -p .cache
+	$(CC) -std=c99 -Wall -Wextra -O2 src/omilisp/omi_metacompiler.c -o $(OMI_METACOMPILER)
+
+omi-docs-proof: build-omi-metacompiler
+	@echo "[omi-docs-proof] proving declaration control-tape artifacts..."
+	node scripts/omi-docs-proof.js
 
 # ============================================================================
 # VERIFICATION GATES

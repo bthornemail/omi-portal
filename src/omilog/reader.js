@@ -107,7 +107,7 @@ function readExpr(state) {
   if (c === '(') return readList(state);
   if (c === "'" || c === '`') return readQuoted(state);
   if (c === RS) return readSourceBlock(state);
-  if (c === ')' || c === '.') {
+  if (c === ')' || isIsolatedDot(state)) {
     state.error(`Unexpected '${c}' at top level`);
   }
 
@@ -127,7 +127,7 @@ function readList(state) {
       state.next();
       return { type: 'list', items };
     }
-    if (state.peek() === '.') {
+    if (isIsolatedDot(state)) {
       state.next();
       state.skipWs();
       const last = readExpr(state);
@@ -190,12 +190,25 @@ function readString(state) {
   return { type: 'string', value };
 }
 
+function isIsolatedDot(state) {
+  if (state.peek() !== '.') return false;
+  const next = state.source[state.pos + 1] || '';
+  return next === '' ||
+    next === ' ' ||
+    next === '\t' ||
+    next === '\n' ||
+    next === '\r' ||
+    next === '(' ||
+    next === ')' ||
+    next === ';';
+}
+
 function readAtom(state) {
   let value = '';
   while (!state.done) {
     const c = state.peek();
     if (c === ' ' || c === '\t' || c === '\n' || c === '\r' ||
-        c === '(' || c === ')' || c === '.' || c === "'" || c === '`' ||
+        c === '(' || c === ')' || c === "'" || c === '`' ||
         c === ';' || c === RS || c === US || c === '"') {
       break;
     }
@@ -318,7 +331,10 @@ export function readOExpressionPair(source) {
   state.skipWs();
   const car = readExpr(state);
   state.skipWs();
-  state.expect('.');
+  if (!isIsolatedDot(state)) {
+    state.error(`Expected isolated '.', got '${state.peek()}'`);
+  }
+  state.next();
   state.skipWs();
   const cdr = readExpr(state);
   state.skipWs();

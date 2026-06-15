@@ -1,0 +1,10 @@
+(omi
+  (identity
+    (sid declaration-first-metacompiler)
+    (kind protocol.control-plane))
+  (address
+    (root addr128.v0)
+    (path .omi/runtime))
+  (law
+    (declarations authority)
+    (control-bytes substrate)))
