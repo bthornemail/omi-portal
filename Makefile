@@ -94,7 +94,7 @@ production: compile-imo ebpf-production portal-production verify-production
 
 verify: verify-docs verify-omilog verify-oppid verify-browser verify-ebpf
 
-verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof
+verify-safe: verify-docs verify-omilog verify-router-seeds verify-reader verify-oppid verify-wan verify-portal-binder verify-narrative verify-centroid verify-lens-parser verify-slice3 verify-atomic-kernel verify-reciprocal-router verify-miquel-router verify-canvas-color verify-json-canvas-schema verify-rrggbbaa-orbit verify-miquel-rgb-incidence verify-browser verify-oppid-script test-omi-pipe test-omi-pipe-network-stdin test-omi-pipe-mcrsgsp test-omi-pipe-mcrsgsp-reconstruction test-omi-pipe-omi-acceptance test-omi-pipe-causal-proof test-omi-pipe-rs-proof test-omi-pipe-gf256-rs-proof emmc-proof
 
 pipeline: source validate generate mirror enter read compose route scope timing naming project replay
 
@@ -740,6 +740,24 @@ test-tetragrammaton-fano-cron:
 test-qemu-clock-tree-emulation:
 	@echo "[Omi QEMU Clock Core] Running 2^-32 scaling and gating checks..."
 	node --test test/qemu-clock.test.js
+
+# ============================================================
+# TETRAGRAMMATRON eMMC STATE IMAGE
+# ============================================================
+
+.PHONY: emmc-state emmc-proof emmc-qemu
+
+emmc-state:
+	@echo "[Omi eMMC State] Building deterministic Tetragrammatron state image..."
+	node scripts/omi-mkemmc-state.js
+
+emmc-proof: emmc-state
+	@echo "[Omi eMMC State] Verifying monotone RPMB and userdata governor planes..."
+	node scripts/tetragrammatron-emmc-proof.js
+
+emmc-qemu: emmc-proof
+	@echo "[Omi eMMC QEMU] Launching explicit operator-gated QEMU session..."
+	sh scripts/run-omi-emmc-qemu.sh
 
 # ============================================================
 # WALLIS-NEUGEBAUER NOTATIONAL KERNEL
