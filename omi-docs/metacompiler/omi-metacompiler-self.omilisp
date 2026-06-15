@@ -1,0 +1,42 @@
+(omi
+  (identity
+    (sid omi-metacompiler.self)
+    (title "OMI Declaration-First Metacompiler")
+    (kind compiler.stage0.declaration)
+    (source "src/omilisp/omi_metacompiler.c"))
+
+  (address
+    (addr omi-metacompiler.self)
+    (locator omi-docs.metacompiler.self)
+    (binding omi-metacompiler.stage0.v0))
+
+  (scope
+    (fs omi)
+    (gs metacompiler)
+    (rs declaration-tape)
+    (us meta-memory))
+
+  (rule
+    (statement "The compiler is accepted only when its declaration and control tape agree")
+    (c-implementation-is-authority false)
+    (decompiled-view-is-authority false)
+    (header8-control-tape-is-authority false)
+    (canonical-declaration-and-receipt-are-authority true))
+
+  (artifact
+    (implementation "src/omilisp/omi_metacompiler.c")
+    (proof-script "scripts/omi-docs-proof.js")
+    (build-target "build-omi-metacompiler")
+    (proof-target "omi-docs-proof"))
+
+  (lanes
+    (fs identity)
+    (gs metacompiler)
+    (rs declaration-tape)
+    (us meta-memory))
+
+  (receipts
+    (source pending)
+    (normalized pending)
+    (tape pending)
+    (meta-memory pending)))
