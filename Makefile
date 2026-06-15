@@ -67,6 +67,10 @@ help: ## Display the canonical operational target glossary map
 	@echo "  make docker-stress      — Stress validation"
 	@echo "  make softmmu-test       — Full-system emulators"
 	@echo "  make run-all-virt-gates — Guix + Docker + QEMU + stress + SoftMMU"
+	@echo "  make benchmark-emmc     — Timed eMMC proof benchmark artifacts"
+	@echo "  make benchmark-qemu-phase — Baseline QEMU/eMMC benchmark report"
+	@echo "  make benchmark-virt-full — Opt-in Docker + SoftMMU benchmark report"
+	@echo "  make benchmark-load-matrix — Opt-in docker-compose load matrix"
 	@echo "  make wan-probe          — WAN connectivity probe"
 	@echo "  make start-telemetry    — Telemetry daemon"
 	@echo ""
@@ -371,6 +375,7 @@ smoke: verify-safe
         docker-build docker-bake docker-push docker-stress softmmu-test run-all-virt-gates \
         release release-dry-run \
         benchmark-concurrency-stress benchmark-parallel-stress benchmark-stress-all \
+        benchmark-qemu-phase benchmark-emmc benchmark-load-matrix benchmark-virt-full \
         build-omi-pipe test-omi-pipe \
         build-c99-core test-c99-core test-c99-core-guix \
         compile-ebpf-gate test-ebpf-pipeline \
@@ -523,6 +528,19 @@ benchmark-parallel-stress:
 	node scripts/stress-parallel.js
 
 benchmark-stress-all: benchmark-concurrency-stress benchmark-parallel-stress
+
+benchmark-emmc:
+	node scripts/benchmark-qemu-phase.js --only emmc
+
+benchmark-qemu-phase:
+	node scripts/benchmark-qemu-phase.js
+
+benchmark-load-matrix:
+	docker compose -f docker-compose.load.yml up --build --abort-on-container-exit
+	docker compose -f docker-compose.load.yml down --remove-orphans
+
+benchmark-virt-full:
+	node scripts/benchmark-qemu-phase.js --include-docker --include-softmmu
 
 # ============================================================================
 # OMI-PIPE POSIX STREAM GATE
