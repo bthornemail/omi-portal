@@ -167,6 +167,8 @@ export function makeOmiAddressForAtom(atom = {}, options = {}) {
 }
 
 export { parseOmiClause, parseOmiDocument } from "./omi-parser.js";
+export * from "./autonomous-slide.js";
+export * from "./codebase-ingestion.js";
 export {
   KARNAUGH_BIT_ORDER,
   W6,
@@ -263,6 +265,7 @@ export * from "./preletter-word16-interpreter.js";
 export * from "./tetragrammatron-meta-memory.js";
 export * from "./tetragrammatron-worker-runtime.js";
 export * from "./tetragrammatron-polyharmonic-governor.js";
+export * from "./tetragrammatron-optimizer.js";
 
 function encodeBase64Url(value) {
   const input = String(value ?? "");

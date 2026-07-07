@@ -7,3 +7,4 @@ export * from "./anti-entropy.js";
 export * from "./webrtc-transport.js";
 export * from "./coturn-proxy.js";
 export * from "./hnsw-index.js";
+export * from "./omi-pseudo-persistent-network.js";

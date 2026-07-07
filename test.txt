@@ -1,0 +1,2503 @@
+
+> omi-portal-core@0.2.0 test
+> node --test test/*.test.js
+
+[32m✔ animated document emits semantic atoms with writable motion data [90m(42.858391ms)[39m[39m
+▶ A-Frame World Projection (ARG → entities)
+  [32m✔ 1. buildEntityFromNode produces an entity with required fields [90m(3.779169ms)[39m[39m
+  [32m✔ 2. buildEntityList produces entities for all topology nodes [90m(0.878691ms)[39m[39m
+  [32m✔ 3. Each entity has carrier hex and data attributes [90m(0.709933ms)[39m[39m
+  [32m✔ 4. entityToAframeHTML produces a valid A-Frame entity string [90m(0.637191ms)[39m[39m
+  [32m✔ 5. compileTopologyToScene produces complete scene data [90m(0.880024ms)[39m[39m
+  [32m✔ 6. Receipt state affects entity color (data attributes) [90m(0.409915ms)[39m[39m
+  [32m✔ 7. A-Frame projection does not mutate carrier source [90m(0.820687ms)[39m[39m
+  [32m✔ 8. No A-Frame entity is source authority (carrier remains in genome) [90m(0.833127ms)[39m[39m
+[32m✔ A-Frame World Projection (ARG → entities) [90m(12.694541ms)[39m[39m
+▶ ARG Movie Player (world/clock/gate)
+  [32m✔ 1. creates world/clock/gate on construction [90m(2.398596ms)[39m[39m
+  [32m✔ 2. accepts injected world/clock/gate [90m(0.286037ms)[39m[39m
+  [32m✔ 3. loadTimeline sets up timeline and currentBeat [90m(3.064662ms)[39m[39m
+  [32m✔ 4. play sets playing flag and resumes clock [90m(0.919242ms)[39m[39m
+  [32m✔ 5. nextBeat advances to next beat [90m(3.673122ms)[39m[39m
+  [32m✔ 6. previousBeat moves back [90m(1.717711ms)[39m[39m
+  [32m✔ 7. previousBeat at index 0 stays at 0 [90m(0.81538ms)[39m[39m
+  [32m✔ 8. nextBeat past end pauses [90m(3.360892ms)[39m[39m
+  [32m✔ 9. scrubToBeat jumps to correct index [90m(4.581125ms)[39m[39m
+  [32m✔ 10. scrubToBeat clamps out-of-range index [90m(1.814267ms)[39m[39m
+  [32m✔ 11. progress returns 0 at start [90m(3.224822ms)[39m[39m
+  [32m✔ 12. progress reflects current beat fraction [90m(1.03941ms)[39m[39m
+  [32m✔ 13. getCurrentFrame returns frame from world state [90m(2.334543ms)[39m[39m
+  [32m✔ 14. advanceTick increments elapsed ticks and advances beat when threshold exceeded [90m(1.226315ms)[39m[39m
+  [32m✔ 15. acceptCurrentBeat creates receipts and imports to world [90m(1.634013ms)[39m[39m
+  [32m✔ 16. rejectCurrentBeat creates rejection receipts with different action [90m(0.821234ms)[39m[39m
+  [32m✔ 17. openInteraction pauses clock, closeInteraction resumes it [90m(0.866674ms)[39m[39m
+  [32m✔ 18. scrubToMotif finds beat by motif [90m(1.12772ms)[39m[39m
+  [32m✔ 19. onBeatChange fires on beat transition [90m(1.207352ms)[39m[39m
+  [32m✔ 20. onPlayStateChange fires on play/pause [90m(1.106078ms)[39m[39m
+  [32m✔ 21. topology compiles without carrier mutation after accept [90m(0.862597ms)[39m[39m
+  [32m✔ 22. destroy cleans up all state [90m(2.055493ms)[39m[39m
+[32m✔ ARG Movie Player (world/clock/gate) [90m(46.143044ms)[39m[39m
+▶ ARG Narrative Movie
+  [32m✔ 1. loads all 14 narrative files in canonical order [90m(4.746814ms)[39m[39m
+  [32m✔ 2. preserves canonical narrative order [90m(0.746614ms)[39m[39m
+  [32m✔ 3. creates one scene per document [90m(2.394237ms)[39m[39m
+  [32m✔ 4. creates beats from paragraphs [90m(0.965626ms)[39m[39m
+  [32m✔ 5. each beat has deterministic ID [90m(1.447062ms)[39m[39m
+  [32m✔ 6. each beat can compile to topology [90m(8.957174ms)[39m[39m
+  [32m✔ 7. each topology node compiles to .o carrier [90m(5.846385ms)[39m[39m
+  [32m✔ 8. movie timeline can play/pause/next/previous [90m(2.868058ms)[39m[39m
+  [32m✔ 9. A-Frame scene updates from current beat [90m(1.967856ms)[39m[39m
+  [32m✔ 10. movie playback does not mutate carriers [90m(3.07831ms)[39m[39m
+  [32m✔ 11. receipts attach to beats, not source text [90m(1.321993ms)[39m[39m
+[32m✔ ARG Narrative Movie [90m(37.483725ms)[39m[39m
+▶ NEAT World Topology (ARG)
+  [32m✔ 1. Resolves motif to emoji [90m(1.624292ms)[39m[39m
+  [32m✔ 2. Resolves motif to WordNet synset [90m(0.312494ms)[39m[39m
+  [32m✔ 3. Creates genome nodes with deterministic .o carriers [90m(0.690615ms)[39m[39m
+  [32m✔ 4. genomeToCarrier and carrierToGenome round-trip [90m(0.757437ms)[39m[39m
+  [32m✔ 5. Builds topology graph from genome nodes and edges [90m(0.709573ms)[39m[39m
+  [32m✔ 6. Topology scoring produces deterministic results [90m(0.730032ms)[39m[39m
+  [32m✔ 7. Candidate routes are deterministic and respect traversal rules [90m(1.772278ms)[39m[39m
+  [32m✔ 8. No route mutates the carrier source [90m(0.681933ms)[39m[39m
+  [32m✔ 9. Edge priorities and weights are consistent [90m(0.414484ms)[39m[39m
+  [32m✔ 10. Unpacking a compiled carrier yields valid selector/path/surface [90m(0.474526ms)[39m[39m
+  [32m✔ 11. Multi-codepoint emoji sequences compile without breaking [90m(1.734296ms)[39m[39m
+[32m✔ NEAT World Topology (ARG) [90m(12.511258ms)[39m[39m
+▶ ARG Player Receipts (interaction + receipt loop)
+  [32m✔ 1. Clicking an entity does not mutate carrier [90m(2.217201ms)[39m[39m
+  [32m✔ 2. getEntityRouteOptions returns available routes from entity [90m(0.410016ms)[39m[39m
+  [32m✔ 3. isEntityActivated tracks activation state [90m(0.530786ms)[39m[39m
+  [32m✔ 4. activateRoute creates a candidate reading [90m(0.570974ms)[39m[39m
+  [32m✔ 5. Accept creates stable receipt with all five fields [90m(0.604175ms)[39m[39m
+  [32m✔ 6. Reject creates rejection receipt with different hash [90m(0.488709ms)[39m[39m
+  [32m✔ 7. Receipt updates projected state only (no source mutation) [90m(0.526341ms)[39m[39m
+  [32m✔ 8. importReceipt adds receipt to world state [90m(2.107937ms)[39m[39m
+  [32m✔ 9. formatReceipt produces readable fields [90m(0.395698ms)[39m[39m
+  [32m✔ 10. handleEntityClick on non-existent entity returns null [90m(0.467013ms)[39m[39m
+  [32m✔ 11. activateRoute on non-existent edge returns null [90m(0.235812ms)[39m[39m
+[32m✔ ARG Player Receipts (interaction + receipt loop) [90m(10.57375ms)[39m[39m
+[32m✔ Astro Core: omicron-70 collapses to true zero placeholder [90m(3.915445ms)[39m[39m
+[32m✔ Astro Core: standard sexagesimal operand maps to fractional digit [90m(0.732824ms)[39m[39m
+[32m✔ Astro Core: terminal slot clamp fires at boundary 54 [90m(0.395716ms)[39m[39m
+[32m✔ Astro Core: evicts values exceeding Hellenistic max slot 54 [90m(0.382965ms)[39m[39m
+[32m✔ Astro Core: CLA adder fires across fractional components [90m(0.472709ms)[39m[39m
+▶ Atomic Kernel — Delta Law
+  [32m✔ deltaTick is a 16-bit bijection [90m(1.383164ms)[39m[39m
+  [32m✔ deltaTick has period 8 starting from seed 0 [90m(1.10146ms)[39m[39m
+  [32m✔ deltaTrace with seed 0 produces canonical period signature mod 16 [90m(0.384888ms)[39m[39m
+  [32m✔ deltaTrace with seed 1 has period 8 (different cycle) [90m(0.313304ms)[39m[39m
+  [32m✔ isCanonicalTickSequence rejects empty sequence [90m(0.264474ms)[39m[39m
+  [32m✔ isCanonicalTickSequence rejects non-array [90m(0.24666ms)[39m[39m
+  [32m✔ deltaPeriodSignature detects period 8 [90m(0.25914ms)[39m[39m
+  [32m✔ deltaTick C constant is 0x5A3C [90m(0.338883ms)[39m[39m
+[32m✔ Atomic Kernel — Delta Law [90m(6.20448ms)[39m[39m
+▶ Atomic Kernel — Omicron Chirality
+  [32m✔ encodeLowerChirality returns Omicron symbol based on tick parity [90m(0.507468ms)[39m[39m
+  [32m✔ encodeUpperChirality returns bidi direction based on tick parity [90m(0.564285ms)[39m[39m
+[32m✔ Atomic Kernel — Omicron Chirality [90m(1.959991ms)[39m[39m
+▶ Atomic Kernel — Stack Classification
+  [32m✔ isLowerStack returns true for 0..8 [90m(0.627658ms)[39m[39m
+  [32m✔ isUpperStack returns true for 9..12 [90m(0.245584ms)[39m[39m
+[32m✔ Atomic Kernel — Stack Classification [90m(1.133562ms)[39m[39m
+▶ Atomic Kernel — Dual Evaluation
+  [32m✔ evaluateAtomicDual returns lower chirality for lower factorial layer [90m(0.528779ms)[39m[39m
+  [32m✔ evaluateAtomicDual returns upper chirality for upper factorial layer [90m(0.271141ms)[39m[39m
+  [32m✔ evaluateAtomicDual returns unknown for out-of-range layer [90m(0.272619ms)[39m[39m
+[32m✔ Atomic Kernel — Dual Evaluation [90m(4.002977ms)[39m[39m
+[32m✔ ringMask maps four bounded ququart surfaces [90m(1.833751ms)[39m[39m
+[32m✔ rotl32 and rotr32 are deterministic unsigned rotations [90m(0.378434ms)[39m[39m
+[32m✔ add4Forward performs inspectable 32-bit full-adder carry routing [90m(2.68631ms)[39m[39m
+[32m✔ gamma32 mixes by rotations, fold constant, and XOR only [90m(1.772429ms)[39m[39m
+[32m✔ stepOmiCell commits non-zero deltas and reports ring residue [90m(0.516484ms)[39m[39m
+[32m✔ formatSlideTelemetry matches QED record layout [90m(0.399116ms)[39m[39m
+[32m✔ AutonomousSlideEngine class facade mirrors function exports [90m(0.331799ms)[39m[39m
+[32m✔ Axiomatic Kernel parses RULES.omi and enforces strict RFC2119 compliance parameters [90m(23.749456ms)[39m[39m
+[32m✔ Axiomatic Kernel accurately maps real-time packet checks [90m(5.633174ms)[39m[39m
+[32m✔ Axiomatic Kernel token-to-segments decoding matches 8-hex CIDR layout [90m(0.631707ms)[39m[39m
+[32m✔ resolveFactForToken decodes POS, stride, layer from segment positions [90m(0.678525ms)[39m[39m
+[32m✔ Axiomatic Kernel integrates with Prolog WordNet fact parser [90m(9.540716ms)[39m[39m
+[32m✔ matchMask checks subset wildcard against full rule table [90m(6.319444ms)[39m[39m
+[32m✔ queryRulesBySegment and queryFactsBySegment return correct matches [90m(12.723676ms)[39m[39m
+[32m✔ segment boundaries mutate only their assigned decoded axis [90m(1.959808ms)[39m[39m
+[32m✔ ECC Tables: 2-of-5 encode table maps 0-9 to 10 valid patterns [90m(2.760573ms)[39m[39m
+[32m✔ ECC Tables: 2-of-5 decode table round-trips all 10 values [90m(0.24127ms)[39m[39m
+[32m✔ ECC Tables: 2-of-5 weights and parity match [90m(0.210946ms)[39m[39m
+[32m✔ ECC Tables: format stride map routes correctly [90m(0.280191ms)[39m[39m
+[32m✔ ECC Tables: MaxiCode/Aztec modulation via seg[5] bit-0 [90m(0.276489ms)[39m[39m
+[32m✔ ECC Tables: ECC bitboard masks are defined for all formats [90m(0.241748ms)[39m[39m
+[32m✔ ECC Tables: Aztec codeword sizes are correct for each layer [90m(0.249194ms)[39m[39m
+[32m✔ ECC Tables: Aztec RS correction levels are defined [90m(0.282642ms)[39m[39m
+[32m✔ ECC Tables: RS generator polynomials are valid [90m(0.418213ms)[39m[39m
+[32m✔ ECC Tables: GF(2^8) arithmetic is self-consistent [90m(1.193323ms)[39m[39m
+[32m✔ ECC Tables: Hamming(15,10) round-trips all-zero [90m(0.530131ms)[39m[39m
+[32m✔ ECC Tables: Hamming(15,10) corrects single-bit errors [90m(1.899489ms)[39m[39m
+[32m✔ ECC Tables: detectBarcodeFormat identifies formats from segments [90m(0.363436ms)[39m[39m
+[32m✔ ECC Tables: computeBitboardMasks returns correct BigInt masks [90m(0.410308ms)[39m[39m
+[32m✔ ECC Kernel: SAB constructor validates buffer [90m(0.986098ms)[39m[39m
+[32m✔ ECC Kernel: rejects non-omi prefix [90m(0.918365ms)[39m[39m
+[32m✔ ECC Kernel: USS-16K format detected from 0x13B0 stride [90m(1.03975ms)[39m[39m
+[32m✔ ECC Kernel: BEEtag format detected from 0x0078 stride [90m(0.450165ms)[39m[39m
+[32m✔ ECC Kernel: MaxiCode format detected from 0x02D0 + seg5 bit-0 [90m(0.396433ms)[39m[39m
+[32m✔ ECC Kernel: Aztec format detected from 0x02D0 + seg5=0 [90m(0.422761ms)[39m[39m
+[32m✔ ECC Kernel: pristine USS-16K token has 0 bitblips [90m(0.370805ms)[39m[39m
+[32m✔ ECC Kernel: single-bit error is auto-corrected [90m(0.377835ms)[39m[39m
+[32m✔ ECC Kernel: Hamming(15,10) encode returns correct bit count [90m(0.308345ms)[39m[39m
+[32m✔ ECC Kernel: Hamming(15,10) decode corrects errors [90m(0.392011ms)[39m[39m
+[32m✔ ECC Kernel: decodeTwoOfFive returns correct values [90m(1.501097ms)[39m[39m
+[32m✔ ECC Kernel: encodeTwoOfFive round-trips [90m(0.377463ms)[39m[39m
+[32m✔ ECC Tables: Aztec RS syndrome metadata in valid tokens [90m(0.488744ms)[39m[39m
+[32m✔ ECC Tables: MaxiCode Hamming metadata in valid tokens [90m(0.39358ms)[39m[39m
+[32m✔ ECC Kernel: SAB memory write on valid token [90m(0.440326ms)[39m[39m
+[32m✔ ECC Tables: SEGMENT_TO_ECC_MASK maps correctly [90m(0.234258ms)[39m[39m
+[32m✔ ECC Kernel: cons/car/cdr lisp primitives [90m(0.283334ms)[39m[39m
+[32m✔ Base36 rule 0x72 parses from RULES.omi [90m(20.433371ms)[39m[39m
+[32m✔ Base36 rule 0x73 parses from RULES.omi [90m(4.884194ms)[39m[39m
+[32m✔ Base36 rule 0x74 parses from RULES.omi [90m(6.39353ms)[39m[39m
+[32m✔ Base36 rule 0x75 parses from RULES.omi [90m(4.07493ms)[39m[39m
+[32m✔ Base36 rule 0x76 parses from RULES.omi [90m(4.390488ms)[39m[39m
+[32m✔ Base36 alignment facts parse from FACTS.omi [90m(4.502422ms)[39m[39m
+[32m✔ COMBINATORS.omi contains base36-projection [90m(4.940111ms)[39m[39m
+[32m✔ base36-projection lowers to native .imo operator + with correct segment [90m(3.580009ms)[39m[39m
+[32m✔ .imo output from COMBINATORS.omi contains no Latin 'base36' text [90m(2.052837ms)[39m[39m
+[32m✔ CLOSURES.omi contains base36-projection-authority-boundary closure [90m(1.690936ms)[39m[39m
+[32m✔ projectBase36Symbol('0') returns value36 0 [90m(0.423697ms)[39m[39m
+[32m✔ projectBase36Symbol('Z') returns value36 35 [90m(0.201656ms)[39m[39m
+[32m✔ projectBase36Symbol('5') is valid symbol position 5 but does not represent hidden factor five [90m(0.239502ms)[39m[39m
+[32m✔ symbolic Base36 projection does not authorize invalid Q_frame state [90m(0.332487ms)[39m[39m
+[32m✔ parseBase36 returns numeric value [90m(2.104901ms)[39m[39m
+[32m✔ parseBase36 normalizes lowercase to uppercase [90m(0.335658ms)[39m[39m
+[32m✔ parseBase36 trims whitespace [90m(0.550083ms)[39m[39m
+[32m✔ parseBase36 rejects invalid characters [90m(0.983875ms)[39m[39m
+[32m✔ projectSocket("3C", "US") returns canonical values [90m(0.518588ms)[39m[39m
+[32m✔ projectSocket zero socket projects to zero [90m(0.31403ms)[39m[39m
+[32m✔ projectSocket top socket Z with GS gauge [90m(0.435487ms)[39m[39m
+[32m✔ projectSocket gauge affects role3 but not geometry [90m(0.396858ms)[39m[39m
+[32m✔ projectSocket fano7 cycles through region36 [90m(0.506426ms)[39m[39m
+[32m✔ every 4×4 local cell produces x,y in 0..3 [90m(3.584631ms)[39m[39m
+[32m✔ QEMU benchmark runner writes dry-run artifact tree [90m(607.845074ms)[39m[39m
+[32m✔ QEMU benchmark runner plans virtualization matrix behind explicit flags [90m(635.059842ms)[39m[39m
+▶ bezout-witness
+  [32m✔ bezoutWitness produces witness with generator [90m(3.843568ms)[39m[39m
+  [32m✔ bezoutWitness returns null for invalid input [90m(0.524565ms)[39m[39m
+  [32m✔ bezoutWitness accepts explicit generator [90m(0.220447ms)[39m[39m
+  [32m✔ verifyWitnessPath validates complete witness [90m(0.33863ms)[39m[39m
+  [32m✔ verifyWitnessPath rejects malformed witness [90m(0.188077ms)[39m[39m
+  [32m✔ verifyWitnessPath rejects missing arms [90m(0.200732ms)[39m[39m
+  [32m✔ composeWitness combines two same-generator witnesses [90m(0.397728ms)[39m[39m
+  [32m✔ composeWitness returns null for mismatched generators [90m(0.258137ms)[39m[39m
+  [32m✔ composeWitness returns null for null input [90m(0.203675ms)[39m[39m
+[32m✔ bezout-witness [90m(8.429037ms)[39m[39m
+[32m✔ BFP Core: extractBlockFloatingPoint executes branchless CLZ exponent normalization [90m(2.253115ms)[39m[39m
+[32m✔ BFP Core: handles quiet zero NN/MM edge values — peak from LL=1 [90m(0.3799ms)[39m[39m
+[32m✔ BFP Core: returns null for invalid frame [90m(0.221276ms)[39m[39m
+[32m✔ BFP Core: peak amplitude picks the largest of NN, MM, LL [90m(0.324873ms)[39m[39m
+[32m✔ BFP Core: targetSharedMemorySlot computed from exponent and raw NN [90m(0.306368ms)[39m[39m
+[32m✔ BFP Core: canvasColorHex maps exponent to hue [90m(0.481517ms)[39m[39m
+[32m✔ BFP Core: all-zero NN/MM with minimal LL gives small exponent [90m(0.285906ms)[39m[39m
+[32m✔ BiDi core evaluates LRE/LRO text transactions against the SAB timeline [90m(4.237209ms)[39m[39m
+[32m✔ BiDi core evaluates RLE/RLO as negative chirality [90m(0.66908ms)[39m[39m
+[32m✔ BiDi clock advances and resets at the 5040 boundary [90m(3.37ms)[39m[39m
+[32m✔ BiDi advanceClockTimeline registers tick on polytope clock [90m(0.543996ms)[39m[39m
+[32m✔ BiDi processBiDiTransaction includes polytope decomposition [90m(0.743614ms)[39m[39m
+[32m✔ BiDi constructor accepts custom polytope buffer [90m(0.909231ms)[39m[39m
+[32m✔ CM6 bridge requires an injected ViewPlugin dependency [90m(1.148627ms)[39m[39m
+[32m✔ processBiDiTransaction includes boot analysis for boot sector address [90m(1.042151ms)[39m[39m
+[32m✔ processBiDiTransaction includes boot analysis for extended execution surface [90m(0.69842ms)[39m[39m
+[32m✔ processBiDiTransaction boot is null for non-boot addresses [90m(0.697761ms)[39m[39m
+[32m✔ engine constructor accepts custom bootCompiler [90m(0.397925ms)[39m[39m
+[32m✔ Bijective Core: engine instantiation validates SAB presence [90m(3.579314ms)[39m[39m
+[32m✔ Bijective Core: enforces 1024-byte ArrayBuffer workspace (Rule 0x8F) [90m(0.346185ms)[39m[39m
+[32m✔ Bijective Core: rejects missing transition buffer [90m(0.622421ms)[39m[39m
+[32m✔ Bijective Core: rejects invalid frame (non-zero Q(S)) [90m(0.432721ms)[39m[39m
+[32m✔ Bijective Core: bijective face inversion active/opposing indices sum to 127 [90m(0.594447ms)[39m[39m
+[32m✔ Bijective Core: accepts genesis frame at boot slot 1504 [90m(0.431762ms)[39m[39m
+[32m✔ Bijective Core: constructor throws when SAB is missing [90m(1.201399ms)[39m[39m
+[32m✔ Bit-Slice Core: engine accurately handles 1024-bit data slicing and extracts exponents [90m(2.559438ms)[39m[39m
+[32m✔ Bit-Slice Core: traps critical exponent overflow states and triggers eviction loops [90m(1.272552ms)[39m[39m
+▶ OmiBooleanKernelEngine
+  [32m✔ constructs with SAB [90m(2.843441ms)[39m[39m
+  [32m✔ validates true-byte token (0x03 high byte) [90m(0.805487ms)[39m[39m
+  [32m✔ validates false-bound token with Degree 3 trigraph mask [90m(0.544749ms)[39m[39m
+  [32m✔ rejects non-omicron prefix [90m(0.341961ms)[39m[39m
+  [32m✔ rejects missing imo suffix [90m(0.328921ms)[39m[39m
+  [32m✔ rejects non-local address [90m(0.437882ms)[39m[39m
+  [32m✔ extracts truth table from omicron code point [90m(0.356369ms)[39m[39m
+  [32m✔ delta law returns to origin after 8 steps [90m(0.379765ms)[39m[39m
+  [32m✔ delta law produces different intermediate states [90m(0.372273ms)[39m[39m
+  [32m✔ delta law self-corrects period 8 for different seeds [90m(4.47392ms)[39m[39m
+  [32m✔ cons/car/cdr lisp primitives [90m(2.012292ms)[39m[39m
+  [32m✔ decodePayloadBits produces Float32Array from base64 [90m(0.508707ms)[39m[39m
+[32m✔ OmiBooleanKernelEngine [90m(15.868028ms)[39m[39m
+[32m✔ OmiBareMetalBootCompiler requires valid SharedArrayBuffer [90m(4.194835ms)[39m[39m
+[32m✔ compileBootSector validates 512-byte payload [90m(0.443409ms)[39m[39m
+[32m✔ compileBootSector rejects invalid 0xAA55 signature [90m(0.371883ms)[39m[39m
+[32m✔ compileBootSector stores sector data at offset 64 in SAB [90m(0.335015ms)[39m[39m
+[32m✔ readBootSector returns stored 512-byte block [90m(0.490524ms)[39m[39m
+[32m✔ parseBootAddress returns null for non-omi strings [90m(0.908005ms)[39m[39m
+[32m✔ parseBootAddress rejects external network paths [90m(0.714055ms)[39m[39m
+[32m✔ parseBootAddress recognizes boot sector lookup table range [90m(0.402718ms)[39m[39m
+[32m✔ parseBootAddress recognizes extended execution surface range [90m(0.460267ms)[39m[39m
+[32m✔ parseBootAddress yields unclassified for out-of-range addresses [90m(0.416083ms)[39m[39m
+[32m✔ parseBootAddress decodes payload coefficients [90m(0.517086ms)[39m[39m
+[32m✔ cons/car/cdr primitives work [90m(0.256085ms)[39m[39m
+[32m✔ Brahmagupta Core: engine accurately handles bilinear products and validates regular fractions [90m(4.637486ms)[39m[39m
+[32m✔ Brahmagupta Core: evicts fractions containing non-regular prime factor elements [90m(0.470202ms)[39m[39m
+[32m✔ C99 validator mirrors JS axiomatic/projective decisions [90m(410.489523ms)[39m[39m
+[32m✔ Canvas Spec: generateOmicronCanvasSpec populates node and edge block sets [90m(3.787292ms)[39m[39m
+[32m✔ Canvas Spec: canvas color is the deterministic FP16 base controller [90m(0.634062ms)[39m[39m
+[32m✔ Canvas Spec: clockwise edge parameters comply with JSON Canvas limits [90m(0.528542ms)[39m[39m
+[32m✔ Canvas Spec: OmiNode projection keeps the same four components with component role changed [90m(0.695187ms)[39m[39m
+[32m✔ Canvas Spec: returns an error payload if Gate 1 structural shell is corrupted [90m(0.396254ms)[39m[39m
+[32m✔ Canvas Spec: RULES.omi declares JSON Canvas invariant anchors [90m(22.462286ms)[39m[39m
+[32m✔ FP16 Color: convertSegmentToFp16Color parses binary16 fields to four-color base components [90m(0.442844ms)[39m[39m
+[32m✔ FP16 Color: negative and large positive magnitudes map to separate base controllers [90m(0.273395ms)[39m[39m
+[32m✔ FP16 Color: enforces strict 2-of-5 nonagram selector bounds [90m(0.457762ms)[39m[39m
+[32m✔ FP16 Color: Omicron canvas metadata carries SCGNN fp16 controller state [90m(1.674266ms)[39m[39m
+[32m✔ FP16 Color: RULES.omi declares fp16 and nonagram invariant anchors [90m(5.070404ms)[39m[39m
+[32m✔ Hypergraph: tetrahedral canvas resolves OmicronNode as centroid of typed OmiNodes [90m(1.747093ms)[39m[39m
+[32m✔ Hypergraph: barycentric centroid derives from OMI segment words with deterministic color [90m(0.790227ms)[39m[39m
+[32m✔ Hypergraph: malformed tetrahedral input rejects before coordinate generation [90m(0.182975ms)[39m[39m
+[32m✔ Hypergraph: RULES.omi declares tetrahedral centroid invariants [90m(5.249012ms)[39m[39m
+[32m✔ Barycentric Substrate: processMetadataDividend packs 24-bit execution receipt [90m(0.523809ms)[39m[39m
+[32m✔ Barycentric Substrate: Base36 symbolic carrier projects orbit state without replacing numeric metadata [90m(0.262373ms)[39m[39m
+[32m✔ Barycentric Substrate: OMI binary quadratic projection spans 5!, 6!, local240, and slot5040 [90m(0.449517ms)[39m[39m
+[32m✔ Barycentric Substrate: Base36 symbol projection feeds Q_xy geometry without authorizing frames [90m(0.257527ms)[39m[39m
+[32m✔ Barycentric Substrate: processMetadataDividend rejects failed truth-row convergence [90m(0.202819ms)[39m[39m
+[32m✔ Barycentric Substrate: malformed input rejects before metadata packing [90m(0.122238ms)[39m[39m
+[32m✔ Barycentric Substrate: RULES.omi declares 360-degree and 24-bit metadata invariants [90m(7.82421ms)[39m[39m
+[32m✔ OmiChiralFifoEngine constructs with SAB [90m(3.482271ms)[39m[39m
+[32m✔ constructor throws on undersized SAB [90m(1.271325ms)[39m[39m
+[32m✔ processAnalogFFTChunk stores left-chiral value at slot 0 [90m(0.885334ms)[39m[39m
+[32m✔ processAnalogFFTChunk stores right-chiral value at slot 1 [90m(0.971418ms)[39m[39m
+[32m✔ processAnalogFFTChunk returns null for out-of-range slot [90m(0.801207ms)[39m[39m
+[32m✔ readSlot returns correct stored values [90m(0.739718ms)[39m[39m
+[32m✔ cons / car / cdr Lisp primitives work [90m(0.885336ms)[39m[39m
+[32m✔ initNamedPipes creates FIFO files [90m(1.292304ms)[39m[39m
+[32m✔ processAnalogFFTChunk accumulates phase energy from shorter arrays [90m(0.524526ms)[39m[39m
+[32m✔ left vs right chiral produce opposite signs for same input [90m(0.865268ms)[39m[39m
+[32m✔ OmiSymmetricalChiralLexer initializes with mirror targets [90m(5.254511ms)[39m[39m
+[32m✔ evaluateChiralTapeStream approves symmetric omi-to-imo tape [90m(1.303534ms)[39m[39m
+[32m✔ evaluateChiralTapeStream approves ο- prefix omicron tape [90m(1.699158ms)[39m[39m
+[32m✔ evaluateChiralTapeStream rejects tokens missing mirror tail [90m(0.787697ms)[39m[39m
+[32m✔ evaluateChiralTapeStream rejects tokens missing omi prefix [90m(0.999121ms)[39m[39m
+[32m✔ evaluateChiralTapeStream rejects empty input [90m(0.810542ms)[39m[39m
+[32m✔ decodePayloadBits produces Float32Array from base64 [90m(1.520533ms)[39m[39m
+[32m✔ evaluateChiralTapeStream returns right-chiral for odd opcode [90m(0.682122ms)[39m[39m
+[32m✔ cons / car / cdr lisp primitives [90m(2.038641ms)[39m[39m
+[32m✔ smith matrix creates 5040 addressable slots [90m(1.853588ms)[39m[39m
+[32m✔ smith point stays inside unit gamma circle and computes z/y [90m(16.42549ms)[39m[39m
+[32m✔ active state tracks tick modulo 5040 [90m(0.578146ms)[39m[39m
+[32m✔ active state exposes polytope factorial decomposition [90m(0.408788ms)[39m[39m
+[32m✔ createSmithMatrixFloat allocates Float64 polytope buffer [90m(0.492002ms)[39m[39m
+[32m✔ storePolytopeTick stores tick at slot 0 [90m(0.449639ms)[39m[39m
+[32m✔ Chromatic RGBA: encoder accurately transforms positive binary16 values to full opacity hex strings [90m(4.083493ms)[39m[39m
+[32m✔ Chromatic RGBA: maps negative sign bits to an attenuated exponential alpha channel [90m(0.431591ms)[39m[39m
+[32m✔ CLA 4-bit: 5 + 6 + 1 = 12 (0xC) with Cout=0 [90m(2.771105ms)[39m[39m
+[32m✔ CLA 4-bit: 0xF + 0x1 + 0 = 0 with Cout=1 [90m(0.266474ms)[39m[39m
+[32m✔ CLA 4-bit: 0 + 0 + 0 = 0 with Cout=0 [90m(0.238271ms)[39m[39m
+[32m✔ CLA 4-bit: 0xA + 0x5 + 1 = 0 with Cout=1 [90m(0.264646ms)[39m[39m
+[32m✔ CLA 4-bit: gate delays respect 4dt maximum (Rule 0x86) [90m(0.395572ms)[39m[39m
+[32m✔ CLA 4-bit: PG and GG group signals computed correctly [90m(0.401307ms)[39m[39m
+[32m✔ CLA 4-bit: carry chain unrolled (C1 through C4) matches standard CLA equations [90m(0.452924ms)[39m[39m
+[32m✔ CLA 16-bit: 0xFFFF + 0x0001 = 0x0000 with Cout=1 [90m(0.456591ms)[39m[39m
+[32m✔ CLA 16-bit: 0x1234 + 0x5678 + 1 = 0x68AD with Cout=0 [90m(0.529835ms)[39m[39m
+[32m✔ CLA JSON Canvas: tetragrammatron.canvas schema registers standard single-digit presets [90m(0.855385ms)[39m[39m
+[32m✔ CLA JSON Canvas: edge topology connects step0 → step1 → outputs [90m(1.062911ms)[39m[39m
+[32m✔ cla4 matches nibble addition low bits and carry [90m(5.041017ms)[39m[39m
+[32m✔ Cluster Mesh: registers new peer on virbr0 [90m(2.774352ms)[39m[39m
+[32m✔ Cluster Mesh: registers new peer on virbr1 [90m(0.399922ms)[39m[39m
+[32m✔ Cluster Mesh: re-registering same peer returns already registered [90m(0.302073ms)[39m[39m
+[32m✔ Cluster Mesh: evicts invalid interface index [90m(0.289534ms)[39m[39m
+[32m✔ Cluster Mesh: GATE_1 eviction on null S [90m(0.289343ms)[39m[39m
+[32m✔ Cluster Mesh: weight 60 routes to yellow preset [90m(0.228407ms)[39m[39m
+[32m✔ Cluster Mesh: capacity maxed at 10 peers evicts [90m(0.50733ms)[39m[39m
+[32m✔ Cluster Mesh: CLA adder fires across interface slices [90m(0.316912ms)[39m[39m
+[32m✔ Code 16K Core: starting character packaging isolates Set C pointer mode [90m(3.787254ms)[39m[39m
+[32m✔ Code 16K Core: Set A lexical mode maps to green preset [90m(0.439013ms)[39m[39m
+[32m✔ Code 16K Core: Set B inflectional mode maps to purple preset [90m(0.353704ms)[39m[39m
+[32m✔ Code 16K Core: row count clamps to valid range [90m(0.334749ms)[39m[39m
+[32m✔ Code 16K Core: evicts structurally invalid frames [90m(0.374795ms)[39m[39m
+[32m✔ Code 16K Core: modulo-107 check matches for larger character arrays [90m(0.421348ms)[39m[39m
+[32m✔ detectLanguage maps supported source extensions [90m(1.469705ms)[39m[39m
+[32m✔ scanCodeSource maps TypeScript structure into OMI categories [90m(3.327335ms)[39m[39m
+[32m✔ ingestSourceFile creates deterministic records, cells, and receipts [90m(25.782304ms)[39m[39m
+[32m✔ address pair words read eight 16-bit segments as four 32-bit words [90m(0.306624ms)[39m[39m
+[32m✔ composeOmiAddressForElement is stable for the same structural element [90m(0.35914ms)[39m[39m
+[32m✔ buildOmiDocuments emits parseable OMI adapter documents [90m(4.272163ms)[39m[39m
+[32m✔ ingestSources sorts source paths before assigning global ordinals [90m(2.951975ms)[39m[39m
+▶ Cosmic Orbit — digmod36
+  [32m✔ returns quotient and remainder for positive numbers [90m(1.201344ms)[39m[39m
+  [32m✔ handles zero [90m(0.36492ms)[39m[39m
+  [32m✔ handles numbers less than 36 [90m(0.31822ms)[39m[39m
+[32m✔ Cosmic Orbit — digmod36 [90m(3.65172ms)[39m[39m
+▶ Cosmic Orbit — recoverCosmicPosition
+  [32m✔ returns symbol from base36 alphabet [90m(0.60224ms)[39m[39m
+  [32m✔ returns angle relative to 360-degree wheel [90m(0.333845ms)[39m[39m
+[32m✔ Cosmic Orbit — recoverCosmicPosition [90m(1.56531ms)[39m[39m
+▶ Cosmic Orbit — recoverCosmicOrbit
+  [32m✔ returns cell, row, layer decomposition for orbit cycle [90m(0.537944ms)[39m[39m
+  [32m✔ computes quadrant coordinates [90m(0.665318ms)[39m[39m
+[32m✔ Cosmic Orbit — recoverCosmicOrbit [90m(1.684335ms)[39m[39m
+▶ Cosmic Orbit — evaluateOrbitSector
+  [32m✔ returns sextant (0–5) based on angle [90m(1.460743ms)[39m[39m
+[32m✔ Cosmic Orbit — evaluateOrbitSector [90m(1.673213ms)[39m[39m
+▶ Cosmic Orbit — DOM Cosmetic Lens
+  [32m✔ applyCosmeticReaderLens sets dir and data-omicron-lens attributes [90m(0.533789ms)[39m[39m
+  [32m✔ applyCosmeticReaderLens returns false for non-element [90m(0.370393ms)[39m[39m
+  [32m✔ applies rtl direction for odd chirality bit [90m(0.392053ms)[39m[39m
+[32m✔ Cosmic Orbit — DOM Cosmetic Lens [90m(1.601336ms)[39m[39m
+▶ cyclic-module
+  [32m✔ cyclicReplayComponent returns component with replay slot [90m(3.688678ms)[39m[39m
+  [32m✔ cyclicReplayComponent returns null for empty records [90m(0.256099ms)[39m[39m
+  [32m✔ cyclicReplayComponent returns null for no generator [90m(0.261637ms)[39m[39m
+  [32m✔ decomposeReplayModule splits records by generator [90m(0.710058ms)[39m[39m
+  [32m✔ decomposeReplayModule returns empty for empty input [90m(0.319288ms)[39m[39m
+  [32m✔ decomposeReplayModule returns empty for no valid records [90m(0.769629ms)[39m[39m
+  [32m✔ directSumComponents aggregates components [90m(0.708969ms)[39m[39m
+  [32m✔ directSumComponents returns null for non-array input [90m(0.216048ms)[39m[39m
+  [32m✔ components sorted by replaySlot [90m(0.469743ms)[39m[39m
+[32m✔ cyclic-module [90m(9.699456ms)[39m[39m
+[32m✔ Δ_C: single step is 16-bit [90m(3.678001ms)[39m[39m
+[32m✔ Δ_C: different seeds produce different orbits [90m(0.248813ms)[39m[39m
+[32m✔ Δ_C: constant 0x5A3C matches canonical [90m(0.185225ms)[39m[39m
+[32m✔ Δ_C: period-8 property holds [90m(0.312734ms)[39m[39m
+[32m✔ Δ_C: orbit has exactly 8 positions for period-8 cycle [90m(0.29816ms)[39m[39m
+[32m✔ Δ_C: orbit from seed reaches back after 8 steps [90m(0.149158ms)[39m[39m
+[32m✔ Δ_C: period-8 holds for all 65536 16-bit values [90m(8.124046ms)[39m[39m
+[32m✔ Δ_C: orbit positions are distinct for non-degenerate seed [90m(0.236176ms)[39m[39m
+[32m✔ Δ_C: generateDeltaCOrbit custom length [90m(0.345602ms)[39m[39m
+[32m✔ Orbital Lexer: valid canonical instruction returns 0 [90m(0.678651ms)[39m[39m
+[32m✔ Orbital Lexer: valid with different LL returns 0 [90m(0.265285ms)[39m[39m
+[32m✔ Orbital Lexer: LL coherence breach returns nonzero [90m(0.211138ms)[39m[39m
+[32m✔ Orbital Lexer: S1 chiral delimiter corruption returns nonzero [90m(0.231633ms)[39m[39m
+[32m✔ Orbital Lexer: S6 cardinal delimiter corruption returns nonzero [90m(0.145292ms)[39m[39m
+[32m✔ Orbital Lexer: free variables pass through unpenalized [90m(0.114408ms)[39m[39m
+[32m✔ Orbital Lexer: zero LL with matching constants returns 0 [90m(0.108182ms)[39m[39m
+[32m✔ Orbital Lexer: max LL with matching constants returns 0 [90m(0.10484ms)[39m[39m
+[32m✔ Orbital Lexer: S0 low byte nonzero returns nonzero [90m(0.104469ms)[39m[39m
+[32m✔ Orbital Lexer: S7 low byte not 0xFF returns nonzero [90m(0.110121ms)[39m[39m
+[32m✔ Orbital Lexer: all-zero instruction returns nonzero [90m(0.160035ms)[39m[39m
+[32m✔ Fano: fanoIntercept of same value returns 0 [90m(0.202833ms)[39m[39m
+[32m✔ Fano: fanoIntercept of 0x00 and 0xFF is bounded by 15 [90m(0.188863ms)[39m[39m
+[32m✔ Fano: fanoResolutionSteps bound is exactly 15 for distinct Fano points [90m(0.179635ms)[39m[39m
+[32m✔ Fano: fanoIntersectionPoint for same point returns 0 [90m(0.230979ms)[39m[39m
+[32m✔ Fano: fanoIntersectionPoint for non-Fano values returns 0 [90m(0.148724ms)[39m[39m
+[32m✔ Fano: fanoIntersectionPoint resolves distinct Fano points [90m(0.140352ms)[39m[39m
+[32m✔ Fano: isFanoPoint correctly identifies valid points [90m(0.259824ms)[39m[39m
+[32m✔ Fano: FANO_LINES has 7 entries with 3 points each [90m(0.324736ms)[39m[39m
+[32m✔ Orbit Phase: divmod(0) gives epoch=0, phase=0 [90m(0.225251ms)[39m[39m
+[32m✔ Orbit Phase: divmod(36) gives epoch=1, phase=0 [90m(0.125552ms)[39m[39m
+[32m✔ Orbit Phase: divmod(5040) gives epoch=140, phase=0 [90m(0.160632ms)[39m[39m
+[32m✔ Orbit Phase: divmod(37) gives epoch=1, phase=1 [90m(0.132081ms)[39m[39m
+[32m✔ Format: parseOmiAddressToSegments round-trips through makeOmiAddress [90m(0.975039ms)[39m[39m
+[32m✔ Format: null input returns null [90m(0.160553ms)[39m[39m
+[32m✔ Format: non-omi prefix returns null [90m(0.698887ms)[39m[39m
+[32m✔ Format: formatBitboard splits into hi/lo 64-bit [90m(0.38002ms)[39m[39m
+[32m✔ Constants: delimiters match canonical values [90m(0.169231ms)[39m[39m
+[32m✔ Constants: FANO_POINTS is 7 [90m(0.096281ms)[39m[39m
+[32m✔ Constants: FANO_RESOLUTION_MAX is 15 [90m(0.084196ms)[39m[39m
+[32m✔ Constants: ORBIT_PERIOD is 8 [90m(0.083773ms)[39m[39m
+[32m✔ SEGMENT_LAYOUT: has 8 entries with correct roles [90m(0.139222ms)[39m[39m
+[32m✔ extractLL: extracts from canonical instruction [90m(0.113972ms)[39m[39m
+[32m✔ extractLL: detects LL mismatch [90m(0.100723ms)[39m[39m
+[32m✔ Truth Row: extractTruthRow from valid frame returns LL, NN, MM [90m(0.214915ms)[39m[39m
+[32m✔ Truth Row: extractTruthRow returns null for invalid frame [90m(0.226497ms)[39m[39m
+[32m✔ Truth Row: extractTruthRow 40-bit BigInt packing [90m(0.196917ms)[39m[39m
+[32m✔ Truth Row: extractTruthRow key is deterministic [90m(0.221933ms)[39m[39m
+[32m✔ Truth Row: fanoTruthResolver with same NN and MM returns 0 [90m(0.169199ms)[39m[39m
+[32m✔ Truth Row: fanoTruthResolver with non-Fano LL returns -1 [90m(0.095216ms)[39m[39m
+[32m✔ Truth Row: fanoTruthResolver bounded by 15 for valid Fano point [90m(0.102142ms)[39m[39m
+[32m✔ Truth Row: verifyTruthRow validates end-to-end pipeline [90m(0.2011ms)[39m[39m
+[32m✔ Truth Row: verifyTruthRow returns false for null S [90m(0.132607ms)[39m[39m
+[32m✔ Truth Row: deltaCOrbitDistance on same value is 0 [90m(0.177955ms)[39m[39m
+[32m✔ Truth Row: deltaCOrbitDistance on consecutive Δ_C values is 1 [90m(0.158457ms)[39m[39m
+[32m✔ Truth Row: deltaCOrbitDistance period-8 cycle length [90m(0.127783ms)[39m[39m
+[32m✔ Transylvania: plane B has 7 lines with points 8-14 [90m(0.223608ms)[39m[39m
+[32m✔ Transylvania: ticket count is 14 [90m(0.11827ms)[39m[39m
+[32m✔ Transylvania: matchTwo guarantees 2-of-3 for [1,2,4] (all in plane A) [90m(0.316952ms)[39m[39m
+[32m✔ Transylvania: matchTwo guarantees 2-of-3 for [8,9,11] (all in plane B) [90m(0.134131ms)[39m[39m
+[32m✔ Transylvania: matchTwo guarantees 2-of-3 for [1,8,9] (split across planes) [90m(0.113706ms)[39m[39m
+[32m✔ Transylvania: matchTwo fails for [1,8,15] (15 out of range) [90m(0.116437ms)[39m[39m
+[32m✔ Transylvania: matchTwo needs exactly 3 numbers [90m(0.09673ms)[39m[39m
+[32m✔ Transylvania: matchTwo rejects out-of-range values [90m(0.090759ms)[39m[39m
+[32m✔ Transylvania: matchTwo reports matching line [90m(0.220871ms)[39m[39m
+[32m✔ Boot: GENESIS_BOOT_ADDRESS is 0x7C00 [90m(0.1559ms)[39m[39m
+[32m✔ Boot: GENESIS_SEGMENTS frame is valid under Gate 1 [90m(0.226981ms)[39m[39m
+[32m✔ Boot: GENESIS_SEGMENTS has correct LL=0x01 [90m(0.180131ms)[39m[39m
+[32m✔ Boot: GENESIS_SEGMENTS S2 = 0x7C00 [90m(0.133905ms)[39m[39m
+[32m✔ Boot: makeGenesisTarget computes MM from 0x7C00 via Δ_C [90m(0.169787ms)[39m[39m
+[32m✔ Boot: makeGenesisTarget(0x01, 0x7C00) resolves in 1 step [90m(0.208671ms)[39m[39m
+[32m✔ Boot: makeGenesisFrame returns valid frame for each LL=1..7 [90m(0.235081ms)[39m[39m
+[32m✔ Boot: makeGenesisFrame returns null for non-Fano LL [90m(1.744852ms)[39m[39m
+[32m✔ Boot: computeBootRingIndex from 0x7C00 is 1504 [90m(0.109346ms)[39m[39m
+[32m✔ Boot: GENESIS_REPLAY_RING_INDEX is 1504 [90m(0.068795ms)[39m[39m
+[32m✔ Boot: GENESIS_EPOCH is 64 [90m(0.087678ms)[39m[39m
+[32m✔ Boot: computeBootPhase from 0x7C00 [90m(0.138883ms)[39m[39m
+[32m✔ Boot: GENESIS_ORBIT_PHASE is 28 [90m(0.067675ms)[39m[39m
+[32m✔ Boot: GENESIS_B_DIGIT is 9 (B[28 % 8] = B[4]) [90m(0.061744ms)[39m[39m
+[32m✔ Boot: SAB_BOOT_SLOT is 1504 [90m(0.069773ms)[39m[39m
+[32m✔ Boot: verifyInstructionPipeline Gate 1 rejects malformed frame [90m(0.1738ms)[39m[39m
+[32m✔ Boot: verifyInstructionPipeline Gate 2 rejects non-convergent row [90m(0.099392ms)[39m[39m
+[32m✔ Boot: verifyInstructionPipeline passes genesis frame [90m(0.097519ms)[39m[39m
+[32m✔ Boot: bootstrapSystemKernel from SAB at 0x7C00 [90m(0.244717ms)[39m[39m
+[32m✔ Boot: bootstrapSystemKernel rejects malformed boot sector [90m(0.100988ms)[39m[39m
+[32m✔ Boot: bootstrapSystemKernel rejects insufficient memory [90m(0.086145ms)[39m[39m
+[32m✔ Boot: fanoTruthResolver with genesis MM returns step 1 [90m(0.091731ms)[39m[39m
+[32m✔ Boot: fanoTruthResolverClassic still works for classic formula [90m(0.13174ms)[39m[39m
+[32m✔ Boot: verifyInstructionPipeline packedRow includes steps in bits 40-47 [90m(0.121176ms)[39m[39m
+[32m✔ Endian: byte-swapped S1 (0xbf03 != 0x03bf) fails Gate 1 [90m(0.125112ms)[39m[39m
+[32m✔ Endian: byte-swapped S6 (0x9f03 != 0x039f) fails Gate 1 [90m(0.117164ms)[39m[39m
+[32m✔ Endian: both delimiters swapped produces Q(S) in billions [90m(0.129003ms)[39m[39m
+[32m✔ Endian: byte-swapped CBOS (0x0001 != 0x0100) fails Gate 1 [90m(0.085668ms)[39m[39m
+[32m✔ Endian: byte-swapped closure (0xFF01 != 0x01FF) fails Gate 1 [90m(0.074425ms)[39m[39m
+[32m✔ Endian: LE read of BE stream yields distinct error magnitude for each swap [90m(0.24641ms)[39m[39m
+[32m✔ Inverse relation: proper NN->MM orbit resolves within 14 steps [90m(0.125873ms)[39m[39m
+[32m✔ Inverse relation: wrong MM for given LL exceeds 14 steps [90m(0.088381ms)[39m[39m
+[32m✔ Delineation chain: byte-string -> truth row -> steps -> cursor advance [90m(0.490458ms)[39m[39m
+▶ deterministic-utils
+  [32m✔ fnv1a32 is deterministic [90m(1.969495ms)[39m[39m
+  [32m✔ fnv1a32 produces different hashes for different inputs [90m(0.359776ms)[39m[39m
+  [32m✔ deterministicPeerOrder returns stable order for same round/seed [90m(3.956567ms)[39m[39m
+  [32m✔ deterministicPeerOrder changes with round [90m(0.755979ms)[39m[39m
+  [32m✔ deterministicLayerAssignment is stable for same node/vector [90m(0.533108ms)[39m[39m
+  [32m✔ deterministicLayerAssignment changes with different node id [90m(0.354194ms)[39m[39m
+  [32m✔ canonicalFragmentSort is stable [90m(23.893623ms)[39m[39m
+  [32m✔ canonicalFragmentSort does not mutate original [90m(0.4153ms)[39m[39m
+  [32m✔ stableJson produces deterministic keys [90m(0.626561ms)[39m[39m
+  [32m✔ deterministicClock starts at seed and advances [90m(0.708026ms)[39m[39m
+  [32m✔ deterministicClock reset works [90m(0.444339ms)[39m[39m
+[32m✔ deterministic-utils [90m(37.09562ms)[39m[39m
+▶ HNSW level assignment determinism
+  [32m✔ same insert produces same internal structure [90m(16.300259ms)[39m[39m
+[32m✔ HNSW level assignment determinism [90m(16.565375ms)[39m[39m
+▶ CoTURN determinism
+  [32m✔ injectable now/nonce produces stable credentials [90m(39.938096ms)[39m[39m
+  [32m✔ injectable now works with validation [90m(3.371958ms)[39m[39m
+[32m✔ CoTURN determinism [90m(43.675168ms)[39m[39m
+▶ Chiral FIFO engine determinism
+  [32m✔ injected tick produces sequential timestamps [90m(1.383877ms)[39m[39m
+  [32m✔ no Date.now in output when tick is injected [90m(0.476798ms)[39m[39m
+[32m✔ Chiral FIFO engine determinism [90m(2.429701ms)[39m[39m
+▶ AntiEntropyRepair
+  [32m✔ checkDivergence detects concurrent writes [90m(1.858264ms)[39m[39m
+  [32m✔ checkDivergence returns empty for identical frontiers [90m(1.430961ms)[39m[39m
+  [32m✔ computeMissing returns items remote has that we don't [90m(0.83368ms)[39m[39m
+  [32m✔ computeMissingIndices finds gaps [90m(0.670445ms)[39m[39m
+  [32m✔ createRepairScheduler and lifecycle [90m(0.775476ms)[39m[39m
+  [32m✔ triggerRepair returns metrics [90m(0.666521ms)[39m[39m
+[32m✔ AntiEntropyRepair [90m(9.11678ms)[39m[39m
+▶ Causal closure
+  [32m✔ fragmentKey is deterministic [90m(4.036331ms)[39m[39m
+  [32m✔ isCausallyClosed returns true when no ancestors needed [90m(0.641731ms)[39m[39m
+  [32m✔ causalClosure adds missing ancestors [90m(0.65171ms)[39m[39m
+  [32m✔ isRSSufficient [90m(0.327238ms)[39m[39m
+  [32m✔ reconstructIfValid succeeds with valid closed set [90m(1.757417ms)[39m[39m
+  [32m✔ reconstructIfValid fails with insufficient fragments [90m(0.379846ms)[39m[39m
+  [32m✔ reconstructIfValid fails without causal closure [90m(0.720893ms)[39m[39m
+[32m✔ Causal closure [90m(11.419159ms)[39m[39m
+▶ CoTURNProxy
+  [32m✔ creates with defaults [90m(2.048978ms)[39m[39m
+  [32m✔ generates TURN credentials [90m(20.640706ms)[39m[39m
+  [32m✔ validates credentials [90m(4.81101ms)[39m[39m
+  [32m✔ rejects expired credentials [90m(2.075823ms)[39m[39m
+  [32m✔ generateTurnUri returns correct structure [90m(2.384765ms)[39m[39m
+  [32m✔ urls returns service info [90m(0.445215ms)[39m[39m
+  [32m✔ rejects invalid username format [90m(0.421709ms)[39m[39m
+[32m✔ CoTURNProxy [90m(36.946723ms)[39m[39m
+▶ GF(2^8) arithmetic
+  [32m✔ addition is XOR [90m(2.720306ms)[39m[39m
+  [32m✔ multiplication and inverse [90m(0.370301ms)[39m[39m
+  [32m✔ division is mul by inverse [90m(0.698704ms)[39m[39m
+[32m✔ GF(2^8) arithmetic [90m(5.663903ms)[39m[39m
+▶ Reed-Solomon RS(k,n) over GF(2^8)
+  [32m✔ encodes and decodes correctly for RS(2,4) with 2-byte data [90m(1.893069ms)[39m[39m
+  [32m✔ recovers from fragment loss for RS(3,5) [90m(0.555135ms)[39m[39m
+  [32m✔ recovers from partial loss for RS(4,7) [90m(0.401587ms)[39m[39m
+  [32m✔ throws with insufficient fragments [90m(3.760197ms)[39m[39m
+  [32m✔ throws on invalid parameters [90m(0.418761ms)[39m[39m
+[32m✔ Reed-Solomon RS(k,n) over GF(2^8) [90m(7.752708ms)[39m[39m
+▶ FragmentStore
+  [32m✔ put and get fragments [90m(2.347837ms)[39m[39m
+  [32m✔ put deduplicates exact match [90m(0.512035ms)[39m[39m
+  [32m✔ frontier aggregates codewords [90m(0.550769ms)[39m[39m
+  [32m✔ missingFragments detects gaps [90m(0.939095ms)[39m[39m
+  [32m✔ missingFragments empty when caught up [90m(1.392037ms)[39m[39m
+  [32m✔ isReconstructable checks sufficiency and closure [90m(0.810173ms)[39m[39m
+  [32m✔ clear removes all [90m(0.664876ms)[39m[39m
+  [32m✔ getAll returns copy [90m(0.359634ms)[39m[39m
+[32m✔ FragmentStore [90m(12.495297ms)[39m[39m
+▶ GossipNode
+  [32m✔ creates node with store [90m(1.909446ms)[39m[39m
+  [32m✔ advertise returns node info [90m(1.463848ms)[39m[39m
+  [32m✔ receiveFragment stores locally [90m(0.620558ms)[39m[39m
+  [32m✔ computeDelta returns fragments peer is missing [90m(0.811321ms)[39m[39m
+  [32m✔ pushPullExchange with another node [90m(0.922783ms)[39m[39m
+  [32m✔ gossipRound with no peers returns zeros [90m(0.617717ms)[39m[39m
+  [32m✔ addPeer and removePeer [90m(0.402011ms)[39m[39m
+[32m✔ GossipNode [90m(9.438184ms)[39m[39m
+▶ Distance functions
+  [32m✔ cosineSimilarity of identical vectors is 1 [90m(1.6901ms)[39m[39m
+  [32m✔ cosineSimilarity of orthogonal vectors is 0 [90m(0.351181ms)[39m[39m
+  [32m✔ cosineDistance is 1 - cosineSimilarity [90m(0.418558ms)[39m[39m
+  [32m✔ l2Distance [90m(0.381125ms)[39m[39m
+[32m✔ Distance functions [90m(6.915264ms)[39m[39m
+▶ HNSWIndex
+  [32m✔ starts empty [90m(2.075005ms)[39m[39m
+  [32m✔ inserts a single vector [90m(1.184745ms)[39m[39m
+  [32m✔ finds nearest by cosine similarity [90m(1.973198ms)[39m[39m
+  [32m✔ insert with duplicate id throws [90m(1.235016ms)[39m[39m
+  [32m✔ clear resets index [90m(0.491625ms)[39m[39m
+  [32m✔ works with l2 distance [90m(0.963023ms)[39m[39m
+  [32m✔ generates auto-id when none given [90m(0.380722ms)[39m[39m
+[32m✔ HNSWIndex [90m(11.972621ms)[39m[39m
+▶ Version Vectors
+  [32m✔ create initial vector [90m(3.290804ms)[39m[39m
+  [32m✔ increment [90m(0.703083ms)[39m[39m
+  [32m✔ compare equal vectors [90m(0.435805ms)[39m[39m
+  [32m✔ compare before/after [90m(0.349602ms)[39m[39m
+  [32m✔ compare concurrent [90m(0.32535ms)[39m[39m
+  [32m✔ merge takes max per key [90m(0.458051ms)[39m[39m
+  [32m✔ equals checks equality [90m(0.549829ms)[39m[39m
+[32m✔ Version Vectors [90m(10.674924ms)[39m[39m
+▶ WebRTCTransport
+  [32m✔ creates transport with default STUN [90m(1.610896ms)[39m[39m
+  [32m✔ creates transport with custom config [90m(1.69682ms)[39m[39m
+  [32m✔ closeAll is safe when empty [90m(0.46013ms)[39m[39m
+  [32m✔ isConnected returns false for unknown peer [90m(0.34057ms)[39m[39m
+  [32m✔ send throws on missing peer [90m(0.910389ms)[39m[39m
+  [32m✔ set onMessage handler [90m(0.250017ms)[39m[39m
+[32m✔ WebRTCTransport [90m(8.106926ms)[39m[39m
+[32m✔ OMI Object Model manifest declares required canonical sections [90m(16.609376ms)[39m[39m
+[32m✔ OMI Object Model manifest tracks curated dev-docs provenance without requiring build context [90m(8.426767ms)[39m[39m
+[32m✔ OMI Object Model manifest declares address spaces and Lisp transformers [90m(2.927797ms)[39m[39m
+[32m✔ OMI Object Model manifest declares prospectus token layouts and compliance checks [90m(4.150571ms)[39m[39m
+[32m✔ OMI Object Model manifest declares polynomial and lifecycle standard [90m(3.21085ms)[39m[39m
+[32m✔ OMI Object Model manifest declares protocol sequencing phases [90m(2.640291ms)[39m[39m
+[32m✔ OMI research inbox claims are promoted through canonical docs, not _temp manifest entries [90m(6.333161ms)[39m[39m
+[32m✔ OMI Declarative Core root files are canonical manifest sources [90m(4.195028ms)[39m[39m
+[32m✔ DOM/CSSOM registry builds around animated document atoms and OMI index maps [90m(39.881241ms)[39m[39m
+[32m✔ DOM/CSSOM registry filters by OMI prefix and atom routing keys [90m(16.602819ms)[39m[39m
+[32m✔ DOM/CSSOM details and attributes expose canonical OMI metadata [90m(18.090394ms)[39m[39m
+[32m✔ Character Core: classifies structural 0x2F divider with orange preset [90m(4.7736ms)[39m[39m
+[32m✔ Character Core: extracts integer 5 from ASCII 0x35 and runs gnomon CLA [90m(0.63939ms)[39m[39m
+[32m✔ Character Core: rejects byte outside 0x00-0x3F range [90m(0.597731ms)[39m[39m
+[32m✔ eBPF gate 1: genesis frame passes (Q(S)=0) [90m(2.449728ms)[39m[39m
+[32m✔ eBPF gate 1: byte-swapped frame rejected (Q(S) >> 0) [90m(0.417268ms)[39m[39m
+[32m✔ eBPF gate 1: non-zero S0 low byte rejected [90m(0.29665ms)[39m[39m
+[32m✔ eBPF gate 1: bad chiral delimiter rejected [90m(0.280574ms)[39m[39m
+[32m✔ eBPF gate 1: bad cardinal delimiter rejected [90m(0.329925ms)[39m[39m
+[32m✔ eBPF gate 1: LL mismatch at S3 rejected [90m(0.204287ms)[39m[39m
+[32m✔ eBPF gate 1: LL mismatch at S4 rejected [90m(0.248066ms)[39m[39m
+[32m✔ eBPF gate 1: LL mismatch at S7 rejected [90m(0.312338ms)[39m[39m
+[32m✔ eBPF gate 1: Fano LL values 0x01..0x07 pass [90m(0.781589ms)[39m[39m
+[32m✔ eBPF gate 1: NN and MM do not affect Q(S) [90m(4.629325ms)[39m[39m
+[32m✔ eBPF gate 1: LL mismatch at each of 4 positions for 0x01..0x0F [90m(0.755868ms)[39m[39m
+[32m✔ eBPF gate 1: Q(S) matches isOrbitLexerValid for 1000 random frames [90m(7.693548ms)[39m[39m
+[32m✔ eBPF gate 1: null and short buffer rejected [90m(0.675049ms)[39m[39m
+[32m✔ eBPF gate 1: GENESIS_SEGMENTS frame passes [90m(0.248016ms)[39m[39m
+[32m✔ eBPF gate 2: bpfDeltaC matches JS deltaC for all 65536 values [90m(69.26268ms)[39m[39m
+[32m✔ eBPF gate 2: genesis frame resolves in 1 step (LL=1, NN=0x7C00, MM=0x1434) [90m(0.350929ms)[39m[39m
+[32m✔ eBPF gate 2: LL outside Fano range (0, 8..0xFF) rejected [90m(1.031045ms)[39m[39m
+[32m✔ eBPF gate 2: NN that never reaches MM returns -1 [90m(0.594642ms)[39m[39m
+[32m✔ eBPF gate 2: all Fano LL values resolve NN→MM equivalently to JS [90m(0.3412ms)[39m[39m
+[32m✔ eBPF gate 2: each Fano LL finds its MM within 14 steps for boot NN=0x7C00 [90m(0.35031ms)[39m[39m
+[32m✔ eBPF gate 2: 14-step failure for near-miss MM values [90m(0.333409ms)[39m[39m
+[32m✔ eBPF combined: genesis frame passes both gates [90m(0.170558ms)[39m[39m
+[32m✔ eBPF combined: LL=0x08 frame fails Gate 2 despite passing Gate 1 [90m(0.154963ms)[39m[39m
+[32m✔ eBPF combined: structurally valid but wrong trajectory rejected [90m(0.152138ms)[39m[39m
+[32m✔ eBPF combined: 500 random structurally valid frames match fanoTruthResolver [90m(2.362838ms)[39m[39m
+[90m﹣ eBPF Pipeline: object output matches verifier structural specifications [90m(1.91839ms)[39m # run make verify-ebpf to build the BPF object fixture[39m
+[32m✔ eBPF Pipeline: user-space mirror matches the kernel-space Delta Law calculation [90m(2.805086ms)[39m[39m
+[32m✔ ClusterSignatureGateway: signPeer produces deterministic 64-bit signature [90m(0.695491ms)[39m[39m
+[32m✔ ClusterSignatureGateway: verifyPacket matches signed peer [90m(0.507624ms)[39m[39m
+[32m✔ ClusterSignatureGateway: telemetrySnapshot returns map entries [90m(0.666235ms)[39m[39m
+[32m✔ Elliptic Core: prime 11 with j=0 maps to cyclic order 6 centroid [90m(3.285827ms)[39m[39m
+[32m✔ Elliptic Core: prime 7 with j=1728 maps to cyclic order 4 centroid [90m(0.40478ms)[39m[39m
+[32m✔ Elliptic Core: standard rational reduction for non-special j [90m(0.249509ms)[39m[39m
+[32m✔ Elliptic Core: blocks field extension below prime 37 [90m(0.275527ms)[39m[39m
+[32m✔ Elliptic Core: quadratic extension root mesh at prime 37 [90m(0.262254ms)[39m[39m
+[32m✔ Elliptic Core: CLA adder fires across prime slices [90m(0.213583ms)[39m[39m
+[32m✔ EmojiDataKernel: parses group and subgroup headers [90m(2.730102ms)[39m[39m
+[32m✔ EmojiDataKernel: parses multi-codepoint emoji [90m(1.654658ms)[39m[39m
+[32m✔ EmojiDataKernel: parses full emoji-test.txt file [90m(47.12875ms)[39m[39m
+[32m✔ EmojiDataKernel: Unicode vendor sources are canonical projection provenance [90m(12.951349ms)[39m[39m
+[32m✔ EmojiDataKernel: rgbBase64Hash produces deterministic RGB from codepoints [90m(0.600738ms)[39m[39m
+[32m✔ EmojiDataKernel: different codepoints produce different hashes [90m(0.44785ms)[39m[39m
+[32m✔ EmojiDataKernel: toOmicronCell builds OmicronNode with text/link/group/file [90m(0.775617ms)[39m[39m
+[32m✔ EmojiDataKernel: toCanvasCells returns complete cell array [90m(58.44627ms)[39m[39m
+[32m✔ EmojiCanvasKernel: generates canvas spec with OmicronNode grid cells [90m(2.771105ms)[39m[39m
+[32m✔ EmojiCanvasKernel: buildCellIndex provides group and col/row lookups [90m(0.94159ms)[39m[39m
+[32m✔ EmojiCanvasKernel: full file canvas generation with constraints [90m(31.978449ms)[39m[39m
+[32m✔ Emoji Feature Core: open-class inflection maps to icosahedron routing [90m(3.053236ms)[39m[39m
+[32m✔ Emoji Feature Core: other-lexical maps to stellated octahedron routing [90m(0.5317ms)[39m[39m
+[32m✔ Emoji Feature Core: other-other maps to point-line-plane pointer [90m(0.436692ms)[39m[39m
+[32m✔ Emoji Feature Core: GATE_1 eviction on null S [90m(0.337384ms)[39m[39m
+[32m✔ Emoji Feature Core: out-of-bounds codepoint triggers block eviction [90m(0.421659ms)[39m[39m
+[32m✔ Emoji Feature Core: CLA adder fires across pos/feat slices [90m(0.39622ms)[39m[39m
+[32m✔ Extrusion Core: engine accurately processes Decomino structures and isolates cdr polycubes [90m(2.636838ms)[39m[39m
+[32m✔ Extrusion Core: evicts cell structural models exceeding maximum polyomino order scales [90m(0.443332ms)[39m[39m
+[32m✔ Empty-cons identity law short-circuits evaluation loops to zero vector [90m(1.635629ms)[39m[39m
+[32m✔ Lattice parser extracts precise factorial layers and verifies correct structural index metrics [90m(0.377922ms)[39m[39m
+[32m✔ Lattice parser detects 0! fixed point and sets bypass flag [90m(0.283699ms)[39m[39m
+[32m✔ Lattice parser detects nil- containing tokens as fixed point [90m(0.249249ms)[39m[39m
+[32m✔ Lattice reject malformed identity without omi- prefix [90m(0.294223ms)[39m[39m
+[32m✔ All factorial layer weights are correct [90m(0.242037ms)[39m[39m
+[32m✔ evaluateLatticeTransformation computes Horner offset for non-fixed layers [90m(0.519676ms)[39m[39m
+[32m✔ cons/car/cdr cell primitives work on lattice kernel [90m(0.314634ms)[39m[39m
+[32m✔ FACTS Evaluation: example index 0 with high judge score matches confidently [90m(4.35464ms)[39m[39m
+[32m✔ FACTS Evaluation: low judge score triggers contradiction eviction [90m(0.444818ms)[39m[39m
+[32m✔ FACTS Evaluation: modest accuracy routes to yellow preset [90m(0.385877ms)[39m[39m
+[32m✔ FACTS Evaluation: out-of-bounds example index evicted [90m(0.399269ms)[39m[39m
+[32m✔ FACTS Evaluation: GATE_1 eviction on null S [90m(0.344756ms)[39m[39m
+[32m✔ FACTS Evaluation: CLA adder fires across index slices [90m(0.425771ms)[39m[39m
+[32m✔ POS feature vector creates normalized POS and channel counts [90m(1.730805ms)[39m[39m
+[32m✔ feature tokens preserve POS transitions [90m(0.469732ms)[39m[39m
+[32m✔ FP16 Canvas: encoder slices binary16 bits into correct graphical properties [90m(2.867977ms)[39m[39m
+[32m✔ FP16 Canvas: sign bit resolves to Greek for bit=0 and Coptic for bit=1 [90m(0.694878ms)[39m[39m
+[32m✔ FP16 Canvas: exponent bits route to correct tetrahedral vertex [90m(0.570959ms)[39m[39m
+[32m✔ FP16 Canvas: significand bits map to hue, offsets, and NBD device [90m(0.483089ms)[39m[39m
+[32m✔ FP16 Canvas: encodeWireFrameToCanvasSpec rejects invalid frame [90m(0.346896ms)[39m[39m
+[32m✔ FP16 Canvas: encoder processes genesis word deterministically [90m(0.471779ms)[39m[39m
+[32m✔ FP16 Canvas: significand x-offset follows sexagesimal modulo [90m(0.383434ms)[39m[39m
+[32m✔ FP16 Canvas: NBD device mapping from significand [90m(0.333868ms)[39m[39m
+[32m✔ FP16 Canvas: exponent routing returns all four tetrahedral vertices [90m(0.362339ms)[39m[39m
+[32m✔ Frontend CSSOM uses pure hex-substring selectors with zero old notation keywords [90m(17.693331ms)[39m[39m
+[32m✔ HTML references external CSS and JS as separate assets [90m(2.687042ms)[39m[39m
+[32m✔ Root front door is an object workspace, not a protocol demo [90m(3.012675ms)[39m[39m
+[32m✔ Frontend JavaScript exports OmiFrontendPipelineBridge class and instantiates on DOMContentLoaded [90m(3.32437ms)[39m[39m
+[32m✔ Telemetry panel has all 12 required data axes [90m(2.249796ms)[39m[39m
+[32m✔ Vite build hoists public HTML entrypoints and preserves bidi.html [90m(0.875148ms)[39m[39m
+[32m✔ Vite config exposes public HTML entrypoints at root URLs without root stubs [90m(5.582385ms)[39m[39m
+[32m✔ WAN dashboard loads static qemu-user lane manifest without launch controls [90m(2.748171ms)[39m[39m
+[32m✔ Root-visible portal entrypoints expose deterministic projection boundaries [90m(6.919162ms)[39m[39m
+[32m✔ Projection carriers keep metadata inside query plane before Base36 socket [90m(5.148137ms)[39m[39m
+[32m✔ Portal deterministic projection panel exposes compiled frame targets [90m(2.254531ms)[39m[39m
+[32m✔ BiDi keeps data-omi-address compatibility while adding projection handles [90m(1.501564ms)[39m[39m
+[32m✔ QEMU user manifest advertises only deterministic amd64 and arm64 visual lanes [90m(2.927579ms)[39m[39m
+[32m✔ QEMU user declarations are grounded in RULES.omi and FACTS.omi [90m(1.923814ms)[39m[39m
+[32m✔ OmiHardwareBus constructor defaults to serial on ::10 [90m(2.390054ms)[39m[39m
+[32m✔ OmiHardwareBus rejects invalid bus id [90m(0.782069ms)[39m[39m
+[32m✔ OmiHardwareBus stores read data into polytope slots [90m(0.75961ms)[39m[39m
+[32m✔ OmiHardwareBus readSlot wraps around POLYTOPE_SLOTS [90m(0.556918ms)[39m[39m
+[32m✔ requestDevice throws in non-browser environment [90m(1.255779ms)[39m[39m
+[32m✔ write throws when no device selected [90m(0.668204ms)[39m[39m
+[32m✔ mockSerialPort creates port with correct baudRate [90m(0.828784ms)[39m[39m
+[32m✔ mockSerialPort open sets baudRate [90m(0.382485ms)[39m[39m
+[32m✔ mockUSBDevice transferOut returns bytes [90m(0.989018ms)[39m[39m
+[32m✔ mockHIDDevice sendReport returns reportId [90m(2.400342ms)[39m[39m
+[32m✔ cons/car/cdr primitives work on hardware bus [90m(0.472296ms)[39m[39m
+[32m✔ ASCII_OPCODES covers 0x00-0x1F [90m(0.248817ms)[39m[39m
+[32m✔ ASCII_HARDWARE_BUS maps opcodes to ports [90m(0.592737ms)[39m[39m
+[32m✔ parsePeripheralAddress validates secure local context with new streamlined format [90m(1.122594ms)[39m[39m
+[32m✔ parsePeripheralAddress rejects non-omi strings [90m(3.279165ms)[39m[39m
+[32m✔ parsePeripheralAddress rejects external network addresses [90m(0.41157ms)[39m[39m
+[32m✔ ingestSerialBytePacket writes bytes into SAB slot [90m(0.436619ms)[39m[39m
+[32m✔ ingestSerialBytePacket clamps to slot bounds [90m(0.265294ms)[39m[39m
+[32m✔ readSlotBytes returns null out of range [90m(0.272611ms)[39m[39m
+[32m✔ asciiOpcodeForBus maps bus names to ASCII codes [90m(0.255799ms)[39m[39m
+[32m✔ formatHardwareAddress builds valid OMI address without FS prefix [90m(0.265719ms)[39m[39m
+[32m✔ OmiHardwarePeripheralEngine cons/car/cdr [90m(0.259326ms)[39m[39m
+[32m✔ HGV Kernel: 2-of-5 barycentric valid position 9 (11000) [90m(1.745555ms)[39m[39m
+[32m✔ HGV Kernel: 2-of-5 barycentric valid position 7 (10010) [90m(0.27248ms)[39m[39m
+[32m✔ HGV Kernel: 2-of-5 rejects invalid mask (3 ones) [90m(0.212004ms)[39m[39m
+[32m✔ HGV Kernel: 2-of-5 rejects dimension mismatch [90m(0.247072ms)[39m[39m
+[32m✔ HGV Kernel: BCD allocation produces non-zero float for valid position [90m(0.424741ms)[39m[39m
+[32m✔ HGV Kernel: BCD zero input maps to purple preset [90m(0.210324ms)[39m[39m
+[32m✔ HGV Kernel: gauge coupling from layer9 to BCD allocates value [90m(0.467115ms)[39m[39m
+[32m✔ HGV Kernel: gauge coupling invalid layer9 returns eviction [90m(0.225033ms)[39m[39m
+[32m✔ HGV Kernel: full evaluateHgv completes pipeline [90m(0.809628ms)[39m[39m
+[32m✔ HGV Kernel: evicts structurally invalid frames [90m(0.595617ms)[39m[39m
+[32m✔ HGV Perceptron: layer 9 accepts valid 2-of-5 input [90m(1.817264ms)[39m[39m
+[32m✔ HGV Perceptron: layer 9 rejects non-2-of-5 input [90m(0.289706ms)[39m[39m
+[32m✔ HGV Perceptron: layer 9 rejects structural eviction [90m(0.254165ms)[39m[39m
+[32m✔ HGV Perceptron: layer 10 allocates binary64 from layer9 event [90m(0.639256ms)[39m[39m
+[32m✔ HGV Perceptron: layer 10 propagates layer9 eviction [90m(0.311405ms)[39m[39m
+[32m✔ HGV Perceptron: perceptron step fires for high confidence [90m(0.297886ms)[39m[39m
+[32m✔ HGV Perceptron: perceptron step does not fire for low confidence [90m(0.35518ms)[39m[39m
+[32m✔ HGV Perceptron: sigmoid produces continuous output [90m(0.273036ms)[39m[39m
+[32m✔ HGV Perceptron: full evaluateHgv pipeline completes [90m(0.544603ms)[39m[39m
+[32m✔ HGV Perceptron: full evaluateHgv sigmoid mode [90m(3.815096ms)[39m[39m
+[32m✔ Hopf Fibration: projects 3-sphere to 2-sphere with balanced z0/z1 [90m(5.09519ms)[39m[39m
+[32m✔ Hopf Fibration: north pole z0 dominant maps to yellow preset [90m(0.583676ms)[39m[39m
+[32m✔ Hopf Fibration: south pole z1 dominant maps to purple preset [90m(0.423716ms)[39m[39m
+[32m✔ Hopf Fibration: evicts tokens outside unit 3-sphere [90m(0.358355ms)[39m[39m
+[32m✔ Hopf Fibration: evicts structurally invalid frames [90m(0.610787ms)[39m[39m
+[32m✔ Hopf Fibration: parametric torus yields Villarceau nesting [90m(0.521659ms)[39m[39m
+[32m✔ omi workspace canonical root invariant [90m(2.14243ms)[39m[39m
+[32m✔ omi workspace SAB allocation invariant [90m(0.354842ms)[39m[39m
+[32m✔ omi integration: ChiralFifoEngine reads slot after FFT write [90m(1.886905ms)[39m[39m
+[32m✔ omi integration: PlaceValueInterpreter resolves CONSTANT_US [90m(0.786989ms)[39m[39m
+[32m✔ omi integration: PlaceValueInterpreter resolves CUBIC_FS for triple trigraph [90m(0.909291ms)[39m[39m
+[32m✔ omi integration: ChiralLexer validates symmetric omi-to-imo tape [90m(1.147202ms)[39m[39m
+[32m✔ omi integration: TrigraphPreprocessor inverts polarity [90m(1.157139ms)[39m[39m
+[32m✔ omi integration: worker clock simulation at 60Hz stride [90m(9.244573ms)[39m[39m
+[32m✔ omi integration: Horner polynomial matches expected depth [90m(0.453843ms)[39m[39m
+[32m✔ omi integration: factorial interrupt at 720 fires every 720 ticks [90m(1.364893ms)[39m[39m
+[32m✔ omi integration: factorial reset at 5040 clears memory [90m(3.391757ms)[39m[39m
+[32m✔ JAB Code: parser handles subtractive CMYK colors and verifies finders [90m(2.985349ms)[39m[39m
+[32m✔ JAB Code: evicts malformed streams missing required finder structures [90m(0.524774ms)[39m[39m
+[32m✔ JAB Code: evicts out of spectrum colors [90m(0.374116ms)[39m[39m
+[32m✔ Chromatic Bridge: computes Delta Law shifts and isolates Fano points [90m(0.596356ms)[39m[39m
+[32m✔ Chromatic Bridge: evicts zero-Fano inputs and routes to warning presets [90m(0.424675ms)[39m[39m
+[32m✔ Code 16K: engine computes Delta Law shifts and isolates Set C [90m(0.563341ms)[39m[39m
+[32m✔ Code 16K: evicts invalid character sets and routes to warning presets [90m(0.427646ms)[39m[39m
+[32m✔ Code 16K: evicts structurally invalid frames [90m(0.355972ms)[39m[39m
+[32m✔ JAB Scrambler: LFSR scrambling routes to low nibble axis [90m(3.33088ms)[39m[39m
+[32m✔ JAB Scrambler: high nibble axis maps and updates indicator presets [90m(0.363655ms)[39m[39m
+[32m✔ JAB Scrambler: evicts structurally invalid frames [90m(0.258621ms)[39m[39m
+[32m✔ JAB Scrambler: scrambled output differs from input [90m(0.348181ms)[39m[39m
+[32m✔ JAB Scrambler: non-zero XOR sum escapes warning preset [90m(0.310292ms)[39m[39m
+▶ JSON Canvas Address Schema — parseRgbHex
+  [32m✔ parses #FF0000 [90m(1.500797ms)[39m[39m
+  [32m✔ parses FF0000 without hash [90m(0.37413ms)[39m[39m
+  [32m✔ parses #000000 and #FFFFFF [90m(0.382553ms)[39m[39m
+  [32m✔ returns null for invalid input [90m(0.198368ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — parseRgbHex [90m(3.97607ms)[39m[39m
+▶ JSON Canvas Address Schema — parseCanvasPresetColor
+  [32m✔ parses all preset keys 1-6 [90m(0.405034ms)[39m[39m
+  [32m✔ returns null for invalid keys [90m(0.176912ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — parseCanvasPresetColor [90m(0.866572ms)[39m[39m
+▶ JSON Canvas Address Schema — classifyCanvasColorAuthority
+  [32m✔ classifies #FF0000 as lower-structural [90m(0.626166ms)[39m[39m
+  [32m✔ classifies preset '1' as upper-reader-cosmetic [90m(0.43041ms)[39m[39m
+  [32m✔ rejects invalid colors [90m(0.635497ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — classifyCanvasColorAuthority [90m(2.265799ms)[39m[39m
+▶ JSON Canvas Address Schema — composeRRGGBBAA
+  [32m✔ composes from numeric rgb and aa [90m(0.635402ms)[39m[39m
+  [32m✔ composes from hex string rgb and aa [90m(0.373252ms)[39m[39m
+  [32m✔ composes with # prefix [90m(1.797087ms)[39m[39m
+  [32m✔ returns null for invalid inputs [90m(0.225196ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — composeRRGGBBAA [90m(3.375425ms)[39m[39m
+▶ JSON Canvas Address Schema — buildJsonCanvasOmiVertex
+  [32m✔ builds a valid vertex [90m(0.290211ms)[39m[39m
+  [32m✔ rejects invalid vertex [90m(0.130421ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — buildJsonCanvasOmiVertex [90m(0.550706ms)[39m[39m
+▶ JSON Canvas Address Schema — buildJsonCanvasOmiEdge
+  [32m✔ builds a valid edge [90m(0.257872ms)[39m[39m
+  [32m✔ rejects invalid edge [90m(0.096976ms)[39m[39m
+  [32m✔ rejects invalid side [90m(0.116576ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — buildJsonCanvasOmiEdge [90m(0.59696ms)[39m[39m
+▶ JSON Canvas Address Schema — buildOmiGraph
+  [32m✔ builds complete G=(V,E,I) [90m(0.468359ms)[39m[39m
+  [32m✔ filters invalid nodes/edges [90m(0.131316ms)[39m[39m
+[32m✔ JSON Canvas Address Schema — buildOmiGraph [90m(0.704667ms)[39m[39m
+▶ JSON Canvas OMI Router — Node Validation
+  [32m✔ accepts valid node [90m(3.174076ms)[39m[39m
+  [32m✔ rejects node with missing id [90m(0.430763ms)[39m[39m
+  [32m✔ rejects node with invalid type [90m(0.353003ms)[39m[39m
+  [32m✔ rejects node with non-integer x [90m(0.366459ms)[39m[39m
+  [32m✔ rejects node with non-positive width [90m(0.364719ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Node Validation [90m(7.54039ms)[39m[39m
+▶ JSON Canvas OMI Router — Edge Validation
+  [32m✔ accepts valid edge [90m(0.570777ms)[39m[39m
+  [32m✔ rejects edge with missing fromNode [90m(0.403932ms)[39m[39m
+  [32m✔ rejects edge with invalid fromSide [90m(1.933579ms)[39m[39m
+  [32m✔ accepts valid sides [90m(0.467172ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Edge Validation [90m(7.481824ms)[39m[39m
+▶ JSON Canvas OMI Router — Node Routing
+  [32m✔ routes a valid text node with geometry and Q_xy projection [90m(1.182878ms)[39m[39m
+  [32m✔ routes a node with lower hex color [90m(1.133233ms)[39m[39m
+  [32m✔ routes a node with upper preset color [90m(0.379545ms)[39m[39m
+  [32m✔ routes a node without color [90m(0.263607ms)[39m[39m
+  [32m✔ rejects invalid node [90m(0.49387ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Node Routing [90m(3.930477ms)[39m[39m
+▶ JSON Canvas OMI Router — Edge Routing
+  [32m✔ routes an edge with tangent-crossing side mapping [90m(0.469712ms)[39m[39m
+  [32m✔ routes an edge with color [90m(0.291704ms)[39m[39m
+  [32m✔ routes edge without sides [90m(0.216619ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Edge Routing [90m(1.233459ms)[39m[39m
+▶ JSON Canvas OMI Router — Side/Tangent Mapping
+  [32m✔ maps sides to tangents [90m(0.281519ms)[39m[39m
+  [32m✔ maps tangents to sides [90m(0.200653ms)[39m[39m
+  [32m✔ returns null for unknown side [90m(0.152823ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Side/Tangent Mapping [90m(0.884304ms)[39m[39m
+▶ JSON Canvas OMI Router — Build Canvas
+  [32m✔ builds a complete OMI canvas from schema [90m(0.769726ms)[39m[39m
+  [32m✔ counts errors for invalid nodes/edges [90m(0.326981ms)[39m[39m
+[32m✔ JSON Canvas OMI Router — Build Canvas [90m(1.330455ms)[39m[39m
+[32m✔ Toroidal K-Map: minimizes cell 8 into overlapping red/green zone [90m(4.049421ms)[39m[39m
+[32m✔ Toroidal K-Map: extracts standalone blue term with carry lookahead [90m(0.608343ms)[39m[39m
+[32m✔ Metacircular Interpreter: standard minterms with proxy alignment [90m(0.665853ms)[39m[39m
+[32m✔ Metacircular Interpreter: race condition triggers yellow consensus bridge [90m(0.483991ms)[39m[39m
+[32m✔ Lattice Core: resolver derives 4th missing vertex from any 3 points [90m(4.260725ms)[39m[39m
+[32m✔ Lattice Core: clamps noisy bit layouts to high-contrast white hex bound [90m(0.408242ms)[39m[39m
+[32m✔ Lattice Core: low significand clamps to black [90m(0.708802ms)[39m[39m
+[32m✔ Lattice Core: cannot infer with fewer than 3 vertices [90m(0.387679ms)[39m[39m
+[32m✔ Lattice Core: invalid address rejected at Gate 1 [90m(0.554613ms)[39m[39m
+[32m✔ Register Machine: extracts CAR and CDR slices from genesis single-word register [90m(1.767553ms)[39m[39m
+[32m✔ Register Machine: nil-terminated cons cell triggers cyan preset [90m(0.44178ms)[39m[39m
+[32m✔ Register Machine: structurally invalid address rejected at Gate 1 [90m(0.428069ms)[39m[39m
+[32m✔ Register Machine: timelineSlot computed as CAR modulo 5040 [90m(0.264842ms)[39m[39m
+[32m✔ Lisp primitive cell constructors pair car and cdr values without bit loss [90m(1.396833ms)[39m[39m
+[32m✔ OmiLispKernel intercepts the 0! suffix and assigns an exact 1-unit memory weight [90m(0.459788ms)[39m[39m
+[32m✔ OmiLispKernel treats non-terminating tokens as active lists with weight > 1 [90m(0.43752ms)[39m[39m
+[32m✔ OmiLispKernel rejects non-omi prefixed strings [90m(0.324668ms)[39m[39m
+[32m✔ OmiLispKernel rejects empty string [90m(0.246328ms)[39m[39m
+[32m✔ cons/car/cdr returns null for null cell [90m(0.307313ms)[39m[39m
+▶ OMI Portal: Live Portal Binder (0xA2)
+  ▶ OmiLivePortalBinder
+    [32m✔ creates binder with default config [90m(2.334599ms)[39m[39m
+    [32m✔ accepts custom connector and voxel stream options [90m(0.389155ms)[39m[39m
+    [32m✔ connector passes events to voxel stream [90m(2.443484ms)[39m[39m
+    [32m✔ disconnect closes SSE connection gracefully [90m(0.41601ms)[39m[39m
+    [32m✔ reset clears all state and disconnects [90m(1.127802ms)[39m[39m
+    [32m✔ initializeLiveBinding without EventSource sets connected false [90m(0.643939ms)[39m[39m
+    [32m✔ ingests Tetragrammatron backend events into the voxel stream [90m(8.23165ms)[39m[39m
+  [32m✔ OmiLivePortalBinder [90m(18.115067ms)[39m[39m
+  ▶ DOM event dispatch
+    [32m✔ VOXEL_BATCH_EVENT constant is defined [90m(0.479406ms)[39m[39m
+    [32m✔ TETRAGRAMMATRON_BACKEND_EVENT constant is defined [90m(0.336753ms)[39m[39m
+    [32m✔ binder emits voxel:batch events via DOM [90m(2.205499ms)[39m[39m
+  [32m✔ DOM event dispatch [90m(3.644228ms)[39m[39m
+[32m✔ OMI Portal: Live Portal Binder (0xA2) [90m(22.846108ms)[39m[39m
+▶ OMI Portal: Live Voxel Stream (0xA1)
+  ▶ operatorToColor
+    [32m✔ returns colors for all operators [90m(1.059214ms)[39m[39m
+    [32m✔ returns default color for unknown operators [90m(0.189328ms)[39m[39m
+  [32m✔ operatorToColor [90m(2.285254ms)[39m[39m
+  ▶ addressToQxy
+    [32m✔ extracts x,y from an omi- address [90m(1.036071ms)[39m[39m
+    [32m✔ extracts x,y from a decimal address [90m(0.422372ms)[39m[39m
+    [32m✔ returns null for invalid address [90m(0.229892ms)[39m[39m
+  [32m✔ addressToQxy [90m(2.103459ms)[39m[39m
+  ▶ LiveVoxelStream — basic operations
+    [32m✔ ingests parsed records and produces voxel state [90m(1.743462ms)[39m[39m
+    [32m✔ ingest returns batch with updates and removals [90m(0.831203ms)[39m[39m
+    [32m✔ getVoxel returns specific voxel by coordinates [90m(0.915447ms)[39m[39m
+    [32m✔ getVoxel returns null for nonexistent coordinate [90m(0.462432ms)[39m[39m
+    [32m✔ getState returns sorted voxels [90m(0.60021ms)[39m[39m
+    [32m✔ ingests Tetragrammatron backend events through route coordinates [90m(0.426931ms)[39m[39m
+  [32m✔ LiveVoxelStream — basic operations [90m(5.741252ms)[39m[39m
+  ▶ LiveVoxelStream — event system
+    [32m✔ emits voxel:batch on ingest [90m(0.620451ms)[39m[39m
+    [32m✔ can remove event listeners [90m(0.334566ms)[39m[39m
+    [32m✔ rejects unsupported event types [90m(0.12545ms)[39m[39m
+  [32m✔ LiveVoxelStream — event system [90m(1.346002ms)[39m[39m
+  ▶ LiveVoxelStream — voxel updates and TTL
+    [32m✔ updates existing voxel on re-ingest [90m(0.424529ms)[39m[39m
+    [32m✔ applies TTL to expire old voxels [90m(0.254633ms)[39m[39m
+    [32m✔ respects maxVoxels limit [90m(0.376444ms)[39m[39m
+  [32m✔ LiveVoxelStream — voxel updates and TTL [90m(1.270435ms)[39m[39m
+  ▶ LiveVoxelStream — full pipeline integration
+    [32m✔ processes records with source addresses [90m(0.267562ms)[39m[39m
+    [32m✔ reset clears all voxel state [90m(0.157777ms)[39m[39m
+  [32m✔ LiveVoxelStream — full pipeline integration [90m(0.565624ms)[39m[39m
+[32m✔ OMI Portal: Live Voxel Stream (0xA1) [90m(14.484467ms)[39m[39m
+[32m✔ Logic Core: maps 0x3C selector to five-value yellow preset [90m(1.492828ms)[39m[39m
+[32m✔ Logic Core: extracts three-value neutral tracks on zero significand [90m(2.273572ms)[39m[39m
+▶ OMI-PORTAL: Makefile Build Automation & Environment Grade Verification
+  [32m✔ Assertion 0x01: Should confirm the existence of the canonical Makefile in the repository root [90m(4.957692ms)[39m[39m
+  [32m✔ Assertion 0x02: Should verify that compiled production stubs map correctly to distribution folders [90m(0.322983ms)[39m[39m
+  [32m✔ Assertion 0x03: Should verify the OPPID coherence check script exists and is executable [90m(0.315288ms)[39m[39m
+  [32m✔ Assertion 0x04: Should verify the compile-omi CLI script exists [90m(0.278734ms)[39m[39m
+  [32m✔ Assertion 0x05: Should verify first-principles docs exist for consumer packaging [90m(0.291896ms)[39m[39m
+  [32m✔ Assertion 0x06: Should verify the five-file OMI canon exists in root [90m(0.359121ms)[39m[39m
+  [32m✔ Assertion 0x06b: Should verify router seed Makefile targets are available [90m(0.704929ms)[39m[39m
+  [32m✔ Assertion 0x07: Should verify Makefile has legacy alias for compile -> production [90m(1.882435ms)[39m[39m
+[32m✔ OMI-PORTAL: Makefile Build Automation & Environment Grade Verification [90m(10.898894ms)[39m[39m
+[32m✔ Megatron Core: lowercase chiral omicron triggers firing step [90m(3.766174ms)[39m[39m
+[32m✔ Megatron Core: uppercase cardinal omicron routes absolute weights [90m(0.617996ms)[39m[39m
+[32m✔ Megatron Core: chiral inhibited track fires for low weight lowercase [90m(0.393582ms)[39m[39m
+[32m✔ Megatron Core: sigmoid mode routes to continuous logistic [90m(0.301679ms)[39m[39m
+[32m✔ Megatron Core: non-omicron unicode characters evicted [90m(0.308747ms)[39m[39m
+[32m✔ Megatron Core: CLA adder fires across unicode slices [90m(0.294599ms)[39m[39m
+[32m✔ Compiler Core: method-of-loci index map with genesis anchor [90m(2.194611ms)[39m[39m
+[32m✔ Compiler Core: evicts invalid object language structures [90m(0.470155ms)[39m[39m
+[32m✔ Meta Neural Core: hidden layer resolves Fano point 3 high resonance [90m(4.227571ms)[39m[39m
+[32m✔ Meta Neural Core: sub-critical inhibited track at Fano point 1 [90m(0.450965ms)[39m[39m
+[32m✔ Meta Neural Core: sigmoid mode routes to continuous confidence [90m(0.371745ms)[39m[39m
+[32m✔ Meta Neural Core: diverges and evicts when Fano orbit misses 1-7 [90m(0.406971ms)[39m[39m
+[32m✔ Meta Neural Core: GATE_1 eviction on structural malformation [90m(0.390119ms)[39m[39m
+[32m✔ Meta Neural Core: CLA adder fires across Fano slices [90m(0.479354ms)[39m[39m
+▶ Miquel RGB Incidence — Vertices
+  [32m✔ returns 8 RGB cube vertices [90m(1.532175ms)[39m[39m
+  [32m✔ vertices include canonical colors [90m(0.466133ms)[39m[39m
+  [32m✔ each vertex has r,g,b values [90m(0.371592ms)[39m[39m
+[32m✔ Miquel RGB Incidence — Vertices [90m(4.586034ms)[39m[39m
+▶ Miquel RGB Incidence — Faces
+  [32m✔ returns 6 channel faces [90m(0.498567ms)[39m[39m
+  [32m✔ faces cover all channel extremes [90m(0.339451ms)[39m[39m
+[32m✔ Miquel RGB Incidence — Faces [90m(1.255289ms)[39m[39m
+▶ Miquel RGB Incidence — Vertex/Face Queries
+  [32m✔ each face contains exactly 4 vertices [90m(0.844668ms)[39m[39m
+  [32m✔ black vertex touches R=0, G=0, B=0 faces [90m(0.737245ms)[39m[39m
+  [32m✔ white vertex touches R=255, G=255, B=255 faces [90m(0.375315ms)[39m[39m
+  [32m✔ red vertex touches R=255, G=0, B=0 faces [90m(0.576927ms)[39m[39m
+  [32m✔ unknown vertex returns empty [90m(2.230532ms)[39m[39m
+[32m✔ Miquel RGB Incidence — Vertex/Face Queries [90m(5.586003ms)[39m[39m
+▶ Miquel RGB Incidence — Build & Validate
+  [32m✔ buildMiquelRgbIncidence returns 24 incidences [90m(0.990374ms)[39m[39m
+  [32m✔ each incidence has vertex, face, axis, channelValue [90m(1.202097ms)[39m[39m
+  [32m✔ validateMiquelRgbIncidence passes structural checks [90m(2.972631ms)[39m[39m
+  [32m✔ 8 vertices × 3 faces = 24 incidences [90m(0.357673ms)[39m[39m
+  [32m✔ 6 faces × 4 vertices = 24 incidences [90m(0.362021ms)[39m[39m
+[32m✔ Miquel RGB Incidence — Build & Validate [90m(6.353814ms)[39m[39m
+▶ Miquel Router — Color Orbit Recovery
+  [32m✔ decodes 00000048 as integer 72 with orbit 2 offset 0 [90m(1.841623ms)[39m[39m
+  [32m✔ decodes FF000000 with correct divmod [90m(0.416187ms)[39m[39m
+  [32m✔ throws for non-8-char hex string [90m(0.967623ms)[39m[39m
+  [32m✔ throws for invalid hex [90m(0.680812ms)[39m[39m
+  [32m✔ sets prime mode 73 for even offset, 37 for odd offset [90m(0.332437ms)[39m[39m
+[32m✔ Miquel Router — Color Orbit Recovery [90m(6.764221ms)[39m[39m
+▶ Miquel Router — miquelDivmod36
+  [32m✔ handles numeric input [90m(0.45986ms)[39m[39m
+  [32m✔ handles hex string input [90m(0.31077ms)[39m[39m
+[32m✔ Miquel Router — miquelDivmod36 [90m(1.574176ms)[39m[39m
+▶ Miquel Router — Configuration
+  [32m✔ returns 8_3_6_4 config by default [90m(0.529286ms)[39m[39m
+  [32m✔ returns 6_4_8_3 config [90m(0.260527ms)[39m[39m
+  [32m✔ falls back to 8_3_6_4 for unknown config [90m(2.128154ms)[39m[39m
+[32m✔ Miquel Router — Configuration [90m(4.554774ms)[39m[39m
+▶ Miquel Router — Voxel Compilation
+  [32m✔ compiles a voxel from schema instance [90m(0.66619ms)[39m[39m
+  [32m✔ uses different multiplier for 6_4_8_3 config [90m(0.300036ms)[39m[39m
+[32m✔ Miquel Router — Voxel Compilation [90m(1.172112ms)[39m[39m
+▶ Miquel Router — Class Interface
+  [32m✔ exposes recoverColorOrbit through class [90m(0.413207ms)[39m[39m
+  [32m✔ exposes compileMiquelVoxel through class [90m(0.277799ms)[39m[39m
+[32m✔ Miquel Router — Class Interface [90m(0.897123ms)[39m[39m
+[32m✔ Monoid Core: engine accurately handles principal prime ideals and verifies matroid closure [90m(2.468722ms)[39m[39m
+[32m✔ Monoid Core: evicts elements violating prime generator conditions under factorization [90m(0.416654ms)[39m[39m
+[32m✔ Monster Core: identifies the 15 supersingular primes of the Happy Family [90m(6.940976ms)[39m[39m
+[32m✔ Monster Core: base primes 2 and 3 map to monadic model [90m(0.453021ms)[39m[39m
+[32m✔ Monster Core: middle supersingular primes route to happy family [90m(0.381276ms)[39m[39m
+[32m✔ Monster Core: blocks non-dividing pariah primes [90m(1.400236ms)[39m[39m
+[32m✔ Monster Core: period-8 orbit offset computed via divmod 36 [90m(0.330661ms)[39m[39m
+[32m✔ Monster Core: CLA adder fires across prime slices [90m(0.536188ms)[39m[39m
+▶ Slice 3: Movie World Renderer (0xA7)
+  ▶ computeActorPositions
+    [32m✔ returns positions for each actor [90m(1.915413ms)[39m[39m
+    [32m✔ assigns 2D grid coordinates [90m(0.401538ms)[39m[39m
+    [32m✔ assigns motif color [90m(0.378799ms)[39m[39m
+  [32m✔ computeActorPositions [90m(4.393878ms)[39m[39m
+  ▶ computeVoxelProjections
+    [32m✔ returns voxel array from world state [90m(0.710725ms)[39m[39m
+    [32m✔ handles empty voxel map [90m(0.331197ms)[39m[39m
+  [32m✔ computeVoxelProjections [90m(1.465909ms)[39m[39m
+  ▶ buildRenderFrame
+    [32m✔ produces a complete render frame [90m(0.59288ms)[39m[39m
+    [32m✔ includes gate states [90m(0.284588ms)[39m[39m
+    [32m✔ renders actors with emoji carriers [90m(0.366816ms)[39m[39m
+  [32m✔ buildRenderFrame [90m(1.670964ms)[39m[39m
+  ▶ integration with PersistentWorldState
+    [32m✔ renders from a real world state with narrative inserts [90m(0.692176ms)[39m[39m
+  [32m✔ integration with PersistentWorldState [90m(2.434186ms)[39m[39m
+[32m✔ Slice 3: Movie World Renderer (0xA7) [90m(11.347698ms)[39m[39m
+[32m✔ packMultiplexAddress produces canonical LL/MM/NN address [90m(2.311517ms)[39m[39m
+[32m✔ packMultiplexAddress preserves constants at S1 and S6 [90m(0.562664ms)[39m[39m
+[32m✔ packMultiplexAddress repeats LL in S0, S3, S4, S7 [90m(2.428143ms)[39m[39m
+[32m✔ unpackMultiplexAddress round-trips through packMultiplexAddress [90m(0.511345ms)[39m[39m
+[32m✔ unpackMultiplexAddress works with various LL values [90m(0.67494ms)[39m[39m
+[32m✔ unpackMultiplexAddress works with various NN/MM values [90m(0.379513ms)[39m[39m
+[32m✔ packMultiplexAddress enforces LL byte mask [90m(0.719427ms)[39m[39m
+[32m✔ Q_frame(S) = 0 for valid packed address [90m(0.475012ms)[39m[39m
+▶ Narrative Document Pipeline — Load → World
+  ▶ extractMotifsFromText
+    [32m✔ finds Gate, Logos, Number, Wisdom from Article I excerpt [90m(1.81266ms)[39m[39m
+    [32m✔ finds Covenant from covenant excerpt [90m(0.387445ms)[39m[39m
+    [32m✔ returns empty array for empty text [90m(1.534038ms)[39m[39m
+  [32m✔ extractMotifsFromText [90m(5.605662ms)[39m[39m
+  ▶ extractMotifsFromDocument
+    [32m✔ extracts motifs from a parsed document [90m(2.388348ms)[39m[39m
+  [32m✔ extractMotifsFromDocument [90m(2.721816ms)[39m[39m
+  ▶ assignEmojiToMotif
+    [32m✔ returns gate emoji for Gate [90m(0.600526ms)[39m[39m
+    [32m✔ returns question mark for unknown motif [90m(0.302939ms)[39m[39m
+  [32m✔ assignEmojiToMotif [90m(2.345814ms)[39m[39m
+  ▶ insertNarrativeIntoWorld
+    [32m✔ inserts documents as receipts [90m(3.307036ms)[39m[39m
+    [32m✔ inserts motifs as world actors [90m(0.848273ms)[39m[39m
+    [32m✔ assigns emoji to motif actors [90m(0.554444ms)[39m[39m
+    [32m✔ sets the Narrative Gate [90m(0.668563ms)[39m[39m
+    [32m✔ adds Number vs Meaning tension [90m(0.4095ms)[39m[39m
+    [32m✔ creates precedence relations between found motifs [90m(1.793167ms)[39m[39m
+    [32m✔ survives tick advancement [90m(0.750419ms)[39m[39m
+  [32m✔ insertNarrativeIntoWorld [90m(10.396592ms)[39m[39m
+  ▶ loadAndInsertNarrative (real files)
+    [32m✔ loads narrative from disk and inserts into world [90m(10.597228ms)[39m[39m
+    [32m✔ preserves canonical document order [90m(7.640108ms)[39m[39m
+    [32m✔ finds key motifs across all documents [90m(7.265266ms)[39m[39m
+    [32m✔ assigns emoji to every motif found [90m(8.197379ms)[39m[39m
+    [32m✔ motif actors have role=motif and behavior=narrative [90m(6.738035ms)[39m[39m
+    [32m✔ world state is durable across epochs [90m(9.78803ms)[39m[39m
+  [32m✔ loadAndInsertNarrative (real files) [90m(50.781306ms)[39m[39m
+[32m✔ Narrative Document Pipeline — Load → World [90m(73.470787ms)[39m[39m
+▶ Slice 1: Narrative World Model (0xA3)
+  ▶ narrative-loader
+    [32m✔ CANONICAL_ORDER has 14 entries [90m(2.119062ms)[39m[39m
+    [32m✔ starts with PRELUDE and ends with EPILOUGE [90m(0.504756ms)[39m[39m
+    [32m✔ classifyDocument returns correct section types [90m(0.397969ms)[39m[39m
+    [32m✔ parseNarrativeDocument extracts title, paragraphs, lines [90m(1.04099ms)[39m[39m
+    [32m✔ parseNarrativeDocument handles empty text [90m(0.421425ms)[39m[39m
+    [32m✔ loadNarrativeFromMap loads documents in canonical order [90m(2.337128ms)[39m[39m
+    [32m✔ loadNarrativeFromMap skips missing documents [90m(2.056841ms)[39m[39m
+    [32m✔ loadNarrativeFromMap returns empty array for empty map [90m(0.500129ms)[39m[39m
+    [32m✔ loadNarrativeFromDisk loads actual narrative files [90m(7.002645ms)[39m[39m
+  [32m✔ narrative-loader [90m(18.84801ms)[39m[39m
+  ▶ emoji-notation-map
+    [32m✔ CANONICAL_ACTOR_ORDER has 14 actors [90m(0.789711ms)[39m[39m
+    [32m✔ EMOJI_BY_ACTOR has entries for all canonical actors [90m(0.335375ms)[39m[39m
+    [32m✔ EMOJI_BY_UPOS has entries for all core UPOS tags [90m(0.185438ms)[39m[39m
+    [32m✔ lookupEmojiCarrier returns correct emoji for Solomon [90m(0.209424ms)[39m[39m
+    [32m✔ lookupEmojiCarrier is case-insensitive [90m(0.110911ms)[39m[39m
+    [32m✔ lookupEmojiCarrier returns null for unknown name [90m(0.140209ms)[39m[39m
+    [32m✔ resolveWorldEmoji uses actor name first [90m(0.151326ms)[39m[39m
+    [32m✔ resolveWorldEmoji falls back to UPOS emoji [90m(0.115406ms)[39m[39m
+    [32m✔ resolveWorldEmoji returns null for empty input [90m(0.17204ms)[39m[39m
+    [32m✔ matchActorFromToken matches Solomon [90m(0.338767ms)[39m[39m
+    [32m✔ matchActorFromToken matches by keyword [90m(0.188404ms)[39m[39m
+    [32m✔ matchActorFromToken returns null for no match [90m(0.141756ms)[39m[39m
+  [32m✔ emoji-notation-map [90m(3.623672ms)[39m[39m
+  ▶ persistent-world-state
+    [32m✔ constructs with default state [90m(0.539958ms)[39m[39m
+    [32m✔ advance increments the tick counter [90m(0.331493ms)[39m[39m
+    [32m✔ advance wraps at 5040 and increments epoch [90m(3.044301ms)[39m[39m
+    [32m✔ addActor stores actor and tracks counts [90m(0.326945ms)[39m[39m
+    [32m✔ addActor updates existing actor [90m(0.202737ms)[39m[39m
+    [32m✔ hasActor checks existence [90m(0.130652ms)[39m[39m
+    [32m✔ getActor returns null for missing actor [90m(0.092252ms)[39m[39m
+    [32m✔ removeActor deletes and returns true/false [90m(0.114211ms)[39m[39m
+    [32m✔ setRelation stores S-P-O triple [90m(0.194378ms)[39m[39m
+    [32m✔ getRelation retrieves by S-P-O key [90m(1.717249ms)[39m[39m
+    [32m✔ hasRelation checks existence [90m(0.319629ms)[39m[39m
+    [32m✔ removeRelation deletes S-P-O [90m(0.260406ms)[39m[39m
+    [32m✔ getRelationsBySubject returns matching relations [90m(0.283736ms)[39m[39m
+    [32m✔ getRelationsByObject returns matching relations [90m(0.269078ms)[39m[39m
+    [32m✔ addTension and resolveTension lifecycle [90m(0.40868ms)[39m[39m
+    [32m✔ setGate and getGate [90m(2.256706ms)[39m[39m
+    [32m✔ voxel operations [90m(0.394589ms)[39m[39m
+    [32m✔ addReceipt stores and bounds the receipt log [90m(0.213953ms)[39m[39m
+    [32m✔ getState returns a frozen snapshot [90m(0.20025ms)[39m[39m
+    [32m✔ reset clears all state [90m(0.164475ms)[39m[39m
+  [32m✔ persistent-world-state [90m(12.362568ms)[39m[39m
+[32m✔ Slice 1: Narrative World Model (0xA3) [90m(36.148147ms)[39m[39m
+[32m✔ Complex NAT64 Core: engine accurately processes complex norms and validates field multiplicativity [90m(2.083289ms)[39m[39m
+[32m✔ Complex NAT64 Core: identifies non-NAT64 prefix frames via segment check [90m(0.411582ms)[39m[39m
+▶ OMI Portal: NAT64 Virtual Adapter (0xA0)
+  ▶ ipv4ToBytes
+    [32m✔ converts a valid IPv4 address to 4 bytes [90m(3.691036ms)[39m[39m
+    [32m✔ returns null for malformed input [90m(0.419071ms)[39m[39m
+  [32m✔ ipv4ToBytes [90m(5.644309ms)[39m[39m
+  ▶ ipv4ToOmiAddress
+    [32m✔ maps 192.0.2.1 to an omi- address with NAT64 prefix [90m(1.2268ms)[39m[39m
+    [32m✔ maps 10.0.0.1 correctly [90m(0.349095ms)[39m[39m
+    [32m✔ returns null for invalid IPv4 [90m(0.211526ms)[39m[39m
+  [32m✔ ipv4ToOmiAddress [90m(5.110459ms)[39m[39m
+  ▶ ipv4ToFfffAddress
+    [32m✔ converts 192.0.2.1 to ffff format [90m(0.268492ms)[39m[39m
+    [32m✔ converts 10.20.30.40 [90m(0.350248ms)[39m[39m
+  [32m✔ ipv4ToFfffAddress [90m(1.024747ms)[39m[39m
+  ▶ createNat64Event
+    [32m✔ creates a valid event from an IPv4 address [90m(1.212825ms)[39m[39m
+    [32m✔ uses the specified operator [90m(0.461295ms)[39m[39m
+    [32m✔ returns null for invalid IPv4 [90m(0.685589ms)[39m[39m
+    [32m✔ imoLine is parseable by readImoRecord [90m(0.364831ms)[39m[39m
+  [32m✔ createNat64Event [90m(3.157208ms)[39m[39m
+  ▶ createNat64SourceEvent
+    [32m✔ creates a source event block [90m(0.43733ms)[39m[39m
+    [32m✔ includes two lines in the block [90m(0.241088ms)[39m[39m
+  [32m✔ createNat64SourceEvent [90m(0.901762ms)[39m[39m
+  ▶ Nat64VirtualAdapter
+    [32m✔ emits and records events [90m(0.46105ms)[39m[39m
+    [32m✔ emits source events [90m(0.179284ms)[39m[39m
+    [32m✔ reset clears history [90m(0.158225ms)[39m[39m
+    [32m✔ respects maxLog limit [90m(0.324741ms)[39m[39m
+  [32m✔ Nat64VirtualAdapter [90m(1.348206ms)[39m[39m
+[32m✔ OMI Portal: NAT64 Virtual Adapter (0xA0) [90m(18.619027ms)[39m[39m
+[32m✔ Neural Core: Perceptron step fires for small laptop offer [90m(8.415559ms)[39m[39m
+[32m✔ Neural Core: Perceptron does not fire with strongly negative bias [90m(0.442805ms)[39m[39m
+[32m✔ Neural Core: sigmoid neuron yields ~0.648 confidence for balanced inputs [90m(0.479629ms)[39m[39m
+[32m✔ Neural Core: sigmoid low confidence maps to purple preset [90m(0.523002ms)[39m[39m
+[32m✔ Neural Core: sigmoid modest transition maps to yellow preset [90m(0.457551ms)[39m[39m
+[32m✔ Neural Core: evicts structurally invalid frames [90m(0.384961ms)[39m[39m
+[32m✔ Nonogram Core: resolver correctly evaluates simple box overlaps and backfill counts [90m(2.159724ms)[39m[39m
+[32m✔ Nonogram Core: identifies negative-resistance quadrant states based on bit layouts [90m(2.234549ms)[39m[39m
+[32m✔ Notation Core: engine accurately handles Babylonian synodic chronometers and maps purple [90m(3.528564ms)[39m[39m
+[32m✔ Notation Core: evicts positions trying to violate the omicron-0x(N)-0x(N-1)-omicron structural fence [90m(0.426944ms)[39m[39m
+▶ O-Chain Arithmetic (multiword BIGINT-256 frame chains)
+  [32m✔ compareWords returns 0 for equal values [90m(2.169931ms)[39m[39m
+  [32m✔ compareWords returns 1 when first is larger [90m(0.335451ms)[39m[39m
+  [32m✔ compareWords returns -1 when first is smaller [90m(0.325887ms)[39m[39m
+  [32m✔ addWords adds single words without carry [90m(0.421559ms)[39m[39m
+  [32m✔ addWords produces carry to a new high word [90m(0.410966ms)[39m[39m
+  [32m✔ addWords handles multiword carry propagation [90m(0.368605ms)[39m[39m
+  [32m✔ addWords handles values of different array lengths [90m(0.32454ms)[39m[39m
+  [32m✔ subtractWords subtracts without borrow [90m(1.689806ms)[39m[39m
+  [32m✔ subtractWords handles simple borrow across one word [90m(0.418624ms)[39m[39m
+  [32m✔ subtractWords handles multiword borrow [90m(0.88111ms)[39m[39m
+  [32m✔ subtractWords returns negative when result would be negative [90m(0.33182ms)[39m[39m
+  [32m✔ subtractWords returns zero value [90m(0.32752ms)[39m[39m
+  [32m✔ addWords is commutative [90m(0.302021ms)[39m[39m
+  [32m✔ trimWords removes leading zero words [90m(0.263646ms)[39m[39m
+  [32m✔ trimWords preserves a single word [90m(0.327485ms)[39m[39m
+  [32m✔ addWords with single BigInt arguments [90m(0.641051ms)[39m[39m
+  [32m✔ subtractWords with single BigInt arguments produces borrow [90m(0.371792ms)[39m[39m
+  [32m✔ compareWords returns 0 for equal single BigInt [90m(0.230492ms)[39m[39m
+  [32m✔ compareWords with different array lengths [90m(2.872562ms)[39m[39m
+[32m✔ O-Chain Arithmetic (multiword BIGINT-256 frame chains) [90m(17.859169ms)[39m[39m
+▶ O-File Container (multiword .o serialization)
+  [32m✔ packOFile produces one hex word per line [90m(2.140188ms)[39m[39m
+  [32m✔ unpackOFile round-trips with packOFile [90m(0.779694ms)[39m[39m
+  [32m✔ unpackOFile handles whitespace variance [90m(0.449974ms)[39m[39m
+  [32m✔ oFileToBinary produces correct byte count [90m(0.470228ms)[39m[39m
+  [32m✔ oFileFromBinary round-trips with oFileToBinary [90m(0.804481ms)[39m[39m
+  [32m✔ oFileFromBinary with single word [90m(0.418888ms)[39m[39m
+  [32m✔ unpackOFile rejects malformed hex (wrong bit width) [90m(0.993424ms)[39m[39m
+  [32m✔ round-trip of many words preserves order [90m(1.96984ms)[39m[39m
+  [32m✔ unpackOFile('') returns [] [90m(0.430194ms)[39m[39m
+  [32m✔ oFileFromBinary rejects non-multiple of 32 bytes [90m(1.140688ms)[39m[39m
+  [32m✔ oFileFromBinary with empty buffer returns [] [90m(0.34869ms)[39m[39m
+  [32m✔ binary big-endian byte order is documented [90m(0.350477ms)[39m[39m
+[32m✔ O-File Container (multiword .o serialization) [90m(14.890912ms)[39m[39m
+[32m✔ Octonion Core: S15->S8 bundle maps to Tetragrammatron Fano WordNet [90m(3.746124ms)[39m[39m
+[32m✔ Octonion Core: S4 quaternionic node maps to green preset [90m(0.422234ms)[39m[39m
+[32m✔ Octonion Core: evicts invalid Adams fibration dimensions [90m(0.390249ms)[39m[39m
+[32m✔ Octonion Core: evicts structurally invalid frames [90m(0.250299ms)[39m[39m
+[32m✔ Octonion Core: layer 7 routes to Tetragrammatron same as layer 8 [90m(0.449101ms)[39m[39m
+[32m✔ Octuple Core: decodes 19-bit exponent with offset binary bias [90m(2.278861ms)[39m[39m
+[32m✔ Octuple Core: detects infinity exponent and triggers red warning [90m(3.180884ms)[39m[39m
+▶ Canvas Color Router — Classification
+  [32m✔ classifies #FF0000 as LOWER_HEX_STRUCTURAL_COLOR [90m(1.923471ms)[39m[39m
+  [32m✔ classifies #00FF00 as lower hex [90m(0.398824ms)[39m[39m
+  [32m✔ classifies #abcdef as lower hex [90m(0.35099ms)[39m[39m
+  [32m✔ classifies '1' as UPPER_PRESET_READER_COLOR [90m(0.393192ms)[39m[39m
+  [32m✔ classifies presets '2' through '6' [90m(0.469234ms)[39m[39m
+  [32m✔ rejects invalid colors [90m(0.375186ms)[39m[39m
+  [32m✔ rejects non-string input [90m(0.301411ms)[39m[39m
+[32m✔ Canvas Color Router — Classification [90m(6.764753ms)[39m[39m
+▶ Canvas Color Router — Routing
+  [32m✔ routes lower hex to structural-canvas-body [90m(0.590063ms)[39m[39m
+  [32m✔ routes upper preset to reader-cosmetic-shell [90m(1.875015ms)[39m[39m
+  [32m✔ rejects invalid colors [90m(0.422233ms)[39m[39m
+[32m✔ Canvas Color Router — Routing [90m(3.782105ms)[39m[39m
+▶ Canvas Color Router — Predicates
+  [32m✔ isLowerHexColor [90m(0.853634ms)[39m[39m
+  [32m✔ isUpperPresetColor [90m(0.242578ms)[39m[39m
+[32m✔ Canvas Color Router — Predicates [90m(1.355337ms)[39m[39m
+▶ Canvas Color Router — Conversion
+  [32m✔ hexToPreset matches exact hex [90m(1.694538ms)[39m[39m
+  [32m✔ hexToPreset returns null for non-matching hex [90m(0.363401ms)[39m[39m
+  [32m✔ hexToPreset returns null for preset input [90m(0.214192ms)[39m[39m
+  [32m✔ presetToHex maps preset to hex [90m(0.221821ms)[39m[39m
+  [32m✔ presetToHex returns null for hex input [90m(0.156047ms)[39m[39m
+  [32m✔ presetToHex returns null for invalid input [90m(0.13601ms)[39m[39m
+[32m✔ Canvas Color Router — Conversion [90m(5.336315ms)[39m[39m
+▶ OMI carrier integration smoke test
+  [32m✔ lane views work on a compiled word [90m(1.141035ms)[39m[39m
+  [32m✔ multiword .o file round-trips [90m(0.54267ms)[39m[39m
+  [32m✔ chain arithmetic over multiword arrays [90m(0.509071ms)[39m[39m
+  [32m✔ setU64 then getU64 round-trips through BigInt [90m(0.516064ms)[39m[39m
+  [32m✔ lanes() from a compiled word [90m(0.282947ms)[39m[39m
+[32m✔ OMI carrier integration smoke test [90m(6.617779ms)[39m[39m
+[32m✔ eMMC layout declares boot0 boot1 RPMB and userdata partitions [90m(2.322909ms)[39m[39m
+[32m✔ eMMC layout stores five aligned userdata .o governor planes [90m(1.77327ms)[39m[39m
+[32m✔ eMMC slot projection combines governor band offset and clock slot [90m(0.865558ms)[39m[39m
+[32m✔ eMMC image builder emits parseable boot headers RPMB receipt and five planes [90m(66.59731ms)[39m[39m
+[32m✔ eMMC proof rejects plane descriptor and payload mismatch [90m(20.850085ms)[39m[39m
+[32m✔ eMMC proof rejects non-zero reserved payload bytes [90m(22.563095ms)[39m[39m
+[32m✔ eMMC polyharmonic governor maps canonical roots to exponents [90m(3.372114ms)[39m[39m
+[32m✔ FACTS and CONS remain inverse projections [90m(0.58311ms)[39m[39m
+[32m✔ four offsets remain lane selectors, not governor roots [90m(0.33045ms)[39m[39m
+[32m✔ polyharmonic plane address includes governor clock offset and slot [90m(1.343664ms)[39m[39m
+[32m✔ RPMB receipt verifies its stable hash [90m(4.55504ms)[39m[39m
+[32m✔ RPMB receipt counter never decreases [90m(1.218629ms)[39m[39m
+[32m✔ same RPMB input replay gives the same receipt [90m(1.227261ms)[39m[39m
+[32m✔ changed source governor or offset changes the RPMB receipt [90m(1.006423ms)[39m[39m
+[32m✔ OMI file header parses car control bytes [90m(1.311664ms)[39m[39m
+[32m✔ OMI file compiler reads binary car and dot-notation cdr [90m(2.016138ms)[39m[39m
+[32m✔ OMI dot notation parser supports UTF-8 clamped payload fallback [90m(0.488157ms)[39m[39m
+[32m✔ OMI file compiler rejects malformed header and context ports [90m(0.798389ms)[39m[39m
+▶ omi-gcd
+  [32m✔ commonPrefixScope returns min prefix [90m(4.469134ms)[39m[39m
+  [32m✔ commonPrefixScope returns same prefix for equal scopes [90m(0.397963ms)[39m[39m
+  [32m✔ commonLaneLL returns same LL for same-lane pointers [90m(0.380117ms)[39m[39m
+  [32m✔ commonLaneLL returns null for different lanes [90m(0.310159ms)[39m[39m
+  [32m✔ commonFrameShell detects matching S1/S6 [90m(0.336006ms)[39m[39m
+  [32m✔ commonFrameShell returns null for invalid input [90m(0.899368ms)[39m[39m
+  [32m✔ commonGenerator returns lane type for same-LL pair [90m(0.440896ms)[39m[39m
+  [32m✔ commonGenerator returns prefix type for different-LL pair [90m(0.375173ms)[39m[39m
+  [32m✔ commonGenerator returns null for invalid input [90m(0.325388ms)[39m[39m
+  [32m✔ commonLaneLL returns null for invalid input [90m(0.59559ms)[39m[39m
+[32m✔ omi-gcd [90m(11.40812ms)[39m[39m
+[32m✔ maskForBit returns unsigned bitmask [90m(1.519471ms)[39m[39m
+[32m✔ maskForBit rejects out of range [90m(0.761672ms)[39m[39m
+[32m✔ encodeSelector combines bits [90m(0.31281ms)[39m[39m
+[32m✔ encodeSelector empty returns zero [90m(0.273084ms)[39m[39m
+[32m✔ decodeSelector returns ascending bit indices [90m(1.369817ms)[39m[39m
+[32m✔ decodeSelector(0xFFFFFFFF) returns all 32 bits in ascending order [90m(0.353861ms)[39m[39m
+[32m✔ encodeSelector round-trips through decodeSelector [90m(0.501372ms)[39m[39m
+[32m✔ extractGaugeLane reads bits 28..31 only [90m(0.317927ms)[39m[39m
+[32m✔ extractGaugeLane ignores lower bits [90m(0.344741ms)[39m[39m
+[32m✔ extractGaugeLane returns null for non-canonical bit patterns [90m(0.448921ms)[39m[39m
+[32m✔ bit 31 survives unsigned round-trip [90m(0.404138ms)[39m[39m
+▶ OMI-IMO Lanes (256-bit word lane views)
+  [32m✔ getU8 round-trips through setU8 [90m(3.698965ms)[39m[39m
+  [32m✔ getU16 round-trips through setU16 [90m(0.574433ms)[39m[39m
+  [32m✔ getU32 round-trips through setU32 [90m(0.431709ms)[39m[39m
+  [32m✔ getU64 round-trips through setU64 [90m(0.402394ms)[39m[39m
+  [32m✔ setLone lane does not disturb neighbors [90m(0.410269ms)[39m[39m
+  [32m✔ lanes() returns all lanes for a given width [90m(0.648221ms)[39m[39m
+  [32m✔ lanes() for a patterned value [90m(0.406363ms)[39m[39m
+  [32m✔ forEachLane iterates all lanes with index [90m(1.833977ms)[39m[39m
+  [32m✔ forEachLane produces correct values [90m(0.495241ms)[39m[39m
+  [32m✔ getLane with width=1 returns individual bits [90m(0.781066ms)[39m[39m
+  [32m✔ setLane with width=1 sets individual bits [90m(0.287707ms)[39m[39m
+  [32m✔ throws on out-of-range lane [90m(0.969867ms)[39m[39m
+  [32m✔ LANE_WIDTHS and LANE_COUNTS constants [90m(0.272782ms)[39m[39m
+[32m✔ OMI-IMO Lanes (256-bit word lane views) [90m(14.355289ms)[39m[39m
+▶ OMI Lens Parser (0xAE) — One-Notation Doctrine
+  ▶ parseCoreAddress
+    [32m✔ parses bare address without prefix [90m(2.679822ms)[39m[39m
+    [32m✔ parses address with /128 claim [90m(0.515107ms)[39m[39m
+    [32m✔ parses address with /128/@60/@16/@4 lens stack [90m(0.302881ms)[39m[39m
+    [32m✔ parses address with claim backoff /128-4 [90m(0.359271ms)[39m[39m
+    [32m✔ returns null for invalid hex segments [90m(0.260399ms)[39m[39m
+    [32m✔ returns null for non-string input [90m(1.480964ms)[39m[39m
+  [32m✔ parseCoreAddress [90m(7.982432ms)[39m[39m
+  ▶ parseClaimPrefix
+    [32m✔ /128 parses as exact claim [90m(2.125203ms)[39m[39m
+    [32m✔ /64 parses as subnet claim [90m(2.537872ms)[39m[39m
+    [32m✔ bare address returns null bits [90m(0.273576ms)[39m[39m
+    [32m✔ /128-4 parses with backoff [90m(0.332017ms)[39m[39m
+    [32m✔ invalid prefix returns null [90m(0.29629ms)[39m[39m
+  [32m✔ parseClaimPrefix [90m(6.457849ms)[39m[39m
+  ▶ parseReaderLenses
+    [32m✔ /@60 parses as reader lens [90m(0.63899ms)[39m[39m
+    [32m✔ /@360 parses as reader lens [90m(0.285645ms)[39m[39m
+    [32m✔ /128/@60/@16/@4 parses claim plus lens stack [90m(0.254825ms)[39m[39m
+    [32m✔ bare address returns empty lens list [90m(0.171919ms)[39m[39m
+    [32m✔ plain /4 without @ does not parse as reader lens [90m(0.170714ms)[39m[39m
+    [32m✔ /@720 and /@5040 parse as reader lenses [90m(0.176239ms)[39m[39m
+  [32m✔ parseReaderLenses [90m(2.112113ms)[39m[39m
+  ▶ parseClaimBackoff
+    [32m✔ /128-4 backoff = /124 effective [90m(0.346044ms)[39m[39m
+    [32m✔ /128-5 backoff = /123 effective [90m(0.15919ms)[39m[39m
+    [32m✔ /128-4 is not equal to /128/@4 [90m(0.312325ms)[39m[39m
+    [32m✔ bare address returns null backoff [90m(0.153532ms)[39m[39m
+  [32m✔ parseClaimBackoff [90m(1.307308ms)[39m[39m
+  ▶ deriveCreationStep
+    [32m✔ derives step from core frame [90m(0.484975ms)[39m[39m
+    [32m✔ slot5040 is derived from fano7 × 720 + role3 × 240 + local240 [90m(0.255063ms)[39m[39m
+  [32m✔ deriveCreationStep [90m(0.934008ms)[39m[39m
+  ▶ applyReaderLens
+    [32m✔ lens 60 returns sexagesimal cadence [90m(0.431286ms)[39m[39m
+    [32m✔ lens 4 returns tetrahedral source [90m(0.231047ms)[39m[39m
+    [32m✔ lens 5 returns five-source [90m(0.191499ms)[39m[39m
+    [32m✔ unknown lens returns custom-N [90m(0.151576ms)[39m[39m
+  [32m✔ applyReaderLens [90m(1.298514ms)[39m[39m
+  ▶ parseOmiNotation (integration)
+    [32m✔ core address parses without prefix [90m(0.570037ms)[39m[39m
+    [32m✔ /128 parses as exact claim [90m(0.205765ms)[39m[39m
+    [32m✔ /@60 parses as reader lens [90m(0.218395ms)[39m[39m
+    [32m✔ /128/@60/@16/@4 parses as claim plus lens stack [90m(0.238272ms)[39m[39m
+    [32m✔ /128-4 parses as claim backoff [90m(0.260205ms)[39m[39m
+    [32m✔ /128-4 is not equal to /128/@4 [90m(0.19045ms)[39m[39m
+    [32m✔ throws on invalid core frame [90m(0.603433ms)[39m[39m
+    [32m✔ creation step is derived before lenses are applied [90m(0.179744ms)[39m[39m
+    [32m✔ reader lenses cannot validate invalid core frame [90m(0.143207ms)[39m[39m
+  [32m✔ parseOmiNotation (integration) [90m(2.991287ms)[39m[39m
+  ▶ backoff is distinct from lens
+    [32m✔ plain /4 is CIDR claim, not tetrahedral lens [90m(0.192969ms)[39m[39m
+    [32m✔ /@4 is tetrahedral lens, not CIDR claim [90m(0.18289ms)[39m[39m
+  [32m✔ backoff is distinct from lens [90m(0.502145ms)[39m[39m
+[32m✔ OMI Lens Parser (0xAE) — One-Notation Doctrine [90m(25.681548ms)[39m[39m
+[32m✔ computeMatrixCycle default state matches canonical values [90m(2.137272ms)[39m[39m
+[32m✔ computeMatrixCycle FS card with 2,3 rails [90m(0.449978ms)[39m[39m
+[32m✔ computeMatrixCycle RS card with infinity rails [90m(0.274186ms)[39m[39m
+[32m✔ computeMatrixCycle GS card produces role3=1 [90m(0.320371ms)[39m[39m
+[32m✔ computeMatrixCycle throws on invalid gauge [90m(0.725485ms)[39m[39m
+[32m✔ computeMatrixCycle throws on invalid rail [90m(0.41486ms)[39m[39m
+[32m✔ computeMatrixCycle throws on invalid Base36 socket [90m(0.614993ms)[39m[39m
+[31m✖ omi-meta-memory-admission-proof builds metacompiler and admits declaration into meta-memory [90m(632.617585ms)[39m[39m
+[32m✔ omi metacompiler builds as a portable C tool [90m(655.429602ms)[39m[39m
+[32m✔ canonical declarations inspect as declaration-first control input [90m(660.987796ms)[39m[39m
+[32m✔ FS/GS/RS/US alist traces inspect as lane declarations [90m(590.722174ms)[39m[39m
+[32m✔ compile writes deterministic ignored proof artifacts [90m(552.126316ms)[39m[39m
+[32m✔ decompile renders control bytes as escaped lane names [90m(514.995157ms)[39m[39m
+[32m✔ malformed declarations reject before control tape emission [90m(634.87923ms)[39m[39m
+[32m✔ omi-docs-proof verifies replay-stable declaration artifacts [90m(561.368157ms)[39m[39m
+▶ O-Bitboard (256-bit O-Word)
+  [32m✔ pack and unpack round-trips a zero word [90m(3.765111ms)[39m[39m
+  [32m✔ pack and unpack round-trips a maximal word [90m(0.406278ms)[39m[39m
+  [32m✔ pack and unpack round-trips typical values [90m(0.387176ms)[39m[39m
+  [32m✔ selector is exactly 1 bit [90m(0.41233ms)[39m[39m
+  [32m✔ path is exactly 19 bits [90m(0.390571ms)[39m[39m
+  [32m✔ surface is exactly 236 bits [90m(0.669918ms)[39m[39m
+  [32m✔ assertOWord accepts valid word [90m(0.466961ms)[39m[39m
+  [32m✔ assertOWord rejects negative word [90m(1.245795ms)[39m[39m
+  [32m✔ assertOWord rejects oversized word [90m(0.513818ms)[39m[39m
+  [32m✔ oWordToHex produces 64-character hex string [90m(0.685685ms)[39m[39m
+  [32m✔ oWordFromHex round-trips with oWordToHex [90m(0.859463ms)[39m[39m
+  [32m✔ formatOWord produces all fields [90m(3.770168ms)[39m[39m
+  [32m✔ explicit 1+19+236 = 256 bit layout [90m(0.304522ms)[39m[39m
+[32m✔ O-Bitboard (256-bit O-Word) [90m(18.275307ms)[39m[39m
+▶ O-Projector (.o -> .omi/.imo)
+  [32m✔ projectToOMI produces a readable string for an empty word [90m(2.380658ms)[39m[39m
+  [32m✔ projectToIMO produces a readable string for an empty word [90m(0.496169ms)[39m[39m
+  [32m✔ projectToOMI contains the QuquartRegister ket boundary [90m(0.449613ms)[39m[39m
+  [32m✔ projectRegister builds a QuquartRegister from source word [90m(0.75664ms)[39m[39m
+  [32m✔ projectRegister accepts custom notationMask and activeReading [90m(0.441139ms)[39m[39m
+  [32m✔ projectReadable returns omi, imo, and register [90m(0.798159ms)[39m[39m
+  [32m✔ projectWithReceipt evaluates receipt replay stability [90m(0.839922ms)[39m[39m
+  [32m✔ projectWithReceipt produces a stable receipt for deterministic operator [90m(0.709493ms)[39m[39m
+  [32m✔ formatKetBoundary is used in projection output [90m(0.761762ms)[39m[39m
+  [32m✔ selector=0 produces omi---imo, selector=1 produces imo---imo for OMI projection [90m(0.980365ms)[39m[39m
+  [32m✔ selector=0 produces imo---omi, selector=1 produces omi---omi for IMO projection [90m(0.402334ms)[39m[39m
+  [32m✔ path is preserved in projection output [90m(0.369516ms)[39m[39m
+[32m✔ O-Projector (.o -> .omi/.imo) [90m(13.254253ms)[39m[39m
+[32m✔ OMI parser parses existing RULES and FACTS one-line declarations [90m(28.054002ms)[39m[39m
+[32m✔ OMI parser preserves /96 suffix clauses and EQUALS right-hand addresses [90m(2.182603ms)[39m[39m
+[32m✔ OMI parser preserves omi-/-imo source blocks for CLOSE, COMBINE, and CONS records [90m(9.176809ms)[39m[39m
+[32m✔ All five root OMI declaration files parse with zero malformed records [90m(11.991907ms)[39m[39m
+[32m✔ Axiomatic kernel remains registry-compatible while loading new declaration records [90m(13.487555ms)[39m[39m
+[32m✔ OMI parser flags unclosed omi- source block as malformed [90m(0.4579ms)[39m[39m
+[32m✔ OMI parser flags -imo without preceding record as malformed [90m(0.448452ms)[39m[39m
+[32m✔ OMI parser preserves source block raw content with indentation and newlines [90m(2.844668ms)[39m[39m
+[32m✔ OMI parser reads new declarative core facts from FACTS.omi [90m(6.146124ms)[39m[39m
+[32m✔ OMI parser reads new Omilog/IMO facts from FACTS.omi [90m(3.531165ms)[39m[39m
+[32m✔ OMI parser reads five-factor router facts from FACTS.omi [90m(3.516673ms)[39m[39m
+[32m✔ OMI parser reads new declarative core rules from RULES.omi [90m(5.31004ms)[39m[39m
+[32m✔ OMI parser reads new Omilog/IMO rules from RULES.omi [90m(4.194301ms)[39m[39m
+[32m✔ OMI parser reads five-factor router rules from RULES.omi [90m(3.55953ms)[39m[39m
+[32m✔ Axiomatic rules compiler still matches existing MUST segment and prefix rules [90m(5.477392ms)[39m[39m
+[32m✔ Wittgenstein truth combinators preserve canonical bit order and carry-forward gnomon [90m(1.42402ms)[39m[39m
+▶ Polybius QuQuart Frame
+  [32m✔ has 25 cells (5x5) [90m(6.497033ms)[39m[39m
+  [32m✔ 1x1 is the o---o origin [90m(0.361694ms)[39m[39m
+  [32m✔ top rail has 4 low QuQuart cells [90m(0.38593ms)[39m[39m
+  [32m✔ left rail has 4 high QuQuart cells [90m(0.370759ms)[39m[39m
+  [32m✔ interior has 16 cells (4x4) [90m(0.34679ms)[39m[39m
+  [32m✔ interior cells are accessible via getInteriorCell [90m(0.499543ms)[39m[39m
+  [32m✔ getCell returns null for out-of-range [90m(0.385978ms)[39m[39m
+  [32m✔ origin is not a rail [90m(0.324124ms)[39m[39m
+  [32m✔ isOrigin is false for non-origin cells [90m(0.356292ms)[39m[39m
+  [32m✔ isRail is false for interior cells [90m(0.447504ms)[39m[39m
+  [32m✔ forEachCell provides correct classification [90m(0.435324ms)[39m[39m
+[32m✔ Polybius QuQuart Frame [90m(13.505103ms)[39m[39m
+[32m✔ OMI control frame encodes raw FS/GS/RS/US boundaries [90m(5.005761ms)[39m[39m
+[32m✔ MQTT topics preserve slash-bearing Git branch names [90m(1.636288ms)[39m[39m
+[32m✔ surrogate and suboptimal flags route through GED gauge lanes [90m(0.921398ms)[39m[39m
+[32m✔ GED mesh event emits a framed MQTT payload receipt [90m(3.540259ms)[39m[39m
+[32m✔ state vector descriptors are deterministic and sorted [90m(26.210371ms)[39m[39m
+[32m✔ network deploy plan is deterministic and NETWORK.omi parses [90m(16.00412ms)[39m[39m
+[32m✔ omi network plan CLI writes replay artifacts without mutating sources [90m(129.955158ms)[39m[39m
+[32m✔ QEMU clock governor maps Atomic Logic Clock to boot1 / 4y² [90m(3.87984ms)[39m[39m
+[32m✔ QEMU clock governor maps Spectral Observer Clock to bridge / 16xy [90m(0.913964ms)[39m[39m
+[32m✔ QEMU clock governor maps Cosmic Orbit Clock to boot0 / 60x² [90m(0.583743ms)[39m[39m
+[32m✔ QEMU clock governor rejects gated main-machine receipt acceptance [90m(0.608934ms)[39m[39m
+▶ Omi-Torus KMap
+  [32m✔ toGray2 maps indexes correctly [90m(5.411288ms)[39m[39m
+  [32m✔ fromGray2 inverts toGray2 [90m(0.350467ms)[39m[39m
+  [32m✔ torusIndex wraps Gray-code at 2-bit boundary [90m(0.254604ms)[39m[39m
+  [32m✔ torusCoord round-trips with torusIndex [90m(0.35213ms)[39m[39m
+  [32m✔ neighbors return 4 adjacent cells [90m(0.370409ms)[39m[39m
+  [32m✔ torus wraps left-to-right and top-to-bottom [90m(0.507093ms)[39m[39m
+  [32m✔ Gray neighbors differ by one bit [90m(0.541227ms)[39m[39m
+  [32m✔ wrapX and wrapY wrap within [0,3] [90m(0.316508ms)[39m[39m
+  [32m✔ detectHazard returns false for straight route [90m(0.496529ms)[39m[39m
+  [32m✔ detectHazard returns true for non-adjacent jump [90m(0.582504ms)[39m[39m
+  [32m✔ groupCells groups adjacent cells [90m(0.471773ms)[39m[39m
+  [32m✔ groupCells separates disconnected cells [90m(0.331876ms)[39m[39m
+  [32m✔ empty route has no hazard [90m(0.242098ms)[39m[39m
+[32m✔ Omi-Torus KMap [90m(12.574177ms)[39m[39m
+▶ UPOS Feature Tablets
+  [32m✔ NOUN maps to Q0.1.4 [90m(1.827798ms)[39m[39m
+  [32m✔ VERB maps to Q0.2.1 [90m(0.254938ms)[39m[39m
+  [32m✔ PUNCT maps to Q0.3.5 [90m(0.206892ms)[39m[39m
+  [32m✔ PronType maps to Q1.1.1 [90m(0.21488ms)[39m[39m
+  [32m✔ Motif maps to Q1.4.1 [90m(0.496533ms)[39m[39m
+  [32m✔ Tense maps to Q2.3.3 [90m(0.359612ms)[39m[39m
+  [32m✔ hyp maps to Q3.2.1 [90m(0.213403ms)[39m[39m
+  [32m✔ receipt maps to Q3.5.2 [90m(0.414598ms)[39m[39m
+  [32m✔ qCellToTag reverse-maps correctly [90m(0.344496ms)[39m[39m
+  [32m✔ encodeTag produces unique numeric code [90m(3.793051ms)[39m[39m
+  [32m✔ decodeTag reverses encodeTag [90m(0.463724ms)[39m[39m
+  [32m✔ formatQCell produces Q#.row.col string [90m(0.310263ms)[39m[39m
+  [32m✔ tagToQCell returns null for unknown tag [90m(0.205527ms)[39m[39m
+  [32m✔ qCellToTag returns null for out-of-range [90m(0.338005ms)[39m[39m
+  [32m✔ decodeTag returns null for invalid codes [90m(0.224379ms)[39m[39m
+  [32m✔ all Q0 tablet cells are reachable via tagToQCell [90m(0.340848ms)[39m[39m
+[32m✔ UPOS Feature Tablets [90m(12.642746ms)[39m[39m
+[32m✔ OMI parser accepts new streamlined format omi-ffff-127-0-0-1-... [90m(2.433042ms)[39m[39m
+[32m✔ OMI parser accepts old omi-8-ffff-... format for backward compatibility [90m(0.397432ms)[39m[39m
+[32m✔ OMI parser accepts deprecated localhost shorthand and emits canonical mapped form [90m(0.344332ms)[39m[39m
+[32m✔ OMI parser rejects malformed prefixes, octets, and bounded RS/US frames [90m(0.843598ms)[39m[39m
+[32m✔ UPOS projection follows Omi Porting partition without changing graph channels [90m(0.447499ms)[39m[39m
+[32m✔ atoms receive deterministic OMI addresses and data attributes [90m(32.500158ms)[39m[39m
+[32m✔ buildOmiIndex queries address prefixes and semantic routing keys [90m(13.409217ms)[39m[39m
+[32m✔ JSON Canvas nodes expose OMI metadata [90m(13.029809ms)[39m[39m
+[32m✔ makeOmiAddressForAtom is deterministic for the same atom [90m(0.654737ms)[39m[39m
+[32m✔ OmiOmicronCIDRKernel validates the 128-bit 8-hextet OMI-CIDR-v0 standard [90m(3.060653ms)[39m[39m
+[32m✔ OmiOmicronCIDRKernel validates the OMI-CIDR-v0 structural standard [90m(2.677643ms)[39m[39m
+[32m✔ 16-bit Delta Law executes an exact period 8 rotation orbit cycle matching Prime 73 fields [90m(2.118851ms)[39m[39m
+[32m✔ period 8 holds across multiple seeds [90m(0.405133ms)[39m[39m
+[32m✔ Central Inversion operator performs a fully reversible byte-level mirror flip [90m(3.354792ms)[39m[39m
+[32m✔ OmiCentralInversionKernel verifies unescaped token addresses carrying the inverse gate [90m(0.604222ms)[39m[39m
+[32m✔ parseInversionAddress returns false for token without inversion gate [90m(0.70438ms)[39m[39m
+[32m✔ parseInversionAddress returns error for empty token [90m(0.4056ms)[39m[39m
+[32m✔ parseInversionAddress CDR carries Float64Array when gate present [90m(0.694937ms)[39m[39m
+[32m✔ cons/car/cdr cell primitives work on inversion kernel [90m(0.319393ms)[39m[39m
+[32m✔ recognizes omi- as readable alias [90m(3.7237ms)[39m[39m
+[32m✔ recognizes OMI- as uppercase alias maps to uppercase Ο [90m(0.371511ms)[39m[39m
+[32m✔ recognizes -imo as readable mirror alias [90m(0.260161ms)[39m[39m
+[32m✔ recognizes ο as U+03BF operator [90m(1.247048ms)[39m[39m
+[32m✔ recognizes Ο as U+039F operator [90m(0.985931ms)[39m[39m
+[32m✔ classifies U+03BF as CHIRAL_CBOS [90m(0.531582ms)[39m[39m
+[32m✔ classifies U+039F as CARDINAL_CBOS [90m(0.379031ms)[39m[39m
+[32m✔ does not expose truthTable as primary diagnostic [90m(0.373472ms)[39m[39m
+[32m✔ keeps 0x7C00 and 0x7F00 as boot memory boundaries [90m(0.608827ms)[39m[39m
+[32m✔ evaluates mask order correctly via maskN notation [90m(1.347547ms)[39m[39m
+[32m✔ rejects non-canonical prefix [90m(0.371393ms)[39m[39m
+[32m✔ rejects non-local address subnet [90m(0.325331ms)[39m[39m
+[32m✔ decodePayloadBits produces Float32Array [90m(0.312223ms)[39m[39m
+[32m✔ OmiOmicronCIDRKernel class is exported and constructable [90m(0.248136ms)[39m[39m
+[32m✔ 16-bit Delta Law executes an exact period 8 rotation orbit [90m(3.944855ms)[39m[39m
+[32m✔ period 8 holds for different seeds [90m(0.605298ms)[39m[39m
+[32m✔ parseSexagesimalAddress accepts valid step15 at slot720 [90m(0.852765ms)[39m[39m
+[32m✔ parseSexagesimalAddress accepts valid step59 at slot120 [90m(0.50093ms)[39m[39m
+[32m✔ parseSexagesimalAddress rejects step65 (exceeds Hellenistic 59 limit) [90m(0.47921ms)[39m[39m
+[32m✔ parseSexagesimalAddress rejects slot999 (not a valid factorial stride) [90m(0.530344ms)[39m[39m
+[32m✔ parseSexagesimalAddress accepts stride 5040 as valid [90m(0.622232ms)[39m[39m
+[32m✔ parseSexagesimalAddress decodes base64 payload into Float32Array [90m(0.785225ms)[39m[39m
+[32m✔ parseSexagesimalAddress returns null cdr for short payload [90m(0.477192ms)[39m[39m
+[32m✔ parseSexagesimalAddress returns error for empty token [90m(1.344284ms)[39m[39m
+[32m✔ cons/car/cdr cell primitives work [90m(0.449575ms)[39m[39m
+[32m✔ KEYWORD_TO_IMO maps all six native keyword entries [90m(2.402516ms)[39m[39m
+[32m✔ IMO_OP_TO_KEYWORD round-trips correctly [90m(0.397214ms)[39m[39m
+[32m✔ IMO_CONTROLS defines FS GS RS US at expected code points [90m(0.300418ms)[39m[39m
+[32m✔ isNativeCharPlaneSafe accepts low ASCII and Unicode carriers [90m(0.609342ms)[39m[39m
+[32m✔ isNativeCharPlaneSafe rejects Latin letters and bytes 0x40-0x7E [90m(0.30479ms)[39m[39m
+[32m✔ isNativeCharPlaneSafeStrict matches isNativeCharPlaneSafe behavior [90m(0.402803ms)[39m[39m
+[32m✔ segmentToNative converts numeric segment value to decimal string [90m(0.276052ms)[39m[39m
+[32m✔ lowerRecordToImo lowers a MUST rule to native operator and decimal address [90m(1.585492ms)[39m[39m
+[32m✔ lowerRecordToImo lowers all compiler keyword operators [90m(0.927108ms)[39m[39m
+[32m✔ lowerRecordToImo preserves suffix in address [90m(0.636751ms)[39m[39m
+[32m✔ compileOmiParsed compiles all five .omi files without violations [90m(37.995851ms)[39m[39m
+[32m✔ compileOmiFile rejects source with malformed records [90m(1.242239ms)[39m[39m
+[32m✔ isNativeCharPlaneSafe rejects input with Latin letters [90m(0.231936ms)[39m[39m
+[32m✔ .imo output from RULES.omi contains only native-safe characters [90m(10.655354ms)[39m[39m
+[32m✔ .imo output from FACTS.omi contains only native-safe characters [90m(4.590644ms)[39m[39m
+[32m✔ dist/omi .imo stubs are regeneratable (no byte-identity check since dist is gitignored) [90m(17.68062ms)[39m[39m
+[32m✔ Source block records produce RS/US wrapped native address markers [90m(0.457753ms)[39m[39m
+[32m✔ Emoji in source blocks round-trips through parser-compiler pipeline [90m(0.603943ms)[39m[39m
+[32m✔ lowerOmiDocumentToImo produces correct line count for mixed source/non-source records [90m(0.484449ms)[39m[39m
+[32m✔ lowerRecordToImo output starts with ο and ends with Ο [90m(0.295181ms)[39m[39m
+[32m✔ source block records wrap with ο and Ο delimiters [90m(0.334395ms)[39m[39m
+[32m✔ Omicron delimiter / wire frame alignment hex values [90m(0.242712ms)[39m[39m
+[32m✔ all five compiled .imo files contain Omicron delimiters and reject Latin bytes [90m(17.834361ms)[39m[39m
+▶ OMI Portal: O-Expression Stream Reader (0x9F)
+  ▶ readOExpression — atoms
+    [32m✔ parses a symbol atom [90m(4.103369ms)[39m[39m
+    [32m✔ parses a number atom [90m(0.569545ms)[39m[39m
+    [32m✔ parses a negative number [90m(1.503961ms)[39m[39m
+    [32m✔ parses nil [90m(1.722238ms)[39m[39m
+    [32m✔ parses true/false [90m(0.303589ms)[39m[39m
+    [32m✔ preserves dotted atoms for declaration identifiers [90m(0.354623ms)[39m[39m
+    [32m✔ returns null for empty input [90m(0.301311ms)[39m[39m
+  [32m✔ readOExpression — atoms [90m(11.111553ms)[39m[39m
+  ▶ readOExpression — OMI addresses
+    [32m✔ parses a full omi- address [90m(1.113707ms)[39m[39m
+    [32m✔ parses a short omi- address [90m(0.866654ms)[39m[39m
+    [32m✔ parses an eight-segment ffff- address [90m(0.639024ms)[39m[39m
+    [32m✔ parses omi notation templates as aliases, not addresses [90m(1.18779ms)[39m[39m
+  [32m✔ readOExpression — OMI addresses [90m(4.568473ms)[39m[39m
+  ▶ readOExpression — emoji atoms
+    [32m✔ parses a single emoji [90m(0.601274ms)[39m[39m
+    [32m✔ parses an emoji in a list [90m(0.418842ms)[39m[39m
+  [32m✔ readOExpression — emoji atoms [90m(1.257864ms)[39m[39m
+  ▶ readOExpression — lists
+    [32m✔ parses an empty list [90m(0.365578ms)[39m[39m
+    [32m✔ parses a list of atoms [90m(0.322016ms)[39m[39m
+    [32m✔ parses nested lists [90m(0.286113ms)[39m[39m
+    [32m✔ parses a list with mixed types [90m(0.372172ms)[39m[39m
+    [32m✔ throws on unterminated list [90m(1.140101ms)[39m[39m
+  [32m✔ readOExpression — lists [90m(2.971606ms)[39m[39m
+  ▶ readOExpression — dotted pairs
+    [32m✔ parses a dotted pair (a . b) [90m(0.483823ms)[39m[39m
+    [32m✔ parses a dotted pair with list cdr [90m(0.282711ms)[39m[39m
+    [32m✔ keeps dotted atoms inside lists distinct from isolated pair dots [90m(0.386122ms)[39m[39m
+  [32m✔ readOExpression — dotted pairs [90m(1.489399ms)[39m[39m
+  ▶ readOExpression — quoted forms
+    [32m✔ parses a quoted atom [90m(0.435072ms)[39m[39m
+    [32m✔ parses a backtick-quoted form [90m(0.23813ms)[39m[39m
+    [32m✔ parses a quoted list [90m(0.255377ms)[39m[39m
+    [32m✔ throws on bare quote with no expression [90m(0.324138ms)[39m[39m
+  [32m✔ readOExpression — quoted forms [90m(1.635195ms)[39m[39m
+  ▶ readOExpression — strings
+    [32m✔ parses a quoted string [90m(0.583988ms)[39m[39m
+    [32m✔ parses a string with escape sequences [90m(0.314686ms)[39m[39m
+    [32m✔ throws on unterminated string [90m(0.354837ms)[39m[39m
+  [32m✔ readOExpression — strings [90m(1.601675ms)[39m[39m
+  ▶ readOExpression — source blocks
+    [32m✔ parses an RS/US source block reference [90m(0.469913ms)[39m[39m
+  [32m✔ readOExpression — source blocks [90m(0.654896ms)[39m[39m
+  ▶ readOExpression — trailing content
+    [32m✔ throws on unexpected trailing content [90m(0.362529ms)[39m[39m
+  [32m✔ readOExpression — trailing content [90m(0.551782ms)[39m[39m
+  ▶ readOExpressionList
+    [32m✔ reads multiple expressions [90m(0.755871ms)[39m[39m
+    [32m✔ reads expressions separated by newlines [90m(0.522571ms)[39m[39m
+    [32m✔ skips comments [90m(0.303232ms)[39m[39m
+    [32m✔ returns [] for empty input [90m(0.24325ms)[39m[39m
+  [32m✔ readOExpressionList [90m(2.247293ms)[39m[39m
+  ▶ readOExpressionAtom
+    [32m✔ reads a symbol atom [90m(1.587931ms)[39m[39m
+    [32m✔ reads a number atom [90m(0.271344ms)[39m[39m
+    [32m✔ throws on a list [90m(0.282551ms)[39m[39m
+  [32m✔ readOExpressionAtom [90m(2.427678ms)[39m[39m
+  ▶ readOExpressionPair
+    [32m✔ reads a dotted pair [90m(0.352116ms)[39m[39m
+    [32m✔ throws without parentheses [90m(0.225626ms)[39m[39m
+  [32m✔ readOExpressionPair [90m(0.756556ms)[39m[39m
+  ▶ readQuotedForm
+    [32m✔ reads a quoted form [90m(0.299671ms)[39m[39m
+    [32m✔ throws on non-quoted input [90m(0.234104ms)[39m[39m
+  [32m✔ readQuotedForm [90m(0.746978ms)[39m[39m
+  ▶ readImoRecord
+    [32m✔ parses a MUST record [90m(1.847111ms)[39m[39m
+    [32m✔ parses a FACT record [90m(0.444216ms)[39m[39m
+    [32m✔ parses a CLOSE record [90m(0.213117ms)[39m[39m
+    [32m✔ parses a COMBINE record [90m(2.532976ms)[39m[39m
+    [32m✔ parses a CONS record [90m(0.276313ms)[39m[39m
+    [32m✔ parses a source block record [90m(0.160793ms)[39m[39m
+    [32m✔ throws on invalid format [90m(0.268211ms)[39m[39m
+  [32m✔ readImoRecord [90m(6.267196ms)[39m[39m
+  ▶ readImoPayloadBlock
+    [32m✔ parses multiple records [90m(0.399984ms)[39m[39m
+    [32m✔ attaches source blocks to preceding records [90m(0.266292ms)[39m[39m
+    [32m✔ returns [] for empty input [90m(0.162102ms)[39m[39m
+  [32m✔ readImoPayloadBlock [90m(1.070663ms)[39m[39m
+  ▶ isEmojiAtom
+    [32m✔ detects a single emoji as true [90m(0.438229ms)[39m[39m
+    [32m✔ detects a text emoji as true [90m(0.233586ms)[39m[39m
+    [32m✔ returns false for plain text [90m(0.220979ms)[39m[39m
+    [32m✔ returns false for numbers [90m(0.234228ms)[39m[39m
+    [32m✔ returns false for empty string [90m(0.144454ms)[39m[39m
+  [32m✔ isEmojiAtom [90m(1.559204ms)[39m[39m
+  ▶ isOmiAddressAtom
+    [32m✔ detects a full OMI address [90m(0.262627ms)[39m[39m
+    [32m✔ detects an eight-segment ffff- address [90m(0.157521ms)[39m[39m
+    [32m✔ detects a short OMI address [90m(0.149795ms)[39m[39m
+    [32m✔ returns false for plain atom [90m(0.123521ms)[39m[39m
+    [32m✔ returns false for numbers [90m(0.120647ms)[39m[39m
+    [32m✔ does not treat notation aliases as validated addresses [90m(0.22225ms)[39m[39m
+  [32m✔ isOmiAddressAtom [90m(1.422348ms)[39m[39m
+  ▶ isOmiAddressAtom — @ lens syntax (0xAD)
+    [32m✔ detects address with /@60 lens [90m(0.235035ms)[39m[39m
+    [32m✔ detects address with stacked lenses [90m(0.149556ms)[39m[39m
+    [32m✔ detects address with @ lens without CIDR [90m(0.166109ms)[39m[39m
+    [32m✔ detects address with all lens types [90m(0.167563ms)[39m[39m
+    [32m✔ rejects bare / without number [90m(0.158361ms)[39m[39m
+  [32m✔ isOmiAddressAtom — @ lens syntax (0xAD) [90m(1.235257ms)[39m[39m
+  ▶ integration: O-expression with OMI addresses
+    [32m✔ parses an O-expression with embedded OMI address [90m(0.310681ms)[39m[39m
+    [32m✔ parses a nested structure matching the user example [90m(0.228714ms)[39m[39m
+  [32m✔ integration: O-expression with OMI addresses [90m(0.736917ms)[39m[39m
+  ▶ integration: IMO payload block round-trip
+    [32m✔ reads a RULES.imo-style block [90m(0.614453ms)[39m[39m
+    [32m✔ reads a CLOSURES.imo-style block with source attachment [90m(0.260315ms)[39m[39m
+  [32m✔ integration: IMO payload block round-trip [90m(1.063597ms)[39m[39m
+  ▶ edge cases
+    [32m✔ handles multiple spaces between expressions [90m(0.295163ms)[39m[39m
+    [32m✔ handles newlines in lists [90m(0.230391ms)[39m[39m
+    [32m✔ skips line comments [90m(0.211763ms)[39m[39m
+    [32m✔ handles nested quoting [90m(0.234644ms)[39m[39m
+    [32m✔ handles deep nesting [90m(0.247523ms)[39m[39m
+    [32m✔ returns null for null/undefined input [90m(0.211587ms)[39m[39m
+  [32m✔ edge cases [90m(2.800913ms)[39m[39m
+  ▶ error messages
+    [32m✔ includes line and column info in errors [90m(0.39047ms)[39m[39m
+  [32m✔ error messages [90m(0.537055ms)[39m[39m
+[32m✔ OMI Portal: O-Expression Stream Reader (0x9F) [90m(54.424405ms)[39m[39m
+[32m✔ Open Portal: engine accurately intercepts valid image files and extracts properties [90m(3.292228ms)[39m[39m
+[32m✔ Open Portal: evicts dropped files that break the maximum coordinate dimensions [90m(0.334478ms)[39m[39m
+[32m✔ Open Portal: rejects null frames with structural eviction [90m(0.194435ms)[39m[39m
+[32m✔ Open Portal: evicts malformed finder alignment on dropped assets [90m(0.307281ms)[39m[39m
+[32m✔ Open Portal: routes video stream type to green preset (4) [90m(0.271576ms)[39m[39m
+[32m✔ Open Portal: zero or negative dimensions trigger overflow eviction [90m(0.331367ms)[39m[39m
+[32m✔ DOM Framing: NAT64 prefix constant is well-known [90m(3.897802ms)[39m[39m
+[32m✔ DOM Framing: extracts embedded IPv4 from 16-bit segments [90m(1.127354ms)[39m[39m
+[32m✔ DOM Framing: aligns with bare prefix without omi- prefix [90m(0.378903ms)[39m[39m
+[32m✔ DOM Framing: evicts non-aligned iframe id [90m(0.391781ms)[39m[39m
+[32m✔ DOM Framing: evicts structurally invalid frames [90m(0.362242ms)[39m[39m
+[32m✔ DOM Framing: CLA adder fires across embedded octets [90m(0.411464ms)[39m[39m
+[Virtio Load Test] Initializing multi-channel guest OS interrupt simulation (1000ms)...
+
+[Execution Analysis Output] Total Guest OS Interrupts Handled: 2625
+[Execution Analysis Output] Total Detected Memory Overwrites:   42
+[Execution Analysis Output] Calculated Core Degradation Ratio:   1.6000%
+ -> [Pass] Factorial address space structure safely isolated competing guest operating system drivers.
+[32m✔ SAB factorial ring maintains data integrity under concurrent virtio/NBD emulation load [90m(1004.738806ms)[39m[39m
+[32m✔ OmiPlaceValueInterpreter constructs with SAB [90m(2.947924ms)[39m[39m
+[32m✔ constructor throws on undersized SAB [90m(0.665889ms)[39m[39m
+[32m✔ evaluateMaskDegree returns CONSTANT_US for no trigraph [90m(0.464208ms)[39m[39m
+[32m✔ evaluateMaskDegree returns LINEAR_RS for one trigraph [90m(0.275768ms)[39m[39m
+[32m✔ evaluateMaskDegree returns QUADRATIC_GS for two trigraphs [90m(0.312829ms)[39m[39m
+[32m✔ evaluateMaskDegree returns CUBIC_FS for three trigraphs [90m(0.325416ms)[39m[39m
+[32m✔ evaluateMaskDegree rejects token with tally > 3 [90m(0.274506ms)[39m[39m
+[32m✔ evaluateMaskDegree rejects non-root prefix [90m(0.248546ms)[39m[39m
+[32m✔ evaluateMaskDegree reads Float64 value from SAB slot [90m(0.473847ms)[39m[39m
+[32m✔ evaluateMaskDegree returns zero for unwritten slot [90m(0.546517ms)[39m[39m
+[32m✔ evaluateMaskDegree uses slot 0 when no slot token found [90m(0.281749ms)[39m[39m
+[32m✔ cons / car / cdr lisp primitives [90m(0.17232ms)[39m[39m
+[32m✔ rail map defines six selectors [90m(1.295866ms)[39m[39m
+[32m✔ railByte maps selectors to bytes [90m(0.373944ms)[39m[39m
+[32m✔ railByte rejects invalid selector [90m(1.930533ms)[39m[39m
+[32m✔ word16 combines two rails [90m(0.272355ms)[39m[39m
+[32m✔ word16 returns unsigned uint16 [90m(0.424104ms)[39m[39m
+[32m✔ interpretWord16 round-trips valid values [90m(0.583575ms)[39m[39m
+[32m✔ interpretWord16 returns null for unknown byte [90m(0.223301ms)[39m[39m
+[32m✔ Polyhedral Core: routes open class NOUN to cube face with cyan preset [90m(2.993891ms)[39m[39m
+[32m✔ Polyhedral Core: routes PUNCT to centroid pointer with yellow preset [90m(0.346761ms)[39m[39m
+[32m✔ Chromatic Vertex: NOUN maps to red cube vertex [90m(0.289474ms)[39m[39m
+[32m✔ Chromatic Vertex: AUX maps to pink blended profile [90m(0.250734ms)[39m[39m
+[32m✔ Chromatic Vertex: unknown tag returns invalid [90m(0.280185ms)[39m[39m
+[32m✔ polytope buffer is 5040 Float64 slots = 40320 bytes [90m(1.476763ms)[39m[39m
+[32m✔ pack4D / unpack4D round-trips coordinates [90m(0.326828ms)[39m[39m
+[32m✔ pack4D clamps to Int16 range [90m(0.191385ms)[39m[39m
+[32m✔ factorialStride returns correct values [90m(0.667102ms)[39m[39m
+[32m✔ tickFactorials decomposes tick into factorial frames [90m(0.414984ms)[39m[39m
+[32m✔ tickFactorials wraps at 5040 [90m(0.200999ms)[39m[39m
+[32m✔ registerTick stores tick modulo 5040 at slot 0 [90m(0.238906ms)[39m[39m
+[32m✔ storeTickValue and readTickValue round-trip at correct slot [90m(0.270209ms)[39m[39m
+[32m✔ polytopeWindow provides strided access [90m(0.46289ms)[39m[39m
+[32m✔ polytopeWindow slice returns subarray [90m(0.62062ms)[39m[39m
+[32m✔ polytopeWindow fill writes multiple values [90m(0.340763ms)[39m[39m
+[32m✔ POLYTOPE_MAP defines correct polytope geometries [90m(0.212959ms)[39m[39m
+[32m✔ FACTORIAL_STRIDES describes each stride level [90m(0.139061ms)[39m[39m
+[32m✔ OmiPolytopeFactorialBuffer allocates 5040 slots [90m(0.252741ms)[39m[39m
+[32m✔ OmiPolytopeFactorialBuffer.resolveFactorialAddress maps tick 744 [90m(0.40003ms)[39m[39m
+[32m✔ OmiPolytopeFactorialBuffer zero-copy write/read round-trip [90m(0.36069ms)[39m[39m
+[32m✔ OmiPolytopeFactorialBuffer cons/car/cdr cell primitives [90m(0.297723ms)[39m[39m
+[32m✔ OmiPolytopeFactorialBuffer evaluateGCLifecycle fires 720 sweep [90m(0.519381ms)[39m[39m
+[32m✔ unpackPolytopePoints returns Float32Array of 3*stride values [90m(5.501467ms)[39m[39m
+[32m✔ unpackPolytopePoints respects page offset [90m(2.851561ms)[39m[39m
+[32m✔ createPolytopeHUD returns tick decomposition [90m(0.531693ms)[39m[39m
+[32m✔ createPolytopeHUD wraps at 5040 [90m(0.273542ms)[39m[39m
+[32m✔ PAGE_NAMES has 7 entries [90m(0.298058ms)[39m[39m
+[32m✔ Polytopic OSI: identifies 1D circumscribed S^0 pre-kernel sphere shell [90m(1.714974ms)[39m[39m
+[32m✔ Polytopic OSI: evicts inputs outside circumscribed sphere fence [90m(0.300934ms)[39m[39m
+[32m✔ Polytopic Neural: expands n=6 truth table to 64 rows [90m(1.854206ms)[39m[39m
+[32m✔ Polytopic Neural: projects 5-Cell simplex from truth table [90m(0.47019ms)[39m[39m
+[32m✔ Polytopic Neural: projects 24-Cell self-dual from truth table [90m(0.335615ms)[39m[39m
+[32m✔ Polytopic Neural: chromatic bridge maps half-precision preset [90m(0.417645ms)[39m[39m
+[32m✔ Polytopic Neural: chromatic bridge maps octuple-precision preset [90m(0.236306ms)[39m[39m
+[32m✔ Polytopic Neural: projects 600-Cell vertices from truth table [90m(0.45056ms)[39m[39m
+[32m✔ Polytopic Neural: verifies snub passes for 5-cell projection [90m(0.47461ms)[39m[39m
+[32m✔ Polytopic Neural: full evaluatePolytopic returns complete result [90m(0.567753ms)[39m[39m
+[32m✔ Polytopic Neural: evicts structurally invalid frames [90m(0.41739ms)[39m[39m
+[32m✔ Polytopic Core: routes UPOS over 5-Cell simplex with cyan preset [90m(1.598225ms)[39m[39m
+[32m✔ Polytopic Core: routes synset over 120-Cell dodecaplex with purple preset [90m(1.516599ms)[39m[39m
+[32m✔ pre-letter window spans 0x2000 through 0x2fff [90m(1.621988ms)[39m[39m
+[32m✔ nibble card table defines sixteen interpreter cards [90m(0.42957ms)[39m[39m
+[32m✔ decodeNibble maps sealed gauge cards [90m(1.203919ms)[39m[39m
+[32m✔ decodeNibble maps projective plane rails and bridges [90m(0.297307ms)[39m[39m
+[32m✔ decodeNibble maps open gauge cards and preserves 0xc as openGauge(FS) [90m(0.262392ms)[39m[39m
+[32m✔ pre-letter byte encoder maps opcode to page byte [90m(0.368474ms)[39m[39m
+[32m✔ pre-letter byte decoder returns page opcode and card [90m(0.384018ms)[39m[39m
+[32m✔ pre-letter byte decoder rejects non-window bytes [90m(0.651461ms)[39m[39m
+[32m✔ pre-letter word16 encoder preserves page and carry boundaries [90m(0.304825ms)[39m[39m
+[32m✔ pre-letter word16 decoder returns high-byte page low-byte carry and card [90m(0.529771ms)[39m[39m
+[32m✔ pre-letter word16 decoder rejects words outside 0x2000..0x2fff [90m(0.41542ms)[39m[39m
+[32m✔ pre-letter encoders reject invalid opcode or carry values [90m(0.282148ms)[39m[39m
+[32m✔ Preset Color: encoder translates 6-center nonogram overlaps directly to canvas preset IDs [90m(5.511867ms)[39m[39m
+[32m✔ Preset Color: maps negative resistance states directly to the purple preset ID [90m(0.356853ms)[39m[39m
+▶ principal-domain
+  [32m✔ factorOmiPointer parses canonical address [90m(1.719437ms)[39m[39m
+  [32m✔ factorOmiPointer returns null for invalid input [90m(0.625509ms)[39m[39m
+  [32m✔ principalGenerator returns one generator for same-base records [90m(0.512018ms)[39m[39m
+  [32m✔ principalGenerator handles empty records [90m(0.30288ms)[39m[39m
+  [32m✔ generatedIdeal filters by generator prefix [90m(0.486782ms)[39m[39m
+  [32m✔ commonGenerator returns lane type for same-LL pointers [90m(0.435951ms)[39m[39m
+  [32m✔ commonGenerator returns prefix type for different-LL pointers [90m(0.373457ms)[39m[39m
+  [32m✔ commonGenerator returns null for invalid inputs [90m(0.206354ms)[39m[39m
+  [32m✔ isPrincipalRegion true for single-generator set [90m(0.342478ms)[39m[39m
+  [32m✔ isPrincipalRegion true for single record [90m(0.430814ms)[39m[39m
+  [32m✔ isPrincipalRegion false for empty set [90m(0.225028ms)[39m[39m
+  [32m✔ factorOmiPointer handles fallback format [90m(0.176808ms)[39m[39m
+[32m✔ principal-domain [90m(9.563317ms)[39m[39m
+[32m✔ Inference Core: Engine accurately unifies direct identity facts from memory slots [90m(4.20195ms)[39m[39m
+[32m✔ Inference Core: Engine resolves transitive Horn clauses inside the Fano bounds [90m(0.436194ms)[39m[39m
+[32m✔ Inference Core: Empty ring returns non-unifiable for any query [90m(1.827703ms)[39m[39m
+[32m✔ Inference Core: Invalid LL outside Fano range returns false [90m(0.393588ms)[39m[39m
+[32m✔ Inference Core: Multiple facts stored, correct match found [90m(0.491012ms)[39m[39m
+[32m✔ Prolog WordNet fact parser handles synset, gloss, and relation facts [90m(3.788114ms)[39m[39m
+[32m✔ Prolog WordNet broker looks up vendor facts and relation targets [90m(2283.40356ms)[39m[39m
+[32m✔ Prolog WordNet broker can feed existing stable centroid compilation [90m(1883.552075ms)[39m[39m
+[32m✔ OMI Fano Prolog token parses, formats, and serializes to a 16-byte packet [90m(1.36989ms)[39m[39m
+[32m✔ OMI Fano Prolog token rejects malformed routing fields [90m(0.814746ms)[39m[39m
+▶ OMI Portal: Proxy Event Connector (0xA0)
+  ▶ constructor and config
+    [32m✔ creates a connector with default config [90m(1.767085ms)[39m[39m
+    [32m✔ accepts custom config [90m(0.402578ms)[39m[39m
+  [32m✔ constructor and config [90m(4.118516ms)[39m[39m
+  ▶ onEvent with valid .imo payload
+    [32m✔ parses a single record [90m(3.304261ms)[39m[39m
+    [32m✔ parses multiple records [90m(0.725953ms)[39m[39m
+    [32m✔ attaches source address when present [90m(0.424122ms)[39m[39m
+  [32m✔ onEvent with valid .imo payload [90m(4.993093ms)[39m[39m
+  ▶ onEvent with malformed input
+    [32m✔ handles empty payload gracefully [90m(1.610267ms)[39m[39m
+    [32m✔ handles whitespace-only payload [90m(0.823787ms)[39m[39m
+    [32m✔ handles invalid .imo format [90m(0.706729ms)[39m[39m
+  [32m✔ onEvent with malformed input [90m(4.05955ms)[39m[39m
+  ▶ event listener system
+    [32m✔ emits imo-record events [90m(0.92083ms)[39m[39m
+    [32m✔ emits malformed events on bad input [90m(0.674731ms)[39m[39m
+    [32m✔ can remove event listeners [90m(0.820204ms)[39m[39m
+    [32m✔ rejects unsupported event types [90m(0.600005ms)[39m[39m
+  [32m✔ event listener system [90m(3.434743ms)[39m[39m
+  ▶ SSE subscription
+    [32m✔ subscribes to an object with onEvent method [90m(0.713098ms)[39m[39m
+    [32m✔ subscribes to an EventSource-like object [90m(0.457403ms)[39m[39m
+    [32m✔ throws for unknown source type [90m(0.795664ms)[39m[39m
+  [32m✔ SSE subscription [90m(2.25947ms)[39m[39m
+  ▶ reset
+    [32m✔ clears all state [90m(0.470393ms)[39m[39m
+  [32m✔ reset [90m(0.614967ms)[39m[39m
+  ▶ integration with reader
+    [32m✔ reads actual .imo file content [90m(0.349151ms)[39m[39m
+  [32m✔ integration with reader [90m(0.485354ms)[39m[39m
+[32m✔ OMI Portal: Proxy Event Connector (0xA0) [90m(22.069735ms)[39m[39m
+[32m✔ Substrate elements use pure IPv6-CIDR notation with zero mixed keywords [90m(13.227771ms)[39m[39m
+[32m✔ Pure IPv6 CSSOM selectors reference hex locations only [90m(6.960383ms)[39m[39m
+[32m✔ Arithmetic hex segment decoding in JS derives parameters correctly [90m(3.504031ms)[39m[39m
+[32m✔ All DOM IDs have corresponding data-omi-address match [90m(3.308292ms)[39m[39m
+[32m✔ Hard-reset handler clears all [id^='omi-'] elements [90m(1.495686ms)[39m[39m
+[32m✔ QEMU Clock Core: engine accurately scales 2^-32 integer units to nanoseconds [90m(2.265542ms)[39m[39m
+[32m✔ QEMU Clock Core: catches gated zero states and flags disabled channels to warning layouts [90m(0.765284ms)[39m[39m
+[32m✔ QEMU Mesh: coordinator correctly creates a zero-allocation raw contiguous binary file image [90m(10.915618ms)[39m[39m
+[32m✔ QEMU Mesh: multi-variant tracking configurations array initializes with clean system constants [90m(0.315342ms)[39m[39m
+[32m✔ QEMU Mesh: getGuestSummary returns correct shape without active guests [90m(1.016539ms)[39m[39m
+[32m✔ QEMU Mesh: attachKernelNbd throws when not running as root [90m(4615.514333ms)[39m[39m
+[32m✔ QEMU Mesh: cleanMeshTopology runs without error as no-op [90m(65.695799ms)[39m[39m
+[32m✔ QEMU Mesh: storage image path defaults to dist/shared-timeline.img [90m(0.294483ms)[39m[39m
+[32m✔ QEMU Mesh: disk image allocation uses Buffer.alloc with correct byte count [90m(12.232507ms)[39m[39m
+[31m✖ QEMU Mesh: bootArchitectureVariants adds two guest records [90m(31.522778ms)[39m[39m
+[34mℹ Error: Test "QEMU Mesh: bootArchitectureVariants adds two guest records" at test/qemu-mesh.test.js:63:1 generated asynchronous activity after the test ended. This activity created the error "Error: spawn qemu-system-aarch64 ENOENT" and would have caused the test to fail, but instead triggered an uncaughtException event.[39m
+[32m✔ Quadratic Lexer: valid canonical token passes [90m(3.10736ms)[39m[39m
+[32m✔ Quadratic Lexer: valid token with different LL yields zero [90m(0.314338ms)[39m[39m
+[32m✔ Quadratic Lexer: LL coherence breach — L4 differs [90m(0.255251ms)[39m[39m
+[32m✔ Quadratic Lexer: LL coherence breach — L0 differs [90m(0.305696ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S1 chiral delimiter [90m(0.254343ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S6 cardinal delimiter [90m(0.181111ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S0 low byte nonzero [90m(0.240423ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S3 high byte wrong [90m(0.213227ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S4 high byte wrong [90m(0.330942ms)[39m[39m
+[32m✔ Quadratic Lexer: constant corruption — S7 low byte not 0xFF [90m(0.462369ms)[39m[39m
+[32m✔ Quadratic Lexer: free variables NNNN and MMMM pass through unpenalized [90m(0.255618ms)[39m[39m
+[32m✔ Quadratic Lexer: all-zero LL (0x00) is valid with matching constants [90m(0.219838ms)[39m[39m
+[32m✔ Quadratic Lexer: max LL (0xFF) is valid with matching constants [90m(0.261997ms)[39m[39m
+[32m✔ Quadratic Lexer: parseOmiAddressToSegments rejects null input [90m(0.193888ms)[39m[39m
+[32m✔ Quadratic Lexer: parseOmiAddressToSegments rejects non-omi prefix [90m(0.3069ms)[39m[39m
+[32m✔ Quadratic Lexer: makeOmiAddress round-trips correctly [90m(1.143335ms)[39m[39m
+[32m✔ Quadratic Lexer: SEGMENT_LAYOUT has 8 entries [90m(0.196956ms)[39m[39m
+[32m✔ Quadratic Lexer: verifyInstructionLexer returns false for null/empty segments [90m(0.15816ms)[39m[39m
+[32m✔ QuquartMachine.evaluateReceiptReplayStability returns same receiptHash on deterministic replay [90m(3.19756ms)[39m[39m
+[32m✔ QuquartMachine.evaluateReceiptReplayStability is stable with constant operator [90m(0.43977ms)[39m[39m
+[32m✔ changed notationMask produces different receiptHash [90m(0.529608ms)[39m[39m
+[32m✔ changed activeReading produces different receiptHash [90m(0.301245ms)[39m[39m
+[32m✔ changed result produces different receiptHash [90m(0.396761ms)[39m[39m
+[32m✔ evaluateCandidateReadings returns only valid lenses [90m(0.602238ms)[39m[39m
+[32m✔ knownSurface ring1024 returns correct dimensions [90m(0.550268ms)[39m[39m
+[32m✔ knownSurface bitboard65536 returns correct dimensions [90m(0.28537ms)[39m[39m
+[32m✔ knownSurface nibble returns 4^2 [90m(0.701532ms)[39m[39m
+[32m✔ knownSurface ascii64 returns 4^3 [90m(0.426945ms)[39m[39m
+[32m✔ knownSurface byte returns 4^4 [90m(0.376293ms)[39m[39m
+[32m✔ getSurfaceDimensions exact even bitWidth [90m(0.338643ms)[39m[39m
+[32m✔ getSurfaceDimensions odd bitWidth embeds into next ququart boundary [90m(0.262794ms)[39m[39m
+[32m✔ getSurfaceDimensions large bitWidth with BigInt safety [90m(2.305684ms)[39m[39m
+[32m✔ empty candidate recovery fails cleanly [90m(0.394384ms)[39m[39m
+[32m✔ invalid reconstructed candidate fails validation [90m(1.371043ms)[39m[39m
+[32m✔ valid reconstructed candidate completes the loop [90m(0.260575ms)[39m[39m
+[32m✔ formatKetBoundary produces expected string [90m(0.519122ms)[39m[39m
+[32m✔ formatKetBoundary handles unreceipted register [90m(0.533381ms)[39m[39m
+[32m✔ InterpretiveState enum values [90m(0.172986ms)[39m[39m
+[32m✔ makeReceipt produces stable five-field receipt [90m(0.595055ms)[39m[39m
+[32m✔ mix64 is deterministic [90m(0.212876ms)[39m[39m
+[32m✔ radix suffix processes Chiron delimiter as stream opener [90m(25.245725ms)[39m[39m
+[32m✔ radix suffix processes Cardinal delimiter as record terminator [90m(15.969021ms)[39m[39m
+[32m✔ radix suffix rejects standard base64 characters after delimiter removal [90m(9.383403ms)[39m[39m
+[32m✔ radix suffix requires compliant base address and omicron delimiter [90m(4.112173ms)[39m[39m
+[32m✔ axiomatic file loader accepts /96 suffix rule rows [90m(3.109715ms)[39m[39m
+[32m✔ reciprocal pairs 1-2 and 2-1 evaluate to the same slot [90m(3.468215ms)[39m[39m
+[32m✔ reciprocal pairs 10-1 and 1-10 evaluate to the same slot [90m(2.010907ms)[39m[39m
+[32m✔ clock step suffix maps to sequential timeline slot [90m(0.455779ms)[39m[39m
+[32m✔ 5040 suffix maps to slot zero and marks hard reset fence [90m(0.838588ms)[39m[39m
+[32m✔ projective suffix rejects malformed values [90m(0.649924ms)[39m[39m
+[32m✔ Research assimilation: 240 bridge and factorial tower claims are canonicalized outside _temp [90m(12.346376ms)[39m[39m
+[32m✔ Research assimilation: hidden five and four-fold selector are grounded in RULES and FACTS [90m(3.522063ms)[39m[39m
+[32m✔ Research assimilation: canvas color remains deterministic software state, not physics claim [90m(4.877819ms)[39m[39m
+[32m✔ Research assimilation: symbolic character carriers are projection-only canon [90m(4.84588ms)[39m[39m
+[32m✔ Research assimilation: Q_frame validates and Q_xy projects as separate quadratic laws [90m(6.258407ms)[39m[39m
+[32m✔ Research assimilation: MCRSGSP provenance maps only to implemented distributed carriers [90m(3.500703ms)[39m[39m
+[32m✔ Research assimilation: OMI doctrine keeps rewrite register boundary explicit [90m(2.046955ms)[39m[39m
+▶ RingIndexer: slot packing
+  [32m✔ packReceipt encodes truth row with steps and provenance [90m(1.2988ms)[39m[39m
+  [32m✔ packReceipt clamps steps to MAX_VALID_STEPS [90m(0.237048ms)[39m[39m
+  [32m✔ unpackSlot extracts zero-provenance receipt [90m(0.212139ms)[39m[39m
+[32m✔ RingIndexer: slot packing [90m(4.737652ms)[39m[39m
+▶ RingIndexer: construction and slot I/O
+  [32m✔ constructs with default 5040 slots [90m(0.541542ms)[39m[39m
+  [32m✔ constructs from existing SharedArrayBuffer [90m(0.389443ms)[39m[39m
+  [32m✔ readSlot returns 0n for unwritten slot [90m(0.439045ms)[39m[39m
+  [32m✔ writeSlot stores and returns the index [90m(0.372549ms)[39m[39m
+  [32m✔ writeSlot wraps modulo 5040 [90m(0.243639ms)[39m[39m
+  [32m✔ readSlot wraps negative index [90m(0.337926ms)[39m[39m
+[32m✔ RingIndexer: construction and slot I/O [90m(3.047611ms)[39m[39m
+▶ RingIndexer: advance and cursor
+  [32m✔ advance moves cursor by steps and stores receipt [90m(0.613463ms)[39m[39m
+  [32m✔ advance wraps around at 5040 boundary [90m(0.248677ms)[39m[39m
+  [32m✔ multiple advances form a receipt chain [90m(0.513672ms)[39m[39m
+  [32m✔ getReceiptChain returns at most 7 entries by default [90m(0.326957ms)[39m[39m
+[32m✔ RingIndexer: advance and cursor [90m(1.965879ms)[39m[39m
+▶ RingIndexer: atomic I/O
+  [32m✔ atomicWrite and atomicRead round-trip [90m(0.201426ms)[39m[39m
+[32m✔ RingIndexer: atomic I/O [90m(0.28095ms)[39m[39m
+▶ RingIndexer: boot genesis
+  [32m✔ bootstrapGenesis writes genesis truth row at boot slot [90m(0.446271ms)[39m[39m
+  [32m✔ bootstrapGenesis sets cursor to boot slot [90m(0.213348ms)[39m[39m
+  [32m✔ createRingIndexer returns OmiRingIndexer instance [90m(0.171317ms)[39m[39m
+[32m✔ RingIndexer: boot genesis [90m(1.012618ms)[39m[39m
+▶ RingIndexer: getFactorials
+  [32m✔ returns tick factorial decomposition [90m(0.28359ms)[39m[39m
+  [32m✔ tick fact decomposition matches cursor [90m(0.140372ms)[39m[39m
+[32m✔ RingIndexer: getFactorials [90m(0.524661ms)[39m[39m
+▶ RingIndexer: rewinding
+  [32m✔ rewind sets cursor and returns the index [90m(0.194723ms)[39m[39m
+  [32m✔ rewind handles modulo wrap [90m(0.148649ms)[39m[39m
+  [32m✔ rewind to negative index wraps [90m(0.139602ms)[39m[39m
+[32m✔ RingIndexer: rewinding [90m(0.604945ms)[39m[39m
+▶ RingIndexer: dividend space
+  [32m✔ provenance tag occupies bits 63-48 [90m(0.207372ms)[39m[39m
+  [32m✔ steps occupies bits 47-40, leaving 24-bit dividend total [90m(0.112518ms)[39m[39m
+[32m✔ RingIndexer: dividend space [90m(0.460856ms)[39m[39m
+▶ RingIndexer: atomic CAS cursor
+  [32m✔ two sequential atomicAdvance calls produce distinct slots [90m(0.323542ms)[39m[39m
+  [32m✔ atomicAdvance CAS wins serialized ordering [90m(0.185518ms)[39m[39m
+  [32m✔ atomicAdvance wraps at 5040 [90m(0.15361ms)[39m[39m
+  [32m✔ cursor is disjoint from ring buffer slots [90m(0.182143ms)[39m[39m
+  [32m✔ setter position updates cursor [90m(0.238894ms)[39m[39m
+  [32m✔ CURSOR_ATOMIC_BYTES is 8 [90m(0.108445ms)[39m[39m
+[32m✔ RingIndexer: atomic CAS cursor [90m(1.444536ms)[39m[39m
+▶ RingIndexer: epoch overwrite detection
+  [32m✔ epoch starts at 0 [90m(0.254188ms)[39m[39m
+  [32m✔ epoch increments on wraparound via advance [90m(0.163531ms)[39m[39m
+  [32m✔ epoch increments only once per wraparound [90m(0.160212ms)[39m[39m
+  [32m✔ epoch increments on wraparound via atomicAdvance [90m(0.150137ms)[39m[39m
+  [32m✔ epoch stored in provenance when no tag given [90m(0.154541ms)[39m[39m
+  [32m✔ caller provenance tag overrides epoch [90m(0.188585ms)[39m[39m
+  [32m✔ multiple epochs distinguishable in receipt chain [90m(3.670685ms)[39m[39m
+  [32m✔ epoch stored in receipt survives round-trip across wrap [90m(0.494786ms)[39m[39m
+[32m✔ RingIndexer: epoch overwrite detection [90m(5.630842ms)[39m[39m
+▶ RingIndexer: epoch overwrite stress (OW-1 through OW-5)
+  [32m✔ OW-1: existing slot provenance epoch readable [90m(0.417427ms)[39m[39m
+  [32m✔ OW-2: cold overwrite overwrites stale epoch slot silently [90m(0.324199ms)[39m[39m
+  [32m✔ OW-3: warm overwrite rejection (same epoch, same slot) [90m(0.592789ms)[39m[39m
+  [32m✔ OW-4: stale overwrite — epoch > current should not occur normally [90m(0.427725ms)[39m[39m
+  [32m✔ OW-5: CAS serialization under sequential load preserves epoch [90m(0.453954ms)[39m[39m
+  [32m✔ wraparound stress: 504 single-step advances cover full ring [90m(2.136677ms)[39m[39m
+  [32m✔ epoch provenance tag encodes epoch in upper 8 bits of 16-bit field [90m(0.350733ms)[39m[39m
+[32m✔ RingIndexer: epoch overwrite stress (OW-1 through OW-5) [90m(6.048359ms)[39m[39m
+[32m✔ composeRRGGBBAA and parseRRGGBBAA round-trip RGB body and AA byte [90m(2.331702ms)[39m[39m
+[32m✔ encodePreBootAddress emits valid eight-segment router addresses [90m(0.71736ms)[39m[39m
+[32m✔ POS seeds map AA low byte 0x01 through 0x11 in existing POS order [90m(1.065985ms)[39m[39m
+[32m✔ feature seeds route through AA high byte distinctly from POS low-byte attachments [90m(0.842845ms)[39m[39m
+[32m✔ WordNet-Prolog seeds preserve synset centroid identity and bridge-only authority [90m(9.618999ms)[39m[39m
+[32m✔ generated vector documents parse and compile to native-safe .imo [90m(8.552005ms)[39m[39m
+[32m✔ tracked vectors are generated under vectors/ and match generator output [90m(15.936107ms)[39m[39m
+[32m✔ CONS RRGGBBAA lookup records are monotonic by primary key [90m(3.330254ms)[39m[39m
+[32m✔ non-linear aliases live in CONS source blocks without reordering keys [90m(1.895148ms)[39m[39m
+[32m✔ proxy seeds resolve through CONS to upper-reader generators [90m(8.991289ms)[39m[39m
+▶ RRGGBBAA Orbit — Mode Switch Detection
+  [32m✔ detects AA=37 (0x25) as mode switch [90m(1.033836ms)[39m[39m
+  [32m✔ does not flag AA=0x00 as mode switch [90m(0.251852ms)[39m[39m
+  [32m✔ does not flag other values as mode switch [90m(0.255509ms)[39m[39m
+[32m✔ RRGGBBAA Orbit — Mode Switch Detection [90m(2.900756ms)[39m[39m
+▶ RRGGBBAA Orbit — recoverRRGGBBAAOrbit
+  [32m✔ recover 0xFF000025 as orbit=118838614 offset=13 base36=d [90m(0.468637ms)[39m[39m
+  [32m✔ offset is always 0..35 [90m(0.286779ms)[39m[39m
+  [32m✔ detects mode switch when AA=37 [90m(0.252394ms)[39m[39m
+  [32m✔ no mode switch for AA=0 [90m(0.211735ms)[39m[39m
+  [32m✔ handles numeric input [90m(0.239867ms)[39m[39m
+[32m✔ RRGGBBAA Orbit — recoverRRGGBBAAOrbit [90m(2.090944ms)[39m[39m
+▶ RRGGBBAA Orbit — composeRRGGBBAAOrbit
+  [32m✔ composes from rgb and aa values [90m(0.500581ms)[39m[39m
+  [32m✔ composes from hex strings [90m(0.337193ms)[39m[39m
+  [32m✔ composes from #FF0000 string [90m(0.810414ms)[39m[39m
+  [32m✔ AA=0x25 triggers modeSwitch [90m(0.248596ms)[39m[39m
+[32m✔ RRGGBBAA Orbit — composeRRGGBBAAOrbit [90m(2.316688ms)[39m[39m
+▶ RRGGBBAA Orbit — recoverRGBFromSeed32
+  [32m✔ extracts rgb and aa from seed [90m(0.250585ms)[39m[39m
+  [32m✔ extracts zero values [90m(0.229485ms)[39m[39m
+[32m✔ RRGGBBAA Orbit — recoverRGBFromSeed32 [90m(0.615513ms)[39m[39m
+▶ RRGGBBAA Orbit — verifyColorOrbit
+  [32m✔ round-trips through compose and recover [90m(0.320813ms)[39m[39m
+  [32m✔ verify is false on mismatch [90m(0.150528ms)[39m[39m
+[32m✔ RRGGBBAA Orbit — verifyColorOrbit [90m(0.628624ms)[39m[39m
+[32m✔ OmiAxiomaticRulesCompiler parses all MUST rules from /RULES.omi [90m(7.002899ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister matches exact segment value [90m(1.958345ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister returns invalid for bad segment index [90m(2.945115ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister returns invalid for non-array S [90m(2.09596ms)[39m[39m
+[32m✔ match finds cardinal-enclosure rule for 0x039f prefix [90m(2.515426ms)[39m[39m
+[32m✔ match returns empty for non-matching frame [90m(2.021201ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister matches stride rules [90m(2.21747ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister matches slot rules [90m(3.16449ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister matches inversion gate rule [90m(2.145697ms)[39m[39m
+[32m✔ evaluateAxiomaticRegister matches chiral-origin rule [90m(1.902785ms)[39m[39m
+▶ Slice 3: Scrubbable World Clock (0xA5)
+  [32m✔ constructs with tick 0 epoch 0 [90m(1.304258ms)[39m[39m
+  [32m✔ advance increments tick [90m(0.389738ms)[39m[39m
+  [32m✔ advance wraps at 5040 and increments epoch [90m(0.201179ms)[39m[39m
+  [32m✔ pause stops tick advancement [90m(0.240874ms)[39m[39m
+  [32m✔ resume restarts tick advancement [90m(0.220036ms)[39m[39m
+  [32m✔ scrubToTick jumps to target tick [90m(0.343364ms)[39m[39m
+  [32m✔ scrubToTick clamps to valid range [90m(0.232767ms)[39m[39m
+  [32m✔ scrubToReceipt jumps to receipt epoch tick [90m(0.502759ms)[39m[39m
+  [32m✔ scrubToReceipt ignores out-of-range index [90m(0.294708ms)[39m[39m
+  [32m✔ scrubToMotif finds receipt by motif name [90m(0.516699ms)[39m[39m
+  [32m✔ advances linked PersistentWorldState [90m(0.318822ms)[39m[39m
+  [32m✔ emits tick event on advance [90m(0.3327ms)[39m[39m
+  [32m✔ emits scrub event on scrubToTick [90m(0.26527ms)[39m[39m
+  [32m✔ emits pause/resume events [90m(0.335067ms)[39m[39m
+[32m✔ Slice 3: Scrubbable World Clock (0xA5) [90m(7.684821ms)[39m[39m
+[32m✔ GAUGE defines four interpreter cards [90m(3.80209ms)[39m[39m
+[32m✔ GAUGE FS card has correct mask token and role [90m(0.333731ms)[39m[39m
+[32m✔ GAUGE GS card has correct mask token and role [90m(0.298107ms)[39m[39m
+[32m✔ GAUGE RS card has correct mask token and role [90m(0.354236ms)[39m[39m
+[32m✔ GAUGE US card has correct mask token and role [90m(0.348047ms)[39m[39m
+[32m✔ ACCEPTANCE_BRIDGE is 0xAA55 [90m(0.250789ms)[39m[39m
+[32m✔ sealedGauge(FS) = 0x0001AA55 [90m(0.269763ms)[39m[39m
+[32m✔ sealedGauge(GS) = 0x0010AA55 [90m(0.208096ms)[39m[39m
+[32m✔ sealedGauge(RS) = 0x0100AA55 [90m(0.268294ms)[39m[39m
+[32m✔ sealedGauge(US) = 0x1000AA55 [90m(0.4287ms)[39m[39m
+[32m✔ sealedGauge returns unsigned uint32 [90m(0.370141ms)[39m[39m
+[32m✔ sealedGauge rejects unknown gauge name [90m(0.96158ms)[39m[39m
+[32m✔ parseSealedGauge round-trips all four gauges [90m(0.427679ms)[39m[39m
+[32m✔ parseSealedGauge returns null for invalid suffix [90m(0.190217ms)[39m[39m
+[32m✔ parseSealedGauge returns null for unknown mask [90m(0.204103ms)[39m[39m
+[32m✔ OmiSemanticMemoryBroker constructs with prolog broker [90m(2.132278ms)[39m[39m
+[32m✔ OmiSemanticMemoryBroker rejects missing prolog broker [90m(1.005914ms)[39m[39m
+[32m✔ ingestLemma inserts HNSW node from Prolog lookup [90m(8.507884ms)[39m[39m
+[32m✔ ingestLemma returns null for unknown lemma [90m(0.406718ms)[39m[39m
+[32m✔ ingestLemma handles duplicate insert gracefully [90m(4.306834ms)[39m[39m
+[32m✔ searchByLemma returns nearest neighbors [90m(7.647927ms)[39m[39m
+[32m✔ searchByVector returns nearest neighbors from raw vector [90m(4.945391ms)[39m[39m
+[32m✔ getTemporalSlot reads value stored at tick [90m(2.396634ms)[39m[39m
+[32m✔ cons/car/cdr cell operations [90m(0.562312ms)[39m[39m
+[32m✔ Semantic Core: routes open class NOUN to cube face with cyan preset [90m(2.817217ms)[39m[39m
+[32m✔ Semantic Core: runs autonomous CLA on incoming feature pairs [90m(0.311741ms)[39m[39m
+[32m✔ Semantic Core: rejects unknown tag with eviction reason [90m(0.40306ms)[39m[39m
+[32m✔ Sexagesimal CLA: encoder maps regular terminating fractions to canvas preset IDs [90m(1.562383ms)[39m[39m
+[32m✔ Sexagesimal CLA: non-regular denominator flags repeating sexagesimal fraction [90m(0.388318ms)[39m[39m
+[32m✔ Sexagesimal CLA: propagate and generate masks computed correctly from 4-bit inputs [90m(0.235165ms)[39m[39m
+[32m✔ Sexagesimal CLA: gate delay analysis respects 3dt carry ceiling (Rule 0x89) [90m(0.225541ms)[39m[39m
+[32m✔ Sexagesimal CLA: YBC 7289 √2 diagonal alignment at boot slot 1504 [90m(0.29253ms)[39m[39m
+▶ Reciprocal Router — Denominator Classification
+  [32m✔ identifies regular denominators (2^a × 3^b × 5^c) [90m(1.2432ms)[39m[39m
+  [32m✔ identifies non-regular denominators [90m(0.285024ms)[39m[39m
+  [32m✔ identifies repeating denominators [90m(0.236521ms)[39m[39m
+  [32m✔ rejects regular denominators from repeating set [90m(0.233679ms)[39m[39m
+[32m✔ Reciprocal Router — Denominator Classification [90m(3.499633ms)[39m[39m
+▶ Reciprocal Router — Fractional Grading
+  [32m✔ grades 60 as regular/finite/stable [90m(0.728888ms)[39m[39m
+  [32m✔ grades 7 as repeating/infinite/replay [90m(0.233814ms)[39m[39m
+  [32m✔ flags 59 and 61 as twin-prime boundary [90m(0.295166ms)[39m[39m
+  [32m✔ grades unknown denominators as irrational [90m(0.292642ms)[39m[39m
+[32m✔ Reciprocal Router — Fractional Grading [90m(2.122074ms)[39m[39m
+▶ Reciprocal Router — Synchronized State
+  [32m✔ returns stable-sync route for regular denominators [90m(0.56145ms)[39m[39m
+  [32m✔ returns replay-loop route for repeating denominators [90m(0.412875ms)[39m[39m
+  [32m✔ returns irrational-mode for unknown denominators [90m(0.341581ms)[39m[39m
+[32m✔ Reciprocal Router — Synchronized State [90m(1.822552ms)[39m[39m
+▶ Reciprocal Router — Reciprocal Product
+  [32m✔ computes exact sexagesimal for regular denominator [90m(3.603648ms)[39m[39m
+  [32m✔ marks repeating result [90m(0.244215ms)[39m[39m
+[32m✔ Reciprocal Router — Reciprocal Product [90m(4.033933ms)[39m[39m
+▶ Reciprocal Router — OmiReciprocalRouter class
+  [32m✔ routes positions and stores history [90m(2.015678ms)[39m[39m
+  [32m✔ accumulates history across routes [90m(0.180858ms)[39m[39m
+  [32m✔ reset clears history [90m(0.17168ms)[39m[39m
+[32m✔ Reciprocal Router — OmiReciprocalRouter class [90m(2.543827ms)[39m[39m
+[32m✔ Sexagesimal Core: factor 15 yields 4 evenly divided minutes [90m(1.762547ms)[39m[39m
+[32m✔ Sexagesimal Core: prime factors 2,3,5 route to clock thread source [90m(0.302161ms)[39m[39m
+[32m✔ Sexagesimal Core: terminal factor 60 maps to LCM horizon lock [90m(0.244271ms)[39m[39m
+[32m✔ Sexagesimal Core: zero canonical frame routes to yellow preset [90m(0.257938ms)[39m[39m
+[32m✔ Sexagesimal Core: non-regular divisor 7 triggers eviction [90m(0.273932ms)[39m[39m
+[32m✔ Sexagesimal Core: GATE_1 eviction on null S [90m(0.179928ms)[39m[39m
+[32m✔ Sexagesimal Core: CLA adder fires across divisor slices [90m(0.209226ms)[39m[39m
+[32m✔ Slide Rule Kernel processes 5-track tokens and verifies 2-of-5 combinatorial constraints [90m(2.319889ms)[39m[39m
+[32m✔ Slide Rule Kernel accurately computes mechanical cross-join angles down to shared memory slots [90m(0.395775ms)[39m[39m
+[32m✔ Base-60 Substrate computes precise integer angles without text markers [90m(0.219317ms)[39m[39m
+[32m✔ Base-60 Substrate isolates track assignments within divisor and nonagram bounds [90m(1.046091ms)[39m[39m
+[32m✔ Slide Rule Kernel rejects malformed tokens [90m(0.224269ms)[39m[39m
+[32m✔ Slide Rule Kernel detects terminal fractal depth at 0x0007 [90m(0.260547ms)[39m[39m
+[32m✔ Slide Rule Kernel accepts IPv4-mapped ::ffff:0:0/96 prefix as default active pair [90m(0.326667ms)[39m[39m
+[32m✔ Slide Rule Kernel accepts embedded IPv4 addr in ::ffff:c0a8:0101 mapping [90m(0.273514ms)[39m[39m
+[32m✔ Slide Rule Kernel evaluates RFC 4193 ULA fc00::/7 compliance [90m(0.621703ms)[39m[39m
+[32m✔ Slide Rule Kernel detects default LAN 192.168.1.0/24 frame [90m(0.643611ms)[39m[39m
+[32m✔ Slide Rule Kernel detects ::ffff:127.0.0.1 localhost pivot [90m(0.43859ms)[39m[39m
+[32m✔ Slide Rule Kernel detects terminal bus ::8 loopback axis [90m(0.352801ms)[39m[39m
+[32m✔ Slide Rule Kernel detects 0x7C00 boot execution entry point [90m(0.28803ms)[39m[39m
+[32m✔ Slide Rule Kernel detects 0xAA55 boot signature [90m(0.258192ms)[39m[39m
+[32m✔ Slide Rule Kernel validates monolithic hardware boot (fc00 + 7c00 + aa55) [90m(0.240788ms)[39m[39m
+[32m✔ Slide Rule Kernel rejects boot when any invariant is missing [90m(0.243394ms)[39m[39m
+[32m✔ Slide Rule Kernel matches decodetree instruction pattern [90m(0.162916ms)[39m[39m
+[32m✔ Slide Rule Kernel validates MTTCG parallel lane sync [90m(0.223062ms)[39m[39m
+[32m✔ Slide Rule Kernel validates QOM clock tree synchronization [90m(0.226722ms)[39m[39m
+[32m✔ Slide Rule Kernel validates full hardware substrate security [90m(0.151393ms)[39m[39m
+[32m✔ Slide Rule Kernel detects atomic acquire memory fence [90m(0.199499ms)[39m[39m
+[32m✔ Slide Rule Kernel enforces QemuLockCnt reader protection [90m(0.169391ms)[39m[39m
+[32m✔ Slide Rule Kernel validates virt-ctrl MMIO register mapping [90m(0.155092ms)[39m[39m
+[32m✔ Slide Rule Kernel catches hardware panic eviction command [90m(0.139705ms)[39m[39m
+[32m✔ Slide Rule Kernel rejects empty and null inputs [90m(0.144442ms)[39m[39m
+ -> Booting: qemu-system-x86_64 -machine q35 -display none
+[32m✔ SoftMMU MBR ingestion via OmiBareMetalBootCompiler [90m(2.404473ms)[39m[39m
+[32m✔ SoftMMU MBR rejects invalid 0xAA55 signature [90m(3.039619ms)[39m[39m
+    -> [Pass] qemu-system-x86_64
+ -> Booting: qemu-system-i386 -machine pc -display none
+    -> [Pass] qemu-system-i386
+ -> Booting: qemu-system-riscv64 -machine virt -display none
+    -> [Pass] qemu-system-riscv64
+ -> Booting: qemu-system-aarch64 -machine virt -display none
+[31m✖ SoftMMU full system emulation boots targets [90m(1557.708358ms)[39m[39m
+[32m✔ Boot compiler pre-header invariants for Big-Endian (ppc64) [90m(1.383322ms)[39m[39m
+[32m✔ Boot compiler pre-header invariants for 32-bit (i386) [90m(0.282525ms)[39m[39m
+[32m✔ Sphere Packing: routes Code 16K symbols to pointer buffer with yellow preset [90m(1.640611ms)[39m[39m
+[32m✔ Sphere Packing: routes UTF-8 to lexical buffer with green preset [90m(0.265187ms)[39m[39m
+[32m✔ Sphere Packing: routes Base64 to inflection buffer with purple preset [90m(0.235222ms)[39m[39m
+[32m✔ Sphere Packing: evicts tokens beyond 107-symbol ceiling [90m(0.232082ms)[39m[39m
+[32m✔ Sphere Packing: evicts unsupported encoding format [90m(0.227993ms)[39m[39m
+[32m✔ Sphere Packing: evicts structurally invalid frames [90m(0.237923ms)[39m[39m
+[32m✔ Sphere Packing: '16k' and 'b64' shorthand aliases work [90m(0.266973ms)[39m[39m
+[32m✔ STS Evaluation: high dot product yields high resonance semantic match [90m(4.412186ms)[39m[39m
+[32m✔ STS Evaluation: divergent low dot product against high human score evicts [90m(0.489459ms)[39m[39m
+[32m✔ STS Evaluation: moderate scores route to yellow preset [90m(0.528593ms)[39m[39m
+[32m✔ STS Evaluation: GATE_1 eviction on null S [90m(0.517476ms)[39m[39m
+[32m✔ STS Evaluation: CLA adder fires across angular slices [90m(0.383625ms)[39m[39m
+[32m✔ Web Proxy: unescaped web+omi URL queries map accurately to valid uint16 segments [90m(2.588194ms)[39m[39m
+[32m✔ Web Proxy: malformed custom protocol URLs generate errors and drop execution instantly [90m(0.508257ms)[39m[39m
+[32m✔ Web Proxy: chronograph and chronometer query slots route through the same gate [90m(1.219904ms)[39m[39m
+[32m✔ Web Proxy: RULES.omi declares browser protocol and service worker mesh anchors [90m(20.492196ms)[39m[39m
+[32m✔ synset cell mnemonic exposes canonical 5-cell and 24-cell spaces [90m(5.371952ms)[39m[39m
+[32m✔ WordNet centroid includes canonical synset cell addressing [90m(2.770754ms)[39m[39m
+[32m✔ Tetragrammaton: scheduler accurately processes regular 15-minute cron slices across Fano nodes [90m(2.559757ms)[39m[39m
+[32m✔ Tetragrammaton: catches non-regular minutes causing fractional layout drift and flags them [90m(0.333628ms)[39m[39m
+[32m✔ previous cell state lets deterministic ingestion converge to zero deltas [90m(27.018202ms)[39m[39m
+[32m✔ guarded bridge is deterministic and accepts after replay stability plus safe gate [90m(182.359428ms)[39m[39m
+[32m✔ guarded bridge reports malformed generated OMI and compile failure [90m(65.069449ms)[39m[39m
+[32m✔ guarded bridge rejects unstable ququart replay [90m(54.417089ms)[39m[39m
+[32m✔ guarded bridge does not accept when final deltas are still nonzero [90m(28.789002ms)[39m[39m
+[32m✔ tetragrammatron bridge CLI writes artifacts and does not mutate sources [90m(238.185629ms)[39m[39m
+▶ hopfDirection
+  [32m✔ identity quaternion projects to +z axis [90m(1.1496ms)[39m[39m
+  [32m✔ 180° about y flips to -z [90m(0.346358ms)[39m[39m
+  [32m✔ 90° about y rotates z to x [90m(0.273752ms)[39m[39m
+  [32m✔ projection preserves unit norm [90m(0.242415ms)[39m[39m
+[32m✔ hopfDirection [90m(3.558188ms)[39m[39m
+▶ computeQxy
+  [32m✔ BQD formula: 60x² + 16xy + 4y² [90m(0.244825ms)[39m[39m
+[32m✔ computeQxy [90m(0.425974ms)[39m[39m
+▶ resolveHopfQuQuartRoute
+  [32m✔ produces valid range for all chart/base/fiber combos [90m(4.71548ms)[39m[39m
+  [32m✔ wraps negative inputs mod range [90m(0.495534ms)[39m[39m
+  [32m✔ produces same route for same inputs (determinism) [90m(1.793875ms)[39m[39m
+  [32m✔ different fiberQ changes thrust direction [90m(0.464743ms)[39m[39m
+[32m✔ resolveHopfQuQuartRoute [90m(8.14927ms)[39m[39m
+▶ tetragrammatronGeometryRoute
+  [32m✔ produces valid geometry route from node [90m(1.023825ms)[39m[39m
+  [32m✔ is deterministic for same node and index [90m(0.540861ms)[39m[39m
+  [32m✔ is independent of insertion index (deterministic by node identity) [90m(0.483192ms)[39m[39m
+  [32m✔ maps channel to baseQ [90m(0.792361ms)[39m[39m
+  [32m✔ does not depend on TinyNEAT signal [90m(0.503619ms)[39m[39m
+[32m✔ tetragrammatronGeometryRoute [90m(3.829182ms)[39m[39m
+▶ Tetragrammatron meta-memory: construction
+  [32m✔ creates canonical descriptor and history buffers [90m(1.869695ms)[39m[39m
+  [32m✔ initializes canonical descriptor defaults [90m(0.59011ms)[39m[39m
+  [32m✔ exposes frozen compact descriptor slot constants [90m(0.534439ms)[39m[39m
+  [32m✔ can wrap caller-provided SharedArrayBuffers [90m(0.808313ms)[39m[39m
+[32m✔ Tetragrammatron meta-memory: construction [90m(6.587728ms)[39m[39m
+▶ Tetragrammatron meta-memory: descriptor I/O
+  [32m✔ reads and writes deterministic descriptor cells [90m(0.765883ms)[39m[39m
+  [32m✔ rejects descriptor indexes outside the 64-cell plane [90m(1.197807ms)[39m[39m
+[32m✔ Tetragrammatron meta-memory: descriptor I/O [90m(2.375569ms)[39m[39m
+▶ Tetragrammatron meta-memory: slot claims
+  [32m✔ atomically claims the current cursor slot and records worker state [90m(0.896615ms)[39m[39m
+  [32m✔ wraps claims through the 5040-slot history plane [90m(0.595617ms)[39m[39m
+[32m✔ Tetragrammatron meta-memory: slot claims [90m(3.680069ms)[39m[39m
+▶ Tetragrammatron meta-memory: receipts
+  [32m✔ writes and reads BigInt64 receipts [90m(0.947525ms)[39m[39m
+  [32m✔ normalizes receipt slots modulo 5040 [90m(0.974743ms)[39m[39m
+[32m✔ Tetragrammatron meta-memory: receipts [90m(2.689859ms)[39m[39m
+▶ Tetragrammatron meta-memory: snapshots
+  [32m✔ returns a serializable descriptor and receipt sample [90m(3.12189ms)[39m[39m
+  [32m✔ can sample explicit receipt slots [90m(0.431093ms)[39m[39m
+[32m✔ Tetragrammatron meta-memory: snapshots [90m(3.887501ms)[39m[39m
+▶ parseNodeTestOutput
+  [32m✔ parses suite lines as running events [90m(3.090259ms)[39m[39m
+  [32m✔ parses pass lines with duration [90m(0.722058ms)[39m[39m
+  [32m✔ parses pass lines without duration [90m(0.449111ms)[39m[39m
+  [32m✔ parses fail lines [90m(2.168983ms)[39m[39m
+  [32m✔ assigns suite context to subsequent tests [90m(0.432173ms)[39m[39m
+  [32m✔ ignores info lines (ℹ) [90m(0.32729ms)[39m[39m
+  [32m✔ returns empty array for empty input [90m(1.503996ms)[39m[39m
+  [32m✔ each event has stable id [90m(0.562721ms)[39m[39m
+[32m✔ parseNodeTestOutput [90m(13.755341ms)[39m[39m
+▶ modulateTestEventToOmi
+  [32m✔ produces FACT record for passed event [90m(1.559572ms)[39m[39m
+  [32m✔ produces MUST_NOT record for failed event [90m(0.680775ms)[39m[39m
+  [32m✔ produces COMBINE record for suite/running event [90m(0.288374ms)[39m[39m
+  [32m✔ round-trips through parseOmiDocument [90m(2.145196ms)[39m[39m
+[32m✔ modulateTestEventToOmi [90m(5.232864ms)[39m[39m
+▶ demodulateOmiRecord
+  [32m✔ recovers passed status from FACT record [90m(0.435826ms)[39m[39m
+  [32m✔ recovers failed status from MUST_NOT record [90m(0.51781ms)[39m[39m
+[32m✔ demodulateOmiRecord [90m(1.172467ms)[39m[39m
+▶ modemRoundTripTestOutput
+  [32m✔ round-trips sample output [90m(1.543863ms)[39m[39m
+  [32m✔ each frame has omi notation and parsed records [90m(0.998554ms)[39m[39m
+  [32m✔ demodulation recovers status and name [90m(0.70907ms)[39m[39m
+  [32m✔ passed events produce FACT records with no malformed lines [90m(1.799107ms)[39m[39m
+  [32m✔ is deterministic for same input [90m(1.097394ms)[39m[39m
+  [32m✔ handles empty input gracefully [90m(0.257275ms)[39m[39m
+[32m✔ modemRoundTripTestOutput [90m(6.915106ms)[39m[39m
+▶ integration with existing parser
+  [32m✔ modulated output is readable by parseOmiDocument [90m(1.142305ms)[39m[39m
+  [32m✔ source blocks preserve raw test lines [90m(0.971032ms)[39m[39m
+  [32m✔ address is a valid OMI address [90m(0.686818ms)[39m[39m
+[32m✔ integration with existing parser [90m(3.164634ms)[39m[39m
+▶ modemRoundTripToGeometryReceipts
+  [32m✔ enriches each frame with geometry fields [90m(3.791062ms)[39m[39m
+  [32m✔ maps passed events to US channel + accepted receipt [90m(2.638236ms)[39m[39m
+  [32m✔ maps failed events to RS channel + candidate receipt [90m(0.499996ms)[39m[39m
+  [32m✔ maps running events to GS channel [90m(0.455961ms)[39m[39m
+  [32m✔ provides summary counts [90m(0.682836ms)[39m[39m
+  [32m✔ is deterministic for same input [90m(1.059452ms)[39m[39m
+  [32m✔ thrustDirection and polybius are present on geometry frames [90m(0.992296ms)[39m[39m
+  [32m✔ handles empty input [90m(0.797014ms)[39m[39m
+[32m✔ modemRoundTripToGeometryReceipts [90m(11.479036ms)[39m[39m
+▶ modemFrameToOWord
+  [32m✔ packs a frame into a valid 256-bit word [90m(1.665753ms)[39m[39m
+  [32m✔ selector is 0 for modem frames [90m(0.885463ms)[39m[39m
+  [32m✔ path encodes baseQ/fiberQ/chart11/fano7/role3 [90m(0.825972ms)[39m[39m
+  [32m✔ surface encodes status / receiptState / slot5040 [90m(1.428817ms)[39m[39m
+  [32m✔ is deterministic for same frame [90m(0.517635ms)[39m[39m
+[32m✔ modemFrameToOWord [90m(5.632757ms)[39m[39m
+▶ oWordToModemFrame
+  [32m✔ round-trips status, local240, slot5040 for all frames [90m(0.95712ms)[39m[39m
+  [32m✔ reports wordHex [90m(0.545022ms)[39m[39m
+  [32m✔ decodes geometry coordinates from path [90m(1.443306ms)[39m[39m
+  [32m✔ selector is 0 [90m(0.527604ms)[39m[39m
+[32m✔ oWordToModemFrame [90m(3.710062ms)[39m[39m
+▶ modemFrameToMemory
+  [32m✔ writes frame route and status into descriptor memory [90m(1.46237ms)[39m[39m
+  [32m✔ writes the low 64 bits of the .o word as the history receipt [90m(0.863029ms)[39m[39m
+  [32m✔ memoryToModemSnapshot is JSON-safe for explicit receipt slots [90m(0.729537ms)[39m[39m
+[32m✔ modemFrameToMemory [90m(3.286666ms)[39m[39m
+▶ packModemFramesToOFile
+  [32m✔ produces one hex line per frame [90m(1.084245ms)[39m[39m
+  [32m✔ handles single frame [90m(0.484737ms)[39m[39m
+[32m✔ packModemFramesToOFile [90m(1.719119ms)[39m[39m
+▶ unpackOFileToModemFrames
+  [32m✔ round-trips with packModemFramesToOFile [90m(2.861516ms)[39m[39m
+  [32m✔ is deterministic [90m(2.409446ms)[39m[39m
+  [32m✔ handles empty text gracefully [90m(0.214933ms)[39m[39m
+[32m✔ unpackOFileToModemFrames [90m(5.692327ms)[39m[39m
+[32m✔ optimizeCodebase is deterministic for the same source and test input [90m(54.455041ms)[39m[39m
+[32m✔ optimizeCodebase ranks failed tests before lower-severity candidates [90m(3.115886ms)[39m[39m
+[32m✔ collectMalformedOmiCandidates catches parser drift surfaces [90m(0.474475ms)[39m[39m
+[32m✔ duplicate and slide residue collectors find structural candidates [90m(1.163255ms)[39m[39m
+[32m✔ rankCandidates applies severity, confidence, and location ordering [90m(0.730311ms)[39m[39m
+[32m✔ optimizer writes candidate receipts through Tetragrammatron event shape [90m(2.525967ms)[39m[39m
+[32m✔ OPTIMIZATION.omi output is parseable [90m(3.41167ms)[39m[39m
+[32m✔ tetragrammatron optimizer CLI writes report files and does not mutate sources [90m(133.449781ms)[39m[39m
+[32m✔ polyharmonic docs do not create new root authority [90m(1.363309ms)[39m[39m
+[32m✔ meta-memory doc keeps five canonical factors [90m(0.404056ms)[39m[39m
+[32m✔ polyharmonic axis documents FACTS and CONS inverse projection [90m(0.31804ms)[39m[39m
+[32m✔ polyharmonic docs preserve implementation boundary language [90m(0.378658ms)[39m[39m
+[32m✔ polyharmonic governors preserve five canonical roots [90m(2.293721ms)[39m[39m
+[32m✔ governor exponents map to generalized mean axis [90m(1.90937ms)[39m[39m
+[32m✔ governorForRoot accepts canonical root filenames and keys [90m(0.262499ms)[39m[39m
+[32m✔ FACTS and CONS are inverse projections [90m(0.256788ms)[39m[39m
+[32m✔ four visible offsets preserve FS GS RS US masks [90m(0.774688ms)[39m[39m
+[32m✔ three clocks are named without replacing older language [90m(0.195614ms)[39m[39m
+[32m✔ visible timing surface is descriptive only [90m(0.598284ms)[39m[39m
+[32m✔ metadata objects are frozen reference surfaces [90m(0.263062ms)[39m[39m
+[32m✔ default browser protocol map covers DOM, JSDOM, CSSOM, CanvasDOM, and browser events [90m(26.38352ms)[39m[39m
+[32m✔ browser-event centroid route resolves to a concrete gauge and raw binary control frame [90m(1.090788ms)[39m[39m
+[32m✔ media query changes route digest and receipt without changing DOM listener policy [90m(0.722141ms)[39m[39m
+[32m✔ PROTOCOLS.omi generated from protocol map parses cleanly [90m(2.649614ms)[39m[39m
+[32m✔ protocol map CLI writes deterministic review artifacts [90m(109.902204ms)[39m[39m
+[32m✔ remote service plan is deterministic and redacts MQTT password [90m(5.956658ms)[39m[39m
+[32m✔ dry-run remote mesh writes all review artifacts and parseable REMOTE_MESH.omi [90m(49.560154ms)[39m[39m
+[32m✔ formatRemoteMeshOmi preserves small VPS boundary facts [90m(14.115216ms)[39m[39m
+[32m✔ mocked remote execution runs bootstrap, rsync, npm, generation, and validation in order [90m(8.436876ms)[39m[39m
+[32m✔ remote mesh CLI dry-run writes artifacts without mutating sources [90m(122.626686ms)[39m[39m
+[90m﹣ real remote integration is gated by explicit environment variables [90m(0.227869ms)[39m # SKIP[39m
+▶ Tetragrammatron worker runtime
+  [32m✔ reads the current descriptor as a backend-friendly object [90m(9.099425ms)[39m[39m
+  [32m✔ claims the routed frame slot instead of the incidental next cursor [90m(1.9494ms)[39m[39m
+  [32m✔ reads the claimed .o receipt from history [90m(3.426943ms)[39m[39m
+  [32m✔ creates and emits a backend event [90m(2.91574ms)[39m[39m
+  [32m✔ workerRuntimeTick returns accepted for an accepted receipt frame [90m(1.571407ms)[39m[39m
+  [32m✔ workerRuntimeTick returns candidate for candidate receipt frames [90m(1.063909ms)[39m[39m
+  [32m✔ workerRuntimeTick returns rejected when descriptor error code is set [90m(1.191779ms)[39m[39m
+  [32m✔ createBackendEvent can be used directly without dispatch [90m(0.817063ms)[39m[39m
+[32m✔ Tetragrammatron worker runtime [90m(24.568245ms)[39m[39m
+[32m✔ Precision Tower: executes 59/60/61 roundtrip with regular base-60 divisor [90m(2.261295ms)[39m[39m
+[32m✔ Precision Tower: 59 prime boundary triggers red preset [90m(1.752813ms)[39m[39m
+[32m✔ OmiTriTierNetworkEngine constructs with default SAB [90m(3.263948ms)[39m[39m
+[32m✔ parseTriTierAddress parses ESP32 hardware token [90m(0.579858ms)[39m[39m
+[32m✔ parseTriTierAddress parses VPS cloud token [90m(0.761134ms)[39m[39m
+[32m✔ parseTriTierAddress rejects external domain [90m(0.414464ms)[39m[39m
+[32m✔ parseTriTierAddress returns null for non-omi string [90m(0.277539ms)[39m[39m
+[32m✔ compileTransitFrame produces valid 16-byte buffer [90m(0.548549ms)[39m[39m
+[32m✔ compileTransitFrame produces 16-byte buffer for VPS tier [90m(0.359117ms)[39m[39m
+[32m✔ compileTransitFrame returns null for invalid address [90m(0.281176ms)[39m[39m
+[32m✔ compileTransitFrame returns null for no coefficients [90m(0.40167ms)[39m[39m
+[32m✔ slotFromTier maps correctly [90m(0.575197ms)[39m[39m
+[32m✔ cons/car/cdr cell primitives [90m(0.447027ms)[39m[39m
+[32m✔ triad155 computes canonical prefix3 low-byte modulo 155 [90m(1.700685ms)[39m[39m
+[32m✔ pre-boot root gives canonical triad 36 [90m(1.116587ms)[39m[39m
+[32m✔ full8 mode is diagnostic and does not replace prefix3 [90m(0.588989ms)[39m[39m
+[32m✔ coreMax routes low intensity to Real Plane A and high intensity to Imaginary Plane B [90m(1.26976ms)[39m[39m
+[32m✔ Real and Imaginary plane memory slots remain isolated [90m(0.47727ms)[39m[39m
+[32m✔ compileOmiParsed remains unchanged unless triad dispatch is requested [90m(1.839057ms)[39m[39m
+[32m✔ compileOmiParsedWithTriadDispatch is deterministic across recompilations [90m(0.953052ms)[39m[39m
+[32m✔ formal CONS audit passes for monotonic RRGGBBAA lookup records [90m(18.878151ms)[39m[39m
+[32m✔ Rules and Facts declare triad dispatch D1-D3 without adding a sixth root [90m(10.444347ms)[39m[39m
+[32m✔ OmiTrigraphPreprocessor constructs with SAB [90m(5.750172ms)[39m[39m
+[32m✔ preprocessAndEvaluateStream returns valid for clean symmetric tape [90m(1.366616ms)[39m[39m
+[32m✔ preprocessAndEvaluateStream inverts payload with ??- trigraph [90m(1.695118ms)[39m[39m
+[32m✔ preprocessAndEvaluateStream returns invalid for null input [90m(0.728045ms)[39m[39m
+[32m✔ trigraph toggles polarity from positive to negative [90m(2.238905ms)[39m[39m
+[32m✔ cons / car / cdr lisp primitives [90m(0.735986ms)[39m[39m
+▶ Slice 2: Triple Centroid & Sexagesimal Weights (0xAA–0xAB)
+  ▶ sexagesimal-weight-table
+    [32m✔ REGULAR_DENOMINATORS contains 13 values [90m(2.191824ms)[39m[39m
+    [32m✔ SEXAGESIMAL_REGULAR_FRACTIONS maps known denominators [90m(0.334428ms)[39m[39m
+    [32m✔ REPEATING_DENOMINATORS contains 7 values [90m(0.328308ms)[39m[39m
+    [32m✔ SEXAGESIMAL_REPEATING_FRACTIONS describes 1/7 as Fano replay cadence [90m(0.462623ms)[39m[39m
+    [32m✔ fractionToSexagesimal: 1/4 = 0;15 [90m(0.578231ms)[39m[39m
+    [32m✔ fractionToSexagesimal: 1/5 = 0;12 [90m(0.320777ms)[39m[39m
+    [32m✔ fractionToSexagesimal: 1/3 = 0;20 [90m(0.400382ms)[39m[39m
+    [32m✔ fractionToSexagesimal: 0/n = 0;0 [90m(0.345093ms)[39m[39m
+    [32m✔ fractionToSexagesimal: 2/2 = 1;0 [90m(0.326372ms)[39m[39m
+    [32m✔ fractionToSexagesimal: returns null for invalid input [90m(0.533692ms)[39m[39m
+    [32m✔ sexagesimalToFloat: 0;15 = 0.25 [90m(0.52181ms)[39m[39m
+    [32m✔ sexagesimalToFloat: 0;12 = 0.2 [90m(0.252795ms)[39m[39m
+    [32m✔ sexagesimalToFloat: 0;7,30 = 0.125 [90m(0.477714ms)[39m[39m
+    [32m✔ sexagesimalToFloat: 1;0 = 1 [90m(0.216304ms)[39m[39m
+    [32m✔ sexagesimalToFloat: returns null for invalid format [90m(0.257253ms)[39m[39m
+    [32m✔ isRegularDenominator: 4, 5, 6, 8, 12 are regular [90m(0.205534ms)[39m[39m
+    [32m✔ isRegularDenominator: 7, 11, 13 are not regular [90m(0.16005ms)[39m[39m
+    [32m✔ isRepeatingDenominator: 7, 59, 61 are repeating [90m(0.180756ms)[39m[39m
+    [32m✔ tetrahedralWeights: four 0;15 sum to 1;0 [90m(0.253413ms)[39m[39m
+    [32m✔ fiveSourceWeights: five 0;12 sum to 1;0 [90m(0.219552ms)[39m[39m
+    [32m✔ computeCentroidWeight sums weights [90m(0.312202ms)[39m[39m
+    [32m✔ computeCentroidWeight returns null for invalid weight [90m(0.17073ms)[39m[39m
+    [32m✔ sumWeightsCloseToOne: 1;0 is close [90m(0.218149ms)[39m[39m
+    [32m✔ sumWeightsCloseToOne: 0;30 is not close [90m(0.206772ms)[39m[39m
+  [32m✔ sexagesimal-weight-table [90m(14.91656ms)[39m[39m
+  ▶ canonical-triple-centroid
+    [32m✔ TRIAD_COUNT is 155 [90m(0.555254ms)[39m[39m
+    [32m✔ TRIAD_PARTITIONS sum to 155 [90m(0.239032ms)[39m[39m
+    [32m✔ TRIAD_PARTITIONS breakdown is 45+20+15+60+15 [90m(0.170956ms)[39m[39m
+    [32m✔ resolveTriad maps index 0 to rules [90m(0.341483ms)[39m[39m
+    [32m✔ resolveTriad maps index 45 to facts [90m(0.220664ms)[39m[39m
+    [32m✔ resolveTriad returns null out of range [90m(0.174044ms)[39m[39m
+    [32m✔ triadCategory classifies via sum mod 5 [90m(0.263818ms)[39m[39m
+    [32m✔ triadCategory returns null for non-array [90m(0.162331ms)[39m[39m
+    [32m✔ routeTriadToOmiFile routes to correct file [90m(0.243333ms)[39m[39m
+    [32m✔ triadToSpoRoute produces S/P/O indices [90m(0.184422ms)[39m[39m
+    [32m✔ CanonicalTripleCentroid constructs with budget [90m(0.23807ms)[39m[39m
+    [32m✔ makeCanonicalTriple requires subject/predicate/object [90m(0.596424ms)[39m[39m
+    [32m✔ makeCanonicalTriple requires at least one witness [90m(0.175841ms)[39m[39m
+    [32m✔ makeCanonicalTriple creates a canonical triple [90m(0.457104ms)[39m[39m
+    [32m✔ makeCanonicalTriple assigns triad indices sequentially [90m(0.448514ms)[39m[39m
+    [32m✔ makeCanonicalTriple tracks budget [90m(0.322601ms)[39m[39m
+    [32m✔ scoreTetrahedralAgreement returns 0 for missing triple [90m(0.286729ms)[39m[39m
+    [32m✔ scoreTetrahedralAgreement returns 1 for 4-witness triple [90m(0.603749ms)[39m[39m
+    [32m✔ scoreTetrahedralAgreement returns 0 for <3 witnesses [90m(0.334648ms)[39m[39m
+    [32m✔ findTriplesByCategory filters by category [90m(0.580181ms)[39m[39m
+    [32m✔ findTriplesByActor filters by actor name [90m(0.403786ms)[39m[39m
+    [32m✔ getCentroidAddress returns canonical OMI address [90m(0.319653ms)[39m[39m
+    [32m✔ emitOmiCentroidExpression produces O-expression string [90m(0.456136ms)[39m[39m
+    [32m✔ reset clears all allocated triples [90m(0.515524ms)[39m[39m
+  [32m✔ canonical-triple-centroid [90m(9.951738ms)[39m[39m
+[32m✔ Slice 2: Triple Centroid & Sexagesimal Weights (0xAA–0xAB) [90m(25.924135ms)[39m[39m
+[32m✔ CENTROID_COEFFICIENTS have correct values [90m(2.537805ms)[39m[39m
+[32m✔ parseTriplicateAddress validates ::/48 prefix with new streamlined format [90m(0.935866ms)[39m[39m
+[32m✔ parseTriplicateAddress rejects external network addresses [90m(0.421485ms)[39m[39m
+[32m✔ parseTriplicateAddress returns null for non-omi strings [90m(0.333945ms)[39m[39m
+[32m✔ parseTriplicateAddress accepts old omi-8-ffff-... format for backward compat [90m(0.530537ms)[39m[39m
+[32m✔ calculateTriplicateProjection applies 24-cell modifier [90m(1.221126ms)[39m[39m
+[32m✔ calculateTriplicateProjection applies 5-cell modifier [90m(0.519025ms)[39m[39m
+[32m✔ calculateTriplicateProjection falls back to tetrahedron for unknown code [90m(0.579248ms)[39m[39m
+[32m✔ calculateTriplicateProjection with [0,1,0,0] matches Horner [90m(0.641916ms)[39m[39m
+[32m✔ calculateTriplicateProjection returns 0 for invalid address [90m(1.661183ms)[39m[39m
+[32m✔ cons/car/cdr primitives work [90m(0.739857ms)[39m[39m
+[32m✔ applyProjectionToPage returns 24-cell code at high page index [90m(0.521417ms)[39m[39m
+[32m✔ applyProjectionToPage returns 5-cell code at low page index [90m(1.560311ms)[39m[39m
+[32m✔ Telemetry Core: probe extracts 24-bit metadata and tracks Eichler mass [90m(1.761208ms)[39m[39m
+[32m✔ Telemetry Core: catches missing provenance and routes to warning [90m(0.376419ms)[39m[39m
+[32m✔ Telemetry Core: jInvariant 0 triggers yellow preset [90m(0.338913ms)[39m[39m
+[32m✔ Telemetry Core: jInvariant 1728 triggers yellow preset [90m(0.371749ms)[39m[39m
+[32m✔ Telemetry Core: non-Eichler prime p=73 passes with standard preset [90m(0.37563ms)[39m[39m
+[32m✔ Telemetry Core: GATE_1 eviction on null S [90m(0.214701ms)[39m[39m
+[32m✔ Telemetry Core: CLA adder fires across dividend slices [90m(0.227577ms)[39m[39m
+[32m✔ WAN FACTS register live edge and tunnel /80 mappings [90m(16.060144ms)[39m[39m
+[32m✔ WAN daemon verifies compliant packets and rejects malformed packets [90m(34.50905ms)[39m[39m
+[32m✔ WAN daemon exposes topology and COOP/COEP headers [90m(9.205297ms)[39m[39m
+[32m✔ WAN CSS selectors remain id-based for public subnet projections [90m(4.056583ms)[39m[39m
+[32m✔ WanTelemetryLoop initializes with default config [90m(3.901566ms)[39m[39m
+[32m✔ WanTelemetryLoop accepts custom config [90m(0.467497ms)[39m[39m
+[32m✔ runProbeCycle with mock probe stores result and broadcasts [90m(1.075494ms)[39m[39m
+[32m✔ runProbeCycle with failing probe captures error gracefully [90m(0.573994ms)[39m[39m
+[32m✔ history is bounded by maxHistory [90m(0.734031ms)[39m[39m
+[32m✔ start/stop lifecycle controls the loop [90m(151.739997ms)[39m[39m
+[32m✔ start is idempotent [90m(0.476815ms)[39m[39m
+[32m✔ reset clears history and clients [90m(0.37344ms)[39m[39m
+[32m✔ addSseClient registers and returns remove function [90m(1.86637ms)[39m[39m
+[32m✔ broadcast sends formatted SSE to all clients [90m(1.438957ms)[39m[39m
+[32m✔ broadcast skips dead clients without throwing [90m(0.757324ms)[39m[39m
+[32m✔ uptime calculation across multiple probes [90m(0.684342ms)[39m[39m
+[32m✔ default config is frozen [90m(1.005515ms)[39m[39m
+▶ WASM Delta-C equivalence
+  [32m✔ deltaC: 100 random values match [90m(1.623182ms)[39m[39m
+  [32m✔ deltaC canonical constant matches [90m(0.495355ms)[39m[39m
+  [32m✔ deltaC: period-8 verification on small set [90m(0.324563ms)[39m[39m
+[32m✔ WASM Delta-C equivalence [90m(14.262363ms)[39m[39m
+▶ WASM fanoTruthResolver equivalence
+  [32m✔ all Fano LL (1-7) with canonical boot address [90m(0.640386ms)[39m[39m
+  [32m✔ non-Fano LL returns -1 [90m(0.274448ms)[39m[39m
+  [32m✔ same NN and MM returns 0 [90m(0.262278ms)[39m[39m
+  [32m✔ 100 random Fano truth rows match [90m(0.798156ms)[39m[39m
+[32m✔ WASM fanoTruthResolver equivalence [90m(2.670607ms)[39m[39m
+▶ WASM makeGenesisTarget equivalence
+  [32m✔ all Fano LL produce matching MM [90m(0.541182ms)[39m[39m
+  [32m✔ non-Fano LL returns 0 from WASM [90m(0.287527ms)[39m[39m
+[32m✔ WASM makeGenesisTarget equivalence [90m(1.297052ms)[39m[39m
+▶ WASM fanoIntercept equivalence
+  [32m✔ same value returns 0 [90m(0.588181ms)[39m[39m
+  [32m✔ 100 random pairs match [90m(0.744423ms)[39m[39m
+[32m✔ WASM fanoIntercept equivalence [90m(1.623274ms)[39m[39m
+▶ WASM fanoIntersectionPoint equivalence
+  [32m✔ all Fano pairs match [90m(0.772723ms)[39m[39m
+[32m✔ WASM fanoIntersectionPoint equivalence [90m(0.95189ms)[39m[39m
+▶ WASM verifyOrbitLexer equivalence
+  [32m✔ genesis frame is valid in both [90m(0.539219ms)[39m[39m
+  [32m✔ malformed frame fails in both [90m(0.419244ms)[39m[39m
+  [32m✔ chiral delimiter mismatch caught in WASM [90m(0.152281ms)[39m[39m
+  [32m✔ cardinal delimiter mismatch caught in WASM [90m(0.153262ms)[39m[39m
+  [32m✔ LL mismatch across segments detected in both [90m(0.16637ms)[39m[39m
+[32m✔ WASM verifyOrbitLexer equivalence [90m(1.776282ms)[39m[39m
+[32m✔ Wikimedia Core: low risk infobox subject maps to verified truth [90m(3.058977ms)[39m[39m
+[32m✔ Wikimedia Core: high reference risk crediblity eviction [90m(0.333571ms)[39m[39m
+[32m✔ Wikimedia Core: moderate risk routes to warning rail [90m(0.322144ms)[39m[39m
+[32m✔ Wikimedia Core: middle risk routes to modest schema transition [90m(0.42898ms)[39m[39m
+[32m✔ Wikimedia Core: GATE_1 eviction on null S [90m(0.329608ms)[39m[39m
+[32m✔ Wikimedia Core: CLA adder fires across S-P-O hash slices [90m(0.344991ms)[39m[39m
+[32m✔ Wire Profile: IPv6 source address maps to valid uint16 segments [90m(2.290629ms)[39m[39m
+[32m✔ Wire Profile: byte-swapped address generates massive error energy [90m(1.923694ms)[39m[39m
+[32m✔ Wire Profile: offset 0x16 alignment matches saddr start in Ethernet frame [90m(0.377828ms)[39m[39m
+[32m✔ Wire Profile: canonical genesis IP text representation [90m(0.345041ms)[39m[39m
+[32m✔ Wire Profile: non-omi prefix returns null [90m(0.361518ms)[39m[39m
+[32m✔ Wire Profile: short address returns null [90m(0.294887ms)[39m[39m
+[32m✔ WordNet centroid requires six relation facts for stability [90m(7.295202ms)[39m[39m
+[32m✔ DOM/CSSOM tetrahedron emits four vertices and six edges [90m(4.425834ms)[39m[39m
+▶ Slice 3: World Interaction Gate (0xA6)
+  [32m✔ constructs in IDLE state [90m(2.585256ms)[39m[39m
+  [32m✔ open transitions to INTERACTIVE and pauses clock [90m(0.416595ms)[39m[39m
+  [32m✔ close transitions back to IDLE and resumes clock [90m(0.351484ms)[39m[39m
+  [32m✔ touch opens gate if IDLE [90m(0.328838ms)[39m[39m
+  [32m✔ touch resets timeout [90m(0.279952ms)[39m[39m
+  [32m✔ tick decrements timeout and auto-closes at 0 [90m(0.348618ms)[39m[39m
+  [32m✔ tick advances clock when IDLE [90m(0.355197ms)[39m[39m
+  [32m✔ enterScrubMode transitions to SCRUBBING [90m(0.354375ms)[39m[39m
+  [32m✔ emits open/close/timeout events [90m(0.397286ms)[39m[39m
+  [32m✔ emits touch event [90m(0.53871ms)[39m[39m
+  [32m✔ configurable timeout duration [90m(0.234178ms)[39m[39m
+[32m✔ Slice 3: World Interaction Gate (0xA6) [90m(8.450653ms)[39m[39m
+[34mℹ tests 2013[39m
+[34mℹ suites 195[39m
+[34mℹ pass 2008[39m
+[34mℹ fail 3[39m
+[34mℹ cancelled 0[39m
+[34mℹ skipped 2[39m
+[34mℹ todo 0[39m
+[34mℹ duration_ms 16064.668239[39m
+
+[31m✖ failing tests:[39m
+
+test at test/omi-meta-memory-admission-proof.test.js:16:1
+[31m✖ omi-meta-memory-admission-proof builds metacompiler and admits declaration into meta-memory [90m(632.617585ms)[39m[39m
+  AssertionError [ERR_ASSERTION]: proof script failed:
+  file:///home/main/devops/omi-portal/scripts/omi-meta-memory-admission-proof.js:25
+      throw new Error(
+            ^
+  
+  Error: omi-metacompiler compile omi-docs/metacompiler/omi-metacompiler-self.omilisp failed
+  stdout:
+  undefined
+  stderr:
+  undefined
+      at run (file:///home/main/devops/omi-portal/scripts/omi-meta-memory-admission-proof.js:25:11)
+      at file:///home/main/devops/omi-portal/scripts/omi-meta-memory-admission-proof.js:71:32
+      at ModuleJob.run (node:internal/modules/esm/module_job:377:25)
+      at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:689:26)
+      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+  
+  Node.js v24.9.0
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///home/main/devops/omi-portal/test/omi-meta-memory-admission-proof.test.js:19:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/qemu-mesh.test.js:63:1
+[31m✖ QEMU Mesh: bootArchitectureVariants adds two guest records [90m(31.522778ms)[39m[39m
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(typeof coordinator.activeGuests[1].pid === "number")
+  
+      at TestContext.<anonymous> (file:///home/main/devops/omi-portal/test/qemu-mesh.test.js:73:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/softmmu-system.test.js:55:1
+[31m✖ SoftMMU full system emulation boots targets [90m(1557.708358ms)[39m[39m
+  AssertionError [ERR_ASSERTION]: Boot stalled on qemu-system-aarch64
+      at TestContext.<anonymous> (file:///home/main/devops/omi-portal/test/softmmu-system.test.js:69:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
