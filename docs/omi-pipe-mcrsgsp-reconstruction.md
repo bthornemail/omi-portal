@@ -4,7 +4,7 @@
 
 The reconstruction layer sits on top of the MCRSGSP carrier. It is:
 
-- **Stateless per invocation**: each pipe run is a fresh reconstruction session. No persistence across runs.
+- **meta-memory per invocation**: each pipe run is a fresh reconstruction session. No persistence across runs.
 - **Per-codeword tracking**: fragments are grouped by `id+k+n` (the codeword triple). Up to 8 concurrent codewords tracked.
 - **Read-only on carrier**: reconstruction observes fragment receipts; it does not modify them. Receipt authority stays in the pipe gate.
 
