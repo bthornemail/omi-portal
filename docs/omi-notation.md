@@ -902,7 +902,7 @@ omi-address/prefix CLOSE closure-execution-name
 
 ### 17.4 IV. COMBINATORS.omi (Composition Operators)
 
-Outlines pure, stateless functional operations. It describes how individual segments combine to transform data tracks without maintaining internal memory state.
+Outlines pure, meta-memory functional operations. It describes how individual segments combine to transform data tracks without maintaining internal memory state.
 
 ```text
 omi-address/prefix COMBINE combinator-transformation-name
@@ -1190,7 +1190,7 @@ A conforming Omi-Notation compiler suite must execute and pass the following ver
 
 ## 27. Final Protocol Statement
 
-Omi-Notation is the native syntax and encapsulation notation layer of the Omi Object Model. It details how network coordinates, multi-byte character flags, bitmask fields, structural text blocks, and stateless composition rules merge into a unified computational canvas.
+Omi-Notation is the native syntax and encapsulation notation layer of the Omi Object Model. It details how network coordinates, multi-byte character flags, bitmask fields, structural text blocks, and meta-memory composition rules merge into a unified computational canvas.
 
 ### 27.1 The Unified Execution Flow
 

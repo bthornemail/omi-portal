@@ -86,7 +86,7 @@ A configuration describes a specific layout or selection of components. In softw
 ## 2. Constructions (The Generation)
 A construction is a generative proof or blueprint. In geometry, a compass-and-straightedge construction creates shapes using strict rules. In logic and type theory, "constructive mathematics" requires you to explicitly build an object to prove it exists, rather than just assuming it by contradiction.
 ## 3. Compositions (The Assembly)
-Composition is the core mechanism of design and functional programming. It connects the output of one component directly to the input of another (e.g., $(f \circ g)(x) = f(g(x))$). Good composition requires components to be "stateless" and independent, allowing them to snap together cleanly.
+Composition is the core mechanism of design and functional programming. It connects the output of one component directly to the input of another (e.g., $(f \circ g)(x) = f(g(x))$). Good composition requires components to be "meta-memory" and independent, allowing them to snap together cleanly.
 ## 4. Coordinates (The Mapping)
 Coordinates give a quantitative address to an absolute position within a defined framework. This can be physical space ($X, Y, Z$ grids), color space (RGB values), or database indexing. They translate abstract positions into concrete data points that a system can locate and manipulate.
 ------------------------------
